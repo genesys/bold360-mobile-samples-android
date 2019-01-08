@@ -19,7 +19,10 @@ class ViewController: UIViewController {
     }
 }
 
-// setup Bold Chat
+/************************************************************/
+// MARK: - Setup Live Chat
+/************************************************************/
+
 extension ViewController {
     @IBAction func setupBoldChat(_ sender: Any) {
         // 1. create account & set
@@ -30,7 +33,10 @@ extension ViewController {
     }
 }
 
-// Setup Bot Chat
+/************************************************************/
+// MARK: - Setup Bot Chat
+/************************************************************/
+
 extension ViewController {
     @IBAction func setupBotChat(_ sender: Any) {
         // 1. create account & set
@@ -45,19 +51,43 @@ extension ViewController {
         account.account = ""
         account.knowledgeBase = ""
         account.apiKey = ""
-        
+
         return account;
     }
 }
+
+/************************************************************/
+// MARK: - ChatControllerDelegate
+/************************************************************/
 
 extension ViewController: ChatControllerDelegate {
     func didFailLoadChatWithError(_ error: Error!) {
         print(error.localizedDescription)
     }
     
+/************************************************************/
+// MARK: - View Controller Attachment
+/************************************************************/
+    
     func shouldPresentChatViewController(_ viewController: UIViewController!) {
         // 4. get chat view controller and show
+        self.chatViewController = viewController
         self.navigationController?.pushViewController(viewController, animated: true)
     }
+    
+/************************************************************/
+// MARK: - Preset Custom Form
+/************************************************************/
+    
+    func shouldPresent(_ form: BrandedForm!, handler completionHandler: (((UIViewController & BoldForm)?) -> Void)!) {
+        if (completionHandler != nil) {
+            if form.form?.type == BCFormTypePostChat {
+                let postVC = self.storyboard?.instantiateViewController(withIdentifier: "postChat") as! PostChatViewController
+                postVC.form = form
+                completionHandler(postVC)
+            } else {
+                completionHandler(nil)
+            }
+        }
+    }
 }
-

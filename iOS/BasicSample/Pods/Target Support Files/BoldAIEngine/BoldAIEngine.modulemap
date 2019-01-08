@@ -1,6 +1,0 @@
-framework module BoldAIEngine {
-  umbrella header "BoldAIEngine-umbrella.h"
-
-  export *
-  module * { export * }
-}

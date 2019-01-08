@@ -1,6 +1,0 @@
-framework module BoldAIAccessibility {
-  umbrella header "BoldAIAccessibility.h"
-
-  export *
-  module * { export * }
-}
