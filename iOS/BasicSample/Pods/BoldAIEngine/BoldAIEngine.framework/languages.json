@@ -1,0 +1,380 @@
+{
+  "ar" :{
+	"like": "مثل",
+	"likeActive": "كنت مثل هذا",
+	"dislike": "كره",
+	"dislikeActive": "كنت تكره هذا",
+	"ok": "موافق",
+	"cancel": "إلغاء",
+	"dislikeOptionsTitle": "ما الخطأ في هذه الإجابة؟",
+	"likeTexts": 
+		{
+			"0": "مثل",
+			"2": "الإجابة غير صحيحة أو غير دقيقة",
+			"3": "معلومات هامة ناقصة",
+			"4": "الإجابة غير ذات صلة",
+			"5": "لم أجد ما كنت أبحث عنه",
+			"6": "المعلومات الناقصة أو غير صحيحة"
+		}
+	},
+
+"da": {
+	"like": "Like",
+	"likeActive": "Du kan lide denne",
+	"dislike": "Dislike",
+	"dislikeActive": "Du kan ikke lide denne",
+	"ok": "OK",
+	"cancel": "Annuller",
+	"dislikeOptionsTitle": "Hvad er der galt med dette svar?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "Svaret er forkert eller upræcist",
+			"3": "Mangler vigtig information",
+			"4": "Svaret er irrelevant",
+			"5": "Jeg kunne ikke finde, hvad jeg ledte efter",
+			"6": "Manglende eller forkerte oplysninger"
+		}
+	},
+  "de" :{
+	"like": "Gefällt mir",
+	"likeActive": "Sie mögen dieses",
+	"dislike": "Dislike",
+	"dislikeActive": "Sie mögen diese",
+	"ok": "OK",
+	"cancel": "Abbrechen",
+	"dislikeOptionsTitle": "Was ist falsch mit dieser Antwort?",
+	"likeTexts": 
+		{
+			"0": "Gefällt mir",
+			"2": "Antwort ist nicht richtig oder ungenau",
+			"3": "Es fehlen wichtige Informationen",
+			"4": "Die Antwort ist irrelevant",
+			"5": "Ich fand nicht, was ich gesucht habe",
+			"6": "Fehlende oder falsche Informationen"
+		}
+},
+"en" : {
+	"like": "Good answer!",
+	"likeActive": "You like this",
+	"dislike": "Needs improvement",
+	"dislikeActive": "You dislike this",
+	"ok": "OK",
+	"cancel": "Cancel",
+	"dislikeOptionsTitle": "What's wrong with this answer?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "Answer is incorrect or inaccurate",
+			"3": "Missing important information",
+			"4": "Answer irrelevant to the page",
+			"5": "Didn't find what I was looking for",
+			"6": "Missing or incorrect information"
+		}
+	
+},
+"es" : {
+	"like": "Me gusta",
+	"likeActive": "Si le gusta este",
+	"dislike": "No me gusta",
+	"dislikeActive": "No le gusta este",
+	"ok": "Aceptar",
+	"cancel": "Cancelar",
+	"dislikeOptionsTitle": "¿Cuál es el problema con esta respuesta?",
+	"likeTexts": 
+		{
+			"0": "Me gusta",
+			"2": "La respuesta es incorrecta o inexacta",
+			"3": "Falta información importante",
+			"4": "La respuesta es irrelevante",
+			"5": "No encontré lo que buscaba",
+			"6": "Información faltante o incorrecta"
+		}
+	
+},
+"fi" : {
+	"like": "Tykkää",
+	"likeActive": "Pidät tästä",
+	"dislike": "En tykkää",
+	"dislikeActive": "Et pidä tämä",
+	"ok": "Ok",
+	"cancel": "Peruuta",
+	"dislikeOptionsTitle": "Miksi tämä vastaus ei ole riittävä?",
+	"likeTexts": 
+		{
+			"0": "Tykkää",
+			"2": "Vastaus on virheellisiä tai epätarkkoja",
+			"3": "Puuttuu tärkeitä tietoja",
+			"4": "Vastaus on epäolennainen",
+			"5": "Etkö löytänyt mitä olin etsimässä",
+			"6": "Puuttuva tai väärä tieto"
+		}
+	
+},
+"fr" : {
+	"like": "J'aime",
+	"likeActive": "Vous aimez ce",
+	"dislike": "Antipathie",
+	"dislikeActive": "Yous n'aime pas ce",
+	"ok": "OK",
+	"cancel": "annuler",
+	"dislikeOptionsTitle": "Pourquoi cette réponse est-elle erronée ?",
+	"likeTexts": 
+		{
+			"0": "J'aime",
+			"2": "La réponse est inexacte ou imprécise",
+			"3": "Des informations importantes sont manquantes",
+			"4": "La réponse est hors sujet",
+			"5": "Je n'ai pas trouvé ce que je cherchais",
+			"6": "Information manquante ou incorrecte"
+		}
+	
+},
+"hu" : {
+	"like": "Like",
+	"likeActive": "You like this",
+	"dislike": "Dislike",
+	"dislikeActive": "You dislike this",
+	"ok": "Rendben",
+	"cancel": "Mégse",
+	"dislikeOptionsTitle": "Mi a baj a válasszal?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "A válasz helytelen vagy pontatlan",
+			"3": "Fontos információ hiányzik belőle",
+			"4": "A válasz nem releváns",
+			"5": "Én nem találtam, amit kerestem",
+			"6": "Hiányzó vagy helytelen információ"
+		}
+	
+},
+"it" : {
+	"like": "Mi piace",
+	"likeActive": "Ti piace questo",
+	"dislike": "Antipatia",
+	"dislikeActive": "Non ti piace questo",
+	"ok": "OK",
+	"cancel": "Annulla",
+	"dislikeOptionsTitle": "Cosa c'è di sbagliato in questa risposta?",
+	"likeTexts": 
+		{
+			"0": "Mi piace",
+			"2": "La risposta è errata o inaccurata",
+			"3": "Mancano informazioni importanti",
+			"4": "La risposta è irrilevante",
+			"5": "Non ho trovato quello che cercavo",
+			"6": "Informazioni mancanti o errate"
+		}
+	
+},
+"iw" : {
+	"like": "אהבתי",
+	"likeActive": "אהבת את זה",
+	"dislike": "לא אהבתי",
+	"dislikeActive": "לא אהבת את זה",
+	"ok": "אישור",
+	"cancel": "ביטול",
+	"dislikeOptionsTitle": "מה לא תקין בתשובה זו?",
+	"likeTexts": 
+		{
+			"0": "אהבתי",
+			"2": "תשובה לא נכונה / לא מדוייקת",
+			"3": "חסר מידע חשוב",
+			"4": "התשובה אינה רלוונטית לעמוד",
+			"5": "לא מצאתי את מה שחיפשתי",
+			"6": "מידע חסר או לא מדוייק"
+		}
+	
+},
+"ja" : {
+	"like": "Like",
+	"likeActive": "あなたはこれが好き",
+	"dislike": "嫌い",
+	"dislikeActive": "あなたはこれを嫌い",
+	"ok": "OK",
+	"cancel": "キャンセル",
+	"dislikeOptionsTitle": "この回答の問題点は?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "回答が不正または不精確",
+			"3": "重要情報が欠けている",
+			"4": "回答内容が無関係",
+			"5": "私は私が探していたものを見つけることができませんでした",
+			"6": "情報の修正、不足はあります"
+		}
+	
+},
+"ko" : {
+	"like": "Like",
+	"likeActive": "당신이 좋아",
+	"dislike": "싫어",
+	"dislikeActive": "당신이 싫어",
+	"ok": "확인",
+	"cancel": "취소",
+	"dislikeOptionsTitle": "이 답의 무엇이 잘못되었나요?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "답이 잘못되었거나 정확하지 않습니다.",
+			"3": "중요한 정보가 빠졌습니다.",
+			"4": "답이 적절하지 않습니다.",
+			"5": "나는 내가 무엇을 찾고 찾을 수 없습니다",
+			"6": "누락 또는 잘못된 정보"
+		}
+	
+},
+"nl" : {
+	"like": "Vind ik leuk",
+	"likeActive": "U houdt van dit",
+	"dislike": "Afkeer",
+	"dislikeActive": "Je vind dit niet leuk",
+	"ok": "OK",
+	"cancel": "Annuleren",
+	"dislikeOptionsTitle": "Wat klopt er niet aan dit antwoord?",
+	"likeTexts": 
+		{
+			"0": "Vind ik leuk",
+			"2": "Antwoord is onjuist of onnauwkeurig",
+			"3": "Belangrijke informatie ontbreekt",
+			"4": "Het antwoord doet niet ter zake",
+			"5": "Heeft u niet gevonden wat ik zocht",
+			"6": "Ontbrekende of onjuiste informatie"
+		}
+	
+},
+"no,nb,nn" : {
+	"like": "Like",
+	"likeActive": "Du liker dette",
+	"dislike": "Dislike",
+	"dislikeActive": "Du liker ikke dette",
+	"ok": "OK",
+	"cancel": "Avbryt",
+	"dislikeOptionsTitle": "Hva er galt med dette svaret?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "Svaret er feil eller unøyaktig",
+			"3": "Mangler viktig informasjon",
+			"4": "Svaret er ikke relevant",
+			"5": "Fant ikke det jeg var ute etter",
+			"6": "Mangelfull eller feilaktig informasjon"
+		}
+	
+},
+"pl" : {
+	"like": "Like",
+	"likeActive": "Chcesz tego",
+	"dislike": "Nie lubić",
+	"dislikeActive": "Nie lubić",
+	"ok": "OK",
+	"cancel": "Anuluj",
+	"dislikeOptionsTitle": "Jaki jest problem z odpowiedzią?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "Odpowiedź jest niepoprawna bądź nieprecyzyjna",
+			"3": "Brakuje ważnych informacji",
+			"4": "Odpowiedź jest niezwiązana z tematem",
+			"5": "Nie mogę znaleźć to, czego szukasz",
+			"6": "Brak lub nieprawidłowe informacje"
+		}
+	
+},
+"pt" : {
+	"like": "Gosto",
+	"likeActive": "Você gosta disso",
+	"dislike": "Antipatia",
+	"dislikeActive": "Você não gosta deste",
+	"ok": "OK",
+	"cancel": "Cancelar",
+	"dislikeOptionsTitle": "O que há de errado com esta resposta?",
+	"likeTexts": 
+		{
+			"0": "Gosto",
+			"2": "A resposta é incorreta ou inexata",
+			"3": "Faltam informações importantes",
+			"4": "A resposta é irrelevante",
+			"5": "Não encontrou o que estava procurando",
+			"6": "Informações ausentes ou incorretas"
+		}
+	
+},
+"ru" : {
+	"like": "Хороший ответ!",
+	"likeActive": "Вам понравилось это",
+	"dislike": "Нужно улучшить",
+	"dislikeActive": "Вам не понравилось это",
+	"ok": "OK",
+	"cancel": "Отмена",
+	"dislikeOptionsTitle": "В чем проблема с этим ответом?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "Ответ неверный или неточный",
+			"3": "В нем отсутствует важная информация",
+			"4": "Ответ не относится к делу",
+			"5": "Мне не удалось найти то, что я искал",
+			"6": "Отсутствие или неправильную информацию"
+		}
+	
+},
+"sv" : {
+	"like": "Liksom",
+	"likeActive": "Du gillar det här inlägget",
+	"dislike": "Motvilja",
+	"dislikeActive": "Du gillar inte det här",
+	"ok": "OK",
+	"cancel": "Avbryt",
+	"dislikeOptionsTitle": "Vad är det för fel på detta svar?",
+	"likeTexts": 
+		{
+			"0": "Liksom",
+			"2": "Svaret är felaktigt eller oriktigt",
+			"3": "Saknar viktig information",
+			"4": "Svaret är irrelevant",
+			"5": "Jag hittade inte det jag letade efter",
+			"6": "Saknas eller felaktig information"
+		}
+	
+},
+"tr" : {
+	"like": "Like",
+	"likeActive": "You like this",
+	"dislike": "Dislike",
+	"dislikeActive": "You dislike this",
+	"ok": "OK",
+	"cancel": "Cancel",
+	"dislikeOptionsTitle": "What's wrong with this answer?",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "Answer is incorrect or inaccurate",
+			"3": "Missing important information",
+			"4": "Answer irrelevant to the page",
+			"5": "Didn't find what I was looking for",
+			"6": "Missing or incorrect information"
+		}
+	
+},
+"zh" : {
+	"like": "Like",
+	"likeActive": "你喜欢这个",
+	"dislike": "反感",
+	"dislikeActive": "你不喜欢",
+	"ok": "确定",
+	"cancel": "取消",
+	"dislikeOptionsTitle": "这个答案有什么问题？",
+	"likeTexts": 
+		{
+			"0": "Like",
+			"2": "答案错误或不准确",
+			"3": "遗漏了重要信息",
+			"4": "答案不切题",
+			"5": "我没有找到我要找的",
+			"6": "缺少或不正确的信息"
+		}
+	
+}
+}

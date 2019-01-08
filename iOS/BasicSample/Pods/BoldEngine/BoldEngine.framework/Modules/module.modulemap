@@ -1,0 +1,6 @@
+framework module BoldEngine {
+  umbrella header "BoldEngine.h"
+
+  export *
+  module * { export * }
+}

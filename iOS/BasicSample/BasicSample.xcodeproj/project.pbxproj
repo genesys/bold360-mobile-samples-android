@@ -182,14 +182,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-BasicSample/Pods-BasicSample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Bold360AI/Bold360AI.framework",
-				"${BUILT_PRODUCTS_DIR}/BoldAIAccessibility/BoldAIAccessibility.framework",
-				"${BUILT_PRODUCTS_DIR}/BoldAIEngine/BoldAIEngine.framework",
-				"${BUILT_PRODUCTS_DIR}/BoldCore/BoldCore.framework",
-				"${BUILT_PRODUCTS_DIR}/BoldEngine/BoldEngine.framework",
-				"${BUILT_PRODUCTS_DIR}/BoldUI/BoldUI.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${PODS_ROOT}/Bold360AI/Bold360AI.framework",
+				"${PODS_ROOT}/BoldAIAccessibility/BoldAIAccessibility.framework",
+				"${PODS_ROOT}/BoldAIEngine/BoldAIEngine.framework",
+				"${PODS_ROOT}/BoldCore/BoldCore.framework",
+				"${PODS_ROOT}/BoldEngine/BoldEngine.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -198,9 +195,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BoldAIEngine.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BoldCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BoldEngine.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BoldUI.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

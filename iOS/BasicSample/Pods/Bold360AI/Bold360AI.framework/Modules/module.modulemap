@@ -1,0 +1,6 @@
+framework module Bold360AI {
+  umbrella header "Bold360AI.h"
+
+  export *
+  module * { export * }
+}

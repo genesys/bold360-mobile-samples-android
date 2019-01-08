@@ -1,0 +1,6 @@
+framework module BoldCore {
+  umbrella header "BoldCore.h"
+
+  export *
+  module * { export * }
+}
