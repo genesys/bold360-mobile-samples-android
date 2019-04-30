@@ -19,6 +19,7 @@ class RestoreChatDemoViewController: AgentViewController {
         // Do any additional setup after loading the view.
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             self.restoreChat = RestoreChat(appDelegate.persistentContainer.viewContext)
+            self.restoreChat?.groupId = "RestoreChatDemoViewController"
             self.restoreChat?.delegate = self
             self.chatController.historyProvider = self.restoreChat
         }
