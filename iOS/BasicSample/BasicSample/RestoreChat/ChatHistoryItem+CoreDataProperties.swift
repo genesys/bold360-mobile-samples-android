@@ -2,7 +2,7 @@
 //  ChatHistoryItem+CoreDataProperties.swift
 //  BasicSample
 //
-//  Created by Nissim Pardo on 29/04/2019.
+//  Created by Nissim Pardo on 30/04/2019.
 //  Copyright © 2019 bold360ai. All rights reserved.
 //
 //
@@ -27,5 +27,6 @@ extension ChatHistoryItem {
     @NSManaged public var scope: Int16
     @NSManaged public var timeStamp: NSDate?
     @NSManaged public var config: ChatConfiguration?
+    @NSManaged public var group: ChatHistoryGroup?
 
 }

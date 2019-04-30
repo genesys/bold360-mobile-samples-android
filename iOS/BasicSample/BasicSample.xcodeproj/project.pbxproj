@@ -16,6 +16,8 @@
 		4899614F22773FF700D86590 /* ChatHistoryItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899614B22773FF700D86590 /* ChatHistoryItem+CoreDataClass.swift */; };
 		4899615022773FF700D86590 /* ChatHistoryItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899614C22773FF700D86590 /* ChatHistoryItem+CoreDataProperties.swift */; };
 		48996152227741B300D86590 /* RestoreChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48996151227741B300D86590 /* RestoreChat.swift */; };
+		4899615F2278348000D86590 /* ChatHistoryGroup+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899615D2278348000D86590 /* ChatHistoryGroup+CoreDataClass.swift */; };
+		489961602278348000D86590 /* ChatHistoryGroup+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899615E2278348000D86590 /* ChatHistoryGroup+CoreDataProperties.swift */; };
 		48A5A19822761AD50073F57B /* Demos.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48A5A19722761AD50073F57B /* Demos.plist */; };
 		48A5A19A22761DCB0073F57B /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A5A19922761DCB0073F57B /* MainTableViewController.swift */; };
 		48A5A19C227635FD0073F57B /* DemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A5A19B227635FD0073F57B /* DemoTableViewCell.swift */; };
@@ -36,6 +38,8 @@
 		4899614B22773FF700D86590 /* ChatHistoryItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatHistoryItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4899614C22773FF700D86590 /* ChatHistoryItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatHistoryItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		48996151227741B300D86590 /* RestoreChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreChat.swift; sourceTree = "<group>"; };
+		4899615D2278348000D86590 /* ChatHistoryGroup+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatHistoryGroup+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4899615E2278348000D86590 /* ChatHistoryGroup+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatHistoryGroup+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		48A5A19722761AD50073F57B /* Demos.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Demos.plist; sourceTree = "<group>"; };
 		48A5A19922761DCB0073F57B /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		48A5A19B227635FD0073F57B /* DemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoTableViewCell.swift; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 		4899614522773FC200D86590 /* RestoreChat */ = {
 			isa = PBXGroup;
 			children = (
+				4899615D2278348000D86590 /* ChatHistoryGroup+CoreDataClass.swift */,
+				4899615E2278348000D86590 /* ChatHistoryGroup+CoreDataProperties.swift */,
 				48996151227741B300D86590 /* RestoreChat.swift */,
 				4899614922773FF700D86590 /* ChatConfiguration+CoreDataClass.swift */,
 				4899614A22773FF700D86590 /* ChatConfiguration+CoreDataProperties.swift */,
@@ -250,6 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				489961602278348000D86590 /* ChatHistoryGroup+CoreDataProperties.swift in Sources */,
 				48996152227741B300D86590 /* RestoreChat.swift in Sources */,
 				48A5A19C227635FD0073F57B /* DemoTableViewCell.swift in Sources */,
 				48A5A19A22761DCB0073F57B /* MainTableViewController.swift in Sources */,
@@ -262,6 +269,7 @@
 				4899614222763B1800D86590 /* AgentViewController.swift in Sources */,
 				4899615022773FF700D86590 /* ChatHistoryItem+CoreDataProperties.swift in Sources */,
 				4899614022763AD500D86590 /* BotDemoViewController.swift in Sources */,
+				4899615F2278348000D86590 /* ChatHistoryGroup+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
