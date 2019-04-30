@@ -7,11 +7,23 @@
 platform :ios, "9.0"
 use_frameworks!
 
-source 'https://github.com/nanorepsdk/NRSDK-specs.git'
-
+# source 'https://github.com/nanorepsdk/NRSDK-specs.git'
+source 'https://github.com/nanorepsdk/NRSDK-Dev-specs.git'
 
 source 'https://github.com/CocoaPods/Specs'
 
+# Nisso env
+BLD_UI="../../../BoldAI/BoldUI/Bold360AI-Dev.podspec"
+BLD_CORE="../../../BoldAI/BoldCore/BoldCore-Dev.podspec"
+BLD_AI_ENGINE="../../../BoldAI/BoldAIEngine/BoldAIEngine-Dev.podspec"
+BLD_AI_ACCESSIBILITY="../../../BoldAI/BoldAIAccessibility/BoldAIAccessibility-Dev.podspec"
+BLD_ENGINE="../../../BoldAI/BoldEngine/BoldEngine-Dev.podspec"
+BLD_360_AI="../../../BoldAI/Bold360AI/Bold360AI-Dev.podspec"
+
 target 'BasicSample' do
-    pod 'Bold360AI'
+    pod 'BoldCore', :path => BLD_CORE
+        pod 'BoldAIEngine', :path => BLD_AI_ENGINE
+        pod 'BoldAIAccessibility', :path => BLD_AI_ACCESSIBILITY
+        pod 'BoldEngine', :path => BLD_ENGINE
+        pod 'Bold360AI', :path => BLD_360_AI
 end

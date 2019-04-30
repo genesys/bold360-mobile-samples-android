@@ -241,11 +241,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BasicSample/Pods-BasicSample-frameworks.sh",
-				"${PODS_ROOT}/Bold360AI/Bold360AI.framework",
-				"${PODS_ROOT}/BoldAIAccessibility/BoldAIAccessibility.framework",
-				"${PODS_ROOT}/BoldAIEngine/BoldAIEngine.framework",
-				"${PODS_ROOT}/BoldCore/BoldCore.framework",
-				"${PODS_ROOT}/BoldEngine/BoldEngine.framework",
+				"${BUILT_PRODUCTS_DIR}/Bold360AI/Bold360AI.framework",
+				"${BUILT_PRODUCTS_DIR}/BoldAIAccessibility/BoldAIAccessibility.framework",
+				"${BUILT_PRODUCTS_DIR}/BoldAIEngine/BoldAIEngine.framework",
+				"${BUILT_PRODUCTS_DIR}/BoldCore/BoldCore.framework",
+				"${BUILT_PRODUCTS_DIR}/BoldEngine/BoldEngine.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
