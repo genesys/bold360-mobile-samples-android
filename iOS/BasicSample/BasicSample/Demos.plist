@@ -18,6 +18,12 @@
 		<key>title</key>
 		<string>Restore Demo</string>
 		<key>icon</key>
+		<string>restore</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>History Demo</string>
+		<key>icon</key>
 		<string>history</string>
 	</dict>
 </array>

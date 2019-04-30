@@ -50,6 +50,9 @@ class MainTableViewController: UITableViewController {
         case 2:
             boldController = RestoreChatDemoViewController()
             break
+        case 3:
+            boldController = HistoryDemoViewController()
+            break
         default:
             boldController = BotDemoViewController()
             break

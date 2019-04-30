@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		487351CC22784A7F0029F295 /* HistoryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487351CB22784A7F0029F295 /* HistoryDemoViewController.swift */; };
 		4899614022763AD500D86590 /* BotDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899613F22763AD500D86590 /* BotDemoViewController.swift */; };
 		4899614222763B1800D86590 /* AgentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899614122763B1800D86590 /* AgentViewController.swift */; };
 		4899614422773FAD00D86590 /* RestoreChatDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899614322773FAD00D86590 /* RestoreChatDemoViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		487351CB22784A7F0029F295 /* HistoryDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDemoViewController.swift; sourceTree = "<group>"; };
 		4899613F22763AD500D86590 /* BotDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotDemoViewController.swift; sourceTree = "<group>"; };
 		4899614122763B1800D86590 /* AgentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentViewController.swift; sourceTree = "<group>"; };
 		4899614322773FAD00D86590 /* RestoreChatDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreChatDemoViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +85,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		487351CA22784A260029F295 /* ChatViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				4899613F22763AD500D86590 /* BotDemoViewController.swift */,
+				4899614122763B1800D86590 /* AgentViewController.swift */,
+				4899614322773FAD00D86590 /* RestoreChatDemoViewController.swift */,
+				487351CB22784A7F0029F295 /* HistoryDemoViewController.swift */,
+			);
+			path = ChatViewControllers;
+			sourceTree = "<group>";
+		};
 		4899614522773FC200D86590 /* RestoreChat */ = {
 			isa = PBXGroup;
 			children = (
@@ -94,7 +107,6 @@
 				4899614B22773FF700D86590 /* ChatHistoryItem+CoreDataClass.swift */,
 				4899614C22773FF700D86590 /* ChatHistoryItem+CoreDataProperties.swift */,
 				4899614622773FD300D86590 /* RestoredChatDemo.xcdatamodeld */,
-				4899614322773FAD00D86590 /* RestoreChatDemoViewController.swift */,
 			);
 			path = RestoreChat;
 			sourceTree = "<group>";
@@ -120,6 +132,7 @@
 		AF12C8A121D22C90007450EF /* BasicSample */ = {
 			isa = PBXGroup;
 			children = (
+				487351CA22784A260029F295 /* ChatViewControllers */,
 				4899614522773FC200D86590 /* RestoreChat */,
 				AF12C8A221D22C90007450EF /* AppDelegate.swift */,
 				AF12C8A621D22C90007450EF /* Main.storyboard */,
@@ -129,8 +142,6 @@
 				48A5A19722761AD50073F57B /* Demos.plist */,
 				48A5A19922761DCB0073F57B /* MainTableViewController.swift */,
 				48A5A19B227635FD0073F57B /* DemoTableViewCell.swift */,
-				4899613F22763AD500D86590 /* BotDemoViewController.swift */,
-				4899614122763B1800D86590 /* AgentViewController.swift */,
 			);
 			path = BasicSample;
 			sourceTree = "<group>";
@@ -261,6 +272,7 @@
 				48A5A19C227635FD0073F57B /* DemoTableViewCell.swift in Sources */,
 				48A5A19A22761DCB0073F57B /* MainTableViewController.swift in Sources */,
 				4899614422773FAD00D86590 /* RestoreChatDemoViewController.swift in Sources */,
+				487351CC22784A7F0029F295 /* HistoryDemoViewController.swift in Sources */,
 				4899614822773FD300D86590 /* RestoredChatDemo.xcdatamodeld in Sources */,
 				4899614E22773FF700D86590 /* ChatConfiguration+CoreDataProperties.swift in Sources */,
 				4899614F22773FF700D86590 /* ChatHistoryItem+CoreDataClass.swift in Sources */,
