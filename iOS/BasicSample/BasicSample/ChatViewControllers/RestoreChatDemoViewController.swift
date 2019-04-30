@@ -12,6 +12,13 @@ import Bold360AI
 class RestoreChatDemoViewController: AgentViewController {
 
     var restoreChat: RestoreChat?
+    var alert: UIAlertController!
+    
+    override func createAccount() -> Account {
+        let account = super.createAccount() as! LiveAccount
+        account.shouldDisablePreChat = true
+        return account
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +38,22 @@ class RestoreChatDemoViewController: AgentViewController {
     }
     
     override func dismissChat(_ sender: UIBarButtonItem?) {
-        self.navigationController?.presentedViewController?.dismiss(animated: false, completion: nil)
+        self.navigationController?.presentedViewController?.dismiss(animated: false, completion: {
+            self.alert = UIAlertController(title: "Background Message", message: "Please wait for the agent's message", preferredStyle: .alert)
+            self.alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(self.alert, animated: true, completion: nil)
+        })
         self.restoreChat?.state = .dismissed
+        
+    }
+    
+    func presentMessageAlert(_ message: StorableChatElement) {
+        let alert = UIAlertController(title: "Agent Message", message: message.text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Load Chat", style: .default, handler: { _ in
+            self.chatController.restoreChatViewController()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.navigationController?.present(alert, animated: true, completion: nil)
     }
     
 
@@ -50,11 +71,9 @@ class RestoreChatDemoViewController: AgentViewController {
 
 extension RestoreChatDemoViewController: RestoreChatDelegate {
     func didReceiveBackgroundMessage(_ message: StorableChatElement) {
-        let alert = UIAlertController(title: "Agent Message", message: message.text, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Load Chat", style: .default, handler: { _ in
-            self.chatController.restoreChatViewController()
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.navigationController?.present(alert, animated: true, completion: nil)
+        self.alert.dismiss(animated: true) {
+            self.presentMessageAlert(message)
+        }
     }
 }
+
