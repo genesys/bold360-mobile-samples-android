@@ -1,10 +1,8 @@
-//
-//  RestoreChat.swift
-//  HyattDemo
-//
-//  Created by Nissim Pardo on 21/04/2019.
-//  Copyright © 2019 Nissim Pardo. All rights reserved.
-//
+// ===================================================================================================
+// Copyright © 2019 bold360ai(LogMeIn).
+// Bold360AI SDK.
+// All rights reserved.
+// ===================================================================================================
 
 import UIKit
 import Bold360AI

@@ -1,11 +1,8 @@
-//
-//  ChatConfiguration+CoreDataProperties.swift
-//  BasicSample
-//
-//  Created by Nissim Pardo on 29/04/2019.
-//  Copyright © 2019 bold360ai. All rights reserved.
-//
-//
+// ===================================================================================================
+// Copyright © 2019 bold360ai(LogMeIn).
+// Bold360AI SDK.
+// All rights reserved.
+// ===================================================================================================
 
 import Foundation
 import CoreData
