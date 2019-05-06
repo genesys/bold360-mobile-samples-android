@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_bot_chat.*
 
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
-    lateinit var chatController: ChatController
+    private lateinit var chatController: ChatController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,47 +26,39 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         createChat()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-       // overridePendingTransition(R.anim.left_in, R.anim.right_out);
-    }
-
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
-
     }
 
-    abstract fun getAccount() : Account
+    abstract fun getAccount(): Account
 
-    protected fun createChat(){
+    protected fun createChat() {
         chatController = ChatController.Builder(this)
             .chatEventListener(this)
             .build(
-            getAccount(), object:ChatLoadedListener{
-                override fun onComplete(result: ChatLoadResponse) {
-                    result.takeIf { it.error == null }?.run {
-                        supportFragmentManager.beginTransaction()
-                            .add(chat_view.id, fragment, topic_title.text.toString())
-                            .addToBackStack(null)
-                            .commit()
+                getAccount(), object : ChatLoadedListener {
+                    override fun onComplete(result: ChatLoadResponse) {
+                        result.takeIf { it.error == null }?.run {
+                            supportFragmentManager.beginTransaction()
+                                .add(chat_view.id, fragment, topic_title.text.toString())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                     }
                 }
-
-            }
-        )
+            )
     }
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
-        when(stateEvent.state) {
+        when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finish()
         }
     }
 
     override fun onAccountUpdate(accountInfo: AccountInfo) {
-
     }
 
     override fun onPhoneNumberSelected(phoneNumber: String) {

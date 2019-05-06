@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.BOLD_CHAT",
                 "Chat with BOLD",
                 resources.getDrawable(R.drawable.live_avatar)
-            ))
+            )
+        )
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
@@ -45,10 +46,9 @@ class MainActivity : AppCompatActivity() {
         topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         (topics_recycler.adapter as TopicsAdapter).updateTopics()
     }
-
-
-
 }
+
+
 
 class TopicsAdapter(var topics: ArrayList<SampleTopic>, val gotoTopic: (topic: SampleTopic) -> Unit) :
     RecyclerView.Adapter<TopicViewHolder>() {
@@ -83,7 +83,7 @@ class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(topic: SampleTopic, startTopic: (intentAction: SampleTopic) -> Unit) {
         titleView.apply {
             text = topic.title
-            topic.icon?.setBounds(0,0,30,30)
+            topic.icon?.setBounds(0, 0, 30, 30)
             setCompoundDrawablesWithIntrinsicBounds(topic.icon, null, null, null)
         }
         itemView.tag = topic.intentAction
