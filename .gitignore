@@ -67,4 +67,6 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+Android/SDKSamples/.idea
+Android/SDKSamples/.gradle
 gradle.properties
