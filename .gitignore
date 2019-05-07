@@ -69,4 +69,3 @@ fastlane/test_output
 iOSInjectionProject/
 Android/SDKSamples/.idea
 Android/SDKSamples/.gradle
-gradle.properties
