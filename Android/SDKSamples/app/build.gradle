@@ -51,6 +51,7 @@ dependencies {
     implementation "com.bold360ai-sdk.conversation:ui:3.2.3.rc7"
     implementation "com.bold360ai-sdk.core:accessibility:3.2.3.rc7"*/
 
+    runtimeOnly 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
     implementation 'androidx.core:core-ktx:1.1.0-alpha05'
