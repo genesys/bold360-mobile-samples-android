@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.integration.core.StateEvent
+import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
+import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 
@@ -34,8 +36,13 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     abstract fun getAccount(): Account
 
     protected fun createChat() {
+
+        val settings = ConversationSettings()
+            .datestamp(true, FriendlyDatestampFormatFactory(this)) // TODO:set as default
+
         chatController = ChatController.Builder(this)
             .chatEventListener(this)
+            .conversationSettings(settings)
             .build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
