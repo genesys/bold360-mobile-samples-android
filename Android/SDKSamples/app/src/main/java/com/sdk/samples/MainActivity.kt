@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity() {
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
                 "Chat with BOT",
-                resources.getDrawable(R.drawable.bot_avatar)
+                resources.getDrawable(R.drawable.bot_chat)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT",
                 "Chat with BOLD",
-                resources.getDrawable(R.drawable.live_avatar)
+                resources.getDrawable(R.drawable.live_chat)
             )
         )
 
