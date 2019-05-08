@@ -73,4 +73,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     override fun onUrlLinkSelected(url: String) {
     }
+
+    override fun onStop() {
+        chatController.terminateChat()
+        super.onStop()
+    }
 }
