@@ -46,9 +46,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             .build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
-                        result.takeIf { it.error == null }?.run {
+                        result.takeIf { it.error == null && it.fragment != null}?.run {
                             supportFragmentManager.beginTransaction()
-                                .add(chat_view.id, fragment, topic_title.text.toString())
+                                .add(chat_view.id, fragment!!, topic_title.text.toString())
                                 .addToBackStack(null)
                                 .commit()
                         }
