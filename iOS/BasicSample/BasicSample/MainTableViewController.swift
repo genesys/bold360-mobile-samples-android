@@ -19,6 +19,7 @@ class MainTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.demos = self.extarctPlist
+        self.title = "Bold360 SDK Demos"
     }
 
     // MARK: - Table view data source
@@ -46,10 +47,12 @@ class MainTableViewController: UITableViewController {
             boldController = AgentViewController()
             break
         case 2:
-            boldController = RestoreChatDemoViewController()
+            boldController = HistoryDemoViewController()
             break
         case 3:
-            boldController = HistoryDemoViewController()
+            boldController = RestoreChatDemoViewController()
+        case 4:
+            boldController = FileUploadDemoViewController()
             break
         default:
             boldController = BotDemoViewController()

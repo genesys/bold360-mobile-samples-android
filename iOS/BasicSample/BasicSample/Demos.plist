@@ -4,27 +4,33 @@
 <array>
 	<dict>
 		<key>title</key>
-		<string>Bot Demo</string>
+		<string>Bot</string>
 		<key>icon</key>
 		<string>robot</string>
 	</dict>
 	<dict>
 		<key>title</key>
-		<string>Live Demo</string>
+		<string>Live</string>
 		<key>icon</key>
 		<string>agent</string>
 	</dict>
 	<dict>
 		<key>title</key>
-		<string>Restore Demo</string>
+		<string>History</string>
+		<key>icon</key>
+		<string>history</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Restore</string>
 		<key>icon</key>
 		<string>restore</string>
 	</dict>
 	<dict>
 		<key>title</key>
-		<string>History Demo</string>
+		<string>File Upload</string>
 		<key>icon</key>
-		<string>history</string>
+		<string>upload</string>
 	</dict>
 </array>
 </plist>
