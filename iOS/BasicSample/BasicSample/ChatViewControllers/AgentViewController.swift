@@ -32,7 +32,4 @@ class AgentViewController: BotDemoViewController {
         super.shouldPresentChatViewController(viewController)
         viewController.viewControllers.first?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "End Chat", style: .plain, target: self, action: #selector(AgentViewController.endChat(_:)))
     }
-    
-    
-
 }
