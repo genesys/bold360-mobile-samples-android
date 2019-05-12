@@ -41,8 +41,8 @@ dependencies {
 
     implementation "com.nanorep.devcore:sdkcore:3.2.4.rc9"
     implementation "com.nanorep.devconversation:engine:3.2.4.rc7"
-    implementation "com.nanorep.devconversation:chatintegration:3.2.4.rc7"
-    implementation "com.nanorep.devconversation:ui:3.2.4.rc9"
+    implementation "com.nanorep.devconversation:chatintegration:3.2.4.rc8"
+    implementation "com.nanorep.devconversation:ui:3.2.4.rc11"
     implementation "com.nanorep.devcore:accessibility:3.2.4.rc6"
 
     /*implementation "com.bold360ai-sdk.core:sdkcore:3.2.3.rc7"
@@ -53,18 +53,17 @@ dependencies {
 
     runtimeOnly 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation 'androidx.core:core-ktx:1.1.0-alpha05'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
+    implementation 'androidx.core:core-ktx:1.2.0-alpha01'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
-    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.jetbrains.anko:anko-commons:0.10.8'
 
     testImplementation 'junit:junit:4.13-beta-2'
-    androidTestImplementation 'androidx.test:runner:1.2.0-alpha05'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha05'
+    androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
 }
