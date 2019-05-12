@@ -10,25 +10,18 @@ import Bold360AI
 
 class FileUploadDemoViewController: AgentViewController {
     
-    var uploadCompletionHandler : ((FileUploadInfo?) -> Void)!
-    let imagePicker = UIImagePickerController()
+    lazy var imagePicker: UIImagePickerController = { return UIImagePickerController()}()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.imagePicker.delegate = self
     }
     
-    func didClickUploadFile(_ completionHandler: ((FileUploadInfo?) -> Void)!) {
-        self.uploadCompletionHandler = completionHandler;
-        self.openPhotoLibrary()
-    }
-    
-    func openPhotoLibrary() {
+    func didClickUploadFile() {
         guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
             print("can't open photo library")
             return
         }
-        
+        self.imagePicker.delegate = self
         self.imagePicker.sourceType = .photoLibrary
         self.navigationController?.presentedViewController?.present(imagePicker, animated: true, completion: nil)
     }
@@ -41,7 +34,7 @@ extension FileUploadDemoViewController: UIImagePickerControllerDelegate, UINavig
             print(info)
             let infoFile = FileUploadInfo()
             infoFile.fileDescription = "<p><a target='_blank' href='https://www.weightwatchers.com/us/find-a-meeting/'>https://www.weightwatchers.com/us/find-a-meeting/</a></p>"
-            self.uploadCompletionHandler(infoFile)
+            self.chatController.handle(BoldEvent.fileUploaded(infoFile))
         }
     }
     
@@ -51,8 +44,7 @@ extension FileUploadDemoViewController: UIImagePickerControllerDelegate, UINavig
             let infoFile = FileUploadInfo()
             let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey:"file failed to upload"])
             infoFile.error = error
-            
-            self.uploadCompletionHandler(infoFile)
+            self.chatController.handle(BoldEvent.fileUploaded(infoFile))
         }
         
         print("did cancel")
