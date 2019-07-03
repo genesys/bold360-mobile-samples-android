@@ -30,17 +30,11 @@ class Autocomplete : AppCompatActivity() {
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
             botViewModel.botChat.account = BotAccount(
-                "8bad6dea-8da4-4679-a23f-b10e62c84de8",
-                "jio",
-                "Staging_Updated",
-                "qa07"
-            )
-            /*BotAccount(
                 "",
                 "nanorep",
                 "English",
                 "" //https://eu1-1.nanorep.com/console/login.html
-            )*/
+            )
         }
 
         botViewModel.onError.observe(this, Observer { error ->
