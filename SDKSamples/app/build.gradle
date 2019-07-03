@@ -29,7 +29,7 @@ android {
         targetCompatibility 1.8
     }
 
-    packagingOptions{
+    packagingOptions {
         pickFirst 'META-INF/main_debug.kotlin_module'
         pickFirst 'META-INF/main_release.kotlin_module'
         pickFirst 'META-INF/atomicfu.kotlin_module'
@@ -39,11 +39,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.nanorep.devcore:sdkcore:3.2.5.rc1"
-    implementation "com.nanorep.devconversation:engine:3.2.5.rc3"
-    implementation "com.nanorep.devconversation:chatintegration:3.2.4.rc14"
-    implementation "com.nanorep.devconversation:ui:3.2.5.rc1"
-    implementation "com.nanorep.devcore:accessibility:3.2.4.rc6"
+    implementation("com.nanorep.devcore:sdkcore:3.3.0.rc1") { changing = true }
+    implementation("com.nanorep.devconversation:engine:3.3.0.rc2") { changing = true }
+    implementation("com.nanorep.devconversation:chatintegration:3.3.0.rc1") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.3.0.rc3") { changing = true }
+    implementation("com.nanorep.devcore:accessibility:3.2.+") { changing = true }
 
     /*implementation "com.bold360ai-sdk.core:sdkcore:3.2.3.rc7"
     implementation "com.bold360ai-sdk.conversation:engine:3.2.3.rc7"
@@ -51,6 +51,8 @@ dependencies {
     implementation "com.bold360ai-sdk.conversation:ui:3.2.3.rc7"
     implementation "com.bold360ai-sdk.core:accessibility:3.2.3.rc7"*/
 
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     runtimeOnly 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0-beta01'

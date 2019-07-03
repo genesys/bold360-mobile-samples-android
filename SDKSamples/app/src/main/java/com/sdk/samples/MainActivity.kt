@@ -29,15 +29,19 @@ class MainActivity : AppCompatActivity() {
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
                 "Chat with BOT",
-                resources.getDrawable(R.drawable.bot_chat)
+                resources.getDrawable(R.drawable.outline_android_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT",
                 "Chat with BOLD",
-                resources.getDrawable(R.drawable.live_chat)
+                resources.getDrawable(R.drawable.outline_perm_identity_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 "Customed welcome message",
-                resources.getDrawable(R.drawable.chat)
+                resources.getDrawable(R.drawable.outline_message_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.AUTOCOMPLETE",
+                "Standalone Autocomplete",
+                resources.getDrawable(R.drawable.outline_text_format_black_24)
             )
         )
 
@@ -88,7 +92,7 @@ class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         titleView.apply {
             text = topic.title
             topic.icon?.setBounds(0, 0, 30, 30)
-            setCompoundDrawables(topic.icon, null, null, null)
+            setCompoundDrawablesRelativeWithIntrinsicBounds(topic.icon, null, null, null)
         }
         itemView.tag = topic.intentAction
         itemView.setOnClickListener { startTopic(topic) }

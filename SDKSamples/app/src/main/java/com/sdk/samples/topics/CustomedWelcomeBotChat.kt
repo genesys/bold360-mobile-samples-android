@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.BotAccount
+import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {
 
