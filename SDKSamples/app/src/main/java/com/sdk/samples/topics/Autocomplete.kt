@@ -1,6 +1,7 @@
 package com.sdk.samples.topics
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
@@ -8,11 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.nanorep.convesationui.fragments.ArticleFragment
+import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
 import com.nanorep.nanoengine.LinkedArticleHandler
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.ArticleResponse
+import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
@@ -46,6 +49,10 @@ class Autocomplete : AppCompatActivity() {
                 result.error?.run { onError(this) } ?: result.data?.run { onArticle(this@run) }
             }
         })
+
+        botViewModel.uiConfig = AutocompleteViewUIConfig(this).apply {
+            inputStyleConfig = StyleConfig(16, Color.BLACK, Typeface.SERIF)
+        }
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().apply {
