@@ -25,16 +25,21 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+
         topics = arrayListOf(
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
                 "Chat with BOT",
                 resources.getDrawable(R.drawable.outline_android_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
+                "Chat with BOLD",
+                resources.getDrawable(R.drawable.outline_perm_identity_black_24)
+            )/*SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT",
                 "Chat with BOLD",
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
-            ), SampleTopic(
+            )*/, SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 "Customed welcome message",
                 resources.getDrawable(R.drawable.outline_message_black_24)

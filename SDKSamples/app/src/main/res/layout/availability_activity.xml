@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@drawable/rect_shape"
+             android:layout_margin="10dp">
+
+    <com.google.android.material.chip.Chip
+            android:id="@+id/action_chip"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:padding="10dp"
+            android:text="@string/chat_with_agent"
+            android:checkable="false"
+            app:closeIconEnabled="true"
+            app:iconStartPadding="5dp"
+            app:chipBackgroundColor="@color/chip_state"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"/>
+
+</FrameLayout>

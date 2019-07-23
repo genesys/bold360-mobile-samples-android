@@ -1,6 +1,5 @@
 package com.sdk.samples.topics
 
-import android.annotation.SuppressLint
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 

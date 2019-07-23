@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SDKSamples</string>
+    <string name="app_name">SDK Samples</string>
+    <string name="chat_with_agent">Chat with agent</string>
 </resources>
