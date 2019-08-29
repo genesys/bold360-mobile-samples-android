@@ -39,17 +39,17 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    /*implementation("com.nanorep.devcore:sdkcore:3.3.1.rc1") { changing = true }
-    implementation("com.nanorep.devconversation:engine:3.3.1.rc1") { changing = true }
-    implementation("com.nanorep.devconversation:chatintegration:3.3.1.rc1") { changing = true }
-    implementation("com.nanorep.devconversation:ui:3.3.1.rc1") { changing = true }
-    implementation("com.nanorep.devcore:accessibility:3.3.1.rc1") { changing = true }*/
+    implementation("com.nanorep.devcore:sdkcore:3.4.+") { changing = true }
+    implementation("com.nanorep.devconversation:engine:3.4.+") { changing = true }
+    implementation("com.nanorep.devconversation:chatintegration:3.4.+") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.4.+") { changing = true }
+    implementation("com.nanorep.devcore:accessibility:3.3.1.rc1") { changing = true }
 
-    implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
+  /*  implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
     implementation "com.bold360ai-sdk.conversation:engine:3.3.1"
     implementation "com.bold360ai-sdk.conversation:chatintegration:3.3.1"
     implementation "com.bold360ai-sdk.conversation:ui:3.3.1"
-    implementation "com.bold360ai-sdk.core:accessibility:3.3.1"
+    implementation "com.bold360ai-sdk.core:accessibility:3.3.1"*/
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'

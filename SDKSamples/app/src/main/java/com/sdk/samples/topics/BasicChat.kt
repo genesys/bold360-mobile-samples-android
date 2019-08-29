@@ -10,7 +10,7 @@ import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.AccountInfo
+import com.nanorep.nanoengine.AccountInfoAny
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
@@ -25,6 +25,15 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         topic_title.text = intent.getStringExtra("title")
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        startChat()
+    }
+
+    open fun startChat(){
         createChat()
     }
 
@@ -33,7 +42,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    abstract fun getAccount(): Account
+    abstract fun getAccount(): Account<*>
 
     protected fun createChat() {
 
@@ -65,7 +74,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         }
     }
 
-    override fun onAccountUpdate(accountInfo: AccountInfo) {
+    override fun onAccountUpdate(accountInfo: AccountInfoAny) {
     }
 
     override fun onPhoneNumberSelected(phoneNumber: String) {
@@ -74,8 +83,17 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     override fun onUrlLinkSelected(url: String) {
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        if(supportFragmentManager.backStackEntryCount == 0){
+            finish()
+        }
+    }
+
     override fun onStop() {
-        chatController.terminateChat()
+        if(this::chatController.isInitialized) chatController.terminateChat()
+
         super.onStop()
     }
 }

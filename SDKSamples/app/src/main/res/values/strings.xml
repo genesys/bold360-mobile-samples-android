@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">SDK Samples</string>
     <string name="chat_with_agent">Chat with agent</string>
+    <string name="show_departments">Press to show departments list</string>
+    <string name="hide_departments">Press to hide departments list</string>
+    <string name="start_chat">Start Chat</string>
+    <string name="department_selection"><u><b>Select a department for availability check</b></u></string>
+    <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
+
 </resources>

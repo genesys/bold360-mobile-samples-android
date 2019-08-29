@@ -20,13 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/rect_shape"
-            android:padding="3dp">
+            android:padding="3dp"
+            android:id="@+id/chat_view"/>
 
-        <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/chat_view"/>
-    </FrameLayout>
 </LinearLayout>
 
 
