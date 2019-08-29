@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CheckAvailability">
+        <activity android:name=".topics.BoldChatAvailability">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT_AVAILABILITY"/>
 
