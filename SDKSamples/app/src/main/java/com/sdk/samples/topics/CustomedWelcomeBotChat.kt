@@ -5,7 +5,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {
 
-    override fun getAccount(): Account<*> {
+    override fun getAccount(): Account {
         return (super.getAccount() as BotAccount).apply {
             welcomeMessage = Customed_WM
         }

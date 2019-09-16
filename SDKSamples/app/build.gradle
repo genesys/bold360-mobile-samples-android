@@ -9,6 +9,7 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.sdk.samples"
         minSdkVersion 19
         targetSdkVersion 28
@@ -39,13 +40,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation("com.nanorep.devcore:sdkcore:3.4.+") { changing = true }
-    implementation("com.nanorep.devconversation:engine:3.4.+") { changing = true }
-    implementation("com.nanorep.devconversation:chatintegration:3.4.+") { changing = true }
-    implementation("com.nanorep.devconversation:ui:3.4.+") { changing = true }
+    implementation("com.nanorep.devcore:sdkcore:3.4.0.rc2") { changing = true }
+    implementation("com.nanorep.devconversation:engine:3.4.0.rc3") { changing = true }
+    implementation("com.nanorep.devconversation:chatintegration:3.4.0.rc3") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.4.0.rc3") { changing = true }
     implementation("com.nanorep.devcore:accessibility:3.3.1.rc1") { changing = true }
-
-  /*  implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
+/*
+    implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
     implementation "com.bold360ai-sdk.conversation:engine:3.3.1"
     implementation "com.bold360ai-sdk.conversation:chatintegration:3.3.1"
     implementation "com.bold360ai-sdk.conversation:ui:3.3.1"

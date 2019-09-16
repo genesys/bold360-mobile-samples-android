@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 "Standalone Autocomplete",
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
+                "BoldChat Escalation from Bot with ExtraData (PreChat)",
+                resources.getDrawable(R.drawable.baseline_list_alt_black_24)
             )
         )
 

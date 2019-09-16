@@ -51,6 +51,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".topics.PrechatExtraData">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.PRE_CHAT_EXTRA_DATA"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
