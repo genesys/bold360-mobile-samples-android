@@ -44,15 +44,18 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     abstract fun getAccount(): Account<*>
 
-    protected fun createChat() {
-
+    open protected fun getBuilder() : ChatController.Builder {
         val settings = ConversationSettings()
             .datestamp(true, FriendlyDatestampFormatFactory(this)) // TODO:set as default
 
-        chatController = ChatController.Builder(this)
+        return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
-            .build(
+    }
+
+    protected fun createChat() {
+
+        chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
                         result.takeIf { it.error == null && it.fragment != null}?.run {
