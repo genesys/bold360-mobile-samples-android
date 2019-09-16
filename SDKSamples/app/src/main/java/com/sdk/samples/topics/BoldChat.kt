@@ -10,7 +10,7 @@ open class BoldChat : BasicChat() {
     }
     @JvmName("account") get
 
-    override fun getAccount(): Account<*> {
+    override fun getAccount(): Account {
         return account
     }
 

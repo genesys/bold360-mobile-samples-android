@@ -10,7 +10,7 @@ import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.AccountInfoAny
+import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
@@ -42,7 +42,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    abstract fun getAccount(): Account<*>
+    abstract fun getAccount(): Account
 
     open protected fun getBuilder() : ChatController.Builder {
         val settings = ConversationSettings()
@@ -77,7 +77,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         }
     }
 
-    override fun onAccountUpdate(accountInfo: AccountInfoAny) {
+    override fun onAccountUpdate(accountInfo: AccountInfo) {
     }
 
     override fun onPhoneNumberSelected(phoneNumber: String) {

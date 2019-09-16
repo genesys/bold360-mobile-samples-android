@@ -5,7 +5,6 @@ import com.integration.core.annotations.VisitorDataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
-import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.sdkcore.utils.Completion
 import java.util.*
@@ -45,26 +44,20 @@ class PrechatExtraData : BotChat() {
             }
             (savedAccount as? BoldAccount)?.apply {
                 addExtraData (
-                    Pair(VisitorDataKeys.Department, BOLD_DEPARTMENT),
-                    Pair(VisitorDataKeys.FirstName, DemoFirstName),
-                    Pair(VisitorDataKeys.LastName, DemoLastName))
+                    VisitorDataKeys.Department to BOLD_DEPARTMENT,
+                    VisitorDataKeys.FirstName to DemoFirstName,
+                    VisitorDataKeys.LastName to DemoLastName)
             }
             callback.onComplete(savedAccount)
         }
 
         private fun <T : AccountInfo> createAccount(account: T): T {
+            accounts[account.getApiKey()] = account
             return account
         }
     }
 
     override fun getBuilder(): ChatController.Builder {
         return super.getBuilder().accountProvider( accountProvider )
-    }
-
-    override fun getAccount(): Account {
-        return super.getAccount().run {
-            accounts[apiKey] = this
-            this
-        }
     }
 }
