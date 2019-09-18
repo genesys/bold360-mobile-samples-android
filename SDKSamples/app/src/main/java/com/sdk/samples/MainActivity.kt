@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
-                "BoldChat Escalation from Bot with ExtraData (PreChat)",
+                "BOT to BOLD Chat with Prechat values",
                 resources.getDrawable(R.drawable.baseline_list_alt_black_24)
             )
         )
