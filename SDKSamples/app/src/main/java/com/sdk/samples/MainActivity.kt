@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity() {
         topics = arrayListOf(
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
-                "Chat with BOT",
+                getString(R.string.chat_with_bot),
                 resources.getDrawable(R.drawable.outline_android_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
-                "Chat with BOLD",
+                getString(R.string.chat_with_bold),
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
             )/*SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT",
@@ -41,16 +41,16 @@ class MainActivity : AppCompatActivity() {
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
             )*/, SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
-                "Customed welcome message",
+                getString(R.string.bot_chat_with_welcome),
                 resources.getDrawable(R.drawable.outline_message_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.AUTOCOMPLETE",
-                "Standalone Autocomplete",
-                resources.getDrawable(R.drawable.outline_text_format_black_24)
-            ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
-                "BOT to BOLD Chat with Prechat values",
+                getString(R.string.bot_to_bold_with_prechat),
                 resources.getDrawable(R.drawable.baseline_list_alt_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.AUTOCOMPLETE",
+                getString(R.string.standalone_autocomplete),
+                resources.getDrawable(R.drawable.outline_text_format_black_24)
             )
         )
 

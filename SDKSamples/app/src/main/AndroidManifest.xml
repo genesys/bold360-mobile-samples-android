@@ -17,14 +17,16 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BotChat">
+        <activity android:name=".topics.BotChat"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOT_CHAT"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BoldChat">
+        <activity android:name=".topics.BoldChat"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT"/>
 
@@ -38,21 +40,24 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CustomedWelcomeBotChat">
+        <activity android:name=".topics.CustomedWelcomeBotChat"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.WELCOME_BOT_CHAT"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BoldChatAvailability">
+        <activity android:name=".topics.BoldChatAvailability"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT_AVAILABILITY"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.PrechatExtraData">
+        <activity android:name=".topics.PrechatExtraData"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.PRE_CHAT_EXTRA_DATA"/>
 

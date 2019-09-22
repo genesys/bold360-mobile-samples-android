@@ -30,6 +30,11 @@ android {
         targetCompatibility 1.8
     }
 
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjvm-default=compatibility']
+        jvmTarget = "1.8"
+    }
+
     packagingOptions {
         pickFirst 'META-INF/main_debug.kotlin_module'
         pickFirst 'META-INF/main_release.kotlin_module'
@@ -40,10 +45,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation("com.nanorep.devcore:sdkcore:3.4.0.rc4") { changing = true }
-    implementation("com.nanorep.devconversation:engine:3.4.0.rc5") { changing = true }
+    implementation("com.nanorep.devcore:sdkcore:3.4.0.rc5") { changing = true }
+    implementation("com.nanorep.devconversation:engine:3.4.0.rc6") { changing = true }
     implementation("com.nanorep.devconversation:chatintegration:3.4.0.rc4") { changing = true }
-    implementation("com.nanorep.devconversation:ui:3.4.0.rc5") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.4.0.rc6") { changing = true }
     implementation("com.nanorep.devcore:accessibility:3.4.0.rc1") { changing = true }
 /*
     implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
