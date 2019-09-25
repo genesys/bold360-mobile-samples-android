@@ -59,9 +59,8 @@ class BoldAvailability : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        view.departments_recycler.adapter = departmentAdapter.apply {
-            registerAdapterDataObserver(adapterDataObserver)
-        }
+        view.departments_recycler.adapter = departmentAdapter
+
         view.departments_recycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -189,7 +188,14 @@ class BoldAvailability : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        departmentAdapter.unregisterAdapterDataObserver(adapterDataObserver)
+        try{departmentAdapter.unregisterAdapterDataObserver(adapterDataObserver)}
+        catch (ignored:IllegalStateException){}
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        view?.departments_recycler?.adapter?.registerAdapterDataObserver(adapterDataObserver)
     }
 
     override fun onResume() {
