@@ -48,7 +48,7 @@ dependencies {
     implementation("com.nanorep.devcore:sdkcore:3.4.0.rc6") { changing = true }
     implementation("com.nanorep.devconversation:engine:3.4.0.rc7") { changing = true }
     implementation("com.nanorep.devconversation:chatintegration:3.4.0.rc4") { changing = true }
-    implementation("com.nanorep.devconversation:ui:3.4.0.rc9") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.4.0.rc10") { changing = true }
     implementation("com.nanorep.devcore:accessibility:3.4.0.rc1") { changing = true }
 /*
     implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
