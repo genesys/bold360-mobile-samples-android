@@ -45,17 +45,17 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation("com.nanorep.devcore:sdkcore:3.4.0.rc6") { changing = true }
-    implementation("com.nanorep.devconversation:engine:3.4.0.rc7") { changing = true }
-    implementation("com.nanorep.devconversation:chatintegration:3.4.0.rc4") { changing = true }
-    implementation("com.nanorep.devconversation:ui:3.4.0.rc10") { changing = true }
-    implementation("com.nanorep.devcore:accessibility:3.4.0.rc1") { changing = true }
-/*
-    implementation "com.bold360ai-sdk.core:sdkcore:3.3.1"
-    implementation "com.bold360ai-sdk.conversation:engine:3.3.1"
-    implementation "com.bold360ai-sdk.conversation:chatintegration:3.3.1"
-    implementation "com.bold360ai-sdk.conversation:ui:3.3.1"
-    implementation "com.bold360ai-sdk.core:accessibility:3.3.1"*/
+    /*implementation("com.nanorep.devcore:sdkcore:3.4.0") { changing = true }
+    implementation("com.nanorep.devconversation:engine:3.4.0") { changing = true }
+    implementation("com.nanorep.devconversation:chatintegration:3.4.0") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.4.0") { changing = true }
+    implementation("com.nanorep.devcore:accessibility:3.4.0") { changing = true }*/
+
+    implementation "com.bold360ai-sdk.core:sdkcore:3.4.0"
+    implementation "com.bold360ai-sdk.conversation:engine:3.4.0"
+    implementation "com.bold360ai-sdk.conversation:chatintegration:3.4.0"
+    implementation "com.bold360ai-sdk.conversation:ui:3.4.0"
+    implementation "com.bold360ai-sdk.core:accessibility:3.4.0"
 
 //    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
