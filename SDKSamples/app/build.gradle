@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.sdk.samples"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -45,28 +45,28 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    /*implementation("com.nanorep.devcore:sdkcore:3.4.0") { changing = true }
-    implementation("com.nanorep.devconversation:engine:3.4.0") { changing = true }
-    implementation("com.nanorep.devconversation:chatintegration:3.4.0") { changing = true }
-    implementation("com.nanorep.devconversation:ui:3.4.0") { changing = true }
-    implementation("com.nanorep.devcore:accessibility:3.4.0") { changing = true }*/
+    implementation("com.nanorep.devcore:sdkcore:3.5.0.+") { changing = true }
+    implementation("com.nanorep.devconversation:engine:3.5.0.+") { changing = true }
+    implementation("com.nanorep.devconversation:chatintegration:3.5.0.+") { changing = true }
+    implementation("com.nanorep.devconversation:ui:3.5.0.+") { changing = true }
+    implementation("com.nanorep.devcore:accessibility:3.5.0.+") { changing = true }
 
-    implementation "com.bold360ai-sdk.core:sdkcore:3.4.0"
+    /*implementation "com.bold360ai-sdk.core:sdkcore:3.4.0"
     implementation "com.bold360ai-sdk.conversation:engine:3.4.0"
     implementation "com.bold360ai-sdk.conversation:chatintegration:3.4.0"
     implementation "com.bold360ai-sdk.conversation:ui:3.4.0"
-    implementation "com.bold360ai-sdk.core:accessibility:3.4.0"
+    implementation "com.bold360ai-sdk.core:accessibility:3.4.0"*/
 
 //    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha05'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-beta01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0-alpha04'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
+    implementation 'androidx.appcompat:appcompat:1.0.2' // don't upgrade - bug with WebView
+    implementation 'androidx.core:core-ktx:1.2.0-beta01'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta05'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'  //!! don't update to beta2
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'  //!! don't update to versions grater than beta1 - causing bugs
+    implementation 'com.google.android.material:material:1.1.0-alpha10' //!! don't upgrate - causing bugs on webview
     compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1'
     compileOnly 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.multidex:multidex:2.0.1'
