@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
-            )/*SampleTopic(
-                "com.sdk.sample.action.BOLD_CHAT",
-                "Chat with BOLD",
+            ), SampleTopic(
+                "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
+                "Costumed live chat upload",
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
-            )*/, SampleTopic(
+            ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
                 resources.getDrawable(R.drawable.outline_message_black_24)
@@ -101,7 +101,7 @@ class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         titleView.apply {
             text = topic.title
             topic.icon?.setBounds(0, 0, 30, 30)
-            setCompoundDrawablesRelativeWithIntrinsicBounds(topic.icon, null, null, null)
+            setCompoundDrawablesWithIntrinsicBounds(topic.icon, null, null, null)
         }
         itemView.tag = topic.intentAction
         itemView.setOnClickListener { startTopic(topic) }

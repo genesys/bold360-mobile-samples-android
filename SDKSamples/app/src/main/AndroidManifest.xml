@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.sdk.samples">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -29,6 +31,14 @@
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.CostumedFileUpload"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
