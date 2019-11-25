@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.integration.core.StateEvent
 import com.integration.core.annotations.VisitorDataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
+import com.nanorep.sdkcore.utils.runMain
 import com.sdk.samples.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class BoldChatAvailability : BoldChat() {
+open class BoldChatAvailability : BoldChat() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +53,15 @@ class BoldChatAvailability : BoldChat() {
 
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
-            StateEvent.ChatWindowDetached -> Log.d(AvailabilityTag, "live chat ended, back to availability checks")
+            StateEvent.ChatWindowDetached -> {
+                Log.d(AvailabilityTag, "live chat ended, back to availability checks")
+                if(supportFragmentManager.backStackEntryCount > 1) {
+                    GlobalScope.launch(Dispatchers.Default) {
+                        delay(2500)
+                        runMain { onBackPressed() }
+                    }
+                }
+            }
         }
     }
 

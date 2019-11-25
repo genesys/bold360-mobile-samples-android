@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_bot_chat.*
 
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
-    private lateinit var chatController: ChatController
+    protected lateinit var chatController: ChatController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +45,16 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     abstract fun getAccount(): Account
 
     open protected fun getBuilder() : ChatController.Builder {
-        val settings = ConversationSettings()
-            .datestamp(true, FriendlyDatestampFormatFactory(this)) // TODO:set as default
+        val settings = createChatSettings()
 
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
+    }
+
+    protected open fun createChatSettings(): ConversationSettings {
+        return ConversationSettings()
+            .datestamp(true, FriendlyDatestampFormatFactory(this))
     }
 
     protected fun createChat() {
@@ -95,8 +99,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     }
 
     override fun onStop() {
-        if(this::chatController.isInitialized) chatController.terminateChat()
-
+        if(isFinishing) {
+            if (this::chatController.isInitialized) chatController.terminateChat()
+        }
         super.onStop()
     }
 }
