@@ -55,9 +55,11 @@ open class BoldChatAvailability : BoldChat() {
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> {
                 Log.d(AvailabilityTag, "live chat ended, back to availability checks")
-                GlobalScope.launch(Dispatchers.Default) {
-                    delay(2000)
-                    runMain { onBackPressed()}
+                if(supportFragmentManager.backStackEntryCount > 1) {
+                    GlobalScope.launch(Dispatchers.Default) {
+                        delay(2500)
+                        runMain { onBackPressed() }
+                    }
                 }
             }
         }
