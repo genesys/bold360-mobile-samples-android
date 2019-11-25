@@ -77,6 +77,10 @@ class CostumedFileUpload : BoldChatAvailability() {
         }
     }
 
+    override fun onUploadFileRequest() {
+        uploadFileRequest()
+    }
+    
     private fun onUploadResults(results: UploadResult) {
         Log.i(TAG, "got Upload results:$results")
         val error = results.error
