@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import com.integration.core.FileUploadInfo
 import com.integration.core.StateEvent
 import com.integration.core.UploadResult
+import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.ErrorException
@@ -30,7 +31,10 @@ import com.sdk.samples.topics.ui.live.toFileUploadInfo
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import java.util.*
 
-
+/**
+ * Demonstrate how to provide a costumed upload trigger, and do a full
+ * upload flow to a live agent.
+ */
 class CostumedFileUpload : BoldChatAvailability() {
 
     private lateinit var imageButton: ImageButton
@@ -62,6 +66,7 @@ class CostumedFileUpload : BoldChatAvailability() {
             })
     }
 
+    // we need to prevent the display of the default upload button
     override fun createChatSettings(): ConversationSettings {
         return super.createChatSettings().apply {
             this.displayUploadIndication(true) //!! Due to a bug on SDK 3.5.0 we need to display the default icon even if not in use
@@ -72,15 +77,23 @@ class CostumedFileUpload : BoldChatAvailability() {
         super.onChatStateChanged(stateEvent)
 
         when (stateEvent.state) {
-            StateEvent.Started -> imageButton.visibility = View.VISIBLE
+            StateEvent.Started -> {
+                if(chatController.isEnabled(ChatFeatures.FileUpload)) {
+                    imageButton.visibility = View.VISIBLE
+                }
+            }
             StateEvent.Ended, StateEvent.ChatWindowDetached -> imageButton.visibility = View.GONE
         }
     }
 
+    // the method that will be triggered when the SDK passes upload requests after
+    // user pressed the "default" upload button
+    // if you have your own upload trigger u don't need to implement this.
     override fun onUploadFileRequest() {
         uploadFileRequest()
     }
-    
+
+    // when upload is done by the SDK the results are passed to the upload callback
     private fun onUploadResults(results: UploadResult) {
         Log.i(TAG, "got Upload results:$results")
         val error = results.error
@@ -146,6 +159,8 @@ class CostumedFileUpload : BoldChatAvailability() {
         }
     }
 
+    // go over selected files and converts them to FileUploadInfo
+    // and passes for upload
     private fun handleFileUploads(resultData: Intent) {
         val chosenUploadsTarget = arrayListOf<FileUploadInfo>()
 
