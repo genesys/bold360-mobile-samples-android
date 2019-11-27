@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.sdk.samples"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 40
         versionName "4.0"
