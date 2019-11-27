@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
             android:drawablePadding="6dp"
-            android:textSize="18sp"
+            android:textSize="@dimen/topic_titles_text"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

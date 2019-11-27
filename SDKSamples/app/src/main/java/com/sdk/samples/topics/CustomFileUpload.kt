@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -49,7 +51,7 @@ class CustomFileUpload : BoldChatAvailability() {
     //<editor-fold desc="Custom upload: step 1: Create your custom upload trigger">
     private fun initUploadButton() {
         imageButton = ImageButton(this).apply {
-            setImageResource(R.drawable.attach_selector)
+            setImageResource(R.drawable.outline_publish_black_24)
             setOnClickListener {
                 uploadFileRequest()
             }
@@ -62,7 +64,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                val margin = 5.px
+                val margin = 3.px
                 setMargins(margin, margin, margin, margin)
                 gravity = Gravity.RIGHT
             })
@@ -199,6 +201,9 @@ class CustomFileUpload : BoldChatAvailability() {
         fun openFilePicker() {
             if (activity.isFinishing || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 Log.w(TAG, "request for file picker display is discarded")
+                if(!activity.isFinishing){
+                    toast(activity, "File browsing is supported only on API 19+", background = ColorDrawable(Color.GRAY))
+                }
                 return
             }
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -218,7 +223,7 @@ class CustomFileUpload : BoldChatAvailability() {
     }
 
     companion object {
-        const val TAG = "CostumedUploadDemo"
+        const val TAG = "CustomUploadSample"
 
         const val READ_EXTERNAL_PERMISSION_CODE = 111
         const val FILE_UPLOAD_REQUEST_CODE = 222

@@ -13,7 +13,7 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select a sample:"
-            android:textSize="18sp"
+            android:textSize="@dimen/topic_titles_text"
             android:layout_marginBottom="10dp"
             android:visibility="gone"/>
 

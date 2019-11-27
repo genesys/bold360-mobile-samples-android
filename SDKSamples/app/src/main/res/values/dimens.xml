@@ -3,5 +3,7 @@
     <dimen name="department_gap">10dp</dimen>
     <dimen name="chip_top_gap">25dp</dimen>
     <dimen name="chip_inner_padding">10dp</dimen>
+    <dimen name="topic_titles_text">18sp</dimen>
+    <dimen name="buttons_text">14sp</dimen>
 
 </resources>
