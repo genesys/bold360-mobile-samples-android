@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.sdk.samples"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 40
         versionName "4.0"
@@ -45,10 +45,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.bold360ai-sdk.core:sdkcore:3.5.0"
-    implementation "com.bold360ai-sdk.conversation:engine:3.5.0"
-    implementation "com.bold360ai-sdk.conversation:chatintegration:3.5.0"
-    implementation "com.bold360ai-sdk.conversation:ui:3.5.0"
+    implementation "com.bold360ai-sdk.core:sdkcore:3.5.1"
+    implementation "com.bold360ai-sdk.conversation:engine:3.5.1"
+    implementation "com.bold360ai-sdk.conversation:chatintegration:3.5.1"
+    implementation "com.bold360ai-sdk.conversation:ui:3.5.1"
     implementation "com.bold360ai-sdk.core:accessibility:3.5.0"
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'

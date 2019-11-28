@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
-                "Costumed live chat upload",
-                resources.getDrawable(R.drawable.outline_perm_identity_black_24)
+                "Custom upload on live chat",
+                resources.getDrawable(R.drawable.outline_publish_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
