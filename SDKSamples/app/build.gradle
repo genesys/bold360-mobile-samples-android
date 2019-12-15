@@ -57,7 +57,7 @@ dependencies {
     implementation "com.nanorep.devconversation:ui:3.6.0.rc1"
     implementation "com.nanorep.devcore:accessibility:3.6.0.rc1"
 */
-    
+
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-rc03'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
