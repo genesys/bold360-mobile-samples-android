@@ -36,6 +36,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".topics.BoldChatAsync"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.BOLD_ASYNC_CHAT"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".topics.CustomFileUpload"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
