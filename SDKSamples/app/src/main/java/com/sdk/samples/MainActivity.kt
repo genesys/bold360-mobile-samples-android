@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 resources.getDrawable(R.drawable.outline_publish_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_ASYNC_CHAT",
-                getString(R.string.async_chat_with_agent),
+                getString(R.string.async_chat_with_bold),
                 resources.getDrawable(R.drawable.baseline_async_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
