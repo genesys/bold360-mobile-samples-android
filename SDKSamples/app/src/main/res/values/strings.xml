@@ -7,10 +7,11 @@
     <string name="start_chat">Start Chat</string>
     <string name="department_selection"><u><b>Select a department for availability check</b></u></string>
     <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
-    <string name="chat_with_bot">Chat with BOT</string>
-    <string name="chat_with_bold">Chat with BOLD</string>
-    <string name="bot_chat_with_welcome">Bot chat with customed welcome</string>
+    <string name="chat_with_bot">Chat with bot ai</string>
+    <string name="chat_with_bold">Chat with live agent</string>
+    <string name="chat_with_async">Async chat with live agent</string>
+    <string name="bot_chat_with_welcome">Chat with ai: customizing welcome message</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
-    <string name="bot_to_bold_with_prechat">BOT to BOLD Chat with Prechat values</string>
+    <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
 
 </resources>
