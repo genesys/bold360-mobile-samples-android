@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
             android:allowBackup="true"
@@ -48,6 +51,14 @@
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.BoldUploadNoUI"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.BOLD_UPLOAD_NO_UI"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>

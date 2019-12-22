@@ -52,6 +52,10 @@ class MainActivity : AppCompatActivity() {
                 "Custom upload on live chat",
                 resources.getDrawable(R.drawable.outline_publish_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.BOLD_UPLOAD_NO_UI",
+                getString(R.string.bold_upload_without_ui),
+                resources.getDrawable(R.drawable.outline_publish_black_24)
+            ), SampleTopic(
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
