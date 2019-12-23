@@ -118,8 +118,9 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
 
     override fun visitorInfoUpdated() {
         runMain {
-            progress_bar.visibility = View.GONE
+            progress_bar.visibility = View.INVISIBLE
             take_a_picture.visibility = View.VISIBLE
+            upload_default_image.visibility = View.VISIBLE
         }
 
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
@@ -134,6 +135,12 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
             take_a_picture.setOnClickListener {
                 startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE)
             }
+        } ?: kotlin.run {
+            take_a_picture.isEnabled = false
+        }
+
+        upload_default_image.setOnClickListener {
+            (ContextCompat.getDrawable(this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
         }
 
     }
@@ -143,8 +150,6 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
 
         (data?.extras?.get("data") as? Bitmap)?.takeIf { requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK }?.run {
                 uploadBitmap(this)
-        } ?: kotlin.run {
-            (ContextCompat.getDrawable(this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
         }
     }
 
