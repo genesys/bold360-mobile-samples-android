@@ -35,11 +35,11 @@
 
             <TextView
                     android:id="@+id/take_a_picture"
-                    style="@style/submit_button"
+                    style="@style/main_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:text="@string/take_a_picture_text"
@@ -47,7 +47,7 @@
 
             <TextView
                     android:id="@+id/upload_default_image"
-                    style="@style/submit_button"
+                    style="@style/main_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

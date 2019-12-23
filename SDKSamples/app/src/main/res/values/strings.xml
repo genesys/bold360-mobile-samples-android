@@ -12,7 +12,7 @@
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
     <string name="bold_upload_without_ui">Uploading with live uploader</string>
-    <string name="take_a_picture_text">take a picture</string>
+    <string name="take_a_picture_text">Take a picture</string>
     <string name="upload_in_progress">Upload in progress</string>
     <string name="upload_default_image">Upload default image</string>
 
