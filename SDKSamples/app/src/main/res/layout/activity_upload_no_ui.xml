@@ -20,29 +20,39 @@
             android:background="@drawable/rect_shape"
             android:padding="3dp">
 
-        <FrameLayout
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:id="@+id/upload_container">
 
-            <ProgressBar
-                    android:id="@+id/progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
+                <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
 
-            <TextView
-                    android:id="@+id/take_a_picture"
-                    style="@style/submit_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="@string/take_a_picture_text"
-                    android:visibility="gone" />
+                    <ProgressBar
+                            android:id="@+id/progress_bar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center" />
 
-        </FrameLayout>
+                    <TextView
+                            android:id="@+id/take_a_picture"
+                            style="@style/submit_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="@string/take_a_picture_text"
+                            android:visibility="gone" />
+
+                </FrameLayout>
+
+        </LinearLayout>
 
     </FrameLayout>
+
 </LinearLayout>

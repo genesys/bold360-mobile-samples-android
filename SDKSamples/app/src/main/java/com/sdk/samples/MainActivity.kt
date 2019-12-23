@@ -35,11 +35,7 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
-                getString(R.string.async_chat_with_an_agent),
-                resources.getDrawable(R.drawable.outline_transform_black_24)
-            ), SampleTopic(
+            ),  SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
                 resources.getDrawable(R.drawable.baseline_list_alt_black_24)
