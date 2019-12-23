@@ -141,11 +141,9 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            (data?.extras?.get("data") as? Bitmap)?.run {
+        (data?.extras?.get("data") as? Bitmap)?.takeIf { requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK }?.run {
                 uploadBitmap(this)
-            }
-        } else {
+        } ?: kotlin.run {
             (ContextCompat.getDrawable(this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
         }
     }
@@ -258,11 +256,15 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
         }
 
         fun updateProgress(progress: Int) {
-            progressBar?.progress = progress
+            runMain {
+                progressBar?.progress = progress
+            }
         }
 
         fun updateText(text: String) {
-            uploadTitle?.text = text
+            runMain {
+                uploadTitle?.text = text
+            }
         }
     }
 
