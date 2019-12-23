@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -22,6 +23,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -29,7 +31,6 @@ import com.integration.bold.boldchat.core.PreChatData
 import com.integration.bold.boldchat.core.UnavailabilityData
 import com.integration.bold.boldchat.visitor.api.SessionParam
 import com.integration.core.BoldLiveUploader
-import com.integration.core.Chatter
 import com.integration.core.FileUploadInfo
 import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
@@ -89,11 +90,9 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
                 finish()
             }
 
-        }.start()
+        }.create()
 
     }
-
-    override fun operatorChanged(chatter: Chatter) {}
 
     override fun chatEnded(formData: PostChatData?) {
 
@@ -146,6 +145,8 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
             (data?.extras?.get("data") as? Bitmap)?.run {
                 uploadBitmap(this)
             }
+        } else {
+            (ContextCompat.getDrawable(this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
         }
     }
 
@@ -163,35 +164,35 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
         }
 
         uploader.upload(
-                fileUploadInfo,
-                boldChat?.sessionInfo(),
+            fileUploadInfo,
+            boldChat?.sessionInfo(),
 
-                {   currentProgress ->
+            { currentProgress ->
 
-                    currentProgress.takeIf { it == 100 }?.run {
-                        progressController.updateProgress(this)
-                    } ?: kotlin.run {
-                        progressController.updateText("Upload Completed")
-                    }
+                currentProgress.takeIf { it == 100 }?.run {
+                    progressController.updateProgress(this)
+                } ?: kotlin.run {
+                    progressController.updateText("Upload Completed")
                 }
+            }
 
-            ) { uploadResult: UploadResult? ->
+        ) { uploadResult: UploadResult? ->
 
-                uploadResult?.run {
+            uploadResult?.run {
 
-                    error?.run {
-                        Log.e(TAG, toString())
-
-                    } ?: kotlin.run {
-
-                        progressController.updateView(false)
-
-                        Log.i(TAG, "${data?.toString()} uploaded")
-                    }
+                error?.run {
+                    Log.e(TAG, toString())
 
                 } ?: kotlin.run {
-                    Log.e(TAG, "null response")
+
+                    progressController.updateView(false)
+
+                    Log.i(TAG, "${data?.toString()} uploaded")
                 }
+
+            } ?: kotlin.run {
+                Log.e(TAG, "null response")
+            }
         }
     }
 
