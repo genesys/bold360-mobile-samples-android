@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">SDK Samples</string>
     <string name="chat_with_agent">Chat with agent</string>
-    <string name="async_chat_with_an_agent">Async chat with an agent</string>
     <string name="show_departments">Press to show departments list</string>
     <string name="hide_departments">Press to hide departments list</string>
     <string name="start_chat">Start Chat</string>
@@ -9,7 +8,6 @@
     <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
     <string name="chat_with_bot">Chat with bot ai</string>
     <string name="chat_with_bold">Chat with live agent</string>
-    <string name="chat_with_async">Async chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with ai: customizing welcome message</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
