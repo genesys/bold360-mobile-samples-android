@@ -5,8 +5,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -197,19 +195,51 @@ class CustomFileUpload : BoldChatAvailability() {
     //</editor-fold>
 
 
+    fun openFilePicker(activity: Activity) {
+
+        val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+
+            Intent(Intent.ACTION_GET_CONTENT)
+
+        } else {
+
+            Intent(Intent.ACTION_OPEN_DOCUMENT)
+
+        }.apply {
+            type = "*/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+
+        try {
+            activity.startActivityForResult(
+                    Intent.createChooser(intent, "Select files to upload"),
+                    FILE_UPLOAD_REQUEST_CODE)
+
+        } catch (e: ActivityNotFoundException) {
+            toast(activity, activity.getString(R.string.FileChooserError), Toast.LENGTH_LONG)
+        }
+    }
+
     class FilePicker(private val activity: Activity) {
         fun openFilePicker() {
-            if (activity.isFinishing || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            if (activity.isFinishing) {
                 Log.w(TAG, "request for file picker display is discarded")
-                if(!activity.isFinishing){
-                    toast(activity, "File browsing is supported only on API 19+", background = ColorDrawable(Color.GRAY))
-                }
                 return
             }
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.type = "*/*"
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+
+            val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                Intent(Intent.ACTION_GET_CONTENT)
+                
+            } else {
+                Intent(Intent.ACTION_OPEN_DOCUMENT)
+
+            } .apply {
+                type = "*/*"
+                addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            }
+
             try {
                 ActivityCompat.startActivityForResult(
                     activity,
