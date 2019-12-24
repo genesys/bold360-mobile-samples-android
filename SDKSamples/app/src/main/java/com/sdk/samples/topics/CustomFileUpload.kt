@@ -192,34 +192,6 @@ class CustomFileUpload : BoldChatAvailability() {
             }
         }
     }
-    //</editor-fold>
-
-
-    fun openFilePicker(activity: Activity) {
-
-        val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-
-            Intent(Intent.ACTION_GET_CONTENT)
-
-        } else {
-
-            Intent(Intent.ACTION_OPEN_DOCUMENT)
-
-        }.apply {
-            type = "*/*"
-            addCategory(Intent.CATEGORY_OPENABLE)
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        }
-
-        try {
-            activity.startActivityForResult(
-                    Intent.createChooser(intent, "Select files to upload"),
-                    FILE_UPLOAD_REQUEST_CODE)
-
-        } catch (e: ActivityNotFoundException) {
-            toast(activity, activity.getString(R.string.FileChooserError), Toast.LENGTH_LONG)
-        }
-    }
 
     class FilePicker(private val activity: Activity) {
         fun openFilePicker() {
@@ -230,7 +202,7 @@ class CustomFileUpload : BoldChatAvailability() {
 
             val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 Intent(Intent.ACTION_GET_CONTENT)
-                
+
             } else {
                 Intent(Intent.ACTION_OPEN_DOCUMENT)
 
