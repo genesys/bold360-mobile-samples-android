@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/chat_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:context=".topics.ChatRestore">
+
+    <TextView
+            android:id="@+id/topic_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    <FrameLayout
+            android:id="@+id/chat_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rect_shape"
+            android:padding="3dp">
+
+        <LinearLayout
+                android:id="@+id/launchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            <CheckBox
+                    android:id="@+id/preserver_handler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:checked="false"
+                    android:text="Preserve handler" />
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorPrimaryDark" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/async_chat"
+                    style="@style/main_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Start Async Chat" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bold_chat"
+                    style="@style/main_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:enabled="true"
+                    android:text="Start Bold Chat" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bot_chat"
+                    style="@style/main_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Start Bot Chat" />
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorPrimaryDark" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/restore_chat"
+                    style="@style/main_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Restore last Chat" />
+
+            <RadioGroup
+                    android:id="@+id/restore_chat_with_account_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkedButton="@id/bot_radio"
+                    android:orientation="vertical">
+
+                <RadioButton
+                        android:id="@+id/bot_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="bot_chat"
+                        android:text="Bot account" />
+
+                <RadioButton
+                        android:id="@+id/bold_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="bold_chat"
+                        android:text="Bold account" />
+
+                <RadioButton
+                        android:id="@+id/async_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="async_chat"
+                        android:text="Async account" />
+
+            </RadioGroup>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorPrimaryDark" />
+
+            <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:maxHeight="20dp"
+                    android:visibility="invisible" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

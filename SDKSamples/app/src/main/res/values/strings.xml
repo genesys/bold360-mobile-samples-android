@@ -12,6 +12,7 @@
     <string name="chat_with_async">Async chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with ai: customizing welcome message</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
+    <string name="restore">Chat Restore</string>
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
 
 </resources>

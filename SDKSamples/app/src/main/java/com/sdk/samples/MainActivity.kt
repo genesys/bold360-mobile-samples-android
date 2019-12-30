@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 
-class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
+open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,6 +54,10 @@ class MainActivity : AppCompatActivity() {
             ), SampleTopic(
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
+                resources.getDrawable(R.drawable.outline_text_format_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.RESTORE",
+                getString(R.string.restore),
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
             )
         )
