@@ -1,7 +1,15 @@
 package com.sdk.samples.topics
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
@@ -12,12 +20,17 @@ import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
+import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected lateinit var chatController: ChatController
+
+    protected var endMenu: MenuItem? = null
+    protected var destructMenu: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +57,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     abstract fun getAccount(): Account
 
-    open protected fun getBuilder() : ChatController.Builder {
+    protected open fun getBuilder() : ChatController.Builder {
         val settings = createChatSettings()
 
         return ChatController.Builder(this)
@@ -78,7 +91,13 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finish()
+            StateEvent.Unavailable -> toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
         }
+    }
+
+    override fun onError(error: NRError) {
+        super.onError(error)
+        toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
     }
 
     override fun onAccountUpdate(accountInfo: AccountInfo) {
@@ -103,5 +122,54 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             if (this::chatController.isInitialized) chatController.terminateChat()
         }
         super.onStop()
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        this.endMenu = menu?.findItem(R.id.end_current_chat)
+        this.destructMenu = menu?.findItem(R.id.destruct_chat)
+
+        if (this::chatController.isInitialized) {
+            enableMenu(endMenu, chatController.hasOpenChats())
+            enableMenu(destructMenu, true)
+        }
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_settings -> return false
+           
+            R.id.end_current_chat -> {
+                chatController.endChat(false)
+                return true
+            }
+           
+            R.id.destruct_chat -> {
+                chatController.destruct()
+                item.isEnabled = false
+                return true
+            }
+            else -> {
+            }
+        }
+        return false
+    }
+
+    protected open fun enableMenu(@Nullable menuItem: MenuItem?, enable: Boolean) {
+        if (menuItem != null) {
+            menuItem.isEnabled = enable
+        }
     }
 }

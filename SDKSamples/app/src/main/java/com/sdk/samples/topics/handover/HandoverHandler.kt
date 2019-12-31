@@ -20,23 +20,27 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.getAs
 import java.util.*
 
-class HandoverHandler(context: Context) : HandoverHandler(context) {
+class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
     private var handlerConfiguration: String? = null
     private val handler = Handler()
 
-    override fun handleEvent( name: String, event: Event) {
-
+    override fun handleEvent(
+        name: String,
+        event: Event
+    ) {
         when (name) {
 
-            UserAction -> (event as? UserEvent)?.takeIf { it.action == UserEvent.ActionLink }?.run {
-                    passEvent(this)
+            UserAction -> if (event is UserEvent) {
+                val userEvent = event
+                if (userEvent.action == UserEvent.ActionLink) {
+                    passEvent(userEvent)
+                }
             }
 
             Message -> {
-                event.data?.getAs<ChatStatement>()?.run {
-                    injectElement(this)
-                }
+                val statement = event.data.getAs<ChatStatement>()
+                statement?.let { injectElement(it) }
             }
 
             State -> handleState(event.getAs<StateEvent>())
@@ -45,22 +49,17 @@ class HandoverHandler(context: Context) : HandoverHandler(context) {
         }
 
         // If there is any post event function, invoke it after the event handling
-        event.postEvent?.invoke()
+        val postEvent: Function0<*>? = event.postEvent
+        postEvent?.invoke()
     }
 
     private fun handleError(event: Event) {
 
         (event as? ErrorEvent)?.takeIf { it.code == NRError.StatementError }?.run {
 
-            var request = data.getAs<ChatStatement>()
+            val request = data.getAs<ChatStatement>() ?: kotlin.run {  data.getAs<NRError>()?.run { data.getAs<ChatStatement>() } }
 
-            if (request == null) {
-                data.getAs<NRError>()?.run {
-                    request = data.getAs<ChatStatement>()
-                }
-            }
-
-            request?.let { updateStatus(request, StatusPending) }
+            request?.let { updateStatus(it, StatusPending) }
         }
 
         passEvent(event)
@@ -68,14 +67,14 @@ class HandoverHandler(context: Context) : HandoverHandler(context) {
 
     override fun enableChatInput( enable: Boolean, cmpData: ChatInputData? ) {
 
-        ChatInputData().run {
+        super.enableChatInput(enable,  ChatInputData().apply {
 
-            onSend = if (enable) { charSequence -> post(OutgoingStatement(charSequence.toString())) } else null
+            onSend = if (enable) { charSequence: CharSequence -> post(OutgoingStatement(charSequence.toString())) } else null
+
             voiceEnabled = enable && isEnabled(ChatFeatures.SpeechRecognition)
             inputEnabled = enable
 
-        }
-        super.enableChatInput(enable, cmpData)
+        })
     }
 
     override fun startChat(accountInfo: AccountInfo?) {
@@ -103,6 +102,7 @@ class HandoverHandler(context: Context) : HandoverHandler(context) {
     override fun handleState(event: StateEvent?) {
 
         event?.run {
+
             when (state) {
 
                 StateEvent.Started -> {
@@ -124,6 +124,7 @@ class HandoverHandler(context: Context) : HandoverHandler(context) {
                 else -> super.handleState(event)
             }
         }
+
     }
 
     override fun onResume() {
@@ -139,8 +140,7 @@ class HandoverHandler(context: Context) : HandoverHandler(context) {
     private fun simulateAgentResponse(outgoingMessage: String) {
 
         presentTypingIndication(true)
-
-        handler.postDelayed( {
+        handler.postDelayed({
 
             var agentAnswer = "handover response number " + responseNumber++
 
@@ -156,15 +156,13 @@ class HandoverHandler(context: Context) : HandoverHandler(context) {
         }, 2000)
     }
 
-    private fun presentTypingIndication(isTyping: Boolean) {
-
-        /* -> In order to use the apps custom typing indication use:
+    private fun presentTypingIndication(isTyping: Boolean) { /* -> In order to use the apps custom typing indication use:
             listener.handleEvent(Operator, new OperatorEvent(OperatorEvent.OperatorTyping, getScope(), isTyping));
          */
-
         Log.d("handover", "event: operatorTyping: $isTyping")
-        if (chatDelegate == null) return
 
+        if (chatDelegate == null) return
+        
         if (isTyping) {
             chatDelegate!!.updateCmp(ComponentType.LiveTypingCmp, null)
         } else {

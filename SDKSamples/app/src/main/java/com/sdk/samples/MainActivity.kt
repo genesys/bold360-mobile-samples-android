@@ -57,8 +57,12 @@ class MainActivity : AppCompatActivity() {
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.RESTORE",
-                getString(R.string.restore),
-                resources.getDrawable(R.drawable.outline_text_format_black_24)
+                getString(R.string.chat_restore),
+                resources.getDrawable(R.drawable.baseline_restore_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.HANDOVER",
+                getString(R.string.bot_chat_with_handover),
+                resources.getDrawable(R.drawable.baseline_pan_tool_black_24)
             )
         )
 
