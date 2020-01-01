@@ -1,184 +1,182 @@
 package com.sdk.samples.topics
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.integration.async.core.UserInfo
-import com.integration.core.userInfo
-import com.nanorep.convesationui.async.AsyncAccount
-import com.nanorep.convesationui.bold.model.BoldAccount
-import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
-import com.nanorep.convesationui.structure.controller.ChatController
-import com.nanorep.convesationui.structure.controller.ChatEventListener
-import com.nanorep.convesationui.structure.controller.ChatLoadResponse
-import com.nanorep.convesationui.structure.controller.ChatLoadedListener
+import androidx.fragment.app.Fragment
+import com.integration.core.StateEvent
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.AccountInfo
-import com.nanorep.nanoengine.bot.BotAccount
-import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.restore_activity.*
+import kotlinx.android.synthetic.main.activity_bot_chat.*
+import kotlinx.android.synthetic.main.restore_layout.*
 
-open class ChatRestore : AppCompatActivity(), ChatEventListener {
+open class ChatRestore : BasicChat(), IRestoreSettings {
 
-    private lateinit var chatController: ChatController
+    private var account: Account? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.restore_activity)
 
-        topic_title.text = intent.getStringExtra("title")
+        prepareUI()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onRestore(account: Account?, isRestorable: Boolean) {
 
-        startChat()
-    }
+        this.account = account
 
-    private fun startChat() {
+        destructWithUI = !isRestorable
 
-        bot_chat.setOnClickListener { onAccountClick(it.id) }
-        bold_chat.setOnClickListener { onAccountClick(it.id) }
-        async_chat.setOnClickListener { onAccountClick(it.id) }
+        try {
+            chatController.restoreChat(account = account, autoChatEnd = destructWithUI)
 
-        restore_chat.setOnClickListener {
-
-            if (this::chatController.isInitialized) {
-
-                val resId = resources.getIdentifier(
-                    findViewById<RadioButton>(restore_chat_with_account_group.checkedRadioButtonId).tag as String,
-                    "id",
-                    packageName
-                )
-
-                val account = getAccount(resId)
-
-                try {
-                    (account as? BotAccount)?.run { chatController.startChat(this) }
-
-                        ?: kotlin.run {
-
-                            chatController.restoreChat(
-                                null,
-                                account,
-                                !preserver_handler.isChecked
-                            )
-
-                        }
-
-                } catch (ex: IllegalStateException) {
-                    toast(
-                        this,
-                        NRError(ex).toString(),
-                        Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)
-                    )
-                }
-
-            } else {
-
-                toast(
-                    this,
-                    "ChatController was not initialized", Toast.LENGTH_SHORT,
-                    ColorDrawable(Color.GRAY)
-                )
-
-            }
+            /* or use the following:
+              if(!destructWithUI)
+                chatController.startChat(account)
+            */
+        } catch (ex: IllegalStateException) {
+            onError(NRError(ex))
         }
     }
 
-    override fun finish() {
-        super.finish()
-        if (this::chatController.isInitialized) chatController.terminateChat()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+    override fun onCreate(account: Account, isRestorable: Boolean) {
+        this.account = account
+        destructWithUI = !isRestorable
+
+        try {
+            createChat()
+        } catch (ex: IllegalStateException) {
+            onError(NRError(ex))
+        }
     }
 
-    private fun onAccountClick(id: Int) {
+    private fun prepareUI() {
+        supportFragmentManager.beginTransaction()
+            .add(chat_view.id, RestoreFragment(), topic_title.text.toString())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun createChat() {
         setLoading(true)
-        chatController = getBuilder().build(
-            getAccount(id), object : ChatLoadedListener {
-                override fun onComplete(result: ChatLoadResponse) {
-                    result.takeIf { it.error == null && it.fragment != null }?.run {
-                        supportFragmentManager.beginTransaction()
-                            .replace(chat_view.id, fragment!!, topic_title.text.toString())
-                            .addToBackStack(null)
-                            .commit()
-                        setLoading(false)
-                    }
-                }
-            },
-            !preserver_handler.isChecked
-        )
+        super.createChat()
+
+        restore_chat.isEnabled = true
     }
 
-    private fun getBuilder(): ChatController.Builder {
-        val settings = createChatSettings()
-
-        return ChatController.Builder(this)
-            .chatEventListener(this)
-            .conversationSettings(settings)
+    override fun startChat() {
+        // super.startChat()
     }
 
-    private fun createChatSettings(): ConversationSettings {
-        return ConversationSettings()
-            .datestamp(true, FriendlyDatestampFormatFactory(this))
+    override fun getAccount(): Account {
+        return account!!
     }
 
-    private fun getAccount(viewId: Int): Account =
+    override fun onChatLoaded() {
+        setLoading(false)
+    }
 
-        when (viewId) {
-            R.id.bot_chat -> BotAccount(
-                "8bad6dea-8da4-4679-a23f-b10e62c84de8", "jio",
-                "Staging_Updated", "qa07", null
+    override fun onChatStateChanged(stateEvent: StateEvent) {
+        Log.d("Chat event", "chat in state: ${stateEvent.state}")
+
+        when (stateEvent.state) {
+            StateEvent.ChatWindowDetached -> {
+                if (supportFragmentManager.backStackEntryCount > 1)
+                    onBackPressed()
+            }
+            StateEvent.Unavailable -> toast(
+                this@ChatRestore,
+                stateEvent.state,
+                Toast.LENGTH_SHORT,
+                ColorDrawable(Color.GRAY)
             )
 
-            R.id.bold_chat -> BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV")
-
-            else -> {
-                
-                val account = AsyncAccount(
-                    "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2",
-                    "mobile12345"
-                )
-
-                val userInfo = UserInfo("1234567654321234567")
-                userInfo.firstName = "fame"
-                userInfo.lastName = "s"
-                userInfo.email = "android@is.s"
-                userInfo.phoneNumber = "09666"
-
-                account.getInfo().userInfo = userInfo
-
-                account
-            }
+            StateEvent.Started -> enableMenu(endMenu, true)
         }
+    }
 
     private fun setLoading(loading: Boolean) {
-        bot_chat.isEnabled = !loading
-        bold_chat.isEnabled = !loading
-        async_chat.isEnabled = !loading
-        restore_chat.isEnabled = !loading
         progressBar.visibility = if (loading) View.VISIBLE else View.INVISIBLE
     }
+}
 
-    override fun onError(error: NRError) {
-        super.onError(error)
-        toast(
-            this,
-            error.toString(), Toast.LENGTH_SHORT,
-            ColorDrawable(Color.GRAY)
-        )
+
+interface IRestoreSettings {
+    fun onCreate(account: Account, isRestorable: Boolean)
+    fun onRestore(account: Account?, isRestorable: Boolean)
+    fun hasChatController(): Boolean
+}
+
+
+class RestoreFragment : Fragment() {
+
+    private var restoreSettings: IRestoreSettings? = null
+    private var selectedAccount: Account? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.restore_layout, container, false)
     }
 
-    override fun onAccountUpdate(accountInfo: AccountInfo) {}
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
-    override fun onPhoneNumberSelected(phoneNumber: String) {}
+        restoreSettings = context as? IRestoreSettings
+    }
 
-    override fun onUrlLinkSelected(url: String) {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        create_chat.setOnClickListener {
+            selectedAccount?.run { restoreSettings?.onCreate(this, preserver_handler.isChecked) }
+        }
+
+        restore_chat.setOnClickListener {
+            restoreSettings?.onRestore(selectedAccount, preserver_handler.isChecked)
+        }
+
+        chat_action_group.setOnCheckedChangeListener { group, checkedId ->
+            selectedAccount = getAccount(getCheckedRadio()?.tag as? String)
+            enableChatAction()
+        }
+
+        chat_action_group.check(bot_radio.id)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        enableChatAction()
+    }
+
+    private fun getAccount(accountName: String?): Account? =
+
+        when (accountName) {
+            "bot_chat" -> BotChat.defaultBotAccount
+
+            "bold_chat" -> BoldChat.defaultBoldAccount
+
+            "async_chat" -> BoldChatAsync.defaultAsyncAccount
+
+            else -> null
+        }
+
+    private fun enableChatAction() {
+        create_chat.isEnabled = selectedAccount != null
+        restore_chat.isEnabled = restoreSettings?.hasChatController() ?: false
+    }
+
+    private fun getCheckedRadio() =
+        view?.findViewById<RadioButton>(chat_action_group.checkedRadioButtonId)
 }

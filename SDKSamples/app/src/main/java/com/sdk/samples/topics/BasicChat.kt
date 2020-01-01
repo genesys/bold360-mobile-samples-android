@@ -4,10 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
@@ -18,16 +16,20 @@ import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
+import kotlinx.android.synthetic.main.restore_layout.*
+import kotlin.properties.Delegates
 
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected lateinit var chatController: ChatController
+    protected var destructWithUI: Boolean by Delegates.observable(true){property, oldValue, newValue ->
+            current_radio.isEnabled = !newValue
+    }
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
@@ -70,7 +72,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             .datestamp(true, FriendlyDatestampFormatFactory(this))
     }
 
-    protected fun createChat() {
+    protected open fun createChat() {
 
         chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
@@ -80,10 +82,17 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
                                 .addToBackStack(null)
                                 .commit()
+
+                            onChatLoaded()
+                        }?: kotlin.run {
+                            onChatLoaded()
                         }
                     }
-                }
-            )
+                }, destructWithUI)
+    }
+
+    protected open fun onChatLoaded() {
+
     }
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
@@ -100,16 +109,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
     }
 
-    override fun onAccountUpdate(accountInfo: AccountInfo) {
-    }
-
-    override fun onPhoneNumberSelected(phoneNumber: String) {
-    }
-
-    override fun onUrlLinkSelected(url: String) {
-    }
-
     override fun onBackPressed() {
+        enableMenu(endMenu, hasChatController() && chatController.hasOpenChats())
+
         super.onBackPressed()
 
         if(supportFragmentManager.backStackEntryCount == 0){
@@ -124,13 +126,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         super.onStop()
     }
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
+    /*override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-    }
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
@@ -139,7 +137,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         this.endMenu = menu?.findItem(R.id.end_current_chat)
         this.destructMenu = menu?.findItem(R.id.destruct_chat)
 
-        if (this::chatController.isInitialized) {
+        if (hasChatController()) {
             enableMenu(endMenu, chatController.hasOpenChats())
             enableMenu(destructMenu, true)
         }
@@ -149,8 +147,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> return false
-           
             R.id.end_current_chat -> {
                 chatController.endChat(false)
                 return true
@@ -161,6 +157,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                 item.isEnabled = false
                 return true
             }
+
             else -> {
             }
         }
@@ -172,4 +169,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             menuItem.isEnabled = enable
         }
     }
+
+    fun hasChatController() : Boolean {
+        return this::chatController.isInitialized
+    }
+
 }

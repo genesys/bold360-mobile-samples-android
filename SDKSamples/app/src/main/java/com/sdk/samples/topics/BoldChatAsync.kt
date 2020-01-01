@@ -8,17 +8,7 @@ import com.nanorep.nanoengine.Account
 open class BoldChatAsync : BasicChat() {
 
     protected val account:AsyncAccount by lazy {
-
-        AsyncAccount("2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2", "mobile12345").apply {
-
-            info.userInfo = UserInfo("1234567654321234569").apply {
-                firstName = "First name"
-                lastName = "Last name"
-                email = "Email@Bold.com"
-                phoneNumber = "123456"
-            }
-
-        }
+        defaultAsyncAccount
     }
 
     @JvmName("account") get
@@ -27,4 +17,17 @@ open class BoldChatAsync : BasicChat() {
         return account
     }
 
+    companion object{
+        val defaultAsyncAccount = AsyncAccount(
+            "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2",
+            "mobile12345"
+        ).apply {
+            info.userInfo = UserInfo("1234567654321234569").apply {
+                firstName = "First name"
+                lastName = "Last name"
+                email = "Email@Bold.com"
+                phoneNumber = "123456"
+            }
+        }
+    }
 }

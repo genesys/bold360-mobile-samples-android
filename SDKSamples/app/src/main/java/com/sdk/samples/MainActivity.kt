@@ -48,21 +48,21 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.bot_chat_with_welcome),
                 resources.getDrawable(R.drawable.outline_message_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.HANDOVER",
+                getString(R.string.bot_chat_with_handover),
+                resources.getDrawable(R.drawable.baseline_pan_tool_black_24)
+            ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
                 resources.getDrawable(R.drawable.outline_publish_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.AUTOCOMPLETE",
-                getString(R.string.standalone_autocomplete),
-                resources.getDrawable(R.drawable.outline_text_format_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.RESTORE",
                 getString(R.string.chat_restore),
                 resources.getDrawable(R.drawable.baseline_restore_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.HANDOVER",
-                getString(R.string.bot_chat_with_handover),
-                resources.getDrawable(R.drawable.baseline_pan_tool_black_24)
+                "com.sdk.sample.action.AUTOCOMPLETE",
+                getString(R.string.standalone_autocomplete),
+                resources.getDrawable(R.drawable.outline_text_format_black_24)
             )
         )
 
