@@ -6,12 +6,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 open class BotChat : BasicChat() {
 
     protected val account: BotAccount by lazy {
-        BotAccount(
-            "",
-            "nanorep",
-            "English",
-            "" //https://eu1-1.nanorep.com/console/login.html
-        )
+        defaultBotAccount
     }
         @JvmName("account") get
 
@@ -19,4 +14,17 @@ open class BotChat : BasicChat() {
         return account
     }
 
+    companion object{
+        val defaultBotAccount = BotAccount(
+            "",
+            "nanorep",
+            "English",
+            "" //https://eu1-1.nanorep.com/console/login.html
+        )
+
+        val testAccount = BotAccount(
+            "8bad6dea-8da4-4679-a23f-b10e62c84de8", "jio",
+            "Staging_Updated", "qa07", null
+        )
+    }
 }
