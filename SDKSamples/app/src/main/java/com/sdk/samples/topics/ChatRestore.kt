@@ -74,7 +74,7 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
     }
 
     override fun startChat() {
-        // super.startChat()
+        // should not start chat here.
     }
 
     override fun getAccount(): Account {
@@ -93,11 +93,10 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
                 if (supportFragmentManager.backStackEntryCount > 1)
                     onBackPressed()
             }
+
             StateEvent.Unavailable -> toast(
-                this@ChatRestore,
-                stateEvent.state,
-                Toast.LENGTH_SHORT,
-                ColorDrawable(Color.GRAY)
+                this@ChatRestore, stateEvent.state,
+                Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)
             )
 
             StateEvent.Started -> enableMenu(endMenu, true)
