@@ -63,6 +63,10 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.HISTORY",
+                getString(R.string.standalone_autocomplete),
+                resources.getDrawable(R.drawable.outline_text_format_black_24)
             )
         )
 
