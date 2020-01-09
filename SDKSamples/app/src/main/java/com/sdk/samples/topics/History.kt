@@ -1,18 +1,17 @@
 package com.sdk.samples.topics
 
-import android.os.Bundle
+import android.view.MenuItem
+import androidx.lifecycle.lifecycleScope
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.sdk.samples.topics.history.DemoHistoryProvider
+import com.sdk.samples.R
+import com.sdk.samples.topics.history.HistoryRepository
+import com.sdk.samples.topics.history.RoomHistoryProvider
 
 open class History : BotChat() {
 
-    var historyProvider: DemoHistoryProvider? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    lateinit var historyRepository: HistoryRepository
 
     companion object {
         const val HistoryPageSize = 8
@@ -22,10 +21,10 @@ open class History : BotChat() {
         return BotAccount("8bad6dea-8da4-4679-a23f-b10e62c84de8", "jio",
             "Staging_Updated", "qa07", null)
     }
-    
+
     override fun getBuilder(): ChatController.Builder {
 
-        historyProvider = DemoHistoryProvider(this)
+        historyRepository = HistoryRepository(RoomHistoryProvider(this, lifecycleScope))
 
         val settings = createChatSettings()
 
@@ -33,13 +32,29 @@ open class History : BotChat() {
 
             conversationSettings(settings)
             chatEventListener(this@History)
-            chatElementListener(historyProvider!!)
+            chatElementListener(historyRepository)
         }
     }
 
-    override fun finish() {
-        super.finish()
-        //historyProvider?.clearRoom()
+    override fun onChatLoaded() {
+        super.onChatLoaded()
+        menu?.findItem(R.id.clear_history)?.isVisible = true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item.itemId) {
+            R.id.clear_history -> {
+                historyRepository.clearHistory()
+
+                chatController.destruct()
+                return true
+            }
+        }
+
+        return false
+    }
+
 
 }

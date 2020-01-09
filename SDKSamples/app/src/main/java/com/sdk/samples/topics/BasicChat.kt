@@ -33,6 +33,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
+    protected var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +134,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        this.menu = menu
 
         this.endMenu = menu?.findItem(R.id.end_current_chat)
         this.destructMenu = menu?.findItem(R.id.destruct_chat)
