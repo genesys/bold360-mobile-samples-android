@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             ), SampleTopic(
                 "com.sdk.sample.action.RESTORE",
                 getString(R.string.chat_restore),
-                resources.getDrawable(R.drawable.baseline_cached_black_24)
+                resources.getDrawable(R.drawable.baseline_restore_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),

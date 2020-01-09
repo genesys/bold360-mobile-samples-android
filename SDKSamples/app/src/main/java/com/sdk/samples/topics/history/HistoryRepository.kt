@@ -9,7 +9,7 @@ interface HistoryProvider: ChatElementListener {
 }
 
 /**
- * Being used in order to provide a dynamic HistoryElementListener injection
+ * Being used in order to provide a dynamic HistoryElementListener injection option
  */
 class HistoryRepository(private val historyProvider: HistoryProvider) : ChatElementListener {
 

@@ -9,7 +9,7 @@ import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
 
 /**
- * The Room database implementation
+ * The Room database implementation for the History
  */
 
 private const val HISTORY = "history_database"

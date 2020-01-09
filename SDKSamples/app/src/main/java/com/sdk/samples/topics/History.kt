@@ -3,8 +3,6 @@ package com.sdk.samples.topics
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import com.nanorep.convesationui.structure.controller.ChatController
-import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.R
 import com.sdk.samples.topics.history.HistoryRepository
 import com.sdk.samples.topics.history.RoomHistoryProvider
@@ -15,11 +13,6 @@ open class History : BotChat() {
 
     companion object {
         const val HistoryPageSize = 8
-    }
-
-    override fun getAccount(): Account {
-        return BotAccount("8bad6dea-8da4-4679-a23f-b10e62c84de8", "jio",
-            "Staging_Updated", "qa07", null)
     }
 
     override fun getBuilder(): ChatController.Builder {
@@ -47,8 +40,8 @@ open class History : BotChat() {
         when (item.itemId) {
             R.id.clear_history -> {
                 historyRepository.clearHistory()
-
                 chatController.destruct()
+
                 return true
             }
         }
