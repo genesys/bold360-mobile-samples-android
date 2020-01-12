@@ -3,11 +3,13 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="app.com.nanoconversationdemo.MainActivity">
 
-    <item android:visible="true"
-        android:id="@+id/end_current_chat"
-        android:title="@string/end_chat"
+    <item
+            android:visible="true"
+            android:id="@+id/end_current_chat"
+            android:title="@string/end_chat"
             android:enabled="false"
-        app:showAsAction="collapseActionView"/>
+            android:orderInCategory="2"
+            app:showAsAction="collapseActionView"/>
 
     <item
         android:visible="false"
@@ -22,5 +24,12 @@
         android:title="@string/upload_file"
         android:orderInCategory="1"
         app:showAsAction="collapseActionView"/>
+
+    <item
+            android:visible="false"
+            android:id="@+id/clear_history"
+            android:title="@string/clear_history"
+            android:orderInCategory="1"
+            app:showAsAction="collapseActionView"/>
 
 </menu>

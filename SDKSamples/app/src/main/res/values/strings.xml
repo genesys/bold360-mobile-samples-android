@@ -16,6 +16,7 @@
     <string name="chat_with_async">Async chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with ai: customizing welcome message</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
+    <string name="history">Chat with history</string>
     <string name="custom_UI">Chat with custom UI</string>
     <string name="chat_restore">Chat creation &amp; restoring</string>
     <string name="bot_chat_with_handover">Chat with ai: handover</string>
@@ -23,6 +24,7 @@
     <string name="end_chat">End chat</string>
     <string name="destruct_chat_controller">Destruct chat controller</string>
     <string name="upload_file">upload file</string>
+    <string name="clear_history">Clean History and End Chat</string>
     <string name="cutomized_ui">Customize the Chat by %s</string>
 
 </resources>
