@@ -39,13 +39,13 @@ open class CustomChat : AppCompatActivity() {
                     setMargins(0,0,0,30)
                 }
 
-                text = getString(R.string.cutomized_ui)
+                text = getString(R.string.cutomized_ui, configure)
 
                 setOnClickListener {
 
                     startActivity(intent.apply {
                         putExtra("title", text.toString())
-                        putExtra("type", customize)
+                        putExtra("type", configure)
                     })
 
                     overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -58,7 +58,7 @@ open class CustomChat : AppCompatActivity() {
                     gravity = Gravity.CENTER_HORIZONTAL
                 }
 
-                text = getString(R.string.overrided_ui)
+                text = getString(R.string.cutomized_ui, override)
 
                 setOnClickListener {
 

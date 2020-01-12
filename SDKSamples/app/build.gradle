@@ -9,10 +9,10 @@ android {
 
     defaultConfig {
         applicationId "com.sdk.samples"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 40
-        versionName "4.0"
+        versionName "4.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
