@@ -44,7 +44,7 @@ open class CustomizedUI : BotChat() {
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
-            .chatUIProvider(UIProviderFactory.create(this, intent.getStringExtra("type") ?: override))
+            .chatUIProvider(UIProviderFactory.create(this, intent?.getStringExtra("type") ?: override))
     }
 
 }

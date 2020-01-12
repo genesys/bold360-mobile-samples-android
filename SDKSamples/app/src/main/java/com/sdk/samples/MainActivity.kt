@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.standalone_autocomplete),
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.CUTOMIZATION",
+                "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
                 resources.getDrawable(R.drawable.baseline_view_quilt_black_24)
             )

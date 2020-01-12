@@ -8,25 +8,26 @@
             android:id="@+id/demo_local_bubble_message_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/demo_text_color"/>
+            android:textColor="@color/demo_text_color" />
 
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/customTimestamp" />
 
         <TextView
+                android:id="@+id/customTimestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <TextView
+                android:id="@+id/customStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="waiting"
-                android:layout_marginLeft="20dp"
                 android:layout_gravity="right"
-                android:id="@+id/customStatus" />
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:text="waiting" />
 
     </LinearLayout>
 

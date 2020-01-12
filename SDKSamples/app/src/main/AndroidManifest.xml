@@ -99,10 +99,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CustomChat"
+        <activity android:name=".topics.CustomUIChat"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.CUTOMIZATION"/>
+                <action android:name="com.sdk.sample.action.CUSTOM_UI"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
@@ -110,7 +110,7 @@
         <activity android:name=".topics.CustomizedUI"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.CUSTOMIZE_UI"/>
+                <action android:name="com.sdk.sample.action.CUSTOMIZED_UI"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>

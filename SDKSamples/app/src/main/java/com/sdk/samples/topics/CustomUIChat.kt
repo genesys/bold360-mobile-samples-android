@@ -13,7 +13,7 @@ import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 
 
-open class CustomChat : AppCompatActivity() {
+open class CustomUIChat : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ open class CustomChat : AppCompatActivity() {
         }.also { buttonsContainer ->
 
             val buttonStyle = R.style.main_button
-            val intent = Intent("com.sdk.sample.action.CUSTOMIZE_UI")
+            val intent = Intent("com.sdk.sample.action.CUSTOMIZED_UI")
 
             buttonsContainer.addView(Button(ContextThemeWrapper(this, buttonStyle), null, buttonStyle).apply {
                 layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
