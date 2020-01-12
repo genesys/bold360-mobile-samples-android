@@ -10,9 +10,24 @@
             android:layout_height="wrap_content"
             android:textColor="@color/demo_text_color"/>
 
-    <TextView
-            android:layout_width="match_parent"
+    <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/customTimestamp" />
+            android:orientation="horizontal">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/customTimestamp" />
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="waiting"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="right"
+                android:id="@+id/customStatus" />
+
+    </LinearLayout>
 
 </merge>

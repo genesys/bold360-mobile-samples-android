@@ -20,11 +20,10 @@ import com.nanorep.convesationui.views.StatusIconConfig
 import com.nanorep.convesationui.views.adapters.BubbleContentUIAdapter
 import com.nanorep.convesationui.views.chatelement.BubbleContentAdapter
 import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
-import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.chatelement.OutgoingElementModel
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
+import com.nanorep.sdkcore.model.StatusOk
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.*
 import java.util.*
@@ -46,13 +45,6 @@ open class CustomizedUI : BotChat() {
             .chatEventListener(this)
             .conversationSettings(settings)
             .chatUIProvider(UIProviderFactory.create(this, intent.getStringExtra("type") ?: override))
-    }
-
-    override fun getAccount(): Account {
-        return BotAccount(
-            "8bad6dea-8da4-4679-a23f-b10e62c84de8", "jio",
-            "Staging_Updated", "qa07", null
-        )
     }
 
 }
@@ -175,17 +167,21 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
-        (demo_local_bubble_message_textview.layoutParams as? MarginLayoutParams)?.apply {
+        (layoutParams as? MarginLayoutParams)?.apply {
             this.setMargins(left, top, right, bottom)
         }
     }
 
     override fun setBubblePadding(left: Int, top: Int, right: Int, bottom: Int) {
-        demo_local_bubble_message_textview.setPadding(left, top, right, bottom)
+        setPadding(left, top, right, bottom)
     }
 
     override fun setTextStyle(styleConfig: StyleConfig) {
         demo_local_bubble_message_textview.setStyleConfig(styleConfig)
+    }
+
+    override fun setStatus(status: Int, statusText: String?) {
+        customStatus.text = if (status == StatusOk) "received" else "waiting"
     }
 
     override fun setDefaultStyle(styleConfig: StyleConfig, timestampStyle: TimestampStyle) {}
@@ -203,8 +199,6 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     override fun setTimestampStyle(timestampStyle: TimestampStyle) {}
 
     override fun setStatusMargins(left: Int, top: Int, right: Int, bottom: Int) {}
-
-    override fun setStatus(status: Int, statusText: String?) {}
 
     override fun setStatusIconConfig(statusIcon: StatusIconConfig?) {}
 
