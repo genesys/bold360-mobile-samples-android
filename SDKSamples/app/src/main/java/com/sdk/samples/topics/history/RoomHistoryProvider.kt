@@ -1,8 +1,6 @@
 package com.sdk.samples.topics.history
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
@@ -23,7 +21,6 @@ import kotlin.math.min
 
 class RoomHistoryProvider(var context: Context, var coroutineScope: CoroutineScope) : HistoryProvider {
 
-    private var handler: Handler = Handler(Looper.getMainLooper())
     private val historyDao = HistoryRoomDB.getInstance(context).historyDao()
 
     override fun onFetch(from: Int, @HistoryFetching.FetchDirection direction: Int, callback: HistoryCallback?) {
@@ -32,16 +29,13 @@ class RoomHistoryProvider(var context: Context, var coroutineScope: CoroutineSco
 
             getHistory(from, direction) { history ->
 
-                if (handler.looper != null) {
-                    handler.post {
-                        Log.d(
-                            "History",
-                            "passing history list to callback, from = " + from + ", size = " + history.size
-                        )
+                Log.d(
+                    "History",
+                    "passing history list to callback, from = " + from + ", size = " + history.size
+                )
 
-                        callback?.onReady(from, direction, history)
-                    }
-                }
+                callback?.onReady(from, direction, history)
+
             }
         }
     }
