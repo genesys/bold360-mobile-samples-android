@@ -45,10 +45,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.nanorep.devcore:sdkcore:3.6.0.rc2"
-    implementation "com.nanorep.devconversation:engine:3.6.0.rc3"
+    implementation "com.nanorep.devcore:sdkcore:3.6.0.rc3"
+    implementation "com.nanorep.devconversation:engine:3.6.0.rc4"
     implementation "com.nanorep.devconversation:chatintegration:3.6.0.rc2"
-    implementation "com.nanorep.devconversation:ui:3.6.0.rc3"
+    implementation "com.nanorep.devconversation:ui:3.6.0.rc4"
     implementation "com.nanorep.devcore:accessibility:3.6.0.rc1"
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
