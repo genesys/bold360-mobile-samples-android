@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             ), SampleTopic(
                 "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
-                resources.getDrawable(R.drawable.baseline_view_quilt_black_24)
+                resources.getDrawable(R.drawable.outline_rate_review_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.HISTORY",
                 getString(R.string.history),

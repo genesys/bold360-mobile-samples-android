@@ -16,7 +16,6 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.convesationui.structure.providers.OutgoingElementUIProvider
 import com.nanorep.convesationui.structure.setStyleConfig
-import com.nanorep.convesationui.views.StatusIconConfig
 import com.nanorep.convesationui.views.adapters.BubbleContentUIAdapter
 import com.nanorep.convesationui.views.chatelement.BubbleContentAdapter
 import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
@@ -39,12 +38,13 @@ open class CustomizedUI : BotChat() {
 
     override fun getBuilder(): ChatController.Builder {
 
-        val settings = createChatSettings()
-
-        return ChatController.Builder(this)
-            .chatEventListener(this)
-            .conversationSettings(settings)
-            .chatUIProvider(UIProviderFactory.create(this, intent?.getStringExtra("type") ?: override))
+        return super.getBuilder()
+            .chatUIProvider(
+                UIProviderFactory.create(
+                    this,
+                    intent?.getStringExtra("type") ?: override
+                )
+            )
     }
 
 }
@@ -113,13 +113,6 @@ private class UIProviderFactory {
                             return OverrideContentAdapter(context)
                         }
                     }
-
-                configure = { adapter: BubbleContentUIAdapter ->
-
-                        adapter.setTextStyle(StyleConfig(14, Color.GRAY, Typeface.SANS_SERIF))
-                        adapter.setBackground(ColorDrawable(Color.YELLOW))
-                        adapter
-                    }
             }
         }
     }
@@ -186,22 +179,16 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
 
     override fun setDefaultStyle(styleConfig: StyleConfig, timestampStyle: TimestampStyle) {}
 
-    override fun setTextAlignment(hAlignment: Int, vAlignment: Int) {}
-
-    override fun setTextMargins(left: Int, top: Int, right: Int, bottom: Int) {}
-
-    override fun enableStatusbar(enable: Boolean) {}
-
-    override fun enableStatusView(enable: Boolean) {}
+    override fun setStatusMargins(left: Int, top: Int, right: Int, bottom: Int) {}
 
     override fun setStatusViewTextStyle(statusStyle: StyleConfig) {}
 
+    override fun setTextAlignment(hAlignment: Int, vAlignment: Int) {}
+
+    override fun setTextMargins(left: Int, top: Int, right: Int, bottom: Int) {}
+    
     override fun setTimestampStyle(timestampStyle: TimestampStyle) {}
 
-    override fun setStatusMargins(left: Int, top: Int, right: Int, bottom: Int) {}
-
-    override fun setStatusIconConfig(statusIcon: StatusIconConfig?) {}
-
-    override fun setStatusIconConfig(styleIdRes: Int) {}
+    override fun enableStatusView(enable: Boolean) {}
 
 }

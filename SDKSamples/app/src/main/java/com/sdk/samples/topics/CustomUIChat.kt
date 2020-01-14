@@ -4,11 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.Gravity
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.setMargins
+import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 
@@ -30,50 +33,38 @@ open class CustomUIChat : AppCompatActivity() {
 
         }.also { buttonsContainer ->
 
-            val buttonStyle = R.style.main_button
-            val intent = Intent("com.sdk.sample.action.CUSTOMIZED_UI")
+            addButton(buttonsContainer, configure)
 
-            buttonsContainer.addView(Button(ContextThemeWrapper(this, buttonStyle), null, buttonStyle).apply {
-                layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                    gravity = Gravity.CENTER_HORIZONTAL
-                    setMargins(0,0,0,30)
-                }
-
-                text = getString(R.string.cutomized_ui, configure)
-
-                setOnClickListener {
-
-                    startActivity(intent.apply {
-                        putExtra("title", text.toString())
-                        putExtra("type", configure)
-                    })
-
-                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                }
-            })
-
-            buttonsContainer.addView(Button(ContextThemeWrapper(this, buttonStyle), null,buttonStyle).apply {
-
-                layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                    gravity = Gravity.CENTER_HORIZONTAL
-                }
-
-                text = getString(R.string.cutomized_ui, override)
-
-                setOnClickListener {
-
-                    startActivity(intent.apply {
-                        putExtra("title", text.toString())
-                        putExtra("type", override)
-                    })
-
-                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                }
-            })
+            addButton(buttonsContainer, override)
 
             chat_view.addView(buttonsContainer)
 
         }
+    }
+
+    private fun addButton(buttonsContainer: ViewGroup, @CustomUIOption customUIOption: String) {
+
+        val buttonStyle = R.style.main_button
+
+        buttonsContainer.addView(Button(ContextThemeWrapper(this, buttonStyle), null, buttonStyle).apply {
+
+            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                gravity = Gravity.CENTER_HORIZONTAL
+                setMargins(10.px)
+            }
+
+            text = getString(R.string.cutomized_ui, customUIOption)
+
+            setOnClickListener {
+
+                startActivity(Intent("com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION").apply {
+                    putExtra("title", text.toString())
+                    putExtra("type", customUIOption)
+                })
+
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }
+        })
     }
 
     override fun finish() {
