@@ -8,6 +8,7 @@ import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
 
+
 /**
  * The Room database implementation for the History
  */
@@ -15,6 +16,7 @@ import com.nanorep.sdkcore.model.StatusPending
 private const val HISTORY = "history_database"
 
 @Database(entities = [HistoryElement::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class HistoryRoomDB: RoomDatabase() {
 
     abstract fun historyDao(): HistoryDao
@@ -64,14 +66,12 @@ interface HistoryDao {
  * sample class for app usage
  */
 @Entity
-open class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
+class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
 
     @PrimaryKey
-    @ColumnInfo(name = "timestamp")
     private var timestamp: Long = 0
 
-    override val scope: StatementScope
-        get() = StatementScope.NanoBotScope
+    override var scope = StatementScope.UnknownScope
 
     @ChatElement.Companion.ChatElementType
     private var type: Int = 0
@@ -85,6 +85,10 @@ open class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatEleme
         type = storable.getType()
         timestamp = storable.getTimestamp()
         status = storable.getStatus()
+        scope = storable.scope
+        key = storable.getStorageKey()
+        isStorageReady = storable.isStorageReady
+
     }
 
     override fun getStorageKey(): ByteArray {
@@ -117,6 +121,32 @@ open class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatEleme
 
     fun setStatus(@StatementStatus status: Int) {
         this.status = status
+    }
+
+}
+
+class Converters {
+
+    @TypeConverter
+    fun toScope (scope: Int): StatementScope {
+
+        return when (scope) {
+
+            StatementScope.UnknownScope.ordinal -> StatementScope.UnknownScope
+            StatementScope.NanoBotScope.ordinal -> StatementScope.NanoBotScope
+            StatementScope.BoldScope.ordinal -> StatementScope.BoldScope
+            StatementScope.AsyncScope.ordinal -> StatementScope.AsyncScope
+            StatementScope.HandoverScope.ordinal -> StatementScope.HandoverScope
+
+            else -> {
+                throw IllegalArgumentException("Could not recognize scope")
+            }
+        }
+    }
+
+    @TypeConverter
+    fun toInt(status: StatementScope): Int {
+        return status.ordinal
     }
 
 }
