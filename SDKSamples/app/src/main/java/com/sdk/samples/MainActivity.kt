@@ -64,6 +64,10 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.standalone_autocomplete),
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.CUSTOM_UI",
+                getString(R.string.custom_UI),
+                resources.getDrawable(R.drawable.outline_rate_review_black_24)
+            ), SampleTopic(
                 "com.sdk.sample.action.HISTORY",
                 getString(R.string.history),
                 resources.getDrawable(R.drawable.baseline_history_black_24)

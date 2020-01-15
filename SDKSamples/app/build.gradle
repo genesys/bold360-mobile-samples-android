@@ -10,10 +10,10 @@ android {
 
     defaultConfig {
         applicationId "com.sdk.samples"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 40
-        versionName "4.0"
+        versionName "4.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -46,11 +46,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.nanorep.devcore:sdkcore:3.6.0.rc2"
-    implementation "com.nanorep.devconversation:engine:3.6.0.rc3"
-    implementation "com.nanorep.devconversation:chatintegration:3.6.0.rc2"
-    implementation "com.nanorep.devconversation:ui:3.6.0.rc3"
-    implementation "com.nanorep.devcore:accessibility:3.6.0.rc1"
+    implementation "com.nanorep.devcore:sdkcore:3.6.+"
+    implementation "com.nanorep.devconversation:engine:3.6.+"
+    implementation "com.nanorep.devconversation:chatintegration:3.6.+"
+    implementation "com.nanorep.devconversation:ui:3.6.+"
+    implementation "com.nanorep.devcore:accessibility:3.6.+"
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
