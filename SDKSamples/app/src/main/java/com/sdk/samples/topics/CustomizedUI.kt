@@ -179,16 +179,16 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
 
     override fun setDefaultStyle(styleConfig: StyleConfig, timestampStyle: TimestampStyle) {}
 
-    override fun setStatusMargins(left: Int, top: Int, right: Int, bottom: Int) {}
-
-    override fun setStatusViewTextStyle(statusStyle: StyleConfig) {}
-
     override fun setTextAlignment(hAlignment: Int, vAlignment: Int) {}
 
     override fun setTextMargins(left: Int, top: Int, right: Int, bottom: Int) {}
-    
-    override fun setTimestampStyle(timestampStyle: TimestampStyle) {}
 
     override fun enableStatusView(enable: Boolean) {}
+
+    override fun setStatusViewTextStyle(statusStyle: StyleConfig) {}
+
+    override fun setTimestampStyle(timestampStyle: TimestampStyle) {}
+
+    override fun setStatusMargins(left: Int, top: Int, right: Int, bottom: Int) {}
 
 }
