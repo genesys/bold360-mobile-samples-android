@@ -25,6 +25,6 @@
     <string name="destruct_chat_controller">Destruct chat controller</string>
     <string name="upload_file">upload file</string>
     <string name="clear_history">Clean History and End Chat</string>
-    <string name="cutomized_ui">Customize the Chat by %s</string>
+    <string name="cutomized_ui">Customize by %s</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.sdk.samples.topics.history
 
 import android.content.Context
+import android.util.Log
 import androidx.room.*
 import com.nanorep.nanoengine.chatelement.ChatElement
 import com.nanorep.nanoengine.chatelement.StorableChatElement
@@ -128,19 +129,14 @@ class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
 class Converters {
 
     @TypeConverter
-    fun toScope (scope: Int): StatementScope {
+    fun toScope (scope: Int): StatementScope? {
 
-        return when (scope) {
+        return try {
+            StatementScope.values()[scope]
 
-            StatementScope.UnknownScope.ordinal -> StatementScope.UnknownScope
-            StatementScope.NanoBotScope.ordinal -> StatementScope.NanoBotScope
-            StatementScope.BoldScope.ordinal -> StatementScope.BoldScope
-            StatementScope.AsyncScope.ordinal -> StatementScope.AsyncScope
-            StatementScope.HandoverScope.ordinal -> StatementScope.HandoverScope
-
-            else -> {
-                throw IllegalArgumentException("Could not recognize scope")
-            }
+        } catch(e: IllegalArgumentException){
+            Log.e("ScopeTypeConverter", "Illegal scope value")
+            null
         }
     }
 
