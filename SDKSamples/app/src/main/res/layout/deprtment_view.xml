@@ -13,6 +13,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="@dimen/department_gap"
             android:padding="@dimen/department_gap"
-            android:textColor="@color/autocomplete_input" />
+            android:textColor="@color/autocomplete_input"
+            android:layout_marginLeft="10dp" />
 
 </LinearLayout>

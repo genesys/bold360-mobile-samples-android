@@ -2,7 +2,6 @@ package com.sdk.samples.topics
 
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.lifecycleScope
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
@@ -32,7 +31,7 @@ open class History : BotChat() {
 
     override fun getBuilder(): ChatController.Builder {
 
-        historyRepository = HistoryRepository( RoomHistoryProvider(this, lifecycleScope) )
+        historyRepository = HistoryRepository( RoomHistoryProvider(this) )
 
         return super.getBuilder()
             .chatElementListener( historyRepository )

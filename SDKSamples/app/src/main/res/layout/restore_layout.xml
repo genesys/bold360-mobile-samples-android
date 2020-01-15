@@ -19,7 +19,8 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/create_restore_chat_instruction"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/topic_titles_text" />
+                android:textSize="@dimen/topic_titles_text"
+                android:layout_marginLeft="5dp" />
 
         <RadioGroup
                 android:id="@+id/chat_action_group"
