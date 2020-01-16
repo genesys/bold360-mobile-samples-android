@@ -161,13 +161,14 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
          */
         Log.d("handover", "event: operatorTyping: $isTyping")
 
-        if (chatDelegate == null) return
-        
-        if (isTyping) {
-            chatDelegate!!.updateCmp(ComponentType.LiveTypingCmp, null)
-        } else {
-            chatDelegate!!.removeCmp(ComponentType.LiveTypingCmp, true)
+        chatDelegate?.run {
+            if (isTyping) {
+                updateCmp(ComponentType.LiveTypingCmp, null)
+            } else {
+                removeCmp(ComponentType.LiveTypingCmp, true)
+            }
         }
+
     }
 
     companion object {
