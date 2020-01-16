@@ -104,9 +104,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
 
         HistoryRoomDB.clearInstance()
 
-        job.cancel() //Cancels the job with all of its children
-
-        cancel() // Cancels
+        cancel() // Cancels this scope, including its job and all its children
     }
 
     private suspend fun getHistory ( fromIdx: Int, direction: Int, onFetched: (MutableList<HistoryElement>) -> Unit ) {
