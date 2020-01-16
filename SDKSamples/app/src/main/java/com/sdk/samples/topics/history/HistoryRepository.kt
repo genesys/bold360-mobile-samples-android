@@ -3,7 +3,8 @@ package com.sdk.samples.topics.history
 import com.nanorep.convesationui.structure.history.ChatElementListener
 
 interface HistoryProvider: ChatElementListener {
-    fun onClear()
+    fun onClearHistory()
+    fun onClearResources()
 }
 
 /**
@@ -12,6 +13,10 @@ interface HistoryProvider: ChatElementListener {
 class HistoryRepository(private val historyProvider: HistoryProvider) : ChatElementListener by historyProvider {
 
     fun clearHistory() {
-        historyProvider.onClear()
+        historyProvider.onClearHistory()
+    }
+
+    fun clearResources() {
+        historyProvider.onClearResources()
     }
 }

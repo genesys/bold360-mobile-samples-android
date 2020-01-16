@@ -52,4 +52,9 @@ open class History : BotChat() {
         return false
     }
 
+    override fun finish() {
+        historyRepository.clearResources()
+        super.finish()
+    }
+
 }

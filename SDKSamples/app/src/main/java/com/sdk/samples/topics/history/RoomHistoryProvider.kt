@@ -6,10 +6,9 @@ import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.nanoengine.chatelement.StorableChatElement
 import com.sdk.samples.topics.History
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 import kotlin.math.min
 
@@ -21,7 +20,10 @@ import kotlin.math.min
 
 class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScope {
 
-    override val coroutineContext = Dispatchers.IO
+    private var job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.IO + job
 
     private val historyDao = HistoryRoomDB.getInstance(context).historyDao()
 
@@ -91,13 +93,20 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
     /**
      * Clears all the history from the database (on a I/O thread)
      */
-    override fun onClear() {
+    override fun onClearHistory() {
 
         launch {
-
             HistoryRoomDB.getInstance(context).clearAllTables()
-
         }
+    }
+
+    override fun onClearResources() {
+
+        HistoryRoomDB.clearInstance()
+
+        job.cancel() //Cancels the job with all of its children
+
+        cancel() // Cancels
     }
 
     private suspend fun getHistory ( fromIdx: Int, direction: Int, onFetched: (MutableList<HistoryElement>) -> Unit ) {

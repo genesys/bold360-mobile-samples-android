@@ -36,6 +36,10 @@ abstract class HistoryRoomDB: RoomDatabase() {
             }
         }
 
+        fun clearInstance() {
+            instance = null
+        }
+
         private fun buildDB(context: Context) : HistoryRoomDB {
             return Room.databaseBuilder(
                 context,
