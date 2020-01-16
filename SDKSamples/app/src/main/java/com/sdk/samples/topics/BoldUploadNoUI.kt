@@ -90,7 +90,7 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
                 finish()
             }
 
-        }.create()
+        }
 
     }
 
