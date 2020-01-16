@@ -13,7 +13,6 @@
     <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
     <string name="chat_with_bot">Chat with bot ai</string>
     <string name="chat_with_bold">Chat with live agent</string>
-    <string name="chat_with_async">Async chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with ai: customizing welcome message</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
     <string name="history">Chat with history</string>
@@ -26,5 +25,9 @@
     <string name="upload_file">upload file</string>
     <string name="clear_history">Clean History and End Chat</string>
     <string name="cutomized_ui">Customize by %s</string>
+    <string name="bold_upload_without_ui">Uploading with live uploader</string>
+    <string name="take_a_picture_text">Take a picture</string>
+    <string name="upload_in_progress">Upload in progress</string>
+    <string name="upload_default_image">Upload default image</string>
 
 </resources>

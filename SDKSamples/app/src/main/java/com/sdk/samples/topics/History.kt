@@ -42,7 +42,7 @@ open class History : BotChat() {
 
         when (item.itemId) {
             R.id.clear_history -> {
-                historyRepository.clearHistory()
+                historyRepository.clearAll()
                 chatController.destruct()
 
                 return true
@@ -53,7 +53,7 @@ open class History : BotChat() {
     }
 
     override fun finish() {
-        historyRepository.clearResources()
+        historyRepository.release()
         super.finish()
     }
 
