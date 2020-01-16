@@ -66,6 +66,7 @@ private class UIProviderFactory {
 
             chatElementsUIProvider.outgoingUIProvider.apply {
 
+                // Customize the general default SDK UI
                 configure = { adapter: BubbleContentUIAdapter ->
 
                         adapter.setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
@@ -75,6 +76,7 @@ private class UIProviderFactory {
                         adapter
                     }
 
+                // Dynamic Customization of the default SDK's UI (customization in real time according to the data of the element)
                 customize = { adapter: BubbleContentUIAdapter, element: OutgoingElementModel? ->
 
                         element?.run {

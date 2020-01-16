@@ -2,18 +2,12 @@ package com.sdk.samples.topics
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ContextThemeWrapper
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.LayoutInflater
 import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.setMargins
-import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
+import kotlinx.android.synthetic.main.custom_ui_options_layout.*
 
 
 open class CustomUIChat : AppCompatActivity() {
@@ -24,52 +18,40 @@ open class CustomUIChat : AppCompatActivity() {
 
         topic_title.text = intent.getStringExtra("title")
 
-        LinearLayout(this).apply {
-            
-            layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                gravity = Gravity.CENTER
-            }
-            orientation = LinearLayout.VERTICAL
+        initOptionsView()
 
-        }.also { buttonsContainer ->
-
-            addButton(buttonsContainer, configure)
-
-            addButton(buttonsContainer, override)
-
-            chat_view.addView(buttonsContainer)
-
-        }
     }
 
-    private fun addButton(buttonsContainer: ViewGroup, @CustomUIOption customUIOption: String) {
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+    }
 
-        val buttonStyle = R.style.main_button
 
-        buttonsContainer.addView(Button(ContextThemeWrapper(this, buttonStyle), null, buttonStyle).apply {
+    private fun initOptionsView(){
 
-            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                gravity = Gravity.CENTER_HORIZONTAL
-                setMargins(10.px)
-            }
+        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, chat_view, true)
+        buttonSetup(configure_option, configure)
+        buttonSetup(override_option, override)
+    }
+
+    private fun buttonSetup(button: Button, @CustomUIOption customUIOption: String) {
+
+        button.run {
 
             text = getString(R.string.cutomized_ui, customUIOption)
 
             setOnClickListener {
 
                 startActivity(Intent("com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION").apply {
+
                     putExtra("title", text.toString())
                     putExtra("type", customUIOption)
                 })
 
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
-        })
-    }
-
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        }
     }
 
 }
