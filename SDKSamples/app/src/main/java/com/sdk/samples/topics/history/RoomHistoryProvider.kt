@@ -93,14 +93,14 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
     /**
      * Clears all the history from the database (on a I/O thread)
      */
-    override fun onClearHistory() {
+    override fun clearAll() {
 
         launch {
             HistoryRoomDB.getInstance(context).clearAllTables()
         }
     }
 
-    override fun onClearResources() {
+    override fun release() {
 
         HistoryRoomDB.clearInstance()
 

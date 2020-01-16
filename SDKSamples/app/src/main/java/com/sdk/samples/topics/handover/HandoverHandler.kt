@@ -167,7 +167,7 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
             } else {
                 removeCmp(ComponentType.LiveTypingCmp, true)
             }
-        } ?: return
+        }
 
     }
 
