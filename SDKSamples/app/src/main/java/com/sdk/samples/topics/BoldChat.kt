@@ -6,7 +6,7 @@ import com.nanorep.nanoengine.Account
 open class BoldChat : BasicChat() {
 
     protected val account:BoldAccount by lazy {
-        BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV")
+        defaultBoldAccount
     }
     @JvmName("account") get
 
@@ -14,4 +14,8 @@ open class BoldChat : BasicChat() {
         return account
     }
 
+    companion object{
+        val defaultBoldAccount = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
+        val fameBoldAccount = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV") // Fame
+    }
 }

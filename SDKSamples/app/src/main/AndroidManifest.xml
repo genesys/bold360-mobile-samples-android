@@ -86,6 +86,46 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".topics.ChatRestore"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.RESTORE"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.Handover"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.HANDOVER"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.CustomUIChat"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.CUSTOM_UI"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.CustomizedUI"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.History"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.HISTORY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
