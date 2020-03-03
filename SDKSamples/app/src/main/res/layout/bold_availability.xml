@@ -69,7 +69,8 @@
             app:layout_constraintBottom_toTopOf="@+id/availability_status"
             app:layout_constraintEnd_toEndOf="@id/show_departments"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide2" />
+            app:layout_constraintTop_toBottomOf="@id/guide2"
+            android:layout_marginLeft="5dp" />
 
     <com.google.android.material.chip.Chip
             android:id="@+id/availability_status"
@@ -92,7 +93,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide2"
             app:layout_constraintVertical_bias="0"
-            app:layout_goneMarginTop="@dimen/chip_top_gap" />
+            app:layout_goneMarginTop="@dimen/chip_top_gap"
+            android:layout_marginLeft="5dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

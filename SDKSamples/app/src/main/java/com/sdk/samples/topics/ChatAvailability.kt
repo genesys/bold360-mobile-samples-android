@@ -31,7 +31,7 @@ class CheckAvailability : AppCompatActivity() {
         action_chip.setOnCloseIconClickListener { _ ->
             ChatAvailability.checkAvailability(account, callback = object : ChatAvailability.Callback{
                 override fun onComplete(result: ChatAvailability.AvailabilityResult) {
-                    if(this@CheckAvailability.isFinishing || this@CheckAvailability.isDestroyed) return
+                    if(this@CheckAvailability.isFinishing || this@CheckAvailability.isChangingConfigurations) return
 
                     action_chip.isSelected = result.isAvailable
                     action_chip.chipIcon = if (action_chip.isSelected) action_chip.checkedIcon else chipUncheckedIcon

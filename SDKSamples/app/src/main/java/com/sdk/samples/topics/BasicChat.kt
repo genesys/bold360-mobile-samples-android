@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -22,6 +23,7 @@ import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
@@ -100,13 +102,13 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finish()
-            StateEvent.Unavailable -> toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
+            StateEvent.Unavailable -> lifecycleScope.launch { toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
         }
     }
 
     override fun onError(error: NRError) {
         super.onError(error)
-        toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
+        lifecycleScope.launch { toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
     }
 
     override fun onBackPressed() {
@@ -133,7 +135,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_main, menu)
-
+        
         this.endMenu = menu?.findItem(R.id.end_current_chat)
         this.destructMenu = menu?.findItem(R.id.destruct_chat)
 
