@@ -12,6 +12,7 @@ import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.nanoengine.model.conversation.providerConfig
 import com.nanorep.nanoengine.model.conversation.statement.IncomingStatement
 import com.nanorep.nanoengine.model.conversation.statement.OutgoingStatement
+import com.nanorep.nanoengine.model.conversation.statement.UserInput
 import com.nanorep.sdkcore.model.ChatStatement
 import com.nanorep.sdkcore.model.StatusOk
 import com.nanorep.sdkcore.model.StatusPending
@@ -25,10 +26,7 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
     private var handlerConfiguration: String? = null
     private val handler = Handler()
 
-    override fun handleEvent(
-        name: String,
-        event: Event
-    ) {
+    override fun handleEvent(name: String, event: Event) {
         when (name) {
 
             UserAction -> if (event is UserEvent) {
@@ -39,8 +37,8 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
             }
 
             Message -> {
-                val statement = event.data.getAs<ChatStatement>()
-                statement?.let { injectElement(it) }
+                val statement = event.data.getAs<IncomingStatement>()
+                statement?.let { chatDelegate?.injectIncoming(it) }
             }
 
             State -> handleState(event.getAs<StateEvent>())
@@ -59,7 +57,7 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
             val request = data.getAs<ChatStatement>() ?: kotlin.run {  data.getAs<NRError>()?.run { data.getAs<ChatStatement>() } }
 
-            request?.let { updateStatus(it, StatusPending) }
+            request?.let { chatDelegate?.updateStatus(it.timestamp, StatusPending) }
         }
 
         passEvent(event)
@@ -69,7 +67,9 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
         super.enableChatInput(enable,  ChatInputData().apply {
 
-            onSend = if (enable) { charSequence: CharSequence -> post(OutgoingStatement(charSequence.toString())) } else null
+            onSendInput = if (enable) { userInput: UserInput ->
+                post(OutgoingStatement(userInput.text))
+            } else null
 
             voiceEnabled = enable && isEnabled(ChatFeatures.SpeechRecognition)
             inputEnabled = enable
@@ -94,12 +94,12 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
     override fun post(message: ChatStatement) {
 
-        injectElement(message)
-        updateStatus(message, StatusOk)
+        chatDelegate?.injectOutgoing(message)
+        chatDelegate?.updateStatus(message.timestamp, StatusOk)
         simulateAgentResponse(message.text)
     }
 
-    override fun handleState(event: StateEvent?) {
+    fun handleState(event: StateEvent?) {
 
         event?.run {
 
@@ -108,20 +108,20 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
                 StateEvent.Started -> {
                     Log.e("MainFragment", "started handover")
                     injectSystemMessage("Started Chat with Handover provider, the handover data is: $handlerConfiguration")
-                    injectElement(IncomingStatement("Hi from handover", getScope()))
-                    passStateEvent(event)
+                    chatDelegate?.injectIncoming(IncomingStatement("Hi from handover", getScope()))
+                    passStateEvent(state)
                 }
 
                 StateEvent.Ended -> {
                     Log.e("MainFragment", "handover ended")
-                    injectElement(IncomingStatement("bye from handover", getScope()))
+                    chatDelegate?.injectIncoming(IncomingStatement("bye from handover", getScope()))
                     injectSystemMessage("Ended Chat with the Handover provider")
-                    passStateEvent(event)
+                    passStateEvent(state)
                 }
 
                 StateEvent.Resumed -> onResume()
 
-                else -> super.handleState(event)
+                else -> {}
             }
         }
 
@@ -165,7 +165,7 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
             if (isTyping) {
                 updateCmp(ComponentType.LiveTypingCmp, null)
             } else {
-                removeCmp(ComponentType.LiveTypingCmp, true)
+                removeCmp(ComponentType.LiveTypingCmp)
             }
         }
 

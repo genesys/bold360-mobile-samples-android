@@ -90,7 +90,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                             onChatLoaded()
                         }
                     }
-                }, destructWithUI)
+                })
     }
 
     protected open fun onChatLoaded() {
