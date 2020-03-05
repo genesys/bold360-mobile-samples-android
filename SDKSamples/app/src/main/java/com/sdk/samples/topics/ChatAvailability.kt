@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
@@ -15,7 +14,7 @@ class CheckAvailability : AppCompatActivity() {
 
     private var chipUncheckedIcon: Drawable? = null
 
-    val account = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV")
+    val account = BoldChat.defaultBoldAccount
 
     /*val model:AvailabilityViewModel? by lazy {
         activity?.let{ ViewModelProviders.of(it).get(AvailabilityViewModel::class.java)}

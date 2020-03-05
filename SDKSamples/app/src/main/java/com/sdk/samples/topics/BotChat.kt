@@ -15,7 +15,8 @@ open class BotChat : BasicChat() {
     }
 
     companion object{
-        val defaultBotAccount = BotAccount(
+
+        val formalBotAccount = BotAccount(
             "",
             "nanorep",
             "English",
@@ -26,5 +27,7 @@ open class BotChat : BasicChat() {
             "", "jio",
             "Staging_Updated", "mobilestaging", null
         )
+
+        val defaultBotAccount = formalBotAccount
     }
 }

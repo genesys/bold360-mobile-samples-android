@@ -3,7 +3,6 @@ package com.sdk.samples.topics
 import android.view.Menu
 import android.view.MenuItem
 import com.nanorep.convesationui.structure.controller.ChatController
-import com.nanorep.nanoengine.Account
 import com.sdk.samples.R
 import com.sdk.samples.topics.history.HistoryRepository
 import com.sdk.samples.topics.history.RoomHistoryProvider
@@ -15,11 +14,6 @@ open class History : BotChat() {
     companion object {
         const val HistoryPageSize = 8
     }
-
-    override fun getAccount(): Account {
-        return defaultBotAccount
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)

@@ -11,7 +11,6 @@ import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
@@ -71,7 +70,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected open fun createChatSettings(): ConversationSettings {
         return ConversationSettings()
-            .datestamp(true, FriendlyDatestampFormatFactory(this))
+//  for tests:   .datestamp(true, SimpleDatestampFormatFactory(this))
     }
 
     protected open fun createChat() {
