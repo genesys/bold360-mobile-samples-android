@@ -86,7 +86,6 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
     }
 
     override fun endChat(forceClose: Boolean) {
-
         handleEvent(State, StateEvent(StateEvent.Ended, getScope()))
         enableChatInput(false, null)
         chatStarted = false
