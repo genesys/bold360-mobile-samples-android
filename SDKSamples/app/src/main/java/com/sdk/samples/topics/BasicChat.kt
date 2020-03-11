@@ -75,21 +75,23 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected open fun createChat() {
 
-        chatController = getBuilder().build(
+        if (!::chatController.isInitialized) {
+            chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
-                        result.takeIf { it.error == null && it.fragment != null}?.run {
+                        result.takeIf { it.error == null && it.fragment != null }?.run {
                             supportFragmentManager.beginTransaction()
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
                                 .addToBackStack(null)
                                 .commit()
 
                             onChatLoaded()
-                        }?: kotlin.run {
+                        } ?: kotlin.run {
                             onChatLoaded()
                         }
                     }
                 })
+        }
     }
 
     protected open fun onChatLoaded() {
