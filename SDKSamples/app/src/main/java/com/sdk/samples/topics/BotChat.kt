@@ -25,8 +25,10 @@ open class BotChat : BasicChat() {
     companion object{
 
         val formalBotAccount = BotAccount(
-            "", "jio",
-            "Staging_Updated", "mobilestaging", null
+            "",
+            "nanorep",
+            "English",
+            "" //https://eu1-1.nanorep.com/console/login.html
         )
 
         val testAccount = BotAccount(
