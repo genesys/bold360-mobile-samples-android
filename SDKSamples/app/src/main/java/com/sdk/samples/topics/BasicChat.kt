@@ -11,7 +11,6 @@ import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
@@ -71,26 +70,28 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected open fun createChatSettings(): ConversationSettings {
         return ConversationSettings()
-            .datestamp(true, FriendlyDatestampFormatFactory(this))
+//  for tests:   .datestamp(true, SimpleDatestampFormatFactory(this))
     }
 
     protected open fun createChat() {
 
-        chatController = getBuilder().build(
+        if (!hasChatController()) {
+            chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
-                        result.takeIf { it.error == null && it.fragment != null}?.run {
+                        result.takeIf { it.error == null && it.fragment != null }?.run {
                             supportFragmentManager.beginTransaction()
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
                                 .addToBackStack(null)
                                 .commit()
 
                             onChatLoaded()
-                        }?: kotlin.run {
+                        } ?: kotlin.run {
                             onChatLoaded()
                         }
                     }
-                }, destructWithUI)
+                })
+        }
     }
 
     protected open fun onChatLoaded() {

@@ -25,10 +25,7 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
     private var handlerConfiguration: String? = null
     private val handler = Handler()
 
-    override fun handleEvent(
-        name: String,
-        event: Event
-    ) {
+    override fun handleEvent(name: String, event: Event) {
         when (name) {
 
             UserAction -> if (event is UserEvent) {
@@ -69,7 +66,14 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
         super.enableChatInput(enable,  ChatInputData().apply {
 
-            onSend = if (enable) { charSequence: CharSequence -> post(OutgoingStatement(charSequence.toString())) } else null
+            onSend = if (enable) { charSequence: CharSequence ->
+                post(OutgoingStatement(charSequence.toString()))
+            } else null
+
+            /* not release yet on 3.6.0 rcs
+            onSendInput = if (enable) { userInput: UserInput ->
+                post(OutgoingStatement(userInput.text))
+            } else null*/
 
             voiceEnabled = enable && isEnabled(ChatFeatures.SpeechRecognition)
             inputEnabled = enable
@@ -86,7 +90,6 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
     }
 
     override fun endChat(forceClose: Boolean) {
-
         handleEvent(State, StateEvent(StateEvent.Ended, getScope()))
         enableChatInput(false, null)
         chatStarted = false
