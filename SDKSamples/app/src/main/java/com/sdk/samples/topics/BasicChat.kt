@@ -75,7 +75,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected open fun createChat() {
 
-        if (!::chatController.isInitialized) {
+        if (!hasChatController()) {
             chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
