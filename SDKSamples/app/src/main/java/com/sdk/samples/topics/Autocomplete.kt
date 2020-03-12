@@ -13,12 +13,12 @@ import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
 import com.nanorep.nanoengine.LinkedArticleHandler
-import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.ArticleResponse
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import com.sdk.samples.topics.BotChat.Companion.defaultBotAccount
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
 class Autocomplete : AppCompatActivity() {
@@ -32,12 +32,7 @@ class Autocomplete : AppCompatActivity() {
         val botViewModel = ViewModelProviders.of(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = BotAccount(
-                "",
-                "nanorep",
-                "English",
-                "" //https://eu1-1.nanorep.com/console/login.html
-            )
+            botViewModel.botChat.account = defaultBotAccount
         }
 
         botViewModel.onError.observe(this, Observer { error ->

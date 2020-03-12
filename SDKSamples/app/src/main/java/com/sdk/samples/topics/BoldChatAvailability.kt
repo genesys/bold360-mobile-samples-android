@@ -62,6 +62,9 @@ open class BoldChatAvailability : BoldChat() {
                     }
                 }
             }
+            else -> {
+                super.onChatStateChanged(stateEvent)
+            }
         }
     }
 

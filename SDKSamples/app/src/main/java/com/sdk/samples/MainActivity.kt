@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 
-class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
+open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,21 +36,37 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_with_bold),
                 resources.getDrawable(R.drawable.outline_perm_identity_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
-                "Custom upload on live chat",
-                resources.getDrawable(R.drawable.outline_publish_black_24)
+                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
+                getString(R.string.bot_to_bold_with_prechat),
+                resources.getDrawable(R.drawable.baseline_list_alt_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
                 resources.getDrawable(R.drawable.outline_message_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
-                getString(R.string.bot_to_bold_with_prechat),
-                resources.getDrawable(R.drawable.baseline_list_alt_black_24)
+                "com.sdk.sample.action.HANDOVER",
+                getString(R.string.bot_chat_with_handover),
+                resources.getDrawable(R.drawable.baseline_pan_tool_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
+                "Custom upload on live chat",
+                resources.getDrawable(R.drawable.outline_publish_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI",
+                getString(R.string.bold_upload_without_ui),
+                resources.getDrawable(R.drawable.outline_publish_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 resources.getDrawable(R.drawable.outline_text_format_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.CUSTOM_UI",
+                getString(R.string.custom_UI),
+                resources.getDrawable(R.drawable.outline_rate_review_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.HISTORY",
+                getString(R.string.history),
+                resources.getDrawable(R.drawable.baseline_history_black_24)
             )
         )
 

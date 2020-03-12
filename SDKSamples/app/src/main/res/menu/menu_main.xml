@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="app.com.nanoconversationdemo.MainActivity">
+
+    <item
+            android:visible="true"
+            android:id="@+id/end_current_chat"
+            android:title="@string/end_chat"
+            android:enabled="false"
+            android:orderInCategory="2"
+            app:showAsAction="collapseActionView"/>
+
+    <item
+        android:visible="false"
+        android:id="@+id/destruct_chat"
+        android:title="@string/destruct_chat_controller"
+        android:orderInCategory="1"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:visible="false"
+        android:id="@+id/upload_file"
+        android:title="@string/upload_file"
+        android:orderInCategory="1"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+            android:visible="false"
+            android:id="@+id/clear_history"
+            android:title="@string/clear_history"
+            android:orderInCategory="1"
+            app:showAsAction="collapseActionView"/>
+
+</menu>
