@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+    <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:id="@+id/apiKey_edit"
+            android:lines="3"
+            android:hint="ApiKey"
+            android:textColorHint="@color/form_field_hint"
+            android:textSize="16sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/restore_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:layout_gravity="start"
+            android:layout_marginTop="10dp"
+            android:text="Restore last chat"/>
+
+
+  <!--  <LinearLayout
+            android:id="@+id/async_sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical">
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:id="@+id/sender_edit_text"
+                    android:hint="SenderId"
+                    android:textColorHint="@color/form_field_hint"
+                    android:textSize="10sp" />
+
+            <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/saved_sender"
+                    style="@style/main_button_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:text="Fill saved"
+                    android:textSize="10sp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <Switch
+                android:id="@+id/should_start_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:text="Should start new chat"/>
+
+
+
+    </LinearLayout>-->
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/start_button"
+            style="@style/main_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/start_async_chat"
+            android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>

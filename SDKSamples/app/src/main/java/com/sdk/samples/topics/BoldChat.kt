@@ -23,6 +23,6 @@ open class BoldChat : BasicChat() {
         val formalBoldAccount = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
         val fameBoldAccount = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV") // Fame
 
-        val defaultBoldAccount = formalBoldAccount
+        val defaultBoldAccount = fameBoldAccount
     }
 }

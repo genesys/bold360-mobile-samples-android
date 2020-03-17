@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.inflate
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,51 +31,51 @@ class MainActivity : AppCompatActivity() {
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
                 getString(R.string.chat_with_bot),
-                resources.getDrawable(R.drawable.outline_android_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_android_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
-                resources.getDrawable(R.drawable.outline_perm_identity_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_ASYNC_CHAT",
                 getString(R.string.async_chat_with_an_agent),
-                resources.getDrawable(R.drawable.outline_transform_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
-                resources.getDrawable(R.drawable.baseline_list_alt_black_24)
+                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
-                resources.getDrawable(R.drawable.outline_message_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_message_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
-                resources.getDrawable(R.drawable.baseline_pan_tool_black_24)
+                ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
-                resources.getDrawable(R.drawable.outline_publish_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI",
                 getString(R.string.bold_upload_without_ui),
-                resources.getDrawable(R.drawable.outline_publish_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.RESTORE",
                 getString(R.string.chat_restore),
-                resources.getDrawable(R.drawable.baseline_restore_black_24)
+                ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
-                resources.getDrawable(R.drawable.outline_text_format_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
-                resources.getDrawable(R.drawable.outline_rate_review_black_24)
+                ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24)
             ), SampleTopic(
                 "com.sdk.sample.action.HISTORY",
                 getString(R.string.history),
-                resources.getDrawable(R.drawable.baseline_history_black_24)
+                ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
             )
         )
 

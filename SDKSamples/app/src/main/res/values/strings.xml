@@ -30,4 +30,7 @@
     <string name="upload_in_progress">Upload in progress</string>
     <string name="upload_default_image">Upload default image</string>
 
+
+    <string name="start_async_chat">Start Chat</string>
+
 </resources>
