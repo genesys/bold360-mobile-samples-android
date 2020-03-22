@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.async_chat_with_an_agent),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.ASYNC_CONTINUITY",
+                getString(R.string.async_chat_continuity),
+                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
+            ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
                 ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
