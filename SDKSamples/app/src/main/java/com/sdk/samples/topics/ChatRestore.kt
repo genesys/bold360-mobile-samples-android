@@ -37,7 +37,7 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
         destructWithUI = !isRestorable
 
         try {
-            chatController.restoreChat(account = account, autoChatEnd = destructWithUI)
+            chatController.restoreChat(account = account, endChatWithUI = destructWithUI)
 
             /* or use the following:
               if(!destructWithUI)

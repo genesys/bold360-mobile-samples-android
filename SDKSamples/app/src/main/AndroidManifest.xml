@@ -1,129 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.sdk.samples">
+        package="com.sdk.samples">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
+            android:name="androidx.multidex.MultiDexApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:name="androidx.multidex.MultiDexApplication">
+            android:theme="@style/AppTheme">
+
         <activity android:name=".topics.Autocomplete">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.AUTOCOMPLETE"/>
+                <action android:name="com.sdk.sample.action.AUTOCOMPLETE" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BotChat"
+        <activity
+                android:name=".topics.BotChat"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.BOT_CHAT"/>
+                <action android:name="com.sdk.sample.action.BOT_CHAT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BoldChat"
+        <activity
+                android:name=".topics.BoldChat"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.BOLD_CHAT"/>
+                <action android:name="com.sdk.sample.action.BOLD_CHAT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CustomFileUpload"
+        <activity
+                android:name=".topics.BoldChatAsync"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD"/>
+                <action android:name="com.sdk.sample.action.BOLD_ASYNC_CHAT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BoldUploadNoUI"
+        <activity
+                android:name=".topics.CustomFileUpload"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI"/>
+                <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".topics.BoldUploadNoUI"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CustomedWelcomeBotChat"
+        <activity
+                android:name=".topics.CustomedWelcomeBotChat"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.WELCOME_BOT_CHAT"/>
+                <action android:name="com.sdk.sample.action.WELCOME_BOT_CHAT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.BoldChatAvailability"
+        <activity
+                android:name=".topics.BoldChatAvailability"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.BOLD_CHAT_AVAILABILITY"/>
+                <action android:name="com.sdk.sample.action.BOLD_CHAT_AVAILABILITY" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.PrechatExtraData"
+        <activity
+                android:name=".topics.PrechatExtraData"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.PRE_CHAT_EXTRA_DATA"/>
+                <action android:name="com.sdk.sample.action.PRE_CHAT_EXTRA_DATA" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.ChatRestore"
+        <activity
+                android:name=".topics.ChatRestore"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.RESTORE"/>
+                <action android:name="com.sdk.sample.action.RESTORE" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.Handover"
+        <activity
+                android:name=".topics.Handover"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.HANDOVER"/>
+                <action android:name="com.sdk.sample.action.HANDOVER" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CustomUIChat"
+        <activity
+                android:name=".topics.CustomUIChat"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.CUSTOM_UI"/>
+                <action android:name="com.sdk.sample.action.CUSTOM_UI" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.CustomizedUI"
+        <activity
+                android:name=".topics.CustomizedUI"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION"/>
+                <action android:name="com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.History"
+        <activity
+                android:name=".topics.History"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.HISTORY"/>
+                <action android:name="com.sdk.sample.action.HISTORY" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".topics.AsyncChatContinuity">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.ASYNC_CONTINUITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

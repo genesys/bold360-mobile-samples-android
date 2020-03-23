@@ -9,6 +9,7 @@
 
     <string name="chat_with_agent">Chat with agent</string>
     <string name="async_chat_with_an_agent">Async chat with an agent</string>
+    <string name="async_chat_continuity">Async chat continuity</string>
     <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
     <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
     <string name="chat_with_bot">Chat with bot ai</string>
@@ -29,5 +30,10 @@
     <string name="take_a_picture_text">Take a picture</string>
     <string name="upload_in_progress">Upload in progress</string>
     <string name="upload_default_image">Upload default image</string>
+
+
+    <string name="start_async_chat">Start Chat</string>
+    <string name="application_id">Application Id</string>
+    <string name="restore_if_available">Restore if available</string>
 
 </resources>

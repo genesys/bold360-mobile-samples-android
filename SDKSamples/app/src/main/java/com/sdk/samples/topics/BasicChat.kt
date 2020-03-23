@@ -91,6 +91,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                         }
                     }
                 })
+        } else {
+            chatController.startChat(getAccount())
         }
     }
 
@@ -102,7 +104,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
-            StateEvent.ChatWindowDetached -> finish()
+            StateEvent.ChatWindowDetached -> finishIfLast()
             StateEvent.Unavailable -> lifecycleScope.launch { toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
         }
     }
@@ -117,7 +119,11 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         super.onBackPressed()
 
-        if(supportFragmentManager.backStackEntryCount == 0){
+        finishIfLast()
+    }
+
+    private fun finishIfLast() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
     }

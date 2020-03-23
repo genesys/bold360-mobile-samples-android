@@ -83,6 +83,7 @@ class BoldAvailability : Fragment() {
 
                 val callback = object : ChatAvailability.Callback {
                     override fun onComplete(result: ChatAvailability.AvailabilityResult) {
+                        if(context == null || !isAdded) return // in case fragment was closed by receiving the response
 
                         availability_status.apply {
                             isSelected = result.isAvailable
