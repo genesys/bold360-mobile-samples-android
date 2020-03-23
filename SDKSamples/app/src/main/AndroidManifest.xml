@@ -148,7 +148,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".topics.AsyncChatContinuity">
+        <activity android:name=".topics.AsyncChatContinuity"
+                android:configChanges="orientation|screenSize|locale|layoutDirection"
+                android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.ASYNC_CONTINUITY" />
 

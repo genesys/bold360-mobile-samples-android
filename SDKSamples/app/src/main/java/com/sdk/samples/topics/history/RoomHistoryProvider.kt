@@ -6,6 +6,7 @@ import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.nanoengine.chatelement.StorableChatElement
 import com.sdk.samples.topics.History
+import com.sdk.samples.topics.History.Companion.HistoryPageSize
 import kotlinx.coroutines.*
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.coroutines.CoroutineContext
@@ -18,12 +19,9 @@ import kotlin.math.min
  * @param coroutineScope The application's lifecycle coroutine scope
  */
 
-class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScope {
+class RoomHistoryProvider(var context: Context) : HistoryProvider {
 
-    private var job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
+    val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
 
     private val historyDao = HistoryRoomDB.getInstance(context).historyDao()
 
@@ -33,7 +31,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
      */
     override fun onFetch(from: Int, @HistoryFetching.FetchDirection direction: Int, callback: HistoryCallback?) {
 
-        launch {
+        coroutineScope.launch {
 
             getHistory(from, direction) { history ->
 
@@ -55,7 +53,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
      */
     override fun onReceive(item: StorableChatElement) {
 
-        launch {
+        coroutineScope.launch {
 
             Log.d("history", "onReceive: [type:${item.getType()}][text:${item.text}]")
             historyDao.insert(HistoryElement(item))
@@ -68,7 +66,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
      */
     override fun onRemove(timestampId: Long) {
 
-        launch {
+        coroutineScope.launch {
 
             Log.d("history", "onRemove: [id:$timestampId]")
             historyDao.delete(timestampId)
@@ -81,7 +79,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
      */
     override fun onUpdate(timestampId: Long, item: StorableChatElement) {
 
-        launch {
+        coroutineScope.launch {
 
             Log.d("history", "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]")
             historyDao.update(HistoryElement(item).apply { setTimestamp(timestampId) })
@@ -95,7 +93,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
      */
     override fun clearAll() {
 
-        launch {
+        coroutineScope.launch {
             HistoryRoomDB.getInstance(context).clearAllTables()
         }
     }
@@ -104,7 +102,13 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
 
         HistoryRoomDB.clearInstance()
 
-        cancel() // Cancels this scope, including its job and all its children
+        coroutineScope.cancel() // Cancels this scope, including its job and all its children
+    }
+
+    @ExperimentalCoroutinesApi
+    override suspend fun count(): Int {
+        val result = coroutineScope.async<Int> { historyDao.count() }
+        return result.await()
     }
 
     private suspend fun getHistory ( fromIdx: Int, direction: Int, onFetched: (MutableList<HistoryElement>) -> Unit ) {
@@ -112,25 +116,33 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider, CoroutineScop
         var fromIdx = fromIdx
 
         val fetchOlder = direction == HistoryFetching.Older
-
-        // In order to prevent Concurrent exception:
-        val accountHistory = CopyOnWriteArrayList(historyDao.getAll())
-
-        val historySize = accountHistory.size
+        val historySize = historyDao.count()
 
         when {
-            fromIdx == -1 -> { fromIdx = if (fetchOlder) historySize - 1 else 0 }
-            fetchOlder -> { fromIdx = historySize - fromIdx }
+            fromIdx == -1 -> {
+                fromIdx = if (fetchOlder) historySize - 1 else 0
+            }
+            fetchOlder -> {
+                fromIdx = historySize - fromIdx
+            }
         }
 
         val toIndex = if (fetchOlder)
-            max(0, fromIdx - History.HistoryPageSize)
+            max(0, fromIdx - HistoryPageSize)
         else
-            min(fromIdx + History.HistoryPageSize, historySize - 1)
+            min(fromIdx + HistoryPageSize, historySize - 1)
+
+        Log.d("history", "fetching history: total = $historySize, from = $fromIdx, to=$toIndex")
+
+        // In order to prevent Concurrent exception:
+        val accountHistory = CopyOnWriteArrayList(historyDao.getCount(toIndex, fromIdx))
 
         try {
             Log.d("History", "fetching history items ($historySize) from $toIndex to $fromIdx")
-            onFetched.invoke(accountHistory.subList(toIndex, fromIdx))
+            coroutineScope.launch(Dispatchers.Main) {
+                onFetched.invoke(accountHistory)
+            }
+
         } catch (ex: Exception) {
             onFetched.invoke(ArrayList())
         }
