@@ -84,8 +84,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                         result.takeIf { it.error == null && it.fragment != null }?.run {
                             supportFragmentManager.beginTransaction()
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
-                               // .addToBackStack(null)
-                                .commitNow()
+                                .addToBackStack(null)
+                                .commit()
 
                             onChatLoaded()
                         } ?: kotlin.run {
