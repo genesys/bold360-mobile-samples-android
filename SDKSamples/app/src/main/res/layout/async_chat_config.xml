@@ -1,62 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="ApiKey"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"/>
-
-    <androidx.appcompat.widget.AppCompatEditText
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:id="@+id/apiKey_edit"
-            android:lines="3"
-            android:hint="ApiKey"
-            android:textColorHint="@color/form_field_hint"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="start"
-            android:textColor="@color/colorPrimary"
-            android:text="@string/application_id"
-            android:textSize="18sp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/apikey"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:id="@+id/application_edit"
-            android:lines="1"
-            android:hint="@string/application_id"
-            android:textColorHint="@color/form_field_hint"
-            android:textSize="14sp" />
+        <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/apiKey_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:hint="@string/apikey"
+                android:lines="2"
+                android:textColorHint="@color/form_field_hint"
+                android:textSize="14sp" />
 
-    <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/restore_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:layout_gravity="start"
-            android:layout_marginTop="10dp"
-            android:text="@string/restore_if_available"/>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="20dp"
+                android:text="@string/application_id"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/start_button"
-            style="@style/main_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/start_async_chat"
-            android:layout_gravity="center_horizontal"/>
+        <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/application_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:hint="@string/application_id"
+                android:lines="1"
+                android:textColorHint="@color/form_field_hint"
+                android:textSize="14sp" />
 
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="20dp"
+                android:text="@string/user_id"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/user_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:hint="@string/user_id"
+                android:inputType="numberDecimal"
+                android:lines="1"
+                android:textColorHint="@color/form_field_hint"
+                android:textSize="14sp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/restore_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="20dp"
+                android:checked="true"
+                android:text="@string/restore_if_available" />
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/start_button"
+                style="@style/main_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:text="@string/start_async_chat" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

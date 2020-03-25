@@ -34,6 +34,11 @@
 
     <string name="start_async_chat">Start Chat</string>
     <string name="application_id">Application Id</string>
+    <string name="user_id">User Id</string>
     <string name="restore_if_available">Restore if available</string>
+    <string name="missing_apikey">Apikey is required</string>
+    <string name="missing_applicationId">Application id is required</string>
+    <string name="restore_chat_with_no_user">Can\'t restore chat without previous user id</string>
+    <string name="apikey">ApiKey</string>
 
 </resources>
