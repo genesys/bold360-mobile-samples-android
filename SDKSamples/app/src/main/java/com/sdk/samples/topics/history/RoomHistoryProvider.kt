@@ -139,9 +139,8 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
 
         try {
             Log.d("History", "fetching history items ($historySize) from $toIndex to $fromIdx")
-            coroutineScope.launch(Dispatchers.Main) {
-                onFetched.invoke(accountHistory)
-            }
+            onFetched.invoke(accountHistory)
+
 
         } catch (ex: Exception) {
             onFetched.invoke(ArrayList())
