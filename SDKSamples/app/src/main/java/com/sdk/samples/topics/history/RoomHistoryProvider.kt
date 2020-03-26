@@ -132,15 +132,14 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         else
             min(fromIdx + HistoryPageSize, historySize - 1)
 
-        Log.d("history", "fetching history: total = $historySize, from = $fromIdx, to=$toIndex")
+        Log.d("history", "fetching history: total = $historySize, from $toIndex to $fromIdx")
 
         // In order to prevent Concurrent exception:
-        val accountHistory = CopyOnWriteArrayList(historyDao.getCount(toIndex, fromIdx))
+        val accountHistory = CopyOnWriteArrayList(historyDao.getCount(toIndex, fromIdx-toIndex))
 
         try {
-            Log.d("History", "fetching history items ($historySize) from $toIndex to $fromIdx")
+            //Log.v("History", accountHistory.map { "item: ${it.inDate}"}.joinToString("\n"))
             onFetched.invoke(accountHistory)
-
 
         } catch (ex: Exception) {
             onFetched.invoke(ArrayList())

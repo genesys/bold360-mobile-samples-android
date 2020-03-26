@@ -32,8 +32,8 @@ open class BotChat : BasicChat() {
         )
 
         val testAccount = BotAccount(
-            "", "jio",
-            "Staging_Updated", "mobilestaging", null
+            "", "nanorep",
+            "English", "mobilestaging", null
         )
 
         val defaultBotAccount = formalBotAccount

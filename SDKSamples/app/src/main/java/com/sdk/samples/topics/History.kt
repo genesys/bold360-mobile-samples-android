@@ -7,7 +7,7 @@ import com.sdk.samples.R
 import com.sdk.samples.topics.history.HistoryRepository
 import com.sdk.samples.topics.history.RoomHistoryProvider
 
-open class History : BotChat() {
+open class History : AsyncChatContinuity() {
 
     private lateinit var historyRepository: HistoryRepository
 
