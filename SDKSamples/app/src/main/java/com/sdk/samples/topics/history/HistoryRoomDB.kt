@@ -54,10 +54,10 @@ abstract class HistoryRoomDB: RoomDatabase() {
 interface HistoryDao {
 
     @Query("SELECT * FROM historyElement ORDER BY inDate Limit :count OFFSET :from ")
-    fun getCount(from: Int, count: Int): List<HistoryElement>
+    suspend fun getCount(from: Int, count: Int): List<HistoryElement>
 
     @Query("SELECT COUNT(*) FROM historyElement")
-    fun count(): Int
+    suspend fun count(): Int
 
     @Query("SELECT * FROM historyElement")
     suspend fun getAll(): List<HistoryElement>
