@@ -28,8 +28,8 @@ import kotlin.properties.Delegates
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected lateinit var chatController: ChatController
-    protected var destructWithUI: Boolean by Delegates.observable(true){property, oldValue, newValue ->
-            current_radio.isEnabled = !newValue
+    protected var destructWithUI: Boolean by Delegates.observable(true) { property, oldValue, newValue ->
+        current_radio.isEnabled = !newValue
     }
 
     protected var endMenu: MenuItem? = null
@@ -49,7 +49,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         startChat()
     }
 
-    open fun startChat(){
+    open fun startChat() {
         createChat()
     }
 
@@ -60,38 +60,37 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     abstract fun getAccount(): Account
 
-    protected open fun getBuilder() : ChatController.Builder {
+    protected open fun getBuilder(): ChatController.Builder {
         val settings = createChatSettings()
 
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
+        // for tests: .accountProvider(SimpleAccountProvider())
     }
 
     protected open fun createChatSettings(): ConversationSettings {
         return ConversationSettings()
-//  for tests:   .datestamp(true, SimpleDatestampFormatFactory(this))
+        //uncomment to set custom datestamp format: .datestamp(true, SampleDatestampFactory())
     }
 
     protected open fun createChat() {
 
-        if (!hasChatController()) {
-            chatController = getBuilder().build(
-                getAccount(), object : ChatLoadedListener {
-                    override fun onComplete(result: ChatLoadResponse) {
-                        result.takeIf { it.error == null && it.fragment != null }?.run {
-                            supportFragmentManager.beginTransaction()
-                                .add(chat_view.id, fragment!!, topic_title.text.toString())
-                                .addToBackStack(null)
-                                .commit()
+        chatController = getBuilder().build(
+            getAccount(), object : ChatLoadedListener {
+                override fun onComplete(result: ChatLoadResponse) {
+                    result.takeIf { it.error == null && it.fragment != null }?.run {
+                        supportFragmentManager.beginTransaction()
+                            .add(chat_view.id, fragment!!, topic_title.text.toString())
+                            .addToBackStack(null)
+                            .commit()
 
-                            onChatLoaded()
-                        } ?: kotlin.run {
-                            onChatLoaded()
-                        }
+                        onChatLoaded()
+                    } ?: kotlin.run {
+                        onChatLoaded()
                     }
-                })
-        }
+                }
+            })
     }
 
     protected open fun onChatLoaded() {
@@ -103,7 +102,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finish()
-            StateEvent.Unavailable -> lifecycleScope.launch { toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
+            StateEvent.Unavailable -> lifecycleScope.launch {
+                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
+            }
         }
     }
 
@@ -117,26 +118,22 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         super.onBackPressed()
 
-        if(supportFragmentManager.backStackEntryCount == 0){
+        if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
     }
 
     override fun onStop() {
-        if(isFinishing) {
+        if (isFinishing) {
             if (this::chatController.isInitialized) chatController.terminateChat()
         }
         super.onStop()
     }
 
-    /*override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-    }*/
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_main, menu)
-        
+
         this.endMenu = menu?.findItem(R.id.end_current_chat)
         this.destructMenu = menu?.findItem(R.id.destruct_chat)
 
@@ -154,7 +151,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                 chatController.endChat(false)
                 return true
             }
-           
+
             R.id.destruct_chat -> {
                 chatController.destruct()
                 item.isEnabled = false
@@ -173,7 +170,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         }
     }
 
-    fun hasChatController() : Boolean {
+    private fun hasChatController(): Boolean {
         return this::chatController.isInitialized
     }
 
