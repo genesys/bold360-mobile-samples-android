@@ -5,6 +5,7 @@ import com.nanorep.convesationui.structure.history.ChatElementListener
 interface HistoryProvider: ChatElementListener {
     fun clearAll()
     fun release()
+    suspend fun count(): Int
 }
 
 /**

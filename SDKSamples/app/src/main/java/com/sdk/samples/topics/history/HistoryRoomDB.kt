@@ -8,6 +8,7 @@ import com.nanorep.nanoengine.chatelement.StorableChatElement
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
+import com.nanorep.sdkcore.utils.SystemUtil
 
 
 /**
@@ -52,6 +53,12 @@ abstract class HistoryRoomDB: RoomDatabase() {
 @Dao
 interface HistoryDao {
 
+    @Query("SELECT * FROM historyElement ORDER BY inDate Limit :count OFFSET :from ")
+    suspend fun getCount(from: Int, count: Int): List<HistoryElement>
+
+    @Query("SELECT COUNT(*) FROM historyElement")
+    suspend fun count(): Int
+
     @Query("SELECT * FROM historyElement")
     suspend fun getAll(): List<HistoryElement>
 
@@ -72,6 +79,11 @@ interface HistoryDao {
  */
 @Entity
 class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
+
+    /**
+     * for internal use, to get the records in insertion order
+     */
+    var inDate: Long = SystemUtil.syncedCurrentTimeMillis()
 
     @PrimaryKey
     private var timestamp: Long = 0
