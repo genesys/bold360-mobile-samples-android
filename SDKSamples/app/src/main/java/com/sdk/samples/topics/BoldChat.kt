@@ -6,10 +6,10 @@ import com.nanorep.sdkcore.utils.toast
 
 open class BoldChat : BasicChat() {
 
-    protected val account:BoldAccount by lazy {
+    protected val account: BoldAccount by lazy {
         defaultBoldAccount
     }
-    @JvmName("account") get
+        @JvmName("account") get
 
     override fun getAccount(): Account {
         return account
@@ -19,9 +19,11 @@ open class BoldChat : BasicChat() {
         toast(this, "got link: $url")
     }
 
-    companion object{
-        val formalBoldAccount = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
+    companion object {
+        val formalBoldAccount: BoldAccount
+            get() = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
 
-        val defaultBoldAccount = formalBoldAccount
+        val defaultBoldAccount: BoldAccount
+            get() = formalBoldAccount
     }
 }
