@@ -29,14 +29,6 @@ open class BotChat : BasicChat() {
                 "" //https://eu1-1.nanorep.com/console/login.html
             )
 
-        val testBotAccount: BotAccount
-            get() = BotAccount(
-                "",
-                "nanorep",
-                "English",
-                "mobilestaging"
-            )
-
         val defaultBotAccount: BotAccount
             get() = formalBotAccount
     }
