@@ -9,6 +9,7 @@ import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
 import com.nanorep.sdkcore.utils.SystemUtil
+import java.util.*
 
 
 /**
@@ -68,8 +69,8 @@ interface HistoryDao {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(historyElement: HistoryElement)
 
-    @Update
-    suspend fun update(historyElement: HistoryElement)
+    @Query("UPDATE historyElement SET `key`=:key, status=:status WHERE timestamp=:timestamp ")
+    fun update(timestamp: Long, key: ByteArray?, status: Int)
 
 }
 
@@ -83,7 +84,7 @@ class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
     /**
      * for internal use, to get the records in insertion order
      */
-    var inDate: Long = SystemUtil.syncedCurrentTimeMillis()
+    lateinit var inDate: Date
 
     @PrimaryKey
     private var timestamp: Long = 0
@@ -98,6 +99,8 @@ class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
 
     override var isStorageReady = true
 
+    var textContent: String = ""
+
     constructor(storable: StorableChatElement) :this(storable.getStorageKey()) {
         type = storable.getType()
         timestamp = storable.getTimestamp()
@@ -105,7 +108,7 @@ class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
         scope = storable.scope
         key = storable.getStorageKey()
         isStorageReady = storable.isStorageReady
-
+        textContent = storable.text
     }
 
     override fun getStorageKey(): ByteArray {
@@ -161,4 +164,13 @@ class Converters {
         return status.ordinal
     }
 
+    @TypeConverter
+    fun toDate(dateLong: Long?): Date? {
+        return dateLong?.let { Date(it) }
+    }
+
+    @TypeConverter
+    fun fromDate(date: Date?): Long? {
+        return date?.time
+    }
 }
