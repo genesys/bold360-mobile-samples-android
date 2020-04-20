@@ -36,7 +36,6 @@ open class History : /*AsyncChatContinuity()*/ BotChat() {
             R.id.clear_history -> {
                 historyRepository.clearAll()
                 finish()
-
                 return true
             }
         }
@@ -44,9 +43,8 @@ open class History : /*AsyncChatContinuity()*/ BotChat() {
         return false
     }
 
-    override fun finish() {
-        takeIf { ::historyRepository.isInitialized }?.historyRepository?.release()
-        super.finish()
+    override fun onStop() {
+        takeIf { isFinishing && ::historyRepository.isInitialized }?.historyRepository?.release()
+        super.onStop()
     }
-
 }
