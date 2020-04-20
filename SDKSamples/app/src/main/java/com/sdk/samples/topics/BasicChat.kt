@@ -17,6 +17,7 @@ import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
+import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
@@ -56,7 +57,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     override fun finish() {
         super.finish()
-        takeIf { ::chatController.isInitialized }?.chatController?.destruct()
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
@@ -127,7 +127,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         finishIfLast()
     }
 
-    private fun finishIfLast() {
+    protected fun finishIfLast() {
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
