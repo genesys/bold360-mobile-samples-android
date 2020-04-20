@@ -5,11 +5,12 @@ import android.util.Log
 import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.nanoengine.chatelement.StorableChatElement
-import com.sdk.samples.topics.History
+import com.nanorep.sdkcore.utils.SystemUtil
 import com.sdk.samples.topics.History.Companion.HistoryPageSize
 import kotlinx.coroutines.*
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.coroutines.CoroutineContext
+import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.min
 
@@ -51,41 +52,43 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
     /**
      * Adds an element to the history (on a I/O thread)
      */
+    @ExperimentalCoroutinesApi
     override fun onReceive(item: StorableChatElement) {
+        // start immediately the insert action without being suspended.
+        // this Room version verifies DB actions not on main thread.
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
-        coroutineScope.launch {
-
-            Log.d("history", "onReceive: [type:${item.getType()}][text:${item.text}]")
-            historyDao.insert(HistoryElement(item))
-
+            historyDao.insert(HistoryElement(item).apply {
+                inDate = Date(SystemUtil.syncedCurrentTimeMillis())
+                Log.d("history", "onReceive: [inDate:${inDate}][timestamp:${getTimestamp()}][text:${textContent}]")
+            })
         }
     }
 
     /**
      * Removes an element to the history (on a I/O thread)
      */
+    @ExperimentalCoroutinesApi
     override fun onRemove(timestampId: Long) {
 
-        coroutineScope.launch {
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
             Log.d("history", "onRemove: [id:$timestampId]")
             historyDao.delete(timestampId)
-
         }
     }
 
     /**
      * Updates an element at the history by its timestamp (on a I/O thread)
      */
+    @ExperimentalCoroutinesApi
     override fun onUpdate(timestampId: Long, item: StorableChatElement) {
 
-        coroutineScope.launch {
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
             Log.d("history", "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]")
-            historyDao.update(HistoryElement(item).apply { setTimestamp(timestampId) })
-
+            historyDao.update(timestampId, item.getStorageKey(), item.getStatus())
         }
-
     }
 
     /**
@@ -111,7 +114,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         return result.await()
     }
 
-    private suspend fun getHistory ( fromIdx: Int, direction: Int, onFetched: (MutableList<HistoryElement>) -> Unit ) {
+    private suspend fun getHistory(fromIdx: Int, direction: Int, onFetched: (MutableList<HistoryElement>) -> Unit) {
 
         var fromIdx = fromIdx
 
@@ -135,7 +138,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         Log.d("history", "fetching history: total = $historySize, from $toIndex to $fromIdx")
 
         // In order to prevent Concurrent exception:
-        val accountHistory = CopyOnWriteArrayList(historyDao.getCount(toIndex, fromIdx-toIndex))
+        val accountHistory = CopyOnWriteArrayList(historyDao.getCount(toIndex, fromIdx - toIndex))
 
         try {
             //Log.v("History", accountHistory.map { "item: ${it.inDate}"}.joinToString("\n"))

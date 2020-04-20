@@ -29,8 +29,8 @@ import kotlin.properties.Delegates
 abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     protected lateinit var chatController: ChatController
-    protected var destructWithUI: Boolean by Delegates.observable(true){property, oldValue, newValue ->
-            current_radio.isEnabled = !newValue
+    protected var destructWithUI: Boolean by Delegates.observable(true) { property, oldValue, newValue ->
+        current_radio.isEnabled = !newValue
     }
 
     protected var endMenu: MenuItem? = null
@@ -50,18 +50,19 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         startChat()
     }
 
-    open fun startChat(){
+    open fun startChat() {
         createChat()
     }
 
     override fun finish() {
         super.finish()
+        takeIf { ::chatController.isInitialized }?.chatController?.destruct()
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
     abstract fun getAccount(): Account
 
-    protected open fun getBuilder() : ChatController.Builder {
+    protected open fun getBuilder(): ChatController.Builder {
         val settings = createChatSettings()
 
         return ChatController.Builder(this)
@@ -107,7 +108,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finishIfLast()
-            StateEvent.Unavailable -> lifecycleScope.launch { toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
+            StateEvent.Unavailable -> lifecycleScope.launch {
+                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
+            }
         }
     }
 
@@ -131,9 +134,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     }
 
     override fun onStop() {
-        if(isFinishing) {
-            if (this::chatController.isInitialized) chatController.terminateChat()
-        }
+        takeIf { isFinishing && ::chatController.isInitialized }?.chatController?.terminateChat()
+
         super.onStop()
     }
 
@@ -144,7 +146,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_main, menu)
-        
+
         this.endMenu = menu?.findItem(R.id.end_current_chat)
         this.destructMenu = menu?.findItem(R.id.destruct_chat)
 
@@ -160,12 +162,14 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         when (item.itemId) {
             R.id.end_current_chat -> {
                 chatController.endChat(false)
+                finish()
                 return true
             }
-           
+
             R.id.destruct_chat -> {
-                chatController.destruct()
+                //chatController.destruct()
                 item.isEnabled = false
+                finish()
                 return true
             }
 
@@ -181,7 +185,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         }
     }
 
-    fun hasChatController() : Boolean {
+    fun hasChatController(): Boolean {
         return this::chatController.isInitialized
     }
 

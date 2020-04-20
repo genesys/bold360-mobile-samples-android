@@ -7,7 +7,7 @@ import com.sdk.samples.R
 import com.sdk.samples.topics.history.HistoryRepository
 import com.sdk.samples.topics.history.RoomHistoryProvider
 
-open class History : AsyncChatContinuity() {
+open class History : /*AsyncChatContinuity()*/ BotChat() {
 
     private lateinit var historyRepository: HistoryRepository
 
@@ -35,7 +35,7 @@ open class History : AsyncChatContinuity() {
         when (item.itemId) {
             R.id.clear_history -> {
                 historyRepository.clearAll()
-                chatController.destruct()
+                finish()
 
                 return true
             }
@@ -45,7 +45,7 @@ open class History : AsyncChatContinuity() {
     }
 
     override fun finish() {
-        historyRepository.release()
+        takeIf { ::historyRepository.isInitialized }?.historyRepository?.release()
         super.finish()
     }
 
