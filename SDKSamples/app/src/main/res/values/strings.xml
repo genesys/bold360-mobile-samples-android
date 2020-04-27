@@ -41,4 +41,6 @@
     <string name="restore_chat_with_no_user">Can\'t restore chat without previous user id</string>
     <string name="apikey">ApiKey</string>
 
+    <string name="file_transfer_not_enabled">File transfer is not enabled for this chat</string>
+
 </resources>

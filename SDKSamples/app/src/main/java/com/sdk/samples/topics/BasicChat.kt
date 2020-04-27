@@ -17,7 +17,6 @@ import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
-import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
@@ -68,11 +67,12 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
+        // for tests: .accountProvider(SimpleAccountProvider())
     }
 
     protected open fun createChatSettings(): ConversationSettings {
         return ConversationSettings()
-//  for tests:   .datestamp(true, SimpleDatestampFormatFactory(this))
+        //uncomment to set custom datestamp format: .datestamp(true, SampleDatestampFactory())
     }
 
     protected open fun createChat() {
@@ -109,14 +109,14 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finishIfLast()
             StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
+                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
         }
     }
 
     override fun onError(error: NRError) {
         super.onError(error)
-        lifecycleScope.launch { toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
+        lifecycleScope.launch { toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -138,10 +138,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         super.onStop()
     }
-
-    /*override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
