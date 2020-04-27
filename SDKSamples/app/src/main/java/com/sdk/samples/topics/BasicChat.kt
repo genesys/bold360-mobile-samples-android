@@ -103,14 +103,14 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         when (stateEvent.state) {
             StateEvent.ChatWindowDetached -> finish()
             StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY))
+                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
         }
     }
 
     override fun onError(error: NRError) {
         super.onError(error)
-        lifecycleScope.launch { toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)) }
+        lifecycleScope.launch { toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
