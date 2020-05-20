@@ -1,8 +1,5 @@
 package com.sdk.samples.topics
 
-import android.widget.Toast
-import com.nanorep.convesationui.structure.controller.ChatController
-import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
@@ -22,20 +19,23 @@ open class BotChat : BasicChat() {
         toast(this@BotChat, "The file upload action is not available for this sample.")
     }
 
-    companion object{
+    companion object {
 
-        val formalBotAccount = BotAccount(
-            "",
-            "nanorep",
-            "English",
-            "" //https://eu1-1.nanorep.com/console/login.html
-        )
+        val formalBotAccount: BotAccount
+            get() = BotAccount(
+                "",
+                "nanorep",
+                "English",
+                "" //https://eu1-1.nanorep.com/console/login.html
+            )
 
-        val testAccount = BotAccount(
-            "", "nanorep",
-            "English", "mobilestaging", null
-        )
+        val testAccount: BotAccount
+            get() = BotAccount(
+                "", "nanorep",
+                "English", "mobilestaging", null
+            )
 
-        val defaultBotAccount = formalBotAccount
+        val defaultBotAccount: BotAccount
+            get() = testAccount
     }
 }

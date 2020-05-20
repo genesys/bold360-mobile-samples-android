@@ -33,6 +33,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+                android:name=".topics.BotVocToVocChat"
+                android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.VOICE_TO_VOICE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
                 android:name=".topics.BoldChat"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">

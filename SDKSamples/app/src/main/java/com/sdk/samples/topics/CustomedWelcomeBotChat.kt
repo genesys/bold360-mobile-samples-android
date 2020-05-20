@@ -12,8 +12,11 @@ class CustomedWelcomeBotChat : BotChat() {
     }
 
     companion object{
-        const val Customed_WM = "1009687422"
-        const val Disable_WM = BotAccount.None
+        const val Customed_WM = "1009689562" //"1009687422"
 
+        const val TestEnv_WM = "871383332"
+
+        // use the following to prevent welcome message to appear on chat
+        const val Disable_WM = BotAccount.None
     }
 }

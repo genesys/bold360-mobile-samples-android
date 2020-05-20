@@ -12,6 +12,7 @@ import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.nanoengine.model.conversation.providerConfig
 import com.nanorep.nanoengine.model.conversation.statement.IncomingStatement
 import com.nanorep.nanoengine.model.conversation.statement.OutgoingStatement
+import com.nanorep.nanoengine.model.conversation.statement.UserInput
 import com.nanorep.sdkcore.model.ChatStatement
 import com.nanorep.sdkcore.model.StatusOk
 import com.nanorep.sdkcore.model.StatusPending
@@ -66,14 +67,9 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
         super.enableChatInput(enable,  ChatInputData().apply {
 
-            onSend = if (enable) { charSequence: CharSequence ->
-                post(OutgoingStatement(charSequence.toString()))
-            } else null
-
-            /* not release yet on 3.6.0 rcs
             onSendInput = if (enable) { userInput: UserInput ->
                 post(OutgoingStatement(userInput.text))
-            } else null*/
+            } else null
 
             voiceEnabled = enable && isEnabled(ChatFeatures.SpeechRecognition)
             inputEnabled = enable
