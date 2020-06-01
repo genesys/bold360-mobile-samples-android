@@ -30,14 +30,13 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
         prepareUI()
     }
 
-    override fun onRestore(account: Account?, isRestorable: Boolean) {
+    override fun onRestore(account: Account?) {
 
         this.account = account
 
-        destructWithUI = !isRestorable
 
         try {
-            chatController.restoreChat(account = account, endChatWithUI = destructWithUI)
+            chatController.restoreChat(account = account)
 
             /* or use the following:
               if(!destructWithUI)
@@ -48,9 +47,9 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
         }
     }
 
-    override fun onCreate(account: Account, isRestorable: Boolean) {
+    override fun onCreate(account: Account) {
         this.account = account
-        destructWithUI = !isRestorable
+//        destructWithUI = !isRestorable
 
         try {
             createChat()
@@ -110,8 +109,8 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
 
 
 interface IRestoreSettings {
-    fun onCreate(account: Account, isRestorable: Boolean)
-    fun onRestore(account: Account?, isRestorable: Boolean)
+    fun onCreate(account: Account)
+    fun onRestore(account: Account?)
     fun hasChatController(): Boolean
 }
 
@@ -138,11 +137,11 @@ class RestoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         create_chat.setOnClickListener {
-            selectedAccount?.run { restoreSettings?.onCreate(this, preserver_handler.isChecked) }
+            selectedAccount?.run { restoreSettings?.onCreate(this) }
         }
 
         restore_chat.setOnClickListener {
-            restoreSettings?.onRestore(selectedAccount, preserver_handler.isChecked)
+            restoreSettings?.onRestore(selectedAccount)
         }
 
         chat_action_group.setOnCheckedChangeListener { group, checkedId ->

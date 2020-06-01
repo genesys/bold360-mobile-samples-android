@@ -61,6 +61,7 @@ class ChatViewModel : ViewModel() {
 }
 
 private const val TAG = "async"
+private const val ASYNC_FORM = "async_form"
 
 /**
  * Enables restore and reconnect of last async chat.
@@ -115,8 +116,9 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
     private fun openAsyncForm() {
         chatViewModel.account = accountRecovery.restoreAccount()
 
-        supportFragmentManager.beginTransaction().add(chat_view.id, AsyncChatForm())
-            .addToBackStack(null).commit()
+        Log.d("async", "Open async form ")
+        supportFragmentManager.takeIf { it.findFragmentByTag(ASYNC_FORM) == null }?.beginTransaction()?.add(chat_view.id, AsyncChatForm(), ASYNC_FORM)
+            ?.addToBackStack(null)?.commit()
     }
 }
 

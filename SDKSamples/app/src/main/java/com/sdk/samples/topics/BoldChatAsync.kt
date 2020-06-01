@@ -18,8 +18,8 @@ open class BoldChatAsync : BasicChat() {
 
     companion object{
         val defaultAsyncAccount = AsyncAccount(
-            "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2",
-            "mobile12345"
+            "2300000001700000000:2279533687831071375:MlVOftOF/UFUUqPPSbMSDAnQjITxOrQW:gamma",
+            "MobileAsyncStaging123452"
         ).apply {
             info.userInfo = UserInfo("1234567654321234569").apply {
                 firstName = "First name"
