@@ -30,7 +30,7 @@ open class BoldChatAvailability : BoldChat() {
             onResults = { results ->
                 if (results.isAvailable) {
 
-                    val acAccount = getAccount()
+//                    val acAccount = getAccount()
                     results.departmentId.takeIf { it > 0 }?.let {
                         account.addExtraData(VisitorDataKeys.Department to results.departmentId)
                     }

@@ -20,9 +20,10 @@ import kotlin.math.min
  * @param coroutineScope The application's lifecycle coroutine scope
  */
 
-class RoomHistoryProvider(var context: Context) : HistoryProvider {
+@ExperimentalCoroutinesApi
+class RoomHistoryProvider(var context: Context, override var targetId: String? = null) : HistoryProvider {
 
-    val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
 
     private val historyDao = HistoryRoomDB.getInstance(context).historyDao()
 
@@ -58,10 +59,12 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         // this Room version verifies DB actions not on main thread.
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
-            historyDao.insert(HistoryElement(item).apply {
-                inDate = Date(SystemUtil.syncedCurrentTimeMillis())
-                Log.d("history", "onReceive: [inDate:${inDate}][timestamp:${getTimestamp()}][text:${textContent}]")
-            })
+            targetId?.run {
+                historyDao.insert(HistoryElement(this, item).apply {
+                    inDate = Date(SystemUtil.syncedCurrentTimeMillis())
+                    Log.d("history", "onReceive: [inDate:${inDate}][timestamp:${getTimestamp()}][text:${textContent}]")
+                })
+            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
     }
 
@@ -72,9 +75,10 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
     override fun onRemove(timestampId: Long) {
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
-
+            targetId?.run {
             Log.d("history", "onRemove: [id:$timestampId]")
-            historyDao.delete(timestampId)
+            historyDao.delete(this, timestampId)
+        } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
     }
 
@@ -87,14 +91,25 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
             Log.d("history", "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]")
-            historyDao.update(timestampId, item.getStorageKey(), item.getStatus())
+            targetId?.run {historyDao.update(this, timestampId, item.getStorageKey(), item.getStatus())
+            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
+        }
+    }
+
+    override fun clear() {
+
+        coroutineScope.launch(Dispatchers.IO) {
+            targetId?.run {
+                historyDao.delete(this)
+            }
+                ?: HistoryRoomDB.getInstance(context).clearAllTables()
         }
     }
 
     /**
      * Clears all the history from the database (on a I/O thread)
      */
-    override fun clearAll() {
+    fun clearAll() {
 
         coroutineScope.launch {
             HistoryRoomDB.getInstance(context).clearAllTables()
@@ -108,9 +123,8 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         coroutineScope.cancel() // Cancels this scope, including its job and all its children
     }
 
-    @ExperimentalCoroutinesApi
     override suspend fun count(): Int {
-        val result = coroutineScope.async<Int> { historyDao.count() }
+        val result = coroutineScope.async<Int> { targetId?.let { historyDao.count(it) } ?: 0 }
         return result.await()
     }
 
@@ -119,7 +133,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         var fromIdx = fromIdx
 
         val fetchOlder = direction == HistoryFetching.Older
-        val historySize = historyDao.count()
+        val historySize = count()
 
         when {
             fromIdx == -1 -> {
@@ -138,7 +152,7 @@ class RoomHistoryProvider(var context: Context) : HistoryProvider {
         Log.d("history", "fetching history: total = $historySize, from $toIndex to $fromIdx")
 
         // In order to prevent Concurrent exception:
-        val accountHistory = CopyOnWriteArrayList(historyDao.getCount(toIndex, fromIdx - toIndex))
+        val accountHistory = CopyOnWriteArrayList(targetId?.let{historyDao.getCount(it, toIndex, fromIdx - toIndex)}?: emptyList())
 
         try {
             //Log.v("History", accountHistory.map { "item: ${it.inDate}"}.joinToString("\n"))

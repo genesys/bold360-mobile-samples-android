@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_with_bot),
                 ContextCompat.getDrawable(this, R.drawable.outline_android_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.HISTORY",
+                getString(R.string.chat_with_bot_history),
+                ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
+            ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
                 ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
@@ -80,10 +84,6 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
                 ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.HISTORY",
-                getString(R.string.history),
-                ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
             )
         )
 

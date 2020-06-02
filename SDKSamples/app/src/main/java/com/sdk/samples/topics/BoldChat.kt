@@ -7,7 +7,7 @@ import com.nanorep.sdkcore.utils.toast
 open class BoldChat : BasicChat() {
 
     protected val account: BoldAccount by lazy {
-        defaultBoldAccount
+        Accounts.defaultBoldAccount
     }
     @JvmName("account") get
 
@@ -19,14 +19,4 @@ open class BoldChat : BasicChat() {
         toast(this, "got link: $url")
     }
 
-    companion object {
-        val formalBoldAccount: BoldAccount
-            get() = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
-
-        val fameBoldAccount: BoldAccount
-            get() = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV") // Fame
-
-        val defaultBoldAccount: BoldAccount
-            get() = formalBoldAccount
-    }
 }

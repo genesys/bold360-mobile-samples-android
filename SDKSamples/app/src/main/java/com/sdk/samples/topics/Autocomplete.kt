@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
@@ -18,7 +18,6 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.topics.BotChat.Companion.defaultBotAccount
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
 class Autocomplete : AppCompatActivity() {
@@ -29,10 +28,10 @@ class Autocomplete : AppCompatActivity() {
 
         article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 
-        val botViewModel = ViewModelProviders.of(this).get(BotCompletionViewModel::class.java);
+        val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = defaultBotAccount
+            botViewModel.botChat.account = Accounts.defaultBotAccount
         }
 
         botViewModel.onError.observe(this, Observer { error ->

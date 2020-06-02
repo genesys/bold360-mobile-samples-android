@@ -8,7 +8,6 @@ import com.nanorep.nanoengine.chatelement.StorableChatElement
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
-import com.nanorep.sdkcore.utils.SystemUtil
 import java.util.*
 
 
@@ -54,23 +53,26 @@ abstract class HistoryRoomDB: RoomDatabase() {
 @Dao
 interface HistoryDao {
 
-    @Query("SELECT * FROM historyElement ORDER BY inDate Limit :count OFFSET :from ")
-    suspend fun getCount(from: Int, count: Int): List<HistoryElement>
+    @Query("SELECT * FROM historyElement WHERE groupId=:groupId ORDER BY inDate Limit :count OFFSET :from ")
+    suspend fun getCount(groupId: String, from: Int, count: Int): List<HistoryElement>
 
-    @Query("SELECT COUNT(*) FROM historyElement")
-    suspend fun count(): Int
+    @Query("SELECT COUNT(*) FROM historyElement WHERE groupId=:groupId")
+    suspend fun count(groupId: String): Int
 
-    @Query("SELECT * FROM historyElement")
-    suspend fun getAll(): List<HistoryElement>
+    @Query("SELECT * FROM historyElement WHERE groupId=:groupId ORDER BY inDate")
+    suspend fun getAll(groupId: String): List<HistoryElement>
 
-    @Query("DELETE FROM historyElement WHERE timestamp=:timestamp")
-    suspend fun delete(timestamp: Long)
+    @Query("DELETE FROM historyElement WHERE groupId=:groupId and timestamp=:timestamp")
+    suspend fun delete(groupId: String, timestamp: Long)
+
+    @Query("DELETE FROM historyElement WHERE groupId=:groupId")
+    suspend fun delete(groupId: String)
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(historyElement: HistoryElement)
 
-    @Query("UPDATE historyElement SET `key`=:key, status=:status WHERE timestamp=:timestamp ")
-    fun update(timestamp: Long, key: ByteArray?, status: Int)
+    @Query("UPDATE historyElement SET `key`=:key, status=:status WHERE groupId=:groupId and timestamp=:timestamp ")
+    suspend fun update(groupId: String, timestamp: Long, key: ByteArray?, status: Int)
 
 }
 
@@ -79,7 +81,11 @@ interface HistoryDao {
  * sample class for app usage
  */
 @Entity
-class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
+class HistoryElement() : StorableChatElement {
+
+    var groupId: String = ""
+
+    var key:ByteArray = byteArrayOf()
 
     /**
      * for internal use, to get the records in insertion order
@@ -101,7 +107,8 @@ class HistoryElement(var key:ByteArray = byteArrayOf()) : StorableChatElement {
 
     var textContent: String = ""
 
-    constructor(storable: StorableChatElement) :this(storable.getStorageKey()) {
+    constructor(groupId: String, storable: StorableChatElement) : this() {
+        this.groupId = groupId
         type = storable.getType()
         timestamp = storable.getTimestamp()
         status = storable.getStatus()

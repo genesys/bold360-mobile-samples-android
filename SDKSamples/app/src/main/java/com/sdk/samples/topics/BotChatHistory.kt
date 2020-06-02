@@ -4,7 +4,7 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
 
-open class BotChat : BasicChat() {
+open class BotChatHistory : History() {
 
     protected val account: BotAccount by lazy {
         Accounts.defaultBotAccount
@@ -16,7 +16,7 @@ open class BotChat : BasicChat() {
     }
 
     override fun onUploadFileRequest() {
-        toast(this@BotChat, "The file upload action is not available for this sample.")
+        toast(this@BotChatHistory, "The file upload action is not available for this sample.")
     }
 
 }
