@@ -3,8 +3,12 @@ package com.sdk.samples.topics.history
 import com.nanorep.convesationui.structure.history.ChatElementListener
 
 interface HistoryProvider: ChatElementListener {
-    fun clearAll()
+    var targetId: String?
+
+    fun clear()
+
     fun release()
+
     suspend fun count(): Int
 }
 

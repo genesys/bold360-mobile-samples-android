@@ -120,6 +120,10 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
         supportFragmentManager.takeIf { it.findFragmentByTag(ASYNC_FORM) == null }?.beginTransaction()?.add(chat_view.id, AsyncChatForm(), ASYNC_FORM)
             ?.addToBackStack(null)?.commit()
     }
+
+    override fun onChatClose() {
+        // For this sample we don't want to end the chat on UI close
+    }
 }
 
 

@@ -134,9 +134,15 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     }
 
     override fun onStop() {
-        takeIf { isFinishing && ::chatController.isInitialized }?.chatController?.terminateChat()
-
+        onChatClose()
         super.onStop()
+    }
+
+    protected open fun onChatClose(){
+        takeIf { isFinishing && ::chatController.isInitialized }?.run{
+            chatController.terminateChat()
+            chatController.destruct()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

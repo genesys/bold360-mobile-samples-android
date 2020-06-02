@@ -7,7 +7,7 @@ import com.sdk.samples.topics.handover.MyHandoverHandler
 open class Handover : BotChat() {
 
     override fun getAccount(): Account {
-        return defaultBotAccount
+        return Accounts.defaultBotAccount
     }
     
     override fun getBuilder(): ChatController.Builder {

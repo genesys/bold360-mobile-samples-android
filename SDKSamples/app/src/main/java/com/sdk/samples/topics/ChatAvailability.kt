@@ -14,7 +14,7 @@ class CheckAvailability : AppCompatActivity() {
 
     private var chipUncheckedIcon: Drawable? = null
 
-    val account = BoldChat.defaultBoldAccount
+    val account = Accounts.defaultBoldAccount
 
     /*val model:AvailabilityViewModel? by lazy {
         activity?.let{ ViewModelProviders.of(it).get(AvailabilityViewModel::class.java)}

@@ -161,11 +161,11 @@ class RestoreFragment : Fragment() {
     private fun getAccount(accountName: String?): Account? =
 
         when (accountName) {
-            "bot_chat" -> BotChat.defaultBotAccount
+            "bot_chat" -> Accounts.defaultBotAccount
 
-            "bold_chat" -> BoldChat.defaultBoldAccount
+            "bold_chat" -> Accounts.defaultBoldAccount
 
-            "async_chat" -> BoldChatAsync.defaultAsyncAccount
+            "async_chat" -> Accounts.defaultAsyncAccount
 
             else -> null
         }
