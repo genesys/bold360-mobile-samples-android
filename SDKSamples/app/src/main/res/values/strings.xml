@@ -13,7 +13,7 @@
     <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
     <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
     <string name="chat_with_bot">Chat with bot ai</string>
-    <string name="chat_with_bot_history">Chat with bot ai + History</string>
+    <string name="chat_with_bot_history">Chat with AI</string>
     <string name="chat_with_bold">Chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with ai: customizing welcome message</string>
     <string name="bot_chat_with_voc_to_voc">Chat with ai: Voice to Voice</string>
@@ -37,6 +37,8 @@
     <string name="start_async_chat">Start Chat</string>
     <string name="application_id">Application Id</string>
     <string name="user_id">User Id</string>
+    <string name="user_first">First name</string>
+    <string name="user_last">Last name</string>
     <string name="restore_if_available">Restore if available</string>
     <string name="missing_apikey">Apikey is required</string>
     <string name="missing_applicationId">Application id is required</string>

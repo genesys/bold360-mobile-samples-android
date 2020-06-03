@@ -150,11 +150,10 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".topics.BotChatHistory"
+                android:name=".topics.BotChatDemo"
                 android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
-                <action android:name="com.sdk.sample.action.HISTORY" />
-
+                <action android:name="com.sdk.sample.action.BOT_CHAT_DEMO" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

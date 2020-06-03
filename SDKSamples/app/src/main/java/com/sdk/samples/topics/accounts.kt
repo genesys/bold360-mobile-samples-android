@@ -28,13 +28,17 @@ object Accounts {
     private val testBotAccount: BotAccount
         get() = BotAccount(
             "", "nanorep",
-            "English", "mobilestaging", null
-        )
+            "English", "mobilestaging")
+
+    private val rbsBotAccount: BotAccount
+        get() = BotAccount("252f4e19-7ebd-4ebc-8f20-f28778361899", "rbspilot",
+            "English", "eu1-1")
 
     val defaultBotAccount: BotAccount
-        get() = formalBotAccount
+        get() = rbsBotAccount
 
-    val defaultAsyncAccount = AsyncAccount(
+
+    private val formalAsyncAccount = AsyncAccount(
         "2300000001700000000:2279533687831071375:MlVOftOF/UFUUqPPSbMSDAnQjITxOrQW:gamma",
         "MobileAsyncStaging123452"
     ).apply {
@@ -45,4 +49,16 @@ object Accounts {
             phoneNumber = "123456"
         }
     }
+
+    private val rbsAsyncAccount = AsyncAccount(
+        "700923217738955243:696490953063305782:60/4G71sRGPWY/A8g4yxFeNTSQKcMtxr:eu",
+        "RbsPilotMobileMessaging").apply {
+        info.userInfo = UserInfo("7009232177389552433").apply {
+            firstName = "RBS"
+            lastName = "Demo"
+        }
+    }
+
+    val defaultAsyncAccount: AsyncAccount
+        get() = rbsAsyncAccount
 }

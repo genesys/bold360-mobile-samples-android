@@ -114,7 +114,7 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
      * Opens the async account details form
      */
     private fun openAsyncForm() {
-        chatViewModel.account = accountRecovery.restoreAccount()
+        chatViewModel.account = getAccount() as AsyncAccount // accountRecovery.restoreAccount()
 
         Log.d("async", "Open async form ")
         supportFragmentManager.takeIf { it.findFragmentByTag(ASYNC_FORM) == null }?.beginTransaction()?.add(chat_view.id, AsyncChatForm(), ASYNC_FORM)
@@ -151,10 +151,15 @@ class AsyncChatForm : Fragment() {
         //-> init views values with provided account
         apiKey_edit.setText(chatViewModel.account?.apiKey ?: "")
         application_edit.setText(chatViewModel.account?.info?.applicationId ?: "")
-        user_edit.apply {
-            setText(chatViewModel.account?.info?.userInfo?.userId ?: "")
-            filters = arrayOf(InputFilter.LengthFilter(19))
+
+        user_edit.filters = arrayOf(InputFilter.LengthFilter(19))
+
+        chatViewModel.account?.info?.userInfo?.let{
+            user_edit.setText(it.userId)
+            user_first.setText(it.firstName)
+            user_last.setText(it.lastName)
         }
+
         restore_switch.isChecked = chatViewModel.account != null
 
         start_button.setOnClickListener {
@@ -172,6 +177,8 @@ class AsyncChatForm : Fragment() {
         val apiKey = apiKey_edit.text.toString()
         val applicationId = application_edit.text.toString()
         val userId = user_edit.text.toString()
+        val userFName = user_first.text.toString()
+        val userLName = user_last.text.toString()
 
         val error = when {
             apiKey.isBlank() -> getString(R.string.missing_apikey)
@@ -187,7 +194,10 @@ class AsyncChatForm : Fragment() {
         } ?: AsyncAccount(apiKey, applicationId).apply {
             // if user id is empty, AsyncAccount provides a auto generated id.
             userId.takeUnless { it.isBlank() }?.let {
-                info.userInfo = UserInfo(it)
+                info.userInfo = UserInfo(it).apply {
+                    firstName = userFName
+                    lastName = userLName
+                }
             }
         }
     }
@@ -220,6 +230,8 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
     private val applicationId: String by this
 
     private val userId: String by this
+    private val userFirst: String by this
+    private val userLast: String by this
 
     private var senderId: String by this
 
@@ -245,6 +257,8 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
                         putString(this@AsyncAccountRecovery::apiKey.name, apiKey)
                         putString(this@AsyncAccountRecovery::applicationId.name, info.applicationId)
                         putString(this@AsyncAccountRecovery::userId.name, info.userInfo.userId)
+                        putString(this@AsyncAccountRecovery::userFirst.name, info.userInfo.firstName)
+                        putString(this@AsyncAccountRecovery::userLast.name, info.userInfo.lastName)
                     }
 
                     /* override session details, SenderId and LastReceivedMessageId if:
@@ -278,7 +292,10 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
                 apiKey.takeUnless { it.isBlank() }?.let {
                     // recover account from the sharedPreferences with no changes.
                     AsyncAccount(it, applicationId).apply {
-                        info.userInfo = UserInfo(this@AsyncAccountRecovery.userId)
+                        info.userInfo = UserInfo(this@AsyncAccountRecovery.userId).apply {
+                            firstName = this@AsyncAccountRecovery.userFirst
+                            lastName = this@AsyncAccountRecovery.userLast
+                        }
                         info.SenderId = senderId.toLongOrNull()
                         info.LastReceivedMessageId = lastReceivedMessageId
                     }
