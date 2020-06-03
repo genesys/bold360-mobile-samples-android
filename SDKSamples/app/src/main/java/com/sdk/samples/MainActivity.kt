@@ -37,22 +37,6 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_with_bot_history),
                 ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
-                getString(R.string.chat_with_bold),
-                ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
-                getString(R.string.async_chat_with_an_agent),
-                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.ASYNC_CONTINUITY",
-                getString(R.string.async_chat_continuity),
-                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
-                getString(R.string.bot_to_bold_with_prechat),
-                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
-            ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
                 ContextCompat.getDrawable(this, R.drawable.outline_message_black_24)
@@ -64,7 +48,23 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
+            ), SampleTopic( // although 
+                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
+                getString(R.string.async_chat_with_an_agent),
+                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.ASYNC_CONTINUITY",
+                getString(R.string.async_chat_continuity),
+                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
+                getString(R.string.chat_with_bold),
+                ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
+                getString(R.string.bot_to_bold_with_prechat),
+                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
+            ),  SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
                 ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
@@ -77,13 +77,13 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_restore),
                 ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24)
             ), SampleTopic(
-                "com.sdk.sample.action.AUTOCOMPLETE",
-                getString(R.string.standalone_autocomplete),
-                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
-            ), SampleTopic(
                 "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
                 ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.AUTOCOMPLETE",
+                getString(R.string.standalone_autocomplete),
+                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
             )
         )
 
