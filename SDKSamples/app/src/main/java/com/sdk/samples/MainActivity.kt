@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
-            ), SampleTopic( // although 
+            ), SampleTopic(
                 "com.sdk.sample.action.BOLD_ASYNC_CHAT",
                 getString(R.string.async_chat_with_an_agent),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)

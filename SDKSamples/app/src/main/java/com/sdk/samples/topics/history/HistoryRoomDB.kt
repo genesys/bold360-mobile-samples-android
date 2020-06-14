@@ -17,7 +17,7 @@ import java.util.*
 
 private const val HISTORY = "history_database"
 
-@Database(entities = [HistoryElement::class], version = 2)
+@Database(entities = [HistoryElement::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class HistoryRoomDB: RoomDatabase() {
 
