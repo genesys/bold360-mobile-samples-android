@@ -42,11 +42,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         topic_title.text = intent.getStringExtra("title")
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-
         startChat()
     }
 
