@@ -11,7 +11,7 @@ open class BotVocToVocChat : BotChat() {
 
     private val readAlterProvider:TTSReadAlterProvider = object : TTSReadAlterProvider{
         override fun alter(readRequest: ReadRequest, callback: (ReadRequest) -> Unit) {
-            readRequest.text = "Changing element text for testing: ${readRequest.readReqId}: original message: ${readRequest.text}"
+//            readRequest.text = "Changing element text for testing: ${readRequest.readReqId}: original message: ${readRequest.text}"
             callback.invoke(readRequest)
         }
     }
