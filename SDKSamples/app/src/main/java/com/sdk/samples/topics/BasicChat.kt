@@ -106,6 +106,9 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             StateEvent.Unavailable -> lifecycleScope.launch {
                 toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
+            StateEvent.Ended -> if(!chatController.hasOpenChats()) {
+                finish()
+            }
         }
     }
 
@@ -159,7 +162,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         when (item.itemId) {
             R.id.end_current_chat -> {
                 chatController.endChat(false)
-                finish()
                 return true
             }
 
