@@ -91,7 +91,6 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
         accountRecovery = AsyncAccountRecovery(this)
 
@@ -108,13 +107,15 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
                 }
             })
         }
+
+        super.onCreate(savedInstanceState)
     }
 
     /**
      * Opens the async account details form
      */
     private fun openAsyncForm() {
-        chatViewModel.account = accountRecovery.restoreAccount()
+        chatViewModel.account = getAccount() as AsyncAccount//accountRecovery.restoreAccount()
 
         Log.d("async", "Open async form ")
         supportFragmentManager.takeIf { it.findFragmentByTag(ASYNC_FORM) == null }?.beginTransaction()?.add(chat_view.id, AsyncChatForm(), ASYNC_FORM)

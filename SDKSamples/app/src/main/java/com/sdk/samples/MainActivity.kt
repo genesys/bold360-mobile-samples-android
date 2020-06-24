@@ -1,16 +1,23 @@
 package com.sdk.samples
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.inflate
 import android.view.ViewGroup
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.security.ProviderInstaller
+import com.nanorep.sdkcore.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 
@@ -19,6 +26,7 @@ open class SampleTopic(val intentAction: String, val title: String, val icon: Dr
 class MainActivity : AppCompatActivity() {
 
     private lateinit var topics: ArrayList<SampleTopic>
+    private var retryProviderInstall = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +103,65 @@ class MainActivity : AppCompatActivity() {
         }
         topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         (topics_recycler.adapter as TopicsAdapter).updateTopics()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        if (retryProviderInstall) {
+            updateSecurityProvider(this)
+            retryProviderInstall = false
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == ERROR_DIALOG_REQUEST_CODE) {
+            retryProviderInstall = true
+        }
+    }
+
+    companion object{
+        const val ERROR_DIALOG_REQUEST_CODE = 665
+
+        fun updateSecurityProvider(context: Activity) {
+
+            if (Build.VERSION.SDK_INT < 21) {
+                ProviderInstaller.installIfNeededAsync(context, object : ProviderInstaller.ProviderInstallListener {
+                    override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
+                        Log.e("Security-Installer", "!!! failed to install security provider updates, Checking for recoverable error...")
+
+                        GoogleApiAvailability.getInstance().apply {
+                            if (isUserResolvableError(errorCode) &&
+                                // check if the intent can be activated to prevent ActivityNotFoundException and
+                                // to be able to display that "Messaging won't be available"
+                                recoveryIntent?.resolveActivity(context.packageManager) != null) {
+
+                                // Recoverable error. Show a dialog prompting the user to
+                                // install/update/enable Google Play services.
+                                showErrorDialogFragment(context, errorCode, ERROR_DIALOG_REQUEST_CODE) {
+                                    // onCancel: The user chose not to take the recovery action
+                                    onProviderInstallerNotAvailable()
+                                }
+                            } else {
+                                onProviderInstallerNotAvailable()
+                            }
+                        }
+                    }
+
+                    private fun onProviderInstallerNotAvailable() {
+                        val msg = "Google play services can't be installed or updated thous Messaging may not be available"
+                        toast(context, msg)
+                        Log.e("Security-Installer", ">> $msg")
+                    }
+
+                    override fun onProviderInstalled() {
+                        Log.i("Security-Installer", ">> security provider updates installed successfully")
+
+                    }
+                })
+            }
+        }
     }
 }
 
