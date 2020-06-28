@@ -123,7 +123,9 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
     }
 
     override fun onChatClose() {
-        // For this sample we don't want to end the chat on UI close
+        if( isFinishing && hasChatController() ){
+            chatController.destruct()
+        }
     }
 }
 

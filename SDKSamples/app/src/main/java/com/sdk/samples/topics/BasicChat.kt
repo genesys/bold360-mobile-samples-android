@@ -102,7 +102,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
-            StateEvent.ChatWindowDetached -> finishIfLast()
+            StateEvent.ChatWindowDetached -> onChatUIDetached()
             StateEvent.Unavailable -> lifecycleScope.launch {
                 toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
@@ -122,6 +122,10 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         super.onBackPressed()
 
+        finishIfLast()
+    }
+
+    open protected fun onChatUIDetached() {
         finishIfLast()
     }
 
@@ -185,7 +189,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     }
 
     fun hasChatController(): Boolean {
-        return this::chatController.isInitialized
+        return this::chatController.isInitialized && !chatController.wasDestructed
     }
 
 }
