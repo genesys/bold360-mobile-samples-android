@@ -65,21 +65,6 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/colorPrimaryDark" />
 
-        <CheckBox
-                android:id="@+id/preserver_handler"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="10dp"
-                android:checked="false"
-                android:text="Restorable chat" />
-
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/colorPrimaryDark" />
-
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

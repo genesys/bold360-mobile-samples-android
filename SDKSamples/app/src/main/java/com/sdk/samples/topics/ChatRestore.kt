@@ -38,10 +38,6 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
         try {
             chatController.restoreChat(account = account)
 
-            /* or use the following:
-              if(!destructWithUI)
-                chatController.startChat(account)
-            */
         } catch (ex: IllegalStateException) {
             onError(NRError(ex))
         }
@@ -49,7 +45,6 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
 
     override fun onCreate(account: Account) {
         this.account = account
-//        destructWithUI = !isRestorable
 
         try {
             createChat()
