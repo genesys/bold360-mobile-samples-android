@@ -1,6 +1,5 @@
 package com.sdk.samples.topics
 
-import android.content.Context
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.AccountInfo
@@ -10,15 +9,15 @@ import com.sdk.samples.topics.extra.SimpleAccountProvider
 class PrechatExtraData : BotChat() {
 
     override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().accountProvider( MyAccountProvider(this) )
+        return super.getBuilder().accountProvider( Companion )
     }
 
 
-    private class MyAccountProvider(context: Context) : SimpleAccountProvider(context) {
+    companion object : SimpleAccountProvider() {
 
-        private val BOLD_DEPARTMENT = "2278985919139590636"
-        private val DemoFirstName = "Bold"
-        private val DemoLastName = "360"
+        const val BOLD_DEPARTMENT = "2278985919139590636"
+        const val DemoFirstName = "Bold"
+        const val DemoLastName = "360"
 
         override fun addAccount(account: AccountInfo) {
             (account as? BoldAccount)?.apply {
