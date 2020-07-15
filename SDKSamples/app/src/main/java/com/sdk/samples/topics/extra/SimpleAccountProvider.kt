@@ -2,6 +2,7 @@ package com.sdk.samples.topics.extra
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
@@ -53,24 +54,24 @@ open class SimpleAccountProvider(private val context: Context) : AccountInfoProv
             )
             val edit = preferences.edit()
             val userInfo = info.userInfo
-           /* Log.d(
-                app.com.nanoconversationdemo.fragment.MainFragment.TAG_MainFragment,
+            Log.d(
+                TAG_SimpleAccountProvider,
                 "updateAsyncSession: userInfo: $userInfo"
-            )*/
+            )
             edit.putString("userInfo", Gson().toJson(userInfo))
             val senderId = info.SenderId
             if (senderId != null) {
-              /*  Log.d(
-                    app.com.nanoconversationdemo.fragment.MainFragment.TAG_MainFragment,
+                Log.d(
+                    TAG_SimpleAccountProvider,
                     "updateAsyncSession: senderId: $senderId"
-                )*/
+                )
                 edit.putLong(SessionInfoConfigKeys.SenderId, senderId)
             }
             val lastReceivedMessageId = info.LastReceivedMessageId
-           /* Log.d(
-                app.com.nanoconversationdemo.fragment.MainFragment.TAG_MainFragment,
+            Log.d(
+                TAG_SimpleAccountProvider,
                 "updateAsyncSession: lastReceivedMessageId: $lastReceivedMessageId"
-            )*/
+            )
             edit.putString(SessionInfoConfigKeys.LastReceivedMessageId, lastReceivedMessageId)
             edit.apply()
         } catch (ex: Exception) {
@@ -90,5 +91,9 @@ open class SimpleAccountProvider(private val context: Context) : AccountInfoProv
 
     protected open fun addAccount(account: AccountInfo) {
         accounts[account.getApiKey()] = account
+    }
+    
+    companion object {
+        const val TAG_SimpleAccountProvider = "SimpleAccountProvider"
     }
 }
