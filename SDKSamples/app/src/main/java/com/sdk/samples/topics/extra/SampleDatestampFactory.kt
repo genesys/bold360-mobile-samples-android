@@ -1,8 +1,6 @@
 package com.sdk.samples.topics.extra
 
-import android.content.Context
 import com.nanorep.nanoengine.model.configuration.DatestampFormatFactory
-import com.sdk.samples.R
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*

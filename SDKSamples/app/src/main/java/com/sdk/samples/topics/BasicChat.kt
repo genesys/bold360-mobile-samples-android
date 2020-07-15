@@ -1,7 +1,5 @@
 package com.sdk.samples.topics
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -21,6 +19,7 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import com.sdk.samples.topics.extra.SimpleAccountProvider
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
 import kotlinx.coroutines.launch
@@ -62,7 +61,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
-        // for tests: .accountProvider(SimpleAccountProvider())
+            .accountProvider(SimpleAccountProvider(this))
     }
 
     protected open fun createChatSettings(): ConversationSettings {

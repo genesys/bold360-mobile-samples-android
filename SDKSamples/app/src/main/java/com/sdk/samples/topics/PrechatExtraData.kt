@@ -1,34 +1,31 @@
 package com.sdk.samples.topics
 
-import androidx.annotation.NonNull
-import com.integration.core.annotations.VisitorDataKeys
+import android.content.Context
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
-import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
 import com.nanorep.nanoengine.AccountInfo
-import com.nanorep.sdkcore.utils.Completion
+import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.sdk.samples.topics.extra.SimpleAccountProvider
-import java.util.*
 
 class PrechatExtraData : BotChat() {
 
     override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().accountProvider( Companion )
+        return super.getBuilder().accountProvider( MyAccountProvider(this) )
     }
 
 
-    companion object : SimpleAccountProvider() {
+    private class MyAccountProvider(context: Context) : SimpleAccountProvider(context) {
 
-        const val BOLD_DEPARTMENT = "2278985919139590636"
-        const val DemoFirstName = "Bold"
-        const val DemoLastName = "360"
+        private val BOLD_DEPARTMENT = "2278985919139590636"
+        private val DemoFirstName = "Bold"
+        private val DemoLastName = "360"
 
         override fun addAccount(account: AccountInfo) {
             (account as? BoldAccount)?.apply {
                 addExtraData (
-                    VisitorDataKeys.Department to BOLD_DEPARTMENT,
-                    VisitorDataKeys.FirstName to DemoFirstName,
-                    VisitorDataKeys.LastName to DemoLastName)
+                    SessionInfoKeys.Department to BOLD_DEPARTMENT,
+                    SessionInfoKeys.FirstName to DemoFirstName,
+                    SessionInfoKeys.LastName to DemoLastName)
             }
             super.addAccount(account)
         }

@@ -1,6 +1,5 @@
 package com.sdk.samples.topics
 
-import com.nanorep.convesationui.bot.CarouselReadoutMessage
 import com.nanorep.convesationui.structure.components.ReadRequest
 import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController

@@ -1,7 +1,5 @@
 package com.sdk.samples.topics
 
-import com.integration.async.core.UserInfo
-import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.nanoengine.Account
 
