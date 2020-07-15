@@ -16,14 +16,6 @@ open class BotChat : BasicChat() {
     override fun getAccount(): Account {
         return account.apply {
 
-            // To beused for mocking:(currently only supports "jio" account [see "/Users/trozin/Sites"]
-            // account.setBaseURL("http://10.228.220.33/");
-
-//        account.setWelcomeMessage("6576576575");
-//       account.setWelcomeMessage( Carousel_WM);/*welcomeIds.get(new Random().nextInt(4))*/
-//       account.setWelcomeMessage( BotAccount.None);
-
-            // to test userId setting: account.userId("myuser1234");
             try {
                 val preferences: SharedPreferences = this@BotChat.getSharedPreferences(
                     "bot_chat_session",
