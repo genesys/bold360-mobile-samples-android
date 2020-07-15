@@ -6,6 +6,7 @@ import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.Completion
+import com.nanorep.sdkcore.utils.weakRef
 import java.lang.ref.WeakReference
 
 open class SimpleAccountProvider() : AccountInfoProvider {
@@ -30,7 +31,13 @@ open class SimpleAccountProvider() : AccountInfoProvider {
 
 }
 
-class SimpleAccountWithIdProvider(private val context: WeakReference<Context>): SimpleAccountProvider() {
+class SimpleAccountWithIdProvider(context: Context): SimpleAccountProvider() {
+
+    private var wContext: WeakReference<Context>? = null
+
+    init {
+        wContext = context.weakRef()
+    }
 
     override fun update(account: AccountInfo) {
         super.update(account)
@@ -38,7 +45,7 @@ class SimpleAccountWithIdProvider(private val context: WeakReference<Context>): 
     }
 
     private fun updateBotSession(account: BotAccount) {
-        context.get()?.run {
+        wContext?.get()?.run {
             try {
                 val preferences: SharedPreferences = getSharedPreferences(
                     "bot_chat_session",
