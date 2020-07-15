@@ -60,7 +60,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
-        // for tests: .accountProvider(SimpleAccountWithIdProvider(this.weakRef()))
+        // for tests: .accountProvider(SimpleAccountWithIdProvider(this))
     }
 
     protected open fun createChatSettings(): ConversationSettings {
