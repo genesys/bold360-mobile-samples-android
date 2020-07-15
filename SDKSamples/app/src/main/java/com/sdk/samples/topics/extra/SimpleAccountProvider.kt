@@ -14,7 +14,7 @@ import com.nanorep.nanoengine.model.conversation.SessionInfo
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys
 import com.nanorep.sdkcore.utils.Completion
 
-open class SimpleAccountProvider(val context: Context) : AccountInfoProvider {
+open class SimpleAccountProvider(private val context: Context) : AccountInfoProvider {
 
     var accounts: MutableMap<String, AccountInfo> = mutableMapOf()
 

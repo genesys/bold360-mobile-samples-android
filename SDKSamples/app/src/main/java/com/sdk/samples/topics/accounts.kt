@@ -9,7 +9,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 object Accounts {
 
     private val formalBoldAccount: BoldAccount
-        get() = BoldAccount("2300000001700000000:2279548743171682758:/zBPGZf1erxQ1schkxUVq64M2OSUR/Wz:gamma") // Mobile
+        get() = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
 
     val defaultBoldAccount: BoldAccount
         get() = formalBoldAccount
@@ -19,7 +19,7 @@ object Accounts {
             "",
             "nanorep",
             "English",
-            "mobilestaging" //https://eu1-1.nanorep.com/console/login.html
+            "" //https://eu1-1.nanorep.com/console/login.html
         )
 
     val defaultBotAccount: BotAccount
