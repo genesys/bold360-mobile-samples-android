@@ -33,11 +33,7 @@ open class SimpleAccountProvider() : AccountInfoProvider {
 
 class SimpleAccountWithIdProvider(context: Context): SimpleAccountProvider() {
 
-    private var wContext: WeakReference<Context>? = null
-
-    init {
-        wContext = context.weakRef()
-    }
+    private var wContext: WeakReference<Context> = context.weakRef()
 
     override fun update(account: AccountInfo) {
         super.update(account)
@@ -45,7 +41,7 @@ class SimpleAccountWithIdProvider(context: Context): SimpleAccountProvider() {
     }
 
     private fun updateBotSession(account: BotAccount) {
-        wContext?.get()?.run {
+        wContext.get()?.run {
             try {
                 val preferences: SharedPreferences = getSharedPreferences(
                     "bot_chat_session",
