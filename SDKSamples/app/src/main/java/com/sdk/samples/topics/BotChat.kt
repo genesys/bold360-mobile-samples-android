@@ -1,10 +1,9 @@
 package com.sdk.samples.topics
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
+import com.sdk.samples.topics.extra.withId
 
 open class BotChat : BasicChat() {
 
@@ -14,19 +13,7 @@ open class BotChat : BasicChat() {
         @JvmName("account") get
 
     override fun getAccount(): Account {
-        return account.apply {
-
-            try {
-                val preferences: SharedPreferences = this@BotChat.getSharedPreferences(
-                    "bot_chat_session",
-                    Context.MODE_PRIVATE
-                )
-                val userId = preferences.getString("botUserId_$account", null)
-                this.userId = userId
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
+        return account.withId(this)
     }
 
     override fun onUploadFileRequest() {

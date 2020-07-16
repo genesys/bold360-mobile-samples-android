@@ -18,10 +18,10 @@ open class SimpleAccountProvider() : AccountInfoProvider {
     }
 
     override fun provide(account: AccountInfo, callback: Completion<AccountInfo>) {
-        accounts[account.getApiKey()]?.let{
+        accounts[account.getApiKey()]?.let {
             account.getInfo().update(it.getInfo())
             account
-        }?: addAccount(account)
+        } ?: addAccount(account)
         callback.onComplete(account)
     }
 
@@ -31,7 +31,7 @@ open class SimpleAccountProvider() : AccountInfoProvider {
 
 }
 
-class SimpleAccountWithIdProvider(context: Context): SimpleAccountProvider() {
+class SimpleAccountWithIdProvider(context: Context) : SimpleAccountProvider() {
 
     private var wContext: WeakReference<Context> = context.weakRef()
 
@@ -54,4 +54,19 @@ class SimpleAccountWithIdProvider(context: Context): SimpleAccountProvider() {
         }
     }
 }
+
+fun BotAccount.withId(context: Context) = apply {
+
+    try {
+        val preferences: SharedPreferences = context.getSharedPreferences(
+            "bot_chat_session",
+            Context.MODE_PRIVATE
+        )
+        val userId = preferences.getString("botUserId_$account", null)
+        this.userId = userId
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+    }
+}
+
 
