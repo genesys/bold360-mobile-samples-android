@@ -190,4 +190,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return this::chatController.isInitialized && !chatController.wasDestructed
     }
 
+    override fun onUrlLinkSelected(url: String) {
+        toast(this, "got link: $url")
+    }
 }

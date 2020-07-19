@@ -16,7 +16,7 @@ open class BotVocToVocChat : BotChat() {
             readRequest.readoutMessage.setQuickPrefix("Quick Option ");*/
 
             // OR:
-            readRequest.readoutResult = "Whatever \n ha ha ha"
+            readRequest.readoutResult = "Response text was altered"
 
             callback.invoke(readRequest)
         }
@@ -28,6 +28,6 @@ open class BotVocToVocChat : BotChat() {
 
     override fun getBuilder(): ChatController.Builder {
         return super.getBuilder()
-            .ttsReadAlterProvider(readAlterProvider) // Comment this to disable the read alter provider
+           // Uncomment this to enable the read alter provider: .ttsReadAlterProvider(readAlterProvider)
     }
 }
