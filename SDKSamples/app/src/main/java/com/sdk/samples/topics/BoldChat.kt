@@ -15,8 +15,4 @@ open class BoldChat : BasicChat() {
         return account
     }
 
-    override fun onUrlLinkSelected(url: String) {
-        toast(this, "got link: $url")
-    }
-
 }

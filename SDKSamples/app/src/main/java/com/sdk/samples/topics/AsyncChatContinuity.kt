@@ -101,7 +101,7 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
                 data?.run {
                     accountRecovery.saveAccount(this)
 
-                    Log.d(TAG, "creating chat with account ${(getAccount() as AsyncAccount).log()}")
+                    Log.d(TAG, "creating chat with account ${(this.account).log()}")
 
                     createChat()
                 }
@@ -196,7 +196,7 @@ class AsyncChatForm : Fragment() {
 
         } ?: AsyncAccount(apiKey, applicationId).apply {
             // if user id is empty, AsyncAccount provides a auto generated id.
-            userId.takeUnless { it.isBlank() }?.let {
+            (userId.takeUnless { it.isBlank() }?:this.info.id).let {
                 info.userInfo = UserInfo(it).apply {
                     firstName = userFName
                     lastName = userLName

@@ -1,7 +1,5 @@
 package com.sdk.samples.topics
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -62,7 +60,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
-        // for tests: .accountProvider(SimpleAccountProvider())
+        // for tests: .accountProvider(SimpleAccountWithIdProvider(this))
     }
 
     protected open fun createChatSettings(): ConversationSettings {
@@ -192,4 +190,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return this::chatController.isInitialized && !chatController.wasDestructed
     }
 
+    override fun onUrlLinkSelected(url: String) {
+        toast(this, "got link: $url")
+    }
 }

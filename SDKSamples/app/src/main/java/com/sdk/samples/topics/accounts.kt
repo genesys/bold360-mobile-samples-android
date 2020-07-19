@@ -5,6 +5,7 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
+import java.util.*
 
 object Accounts {
 
@@ -38,11 +39,11 @@ object Accounts {
         "2300000001700000000:2279533687831071375:MlVOftOF/UFUUqPPSbMSDAnQjITxOrQW:gamma",
         "MobileAsyncStaging123452"
     ).apply {
-        info.userInfo = UserInfo("1234567654321234569").apply {
-            firstName = "First name"
-            lastName = "Last name"
-            email = "Email@Bold.com"
-            phoneNumber = "123456"
+        info.userInfo = UserInfo(UUID.randomUUID().toString()).apply {
+            firstName = "Android"
+            lastName = "Samples"
+            email = "android.samples@bold.com"
+            phoneNumber = "111-111-1111"
         }
     }
 }

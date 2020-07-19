@@ -3,6 +3,7 @@ package com.sdk.samples.topics
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
+import com.sdk.samples.topics.extra.withId
 
 open class BotChat : BasicChat() {
 
@@ -12,7 +13,7 @@ open class BotChat : BasicChat() {
         @JvmName("account") get
 
     override fun getAccount(): Account {
-        return account
+        return account.withId(this)
     }
 
     override fun onUploadFileRequest() {
