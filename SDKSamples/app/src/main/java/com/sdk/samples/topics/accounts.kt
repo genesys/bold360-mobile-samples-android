@@ -12,11 +12,8 @@ object Accounts {
     private val formalBoldAccount: BoldAccount
         get() = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
 
-    private val fameBoldAccount: BoldAccount
-        get() = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV") // Fame
-
     val defaultBoldAccount: BoldAccount
-        get() = fameBoldAccount// formalBoldAccount
+        get() = formalBoldAccount
 
     private val formalBotAccount: BotAccount
         get() = BotAccount(
