@@ -104,9 +104,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             StateEvent.Unavailable -> lifecycleScope.launch {
                 toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
-            StateEvent.Ended -> if(!chatController.hasOpenChats()) {
-                finish()
-            }
+            StateEvent.Idle -> finish()
         }
     }
 

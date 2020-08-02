@@ -9,6 +9,8 @@ import com.nanorep.convesationui.structure.components.ComponentType
 import com.nanorep.convesationui.views.autocomplete.ChatInputData
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.ChatFeatures
+import com.nanorep.nanoengine.model.configuration.VoiceSettings
+import com.nanorep.nanoengine.model.configuration.VoiceSupport
 import com.nanorep.nanoengine.model.conversation.providerConfig
 import com.nanorep.nanoengine.model.conversation.statement.IncomingStatement
 import com.nanorep.nanoengine.model.conversation.statement.OutgoingStatement
@@ -67,13 +69,13 @@ class MyHandoverHandler(context: Context) : HandoverHandler(context) {
 
         super.enableChatInput(enable,  ChatInputData().apply {
 
-            onSendInput = if (enable) { userInput: UserInput ->
-                post(OutgoingStatement(userInput.text))
+            onSend = if (enable) { userInput ->
+                post(OutgoingStatement(userInput.toString()))
             } else null
 
-            voiceEnabled = enable && isEnabled(ChatFeatures.SpeechRecognition)
+            voiceSettings = configureVoiceSettings(VoiceSupport.SpeechRecognition)
             inputEnabled = enable
-
+            typingMonitoringEnabled = true
         })
     }
 

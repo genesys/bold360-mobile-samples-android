@@ -23,14 +23,8 @@ object Accounts {
             "" //https://eu1-1.nanorep.com/console/login.html
         )
 
-    private val testBotAccount: BotAccount
-        get() = BotAccount(
-            "", "nanorep",
-            "English", "mobilestaging", null
-        )
-
     val defaultBotAccount: BotAccount
-        get() = testBotAccount///formalBotAccount
+        get() = formalBotAccount
 
     val defaultAsyncAccount = AsyncAccount(
         "2300000001700000000:2279533687831071375:MlVOftOF/UFUUqPPSbMSDAnQjITxOrQW:gamma",
