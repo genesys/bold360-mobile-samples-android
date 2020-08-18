@@ -1,25 +1,26 @@
 package com.sdk.samples.topics
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.integration.core.StateEvent
+import com.nanorep.convesationui.async.AsyncAccount
+import com.nanorep.convesationui.bold.model.BoldAccount
+import com.nanorep.convesationui.structure.HandoverAccount
 import com.nanorep.nanoengine.Account
+import com.nanorep.nanoengine.bot.BotAccount
+import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.NRError
-import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
 
-open class ChatRestore : BasicChat(), IRestoreSettings {
+open class ChatRestore : History(), IRestoreSettings {
 
     private var account: Account? = null
 
@@ -33,7 +34,6 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
     override fun onRestore(account: Account?) {
 
         this.account = account
-
 
         try {
             chatController.restoreChat(account = account)
@@ -83,17 +83,12 @@ open class ChatRestore : BasicChat(), IRestoreSettings {
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
 
         when (stateEvent.state) {
-            StateEvent.ChatWindowDetached -> {
+            StateEvent.Idle, StateEvent.ChatWindowDetached -> {
                 if (supportFragmentManager.backStackEntryCount > 1)
                     onBackPressed()
             }
 
-            StateEvent.Unavailable -> toast(
-                this@ChatRestore, stateEvent.state,
-                Toast.LENGTH_SHORT, ColorDrawable(Color.GRAY)
-            )
-
-            StateEvent.Started -> enableMenu(endMenu, true)
+            else -> super.onChatStateChanged(stateEvent)
         }
     }
 
