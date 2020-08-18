@@ -18,10 +18,11 @@ class BoldCustomChatForm : BotChat(){
             // Demo implementation that presents present a dummy form :
             val fragment = FormDummy.create(formData, callback)
 
-            supportFragmentManager.beginTransaction().replace(
-                R.id.chat_view,
-                fragment,
-                FORM_DUMMY_FRAGMENT_TAG).commit()
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.chat_container, fragment, FORM_DUMMY_FRAGMENT_TAG)
+                .addToBackStack(FORM_DUMMY_FRAGMENT_TAG)
+                .commitAllowingStateLoss()
         }
     }
 

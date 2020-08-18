@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
+import com.integration.core.annotations.FormType
 import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
@@ -46,15 +47,12 @@ class FormDummy : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.dummy_live_forms_layout, container, false)
-
+        return inflater.inflate(R.layout.dummy_live_forms_layout, container, false).apply {
+            data?.formType.takeIf { it == FormType.PreChatForm }?.run { setBackgroundColor(context.resources.getColor(R.color.colorAccent)) }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-/*
-        view.findViewById<TextView>(R.id.form_text).text = data?.logFormBrandings()
-*/
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
@@ -78,7 +76,7 @@ class FormDummy : Fragment() {
             }
 
             isSubmitted = true
-            fragmentManager?.popBackStackImmediate()
+            parentFragmentManager.popBackStackImmediate()
 
             listener?.get()?.onComplete(data?.chatForm)
         }
