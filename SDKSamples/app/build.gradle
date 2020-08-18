@@ -46,7 +46,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation ("com.nanorep.devcore:sdkcore:4.0.2.rc1"){changing = true}
+    implementation ("com.nanorep.devcore:sdkcore:4.0.+"){changing = true}
     implementation ("com.nanorep.devconversation:engine:4.0.+"){changing = true}
     implementation ("com.nanorep.devconversation:chatintegration:4.0.+"){changing = true}
     implementation ("com.nanorep.devconversation:ui:4.0.+"){changing = true}
