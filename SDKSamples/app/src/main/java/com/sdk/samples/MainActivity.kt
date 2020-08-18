@@ -91,6 +91,10 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
+            ), SampleTopic(
+                "com.sdk.sample.action.CUSTOM_FORM",
+                getString(R.string.custom_form),
+                ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24)
             )
         )
 

@@ -18,6 +18,7 @@
     <string name="bot_chat_with_welcome">Chat with AI: Custom welcome message</string>
     <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice to Voice</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
+    <string name="custom_form">Custom Bold chat form</string>
     <string name="custom_UI">Customizing the chat UI</string>
     <string name="chat_restore">Chat creation &amp; restoring</string>
     <string name="bot_chat_with_handover">Chat with AI: Handover</string>
@@ -32,6 +33,7 @@
     <string name="upload_in_progress">Upload in progress</string>
     <string name="upload_default_image">Upload default image</string>
     <string name="file_transfer_not_enabled">File transfer is not enabled for this chat</string>
+    <string name="department_code">Department Code</string>
 
 
     <string name="start_async_chat">Start Chat</string>
