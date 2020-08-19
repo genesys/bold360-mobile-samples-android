@@ -46,5 +46,6 @@
     <string name="missing_applicationId">Application id is required</string>
     <string name="restore_chat_with_no_user">Can\'t restore chat without previous user id</string>
     <string name="apikey">ApiKey</string>
+    <string name="custom_form_submit">submit</string>
 
 </resources>

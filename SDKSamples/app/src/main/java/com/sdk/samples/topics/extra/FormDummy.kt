@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
-import com.integration.core.annotations.FormType
 import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
@@ -47,29 +46,109 @@ class FormDummy : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.dummy_live_forms_layout, container, false).apply {
-            data?.formType.takeIf { it == FormType.PreChatForm }?.run { setBackgroundColor(context.resources.getColor(R.color.colorAccent)) }
-        }
+        return inflater.inflate(R.layout.dummy_live_forms_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        fetchForm()
 
-        val fieldsContainer =  view.findViewById<LinearLayout>(R.id.form_fields_container)
+    }
 
-        val introTxt = TextView(context)
-        fieldsContainer.addView(introTxt.apply {
-            setStyleConfig(StyleConfig(20, Color.DKGRAY, Typeface.DEFAULT_BOLD))
-            (layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(0, 0,0, 60.px)
-            data?.getIntroMessage()?.run { text = TextTagHandler.getSpannedHtml(this) }?: kotlin.run { visibility = View.GONE }
-        })
+    private fun fetchForm() {
+        initFormTypeTitle()
+        appendIntroText()
+        appendFormFields()
+        initSubmitButton()
+    }
 
-        submitButton.setOnClickListener {
+    private fun initFormTypeTitle() {
 
-            fieldsContainer?.forEachChild {
+        data?.formType?.let {
+
+            form_type_title.apply {
+                setStyleConfig(StyleConfig(20, context.resources.getColor(R.color.colorPrimary), Typeface.DEFAULT_BOLD))
+                text = TextTagHandler.getSpannedHtml("Custom $it")
+            }
+        }
+    }
+
+    private fun appendIntroText() {
+
+        data?.getIntroMessage()?.takeIf { it.isNotEmpty() }?.let { introMessage ->
+
+            val introTxt = TextView(context).apply {
+                setStyleConfig(StyleConfig(16, Color.DKGRAY, Typeface.DEFAULT_BOLD))
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                (layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(0, 0, 0, 10.px)
+                text = TextTagHandler.getSpannedHtml(introMessage)
+            }
+            form_fields_container.addView(introTxt)
+        }
+    }
+
+    private fun appendFormFields() {
+        data?.fields?.forEachIndexed { index, fieldData ->
+
+            val fieldView = EditText(context).apply {
+                hint = fieldData.label
+                id = ViewCompat.generateViewId()
+                tag = index
+            }
+            form_fields_container.addView(fieldView)
+
+            if (fieldData.type == FormFieldType.Select && fieldData.label.contains("Department")) {
+                handleDeptView(index, form_fields_container, fieldData, fieldView)
+            }
+        }
+    }
+
+    private fun handleDeptView(index: Int, fieldsContainer: LinearLayout, fieldData: FormField, fieldView: EditText) {
+
+        data?.fields?.takeIf{ it.size - 1  > index }?.let {
+
+            val departmentTitle = TextView(context).apply {
+                text = resources.getText(R.string.department_code)
+                setTextColor(Color.BLUE)
+            }
+            fieldsContainer.addView(departmentTitle, index + 1)
+        }
+
+
+        fieldData.options?.run {
+            // sets the provided default department as initial value if it's available
+            var initialDept = fieldData.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value ?: ""
+
+            val deptOptionsSB = StringBuilder().append(" Departments data: \n\n")
+
+            forEach {
+
+                deptOptionsSB
+                        .append(" Name: ${it.name} ,Status: ${it.availableLabel}, \nCode to Input: ${it.value}")
+                        .append("\n\n")
+
+                if(initialDept == "" && it.isAvailable){
+                    initialDept = it.value
+                }
+            }
+
+            fieldView.text = SpannableStringBuilder(initialDept)
+
+            val deptOptions = TextView(context).apply {
+                text = deptOptionsSB
+                setTextIsSelectable(true)
+            }
+            fieldsContainer.addView(deptOptions)
+        }
+
+    }
+
+    private fun initSubmitButton() {
+        custom_form_submit_button.setOnClickListener {
+
+            form_fields_container?.forEachChild {
                 (it as? EditText)?.run {
-
                     val index = tag as Int
                     data?.fields?.get(index)?.value = this.text.toString()
                 }
@@ -80,55 +159,6 @@ class FormDummy : Fragment() {
 
             listener?.get()?.onComplete(data?.chatForm)
         }
-
-        data?.fields?.forEachIndexed { index, formField ->
-            val editText = EditText(context)
-            editText.hint = formField.label
-            editText.id = ViewCompat.generateViewId()
-            editText.tag = index
-
-            fieldsContainer.addView(editText)
-
-            if (formField.type == FormFieldType.Select && formField.label.contains("Department")) {
-                handleDeptView(index, fieldsContainer, formField, editText)
-            }
-        }
-    }
-
-    private fun handleDeptView(index: Int, fieldsContainer: LinearLayout, formField: FormField, editText: EditText) {
-
-        val departmentTitle = TextView(context)
-        departmentTitle.text = resources.getText(R.string.department_code)
-
-        data?.fields?.takeIf{ it.size - 1  > index}?.run {
-            fieldsContainer.addView(departmentTitle, index + 1)
-        }
-
-        departmentTitle.setTextColor(Color.BLUE)
-
-        formField.options?.run {
-            // sets the provided default department as initial value if it's available
-            var dep:String = formField.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value?:""
-
-            val deptOptionsSB = StringBuilder().append(" DepartmentStrings: \n\n")
-            forEach {
-
-                deptOptionsSB
-                        .append(" Name: ${it.name} ,Status: ${it.availableLabel}, \nCode to Input: ${it.value}")
-                        .append("\n\n")
-                if(dep == "" && it.isAvailable){
-                    dep = it.value
-                }
-            }
-
-            editText.text = SpannableStringBuilder(dep)
-            val deptOptions = TextView(context)
-            deptOptions.text = deptOptionsSB
-            deptOptions.setTextIsSelectable(true)
-
-            fieldsContainer.addView(deptOptions)
-        }
-
     }
 
     override fun onStop() {

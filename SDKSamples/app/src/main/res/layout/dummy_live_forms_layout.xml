@@ -3,9 +3,19 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingTop="20dp"
+    android:paddingTop="16dp"
     android:gravity="center_horizontal">
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/form_type_title"
+            android:gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="6dp"
+            android:padding="6dp"
+            android:layout_gravity="top"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,23 +30,14 @@
             android:layout_gravity="center_horizontal"
             android:padding="12dp">
 
-          <!--  <TextView
-                android:id="@+id/form_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:layout_gravity="center"
-                android:textSize="13sp"
-                android:textAppearance="?android:textAppearanceLarge" /> -->
-
         </LinearLayout>
     </ScrollView>
 
     <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="submit"
-            android:id="@+id/submitButton"
+            android:text="@string/custom_form_submit"
+            android:id="@+id/custom_form_submit_button"
             android:layout_gravity="bottom"
             style="@style/submit_button"/>
 </LinearLayout>
