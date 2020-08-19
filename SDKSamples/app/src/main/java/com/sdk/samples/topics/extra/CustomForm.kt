@@ -68,7 +68,7 @@ class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
 
             form_type_title.apply {
                 setStyleConfig(StyleConfig(20, context.resources.getColor(R.color.colorPrimary), Typeface.DEFAULT_BOLD))
-                text = context.getString(R.string.custom_form, formType)
+                text = formType
             }
         }
     }

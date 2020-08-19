@@ -16,7 +16,7 @@ object Accounts {
         get() = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV") // Fame
 
     val defaultBoldAccount: BoldAccount
-        get() = fameBoldAccount// formalBoldAccount
+        get() = formalBoldAccount// fameBoldAccount
 
     private val formalBotAccount: BotAccount
         get() = BotAccount(

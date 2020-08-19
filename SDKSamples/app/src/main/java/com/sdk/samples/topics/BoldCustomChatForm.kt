@@ -20,7 +20,7 @@ class BoldCustomChatForm : BoldChat(){
 
             supportFragmentManager
                 .beginTransaction()
-                .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out)
+                .setCustomAnimations(R.anim.right_in, R.anim.right_out, R.anim.right_in , R.anim.right_out)
                 .add(R.id.chat_view, fragment, CUSTOM_LIVE_FORM)
                 .addToBackStack(CUSTOM_LIVE_FORM)
                 .commitAllowingStateLoss()
