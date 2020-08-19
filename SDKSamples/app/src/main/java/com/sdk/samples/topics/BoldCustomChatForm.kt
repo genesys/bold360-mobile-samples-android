@@ -6,23 +6,23 @@ import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.FormProvider
 import com.sdk.samples.R
-import com.sdk.samples.topics.extra.FormDummy
+import com.sdk.samples.topics.extra.CustomForm
 
-const val FORM_DUMMY_FRAGMENT_TAG = "form_dummy_fragment"
+const val CUSTOM_LIVE_FORM = "custom_live_form"
 
-class BoldCustomChatForm : BotChat(){
+class BoldCustomChatForm : BoldChat(){
 
     inner class FormProviderSample: FormProvider {
         override fun presentForm(formData: FormData, @NonNull callback: FormListener) {
 
-            // Demo implementation that presents present a dummy form :
-            val fragment = FormDummy.create(formData, callback)
+            // Demo implementation that presents a custom form :
+            val fragment = CustomForm.create(formData, callback)
 
             supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out)
-                .add(R.id.chat_view, fragment, FORM_DUMMY_FRAGMENT_TAG)
-                .addToBackStack(FORM_DUMMY_FRAGMENT_TAG)
+                .add(R.id.chat_view, fragment, CUSTOM_LIVE_FORM)
+                .addToBackStack(CUSTOM_LIVE_FORM)
                 .commitAllowingStateLoss()
         }
     }

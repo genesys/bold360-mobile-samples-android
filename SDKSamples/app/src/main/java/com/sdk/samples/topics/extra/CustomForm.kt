@@ -24,29 +24,28 @@ import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.dummy_live_forms_layout.*
+import kotlinx.android.synthetic.main.custom_live_forms_layout.*
 import java.lang.ref.WeakReference
 
 
-class FormDummy : Fragment() {
+class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
 
-    private var data: FormData? = null
     private var isSubmitted = false
-
-    private var listener: WeakReference<FormListener>? = null
+    private var weakListener: WeakReference<FormListener>? = null
 
     companion object {
         @JvmStatic fun create(data: FormData, listener: FormListener) : Fragment {
-            return FormDummy().apply {
-                this.data = data
-                this.listener = listener.weakRef()
-            }
+            return CustomForm(data, listener)
         }
+    }
+
+    init {
+        weakListener = listener.weakRef()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.dummy_live_forms_layout, container, false)
+        return inflater.inflate(R.layout.custom_live_forms_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,11 +64,11 @@ class FormDummy : Fragment() {
 
     private fun initFormTypeTitle() {
 
-        data?.formType?.let {
+        data?.formType?.let { formType ->
 
             form_type_title.apply {
                 setStyleConfig(StyleConfig(20, context.resources.getColor(R.color.colorPrimary), Typeface.DEFAULT_BOLD))
-                text = TextTagHandler.getSpannedHtml("Custom $it")
+                text = context.getString(R.string.custom_form, formType)
             }
         }
     }
@@ -120,15 +119,15 @@ class FormDummy : Fragment() {
             // sets the provided default department as initial value if it's available
             var initialDept = fieldData.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value ?: ""
 
-            val deptOptionsSB = StringBuilder().append(" Departments data: \n\n")
+            val deptOptionsSB = StringBuilder().append(context?.resources?.getString(R.string.custom_form_departments_title) ?: "")
 
             forEach {
 
                 deptOptionsSB
-                        .append(" Name: ${it.name} ,Status: ${it.availableLabel}, \nCode to Input: ${it.value}")
-                        .append("\n\n")
+                    .appendln(context?.getString(R.string.custom_form_departments_details, it.name ,it.availableLabel, it.value))
+                    .appendln()
 
-                if(initialDept == "" && it.isAvailable){
+                if(initialDept.isBlank() && it.isAvailable){
                     initialDept = it.value
                 }
             }
@@ -157,14 +156,14 @@ class FormDummy : Fragment() {
             isSubmitted = true
             parentFragmentManager.popBackStackImmediate()
 
-            listener?.get()?.onComplete(data?.chatForm)
+            weakListener?.get()?.onComplete(data?.chatForm)
         }
     }
 
     override fun onStop() {
 
         if (isRemoving && !isSubmitted) {
-            listener?.get()?.onCancel(data?.formType)
+            weakListener?.get()?.onCancel(data?.formType)
         }
 
         super.onStop()
