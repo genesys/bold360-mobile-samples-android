@@ -84,9 +84,8 @@ class CustomFileUpload : BoldChatAvailability() {
         super.onChatStateChanged(stateEvent)
 
         when (stateEvent.state) {
-            StateEvent.Started -> {
 
-                enableMenu(endMenu, chatController.hasOpenChats())
+            StateEvent.Started -> {
                 enableMenu(destructMenu, true)
                 
                 // !- first, make sure the Upload feature is enabled
@@ -96,6 +95,7 @@ class CustomFileUpload : BoldChatAvailability() {
                     toast(this, getString(R.string.file_transfer_not_enabled))
                 }
             }
+
             StateEvent.Ended, StateEvent.ChatWindowDetached -> imageButton.visibility = View.GONE
         }
     }

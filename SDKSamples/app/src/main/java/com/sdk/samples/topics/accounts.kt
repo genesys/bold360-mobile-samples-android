@@ -29,7 +29,9 @@ object Accounts {
     private val testBotAccount: BotAccount
         get() = BotAccount(
             "", "nanorep",
-            "English", "mobilestaging", null
+            "English", "mobilestaging",
+            mapOf("" to "")
+
         )
 
     val defaultBotAccount: BotAccount

@@ -90,6 +90,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         } else {
             chatController.startChat(getAccount())
         }
+
+        enableMenu(destructMenu, true)
     }
 
     protected open fun onChatLoaded() {
@@ -100,11 +102,15 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
         Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
+            StateEvent.Started -> enableMenu(endMenu, chatController.hasOpenChats())
+
             StateEvent.ChatWindowDetached -> onChatUIDetached()
+
             StateEvent.Unavailable -> lifecycleScope.launch {
                 toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
-            StateEvent.Idle -> finish()
+
+            StateEvent.Idle -> onBackPressed()
         }
     }
 
