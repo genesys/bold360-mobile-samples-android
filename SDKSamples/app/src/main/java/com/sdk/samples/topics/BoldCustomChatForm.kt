@@ -20,7 +20,8 @@ class BoldCustomChatForm : BotChat(){
 
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.chat_container, fragment, FORM_DUMMY_FRAGMENT_TAG)
+                .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out)
+                .add(R.id.chat_view, fragment, FORM_DUMMY_FRAGMENT_TAG)
                 .addToBackStack(FORM_DUMMY_FRAGMENT_TAG)
                 .commitAllowingStateLoss()
         }
