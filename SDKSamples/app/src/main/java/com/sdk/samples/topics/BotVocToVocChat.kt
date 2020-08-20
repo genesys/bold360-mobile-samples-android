@@ -24,7 +24,7 @@ open class BotVocToVocChat : BotChat() {
     }
 
     override fun createChatSettings(): ConversationSettings {
-        return super.createChatSettings().voiceSettings(VoiceSettings(VoiceSupport.VoiceToVoice))
+        return super.createChatSettings().voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
     }
 
     override fun getBuilder(): ChatController.Builder {

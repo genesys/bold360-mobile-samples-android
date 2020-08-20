@@ -68,6 +68,10 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_with_bold),
                 ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
             ), SampleTopic(
+                "com.sdk.sample.action.CUSTOM_FORM",
+                getString(R.string.custom_form),
+                ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24)
+            ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
                 ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
@@ -91,10 +95,6 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.CUSTOM_FORM",
-                getString(R.string.custom_form),
-                ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24)
             )
         )
 

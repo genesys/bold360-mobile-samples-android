@@ -16,7 +16,7 @@
     <string name="chat_with_bot_history">Chat with AI: History</string>
     <string name="chat_with_bold">Chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with AI: Custom welcome message</string>
-    <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice to Voice</string>
+    <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice support</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
     <string name="custom_form">Custom Bold chat form</string>
     <string name="custom_form_departments_title">Departments data: \n\n</string>
