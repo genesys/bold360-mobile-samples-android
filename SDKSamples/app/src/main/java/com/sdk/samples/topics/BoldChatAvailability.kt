@@ -1,17 +1,16 @@
 package com.sdk.samples.topics
 
 import android.os.Bundle
-import android.util.Log
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.integration.core.Empty
 import com.integration.core.StateEvent
-import com.integration.core.annotations.VisitorDataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
-import com.nanorep.sdkcore.utils.runMain
+import com.nanorep.convesationui.structure.controller.ChatController
+import com.nanorep.convesationui.structure.providers.ChatUIProvider
+import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
+import com.nanorep.sdkcore.utils.Event
 import com.sdk.samples.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 open class BoldChatAvailability : BoldChat() {
 
@@ -21,54 +20,67 @@ open class BoldChatAvailability : BoldChat() {
         loadAvailabilityCheck()
     }
 
+    private val availabilityViewModel: CheckAvailabilityViewModel by lazy {
+        ViewModelProvider(this).get(CheckAvailabilityViewModel::class.java)
+    }
+
     private fun loadAvailabilityCheck() {
 
-        val viewModel = ViewModelProvider(this).
-            get(CheckAvailabilityViewModel::class.java).apply {
+        availabilityViewModel.apply {
             account = getAccount() as BoldAccount
 
-            onResults = { results ->
-                if (results.isAvailable) {
+            observeResults(this@BoldChatAvailability,
+                Observer { results ->
+                    results?.run {
+                        if (isAvailable) {
+                            departmentId.takeIf { it > 0 }?.let {
+                                account.addExtraData(SessionInfoKeys.Department to results.departmentId)
+                            }
 
-//                    val acAccount = getAccount()
-                    results.departmentId.takeIf { it > 0 }?.let {
-                        account.addExtraData(VisitorDataKeys.Department to results.departmentId)
+                            prepareAccount(account)
+
+                            createChat()
+                        }
                     }
-
-                    account.skipPrechat()
-                    createChat()
-                }
-            }
+                })
         }
 
-        supportFragmentManager.beginTransaction().add(R.id.chat_view, BoldAvailability(), AvailabilityTag)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.chat_view, BoldAvailability(), AvailabilityTag)
             .addToBackStack(AvailabilityTag)
             .commit()
+    }
+
+    protected open fun prepareAccount(account: BoldAccount) {
+        account.skipPrechat()
     }
 
     override fun startChat() {
     }
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
+        super.onChatStateChanged(stateEvent)
 
-        Log.d("Chat event", "chat in state: ${stateEvent.state}")
         when (stateEvent.state) {
-            StateEvent.ChatWindowDetached -> {
-                Log.d(AvailabilityTag, "live chat ended, back to availability checks")
-                if(supportFragmentManager.backStackEntryCount > 1) {
-                    GlobalScope.launch(Dispatchers.Default) {
-                        delay(2500)
-                        runMain { onBackPressed() }
-                    }
-                }
-            }
-            else -> {
-                super.onChatStateChanged(stateEvent)
+            StateEvent.Idle, StateEvent.Unavailable -> {
+                removeChatFragment()
+
+                //-> trigger the observer that was assigned to this viewModel to trogger
+                //  refresh of chat availability status.
+                availabilityViewModel.refresh(Event(Empty))
             }
         }
     }
 
-    companion object{
+    override fun getBuilder(): ChatController.Builder {
+        return super.getBuilder().apply {
+            this.chatUIProvider(ChatUIProvider(this@BoldChatAvailability).apply {
+                chatInputUIProvider.uiConfig.showUpload = false
+            })
+        }
+    }
+
+    companion object {
         const val AvailabilityTag = "AvailabilityTag"
     }
 }

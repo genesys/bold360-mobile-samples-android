@@ -12,7 +12,6 @@ class PrechatExtraData : BotChat() {
         return super.getBuilder().accountProvider( Companion )
     }
 
-
     companion object : SimpleAccountProvider() {
 
         const val BOLD_DEPARTMENT = "2278985919139590636"

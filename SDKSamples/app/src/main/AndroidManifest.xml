@@ -168,6 +168,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".topics.BoldCustomChatForm"
+                android:configChanges="orientation|screenSize|locale|layoutDirection"
+                android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.CUSTOM_FORM" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -21,6 +22,8 @@ import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
@@ -60,12 +63,15 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         return ChatController.Builder(this)
             .chatEventListener(this)
             .conversationSettings(settings)
-        // for tests: .accountProvider(SimpleAccountWithIdProvider(this))
+        /*!- uncomment to set AccountInfoProvider:
+             .accountProvider(SimpleAccountWithIdProvider(this)) */
     }
 
     protected open fun createChatSettings(): ConversationSettings {
         return ConversationSettings()
-        //uncomment to set custom datestamp format: .datestamp(true, SampleDatestampFactory())
+        /*!- uncomment to set custom datestamp format:
+             .datestamp(true, SampleDatestampFactory())
+         */
     }
 
     protected open fun createChat() {
@@ -78,7 +84,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                         result.takeIf { it.error == null && it.fragment != null }?.run {
                             supportFragmentManager.beginTransaction()
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
-                                .addToBackStack(null)
+                                .addToBackStack(ChatTag)
                                 .commit()
 
                             onChatLoaded()
@@ -90,6 +96,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         } else {
             chatController.startChat(getAccount())
         }
+
+        enableMenu(destructMenu, true)
     }
 
     protected open fun onChatLoaded() {
@@ -98,13 +106,24 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
-        Log.d("Chat event", "chat in state: ${stateEvent.state}")
+        Log.d(TAG, "chat in state: ${stateEvent.state}")
+
         when (stateEvent.state) {
+            StateEvent.Started -> enableMenu(endMenu, chatController.hasOpenChats())
+
             StateEvent.ChatWindowDetached -> onChatUIDetached()
+
             StateEvent.Unavailable -> lifecycleScope.launch {
                 toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
             }
-            StateEvent.Idle -> finish()
+
+            StateEvent.Ended -> {
+                if (!chatController.hasOpenChats()) {
+                    removeChatFragment()
+                }
+            }
+
+            StateEvent.Idle -> enableMenu(endMenu, false)
         }
     }
 
@@ -121,7 +140,23 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         finishIfLast()
     }
 
-    open protected fun onChatUIDetached() {
+    protected fun removeChatFragment() {
+        /* !- launch suspended on a different deamon to prevent activation while on a previous
+              fragmentManagerTransaction (exp: onBackPressed on postchat form, triggers StateEvent.Ended
+              event call, which calls to remove the chat fragment */
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                supportFragmentManager.takeUnless { it.isDestroyed }?.popBackStackImmediate(
+                    ChatTag,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
+            } catch (ex: IllegalStateException) {
+                ex.printStackTrace()
+            }
+        }
+    }
+
+    protected open fun onChatUIDetached() {
         finishIfLast()
     }
 
@@ -136,8 +171,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         super.onStop()
     }
 
-    protected open fun onChatClose(){
-        takeIf { isFinishing && ::chatController.isInitialized }?.run{
+    protected open fun onChatClose() {
+        takeIf { isFinishing && ::chatController.isInitialized }?.run {
             chatController.terminateChat()
             chatController.destruct()
         }
@@ -166,7 +201,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             }
 
             R.id.destruct_chat -> {
-                //chatController.destruct()
                 item.isEnabled = false
                 finish()
                 return true
@@ -190,5 +224,10 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
     override fun onUrlLinkSelected(url: String) {
         toast(this, "got link: $url")
+    }
+
+    companion object {
+        protected const val TAG = "BasicChat"
+        protected const val ChatTag = "ChatFragment"
     }
 }

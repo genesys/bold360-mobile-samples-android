@@ -16,8 +16,11 @@
     <string name="chat_with_bot_history">Chat with AI: History</string>
     <string name="chat_with_bold">Chat with live agent</string>
     <string name="bot_chat_with_welcome">Chat with AI: Custom welcome message</string>
-    <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice to Voice</string>
+    <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice support</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
+    <string name="custom_form">Custom Bold chat form</string>
+    <string name="custom_form_departments_title">Departments data: \n\n</string>
+    <string name="custom_form_departments_details">Name: %1$s ,Status: %2$s, Code to Input: %3$s</string>
     <string name="custom_UI">Customizing the chat UI</string>
     <string name="chat_restore">Chat creation &amp; restoring</string>
     <string name="bot_chat_with_handover">Chat with AI: Handover</string>
@@ -25,13 +28,14 @@
     <string name="end_chat">End chat</string>
     <string name="destruct_chat_controller">Destruct chat controller</string>
     <string name="upload_file">upload file</string>
-    <string name="clear_history">Clean History and End Chat</string>
+    <string name="clear_history">Clean History</string>
     <string name="cutomized_ui">Customize by %s</string>
     <string name="bold_upload_without_ui">Uploading with live uploader</string>
     <string name="take_a_picture_text">Take a picture</string>
     <string name="upload_in_progress">Upload in progress</string>
     <string name="upload_default_image">Upload default image</string>
     <string name="file_transfer_not_enabled">File transfer is not enabled for this chat</string>
+    <string name="department_code">Department Code</string>
 
 
     <string name="start_async_chat">Start Chat</string>
@@ -44,5 +48,6 @@
     <string name="missing_applicationId">Application id is required</string>
     <string name="restore_chat_with_no_user">Can\'t restore chat without previous user id</string>
     <string name="apikey">ApiKey</string>
+    <string name="custom_form_submit">submit</string>
 
 </resources>

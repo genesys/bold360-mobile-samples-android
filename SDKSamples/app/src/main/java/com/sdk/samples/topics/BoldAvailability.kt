@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.integration.core.Department
 import com.integration.core.annotations.VisitorDataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
+import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.controller.ChatAvailability
+import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.bold_availability.*
@@ -26,7 +30,26 @@ class CheckAvailabilityViewModel : ViewModel() {
 
     var account: BoldAccount = BoldAccount()
 
-    var onResults: ((ChatAvailability.AvailabilityResult) -> Unit)? = null
+    private var results = SingleLiveData<ChatAvailability.AvailabilityResult>()
+    fun observeResults(
+        owner: LifecycleOwner,
+        observer: Observer<ChatAvailability.AvailabilityResult?>
+    ) {
+        results.observe(owner, observer)
+    }
+
+    fun onResults(results: ChatAvailability.AvailabilityResult) {
+        this.results.value = results
+    }
+
+    private var refresh = SingleLiveData<Event?>()
+    fun observeRefresh(owner: LifecycleOwner, observer: Observer<Event?>) {
+        refresh.observe(owner, observer)
+    }
+
+    fun refresh(event: Event) {
+        refresh.value = event
+    }
 }
 
 
@@ -83,7 +106,7 @@ class BoldAvailability : Fragment() {
 
                 val callback = object : ChatAvailability.Callback {
                     override fun onComplete(result: ChatAvailability.AvailabilityResult) {
-                        if(context == null || !isAdded) return // in case fragment was closed by receiving the response
+                        if (context == null || !isAdded) return // in case fragment was closed by receiving the response
 
                         availability_status.apply {
                             isSelected = result.isAvailable
@@ -124,7 +147,8 @@ class BoldAvailability : Fragment() {
                 } else {
 
                     val departmentId = (view.departments_recycler.adapter as DepartmentAdapter)
-                        .takeIf { it.selectedDepartment > -1 }?.let { it.getItemId(it.selectedDepartment) }
+                        .takeIf { it.selectedDepartment > -1 }
+                        ?.let { it.getItemId(it.selectedDepartment) }
                         ?: 0L
 
                     ChatAvailability.checkAvailability(account, departmentId, callback)
@@ -135,9 +159,15 @@ class BoldAvailability : Fragment() {
                 (availability_status.tag as? ChatAvailability.AvailabilityResult)?.run {
                     /* !! live chat can start only with departments that were configured to the ChatWindow
                         in prechat form configurations. unless skip prechat was applied. */
-                    viewModel?.onResults?.invoke(this)
+                    viewModel?.onResults(this)
                 }
             }
+
+            viewModel?.observeRefresh(activity!!, Observer { event ->
+                event?.run {
+                    resetChip()
+                }
+            })
         }
 
     }
@@ -179,6 +209,8 @@ class BoldAvailability : Fragment() {
     }
 
     private fun resetChip() {
+        Log.e("availability_fragment", "Reset availability state")
+
         availability_status.performCloseIconClick()
         /*availability_status.apply {
             isSelected = false
@@ -189,8 +221,10 @@ class BoldAvailability : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        try{departmentAdapter.unregisterAdapterDataObserver(adapterDataObserver)}
-        catch (ignored:IllegalStateException){}
+        try {
+            departmentAdapter.unregisterAdapterDataObserver(adapterDataObserver)
+        } catch (ignored: IllegalStateException) {
+        }
     }
 
     override fun onStart() {
@@ -232,7 +266,8 @@ class DepartmentAdapter(private var departments: List<Department> = listOf()) :
     }
 
     override fun getItemId(position: Int): Long {
-        return position.takeIf { (0..departments.size).contains(it) }?.let { departments[it].id }?.toLong()
+        return position.takeIf { (0..departments.size).contains(it) }?.let { departments[it].id }
+            ?.toLong()
             ?: 0
     }
 
