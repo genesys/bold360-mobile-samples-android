@@ -36,6 +36,7 @@ open class ChatRestore : History(), IRestoreSettings {
         this.account = account
 
         try {
+            historyRepository.targetId = account?.getGroupId()
             chatController.restoreChat(account = account)
 
         } catch (ex: IllegalStateException) {
@@ -47,6 +48,9 @@ open class ChatRestore : History(), IRestoreSettings {
         this.account = account
 
         try {
+            if(hasChatController()) {
+                historyRepository.targetId = account.getGroupId()
+            }
             createChat()
         } catch (ex: IllegalStateException) {
             onError(NRError(ex))
