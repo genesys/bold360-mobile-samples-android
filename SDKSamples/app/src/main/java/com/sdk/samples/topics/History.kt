@@ -11,19 +11,24 @@ import com.sdk.samples.topics.history.RoomHistoryProvider
 
 abstract class History : BasicChat() {
 
-    private lateinit var historyRepository: HistoryRepository
+    protected lateinit var historyRepository: HistoryRepository
+    protected var historyMenu: MenuItem? = null
 
     companion object {
         const val HistoryPageSize = 8
 
-        private fun Account.getGroupId(): String? {
+        internal fun Account.getGroupId(): String? {
             return apiKey.takeUnless { it.isBlank() } ?: (this as? BotAccount)?.let { "${it.account ?: ""}#${it.knowledgeBase}" }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
-        menu?.findItem(R.id.clear_history)?.isVisible = true
+        historyMenu = menu?.findItem(R.id.clear_history)
+        historyMenu?.isVisible = true
+        if(hasChatController()){
+            enableMenu(historyMenu, true)
+        }
         return true
     }
 
@@ -33,6 +38,8 @@ abstract class History : BasicChat() {
     override fun getBuilder(): ChatController.Builder {
 
         historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
+
+        enableMenu(historyMenu, true)
 
         return super.getBuilder()
             .chatElementListener(historyRepository)
@@ -44,7 +51,6 @@ abstract class History : BasicChat() {
         when (item.itemId) {
             R.id.clear_history -> {
                 historyRepository.clear()
-                finish()
                 return true
             }
         }

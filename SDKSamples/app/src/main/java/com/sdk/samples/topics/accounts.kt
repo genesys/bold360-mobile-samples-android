@@ -29,10 +29,7 @@ object Accounts {
     private val testBotAccount: BotAccount
         get() = BotAccount(
             "", "nanorep",
-            "English", "mobilestaging",
-            mapOf("" to "")
-
-        )
+            "English", "mobilestaging")
 
     val defaultBotAccount: BotAccount
         get() = formalBotAccount///testBotAccount

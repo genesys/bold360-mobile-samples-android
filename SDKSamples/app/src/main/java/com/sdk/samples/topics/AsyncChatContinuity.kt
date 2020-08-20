@@ -60,7 +60,7 @@ class ChatViewModel : ViewModel() {
     }
 }
 
-private const val TAG = "async"
+private const val ASYNC_TAG = "async"
 private const val ASYNC_FORM = "async_form"
 
 /**
@@ -101,7 +101,7 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
                 data?.run {
                     accountRecovery.saveAccount(this)
 
-                    Log.d(TAG, "creating chat with account ${(this.account).log()}")
+                    Log.d(ASYNC_TAG, "creating chat with account ${(this.account).log()}")
 
                     createChat()
                 }
@@ -253,7 +253,7 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
                             this@AsyncAccountRecovery.applicationId.equals(info.applicationId) &&
                             this@AsyncAccountRecovery.userId.equals(info.userInfo.userId)
 
-                    Log.d(TAG, "selected account details ${if (canRestore) "will be used for chat restore"
+                    Log.d(ASYNC_TAG, "selected account details ${if (canRestore) "will be used for chat restore"
                     else "will be used for a new chat creation."} ")
 
                     if (!canRestore) {
@@ -319,7 +319,7 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
             }
         }
 
-        Log.v(TAG, "Restored account => ${account?.log() ?: "not available"}")
+        Log.v(ASYNC_TAG, "Restored account => ${account?.log() ?: "not available"}")
 
         return restored
     }
@@ -338,7 +338,7 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
 
     override fun update(account: AccountInfo) {
         try {
-            Log.d(TAG, "onUpdate: got to update account senderId ${account.getInfo().SenderId}")
+            Log.d(ASYNC_TAG, "onUpdate: got to update account senderId ${account.getInfo().SenderId}")
 
             account.getInfo().SenderId?.let {
                 senderId = "$it" // updates SenderId in shared preferences
@@ -350,7 +350,7 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
 
     override fun onConfigUpdate(account: AccountInfo, updateKey: String, updatedValue: Any?) {
         try {
-            Log.d(TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
+            Log.d(ASYNC_TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
             when (updateKey) {
                 // updates LastReceivedMessageId in shared preferences
                 LastReceivedMessageId -> lastReceivedMessageId = (updatedValue as? String) ?: ""

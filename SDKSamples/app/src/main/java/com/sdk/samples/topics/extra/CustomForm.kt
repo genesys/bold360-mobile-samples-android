@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,51 +12,70 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
-import com.nanorep.convesationui.bold.ui.FormListener
+import com.integration.core.StateEvent
+import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.TextTagHandler
 import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
-import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.custom_live_forms_layout.*
-import java.lang.ref.WeakReference
+
+/**
+ * ViewModel class to pass the form data and enable the callback activation from the Form.
+ */
+class FormViewModel : ViewModel() {
+
+    var data: FormData? = null
+
+    private val submitForm = SingleLiveData<StateEvent?>()
+    fun observeSubmission(owner: LifecycleOwner, observer: Observer<StateEvent?>){
+        if(!submitForm.hasObservers()){
+            submitForm.observe(owner, observer)
+        }
+    }
+    fun onSubmitForm(results: StateEvent?) {
+        submitForm.value = results
+    }
+}
 
 
-class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
+/**
+ * Custom form implementation to be displayed instead of the SDKs provided forms
+ */
+class CustomForm : Fragment() {
 
     private var isSubmitted = false
-    private var weakListener: WeakReference<FormListener>? = null
 
     companion object {
-        @JvmStatic fun create(data: FormData, listener: FormListener) : Fragment {
-            return CustomForm(data, listener)
+        @JvmStatic fun create() : Fragment {
+            return CustomForm()
         }
     }
 
-    init {
-        weakListener = listener.weakRef()
+    private val formViewModel by lazy {
+        ViewModelProvider(activity!!).get(FormViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.custom_live_forms_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        fetchForm()
 
-    }
-
-    private fun fetchForm() {
+        //-> Construct the form according to supplied fields and data:
         initFormTypeTitle()
         appendIntroText()
         appendFormFields()
@@ -63,19 +83,16 @@ class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
     }
 
     private fun initFormTypeTitle() {
-
-        data?.formType?.let { formType ->
-
+        formViewModel.data?.formType?.let { formType ->
             form_type_title.apply {
-                setStyleConfig(StyleConfig(20, context.resources.getColor(R.color.colorPrimary), Typeface.DEFAULT_BOLD))
+                setStyleConfig(StyleConfig(20, ContextCompat.getColor( context, R.color.colorPrimary), Typeface.DEFAULT_BOLD))
                 text = formType
             }
         }
     }
 
     private fun appendIntroText() {
-
-        data?.getIntroMessage()?.takeIf { it.isNotEmpty() }?.let { introMessage ->
+        formViewModel.data?.getIntroMessage()?.takeIf { it.isNotEmpty() }?.let { introMessage ->
 
             val introTxt = TextView(context).apply {
                 setStyleConfig(StyleConfig(16, Color.DKGRAY, Typeface.DEFAULT_BOLD))
@@ -88,7 +105,7 @@ class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
     }
 
     private fun appendFormFields() {
-        data?.fields?.forEachIndexed { index, fieldData ->
+        formViewModel.data?.fields?.forEachIndexed { index, fieldData ->
 
             val fieldView = EditText(context).apply {
                 hint = fieldData.label
@@ -105,7 +122,7 @@ class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
 
     private fun handleDeptView(index: Int, fieldsContainer: LinearLayout, fieldData: FormField, fieldView: EditText) {
 
-        data?.fields?.takeIf{ it.size - 1  > index }?.let {
+        formViewModel.data?.fields?.takeIf{ it.size - 1  > index }?.let {
 
             val departmentTitle = TextView(context).apply {
                 text = resources.getText(R.string.department_code)
@@ -140,7 +157,6 @@ class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
             }
             fieldsContainer.addView(deptOptions)
         }
-
     }
 
     private fun initSubmitButton() {
@@ -149,21 +165,27 @@ class CustomForm(val data: FormData?, listener: FormListener) : Fragment() {
             form_fields_container?.forEachChild {
                 (it as? EditText)?.run {
                     val index = tag as Int
-                    data?.fields?.get(index)?.value = this.text.toString()
+                    formViewModel.data?.fields?.get(index)?.value = this.text.toString()
                 }
             }
 
             isSubmitted = true
-            parentFragmentManager.popBackStackImmediate()
 
-            weakListener?.get()?.onComplete(data?.chatForm)
+            // activating form submission - which will trigger the formListener.onComplete
+            // with the form fields, filled values
+            formViewModel.data?.chatForm?.run{
+                formViewModel.onSubmitForm(StateEvent(StateEvent.Accepted, data = this))
+            }?: Log.e("CustomForm", "Something went wron, form submission can't be done.")
+
+            parentFragmentManager.popBackStackImmediate()
         }
     }
 
     override fun onStop() {
 
         if (isRemoving && !isSubmitted) {
-            weakListener?.get()?.onCancel(data?.formType)
+            // in case user doesn't want to fill the form and presses "back" to cancel.
+            formViewModel.onSubmitForm(StateEvent(StateEvent.Canceled))
         }
 
         super.onStop()

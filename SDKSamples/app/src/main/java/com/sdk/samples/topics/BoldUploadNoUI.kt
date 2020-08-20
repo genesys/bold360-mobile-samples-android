@@ -205,19 +205,6 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    override fun onBackPressed() {
-
-        boldChat?.end() ?: kotlin.run {
-
-            if (supportFragmentManager.backStackEntryCount == 0) {
-                finish()
-            }
-        }
-
-        super.onBackPressed()
-
-    }
-
     internal class ProgressController(private val container: ViewGroup){
 
         private val progressBar: ProgressBar?
