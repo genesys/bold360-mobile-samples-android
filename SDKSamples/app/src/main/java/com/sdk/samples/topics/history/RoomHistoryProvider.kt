@@ -2,9 +2,9 @@ package com.sdk.samples.topics.history
 
 import android.content.Context
 import android.util.Log
+import com.nanorep.convesationui.structure.elements.StorableChatElement
 import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
-import com.nanorep.nanoengine.chatelement.StorableChatElement
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.sdk.samples.topics.History.Companion.HistoryPageSize
 import kotlinx.coroutines.*
@@ -82,6 +82,17 @@ class RoomHistoryProvider(var context: Context, override var targetId: String? =
         }
     }
 
+    @ExperimentalCoroutinesApi
+    override fun onRemove(id: String) {
+
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            targetId?.run {
+            Log.d("history", "onRemove: [id:$id]")
+            historyDao.delete(this, id)
+        } ?: Log.e("history", "onReceive: targetId is null action is canceled")
+        }
+    }
+
     /**
      * Updates an element at the history by its timestamp (on a I/O thread)
      */
@@ -92,6 +103,17 @@ class RoomHistoryProvider(var context: Context, override var targetId: String? =
 
             Log.d("history", "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]")
             targetId?.run {historyDao.update(this, timestampId, item.getStorageKey(), item.getStatus())
+            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    override fun onUpdate(id: String, item: StorableChatElement) {
+
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+
+            Log.d("history", "onUpdate: [id:$id] [text:${item.text}] [status:${item.getStatus()}]")
+            targetId?.run {historyDao.update(this, id, item.getTimestamp(), item.getStorageKey(), item.getStatus())
             } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
     }
