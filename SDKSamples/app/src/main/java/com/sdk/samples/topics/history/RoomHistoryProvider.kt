@@ -250,8 +250,12 @@ class HistoryMigrationProvider(context: Context, var onDone:(()->Unit)? = null) 
                         this.inDate = inDate!!
                     })
                 }
-            }?:onDone?.invoke()
+            }
         }
+    }
+
+    override fun onDone() {
+        this.onDone?.invoke()
     }
 
     override suspend fun count(): Int {

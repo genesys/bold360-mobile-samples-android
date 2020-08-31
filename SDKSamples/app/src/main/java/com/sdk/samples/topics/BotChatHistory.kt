@@ -1,6 +1,7 @@
 package com.sdk.samples.topics
 
 import android.os.Bundle
+import android.util.Log
 import com.nanorep.convesationui.utils.HistoryMigration.Companion.start
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
@@ -27,7 +28,10 @@ open class BotChatHistory : History() {
         super.onCreate(savedInstanceState)
 
         start(HistoryMigrationProvider(this){
-            runOnUiThread { super.startChat()}
+            runOnUiThread {
+                Log.d("BotChatHistory", "Migration completed. starting chat...")
+                super.startChat()
+            }
         })
     }
 
