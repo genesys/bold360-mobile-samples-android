@@ -196,7 +196,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
                 fromIdx = if (fetchOlder) historySize - 1 else 0
             }
             fetchOlder -> {
-                fromIdx = historySize - fromIdx
+                fromIdx = max(historySize - fromIdx, 0)
             }
         }
 
