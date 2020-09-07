@@ -46,11 +46,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.bold360ai-sdk.core:sdkcore:4.0.3"
-    implementation "com.bold360ai-sdk.conversation:engine:4.0.3"
-    implementation "com.bold360ai-sdk.conversation:chatintegration:4.0.1"
-    implementation "com.bold360ai-sdk.conversation:ui:4.0.3"
-    implementation "com.bold360ai-sdk.core:accessibility:4.0.1"
+    implementation ("com.nanorep.devcore:sdkcore:4.0.+"){changing = true}
+    implementation ("com.nanorep.devconversation:engine:4.0.+"){changing = true}
+    implementation ("com.nanorep.devconversation:chatintegration:4.0.+"){changing = true}
+    implementation ("com.nanorep.devconversation:ui:4.0.+"){changing = true}
+    implementation ("com.nanorep.devcore:accessibility:4.0.+"){changing = true}
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"

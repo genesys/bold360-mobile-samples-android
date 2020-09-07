@@ -69,11 +69,12 @@ private class UIProviderFactory {
                 // Customize the general default SDK UI
                 configure = { adapter: BubbleContentUIAdapter ->
 
-                        adapter.setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
-                        adapter.setStatusbarAlignment(UiConfigurations.Alignment.AlignStart)
-                        adapter.setStatusbarComponentsAlignment(UiConfigurations.StatusbarAlignment.AlignLTR)
-                        adapter.setBackground(ColorDrawable(Color.GRAY))
-                        adapter
+                        adapter.apply {
+                            setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
+                            setStatusbarAlignment(UiConfigurations.Alignment.AlignStart)
+                            setStatusbarComponentsAlignment(UiConfigurations.StatusbarAlignment.AlignLTR)
+                            setBackground(ColorDrawable(Color.GRAY))
+                        }
                     }
 
                 // Dynamic Customization of the default SDK's UI (customization in real time according to the data of the element)
