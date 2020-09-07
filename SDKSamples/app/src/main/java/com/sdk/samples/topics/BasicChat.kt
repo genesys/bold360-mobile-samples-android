@@ -80,7 +80,10 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
             chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
                     override fun onComplete(result: ChatLoadResponse) {
+                        if (isFinishing || supportFragmentManager.isStateSaved) return
+
                         hideKeyboard(window.decorView)
+                        
                         result.takeIf { it.error == null && it.fragment != null }?.run {
                             supportFragmentManager.beginTransaction()
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
@@ -89,6 +92,8 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
                             onChatLoaded()
                         } ?: kotlin.run {
+                            toast(this@BasicChat,
+                                "Failed to load chat\nerror:${result.error?:"failed to get chat fragment"}  ")
                             onChatLoaded()
                         }
                     }
