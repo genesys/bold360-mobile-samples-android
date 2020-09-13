@@ -200,6 +200,11 @@ class AsyncChatForm : Fragment() {
                 info.userInfo = UserInfo(it).apply {
                     firstName = userFName
                     lastName = userLName
+
+                    // Since those properties are not in the async form, we're taking them from the base account
+                    email = chatViewModel.account?.info?.userInfo?.email
+                    countryAbbrev = chatViewModel.account?.info?.userInfo?.countryAbbrev
+                    phoneNumber = chatViewModel.account?.info?.userInfo?.phoneNumber
                 }
             }
         }
@@ -235,6 +240,9 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
     private val userId: String by this
     private val userFirst: String by this
     private val userLast: String by this
+    private val email: String by this
+    private val countryAbbrev: String by this
+    private val phoneNumber: String by this
 
     private var senderId: String by this
 
@@ -262,6 +270,11 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
                         putString(this@AsyncAccountRecovery::userId.name, info.userInfo.userId)
                         putString(this@AsyncAccountRecovery::userFirst.name, info.userInfo.firstName)
                         putString(this@AsyncAccountRecovery::userLast.name, info.userInfo.lastName)
+
+                        // not provided by the account form but we want to save the base account details:
+                        putString(this@AsyncAccountRecovery::email.name, info.userInfo.email)
+                        putString(this@AsyncAccountRecovery::countryAbbrev.name, info.userInfo.countryAbbrev)
+                        putString(this@AsyncAccountRecovery::phoneNumber.name, info.userInfo.phoneNumber)
                     }
 
                     /* override session details, SenderId and LastReceivedMessageId if:
@@ -298,6 +311,9 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
                         info.userInfo = UserInfo(this@AsyncAccountRecovery.userId).apply {
                             firstName = this@AsyncAccountRecovery.userFirst
                             lastName = this@AsyncAccountRecovery.userLast
+                            email = this@AsyncAccountRecovery.email
+                            countryAbbrev = this@AsyncAccountRecovery.countryAbbrev
+                            phoneNumber = this@AsyncAccountRecovery.phoneNumber
                         }
                         info.SenderId = senderId.toLongOrNull()
                         info.LastReceivedMessageId = lastReceivedMessageId
