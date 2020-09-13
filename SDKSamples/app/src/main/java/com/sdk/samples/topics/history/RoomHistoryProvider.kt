@@ -43,16 +43,13 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
         callback: HistoryCallback?
     ) {
 
-        Log.d("history", "got fetch request : from $from direction $direction")
+        Log.v("history", "got fetch request : from $from direction $direction")
 
         coroutineScope.launch {
 
             getHistory(from, direction) { history ->
 
-                Log.d(
-                    "History",
-                    "passing history list to callback, from = " + from + ", size = " + history.size
-                )
+                Log.v("History", "passing history list to callback, from = $from , size = ${history.size}")
 
                 callback?.onReady(from, direction, history)
             }
@@ -189,7 +186,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
         val fetchOlder = direction == HistoryFetching.Older
         val historySize = count()
 
-        Log.d("history", "got history size = $historySize, fromIdx = $fromIdx")
+        Log.v("history", "got history size = $historySize, fromIdx = $fromIdx")
 
         when {
             fromIdx == -1 -> {

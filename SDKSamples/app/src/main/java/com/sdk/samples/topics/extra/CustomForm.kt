@@ -183,7 +183,7 @@ class CustomForm : Fragment() {
 
     override fun onStop() {
 
-        if (isRemoving && !isSubmitted) {
+        if ((isRemoving || activity?.isFinishing == true) && !isSubmitted) {
             // in case user doesn't want to fill the form and presses "back" to cancel.
             formViewModel.onSubmitForm(StateEvent(StateEvent.Canceled))
         }
