@@ -16,10 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.integration.async.core.UserInfo
-import com.integration.core.LastReceivedMessageId
-import com.integration.core.SenderId
-import com.integration.core.applicationId
-import com.integration.core.userInfo
+import com.integration.core.*
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.controller.ChatController

@@ -40,11 +40,15 @@ class FormViewModel : ViewModel() {
     var data: FormData? = null
 
     private val submitForm = SingleLiveData<StateEvent?>()
+
     fun observeSubmission(owner: LifecycleOwner, observer: Observer<StateEvent?>){
-        if(!submitForm.hasObservers()){
-            submitForm.observe(owner, observer)
+        if(submitForm.hasObservers()) {
+            submitForm.removeObservers(owner)
         }
+
+        submitForm.observe(owner, observer)
     }
+
     fun onSubmitForm(results: StateEvent?) {
         submitForm.value = results
     }
