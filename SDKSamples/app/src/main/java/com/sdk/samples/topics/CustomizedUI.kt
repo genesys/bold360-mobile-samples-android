@@ -13,16 +13,17 @@ import androidx.annotation.StringDef
 import androidx.core.content.ContextCompat
 import com.nanorep.convesationui.structure.UiConfigurations
 import com.nanorep.convesationui.structure.controller.ChatController
+import com.nanorep.convesationui.structure.elements.IncomingElementModel
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.convesationui.structure.providers.OutgoingElementUIProvider
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.convesationui.views.adapters.BubbleContentUIAdapter
 import com.nanorep.convesationui.views.chatelement.BubbleContentAdapter
 import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
-import com.nanorep.nanoengine.chatelement.OutgoingElementModel
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.model.StatusOk
+import com.nanorep.sdkcore.utils.dp
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.*
 import java.util.*
@@ -64,38 +65,35 @@ private class UIProviderFactory {
 
         private fun configuring(context: Context) = ChatUIProvider(context).apply {
 
-            chatElementsUIProvider.outgoingUIProvider.apply {
+            chatElementsUIProvider.incomingUIProvider.apply {
 
                 // Customize the general default SDK UI
                 configure = { adapter: BubbleContentUIAdapter ->
 
-                        adapter.setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
-                        adapter.setStatusbarAlignment(UiConfigurations.Alignment.AlignStart)
-                        adapter.setStatusbarComponentsAlignment(UiConfigurations.StatusbarAlignment.AlignLTR)
-                        adapter.setBackground(ColorDrawable(Color.GRAY))
-                        adapter
+                        adapter.apply {
+                            setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
+                            setStatusbarAlignment(UiConfigurations.Alignment.AlignStart)
+                            setStatusbarComponentsAlignment(UiConfigurations.StatusbarAlignment.AlignLTR)
+                            setBackground(ColorDrawable(Color.GRAY))
+
+                            setAvatar(ContextCompat.getDrawable(context, R.drawable.mic_icon))
+                            val margins = 2.dp
+                            setAvatarMargins(margins, margins,margins,margins)
+                        }
                     }
 
                 // Dynamic Customization of the default SDK's UI (customization in real time according to the data of the element)
-                customize = { adapter: BubbleContentUIAdapter, element: OutgoingElementModel? ->
+                customize = { adapter: BubbleContentUIAdapter, element: IncomingElementModel? ->
 
                         element?.run {
 
-                            if (elemContent.toLowerCase(Locale.getDefault()).contains("demo")) {
-                                adapter.setTextStyle(StyleConfig(color = Color.RED, font = Typeface.SERIF))
-                            }
-
                             if (elemScope.isLive) {
-                                adapter.setAvatar(
-                                    ContextCompat.getDrawable(
-                                        context,
-                                        R.drawable.agent
-                                    )
-                                )
-                                adapter.setTextStyle(StyleConfig(10, Color.WHITE))
-                                adapter.setBackground(ColorDrawable(Color.RED))
+                                adapter.apply {
+                                    setAvatar(ContextCompat.getDrawable(context, R.drawable.speaker_on))
+                                    setTextStyle(StyleConfig(10, Color.WHITE))
+                                    setBackground(ColorDrawable(Color.RED))
+                                }
                             }
-
                         }
 
                         adapter

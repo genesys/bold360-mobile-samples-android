@@ -40,11 +40,15 @@ class FormViewModel : ViewModel() {
     var data: FormData? = null
 
     private val submitForm = SingleLiveData<StateEvent?>()
+
     fun observeSubmission(owner: LifecycleOwner, observer: Observer<StateEvent?>){
-        if(!submitForm.hasObservers()){
-            submitForm.observe(owner, observer)
+        if(submitForm.hasObservers()) {
+            submitForm.removeObservers(owner)
         }
+
+        submitForm.observe(owner, observer)
     }
+
     fun onSubmitForm(results: StateEvent?) {
         submitForm.value = results
     }
@@ -183,7 +187,7 @@ class CustomForm : Fragment() {
 
     override fun onStop() {
 
-        if (isRemoving && !isSubmitted) {
+        if ((isRemoving || activity?.isFinishing == true) && !isSubmitted) {
             // in case user doesn't want to fill the form and presses "back" to cancel.
             formViewModel.onSubmitForm(StateEvent(StateEvent.Canceled))
         }

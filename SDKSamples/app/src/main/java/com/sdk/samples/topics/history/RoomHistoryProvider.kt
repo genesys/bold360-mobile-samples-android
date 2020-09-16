@@ -2,9 +2,10 @@ package com.sdk.samples.topics.history
 
 import android.content.Context
 import android.util.Log
+import com.nanorep.convesationui.structure.elements.StorableChatElement
 import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
-import com.nanorep.nanoengine.chatelement.StorableChatElement
+import com.nanorep.convesationui.utils.ElementMigration
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.sdk.samples.topics.History.Companion.HistoryPageSize
 import kotlinx.coroutines.*
@@ -21,31 +22,36 @@ import kotlin.math.min
  */
 
 @ExperimentalCoroutinesApi
-class RoomHistoryProvider(var context: Context, override var targetId: String? = null) : HistoryProvider {
+open class RoomHistoryProvider(var context: Context, override var targetId: String? = null) :
+    HistoryProvider {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
+    protected var pageSize = HistoryPageSize
 
-    private val historyDao = HistoryRoomDB.getInstance(context).historyDao()
+    protected open val fetchDispatcher: CoroutineDispatcher = Dispatchers.Main
+
+    protected val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
+
+    protected val historyDao = HistoryRoomDB.getInstance(context).historyDao()
 
     /**
      * Gets all the history from the database(on a I/O thread), and invokes a page of it (page size has been determined at the activity).
      * When finished, it sends the callback to the SDK (on the Main thread).
      */
-    override fun onFetch(from: Int, @HistoryFetching.FetchDirection direction: Int, callback: HistoryCallback?) {
+    override fun onFetch(
+        from: Int,
+        @HistoryFetching.FetchDirection direction: Int,
+        callback: HistoryCallback?
+    ) {
+
+        Log.v("history", "got fetch request : from $from direction $direction")
 
         coroutineScope.launch {
 
             getHistory(from, direction) { history ->
 
-                Log.d(
-                    "History",
-                    "passing history list to callback, from = " + from + ", size = " + history.size
-                )
+                Log.v("History", "passing history list to callback, from = $from , size = ${history.size}")
 
-                launch(Dispatchers.Main) {
-                    callback?.onReady(from, direction, history)
-                }
-
+                callback?.onReady(from, direction, history)
             }
         }
     }
@@ -62,7 +68,10 @@ class RoomHistoryProvider(var context: Context, override var targetId: String? =
             targetId?.run {
                 historyDao.insert(HistoryElement(this, item).apply {
                     inDate = Date(SystemUtil.syncedCurrentTimeMillis())
-                    Log.d("history", "onReceive: [inDate:${inDate}][timestamp:${getTimestamp()}][text:${textContent}]")
+                    Log.d(
+                        "history",
+                        "onReceive: [inDate:${inDate}][timestamp:${getTimestamp()}][text:${textContent}]"
+                    )
                 })
             } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
@@ -76,9 +85,20 @@ class RoomHistoryProvider(var context: Context, override var targetId: String? =
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
             targetId?.run {
-            Log.d("history", "onRemove: [id:$timestampId]")
-            historyDao.delete(this, timestampId)
-        } ?: Log.e("history", "onReceive: targetId is null action is canceled")
+                Log.d("history", "onRemove: [id:$timestampId]")
+                historyDao.delete(this, timestampId)
+            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    override fun onRemove(id: String) {
+
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            targetId?.run {
+                Log.d("history", "onRemove: [id:$id]")
+                historyDao.delete(this, id)
+            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
     }
 
@@ -90,8 +110,30 @@ class RoomHistoryProvider(var context: Context, override var targetId: String? =
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
-            Log.d("history", "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]")
-            targetId?.run {historyDao.update(this, timestampId, item.getStorageKey(), item.getStatus())
+            Log.d(
+                "history",
+                "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]"
+            )
+            targetId?.run {
+                historyDao.update(this, timestampId, item.getStorageKey(), item.getStatus())
+            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    override fun onUpdate(id: String, item: StorableChatElement) {
+
+        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+
+            Log.d("history", "onUpdate: [id:$id] [text:${item.text}] [status:${item.getStatus()}]")
+            targetId?.run {
+                historyDao.update(
+                    this,
+                    id,
+                    item.getTimestamp(),
+                    item.getStorageKey(),
+                    item.getStatus()
+                )
             } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
     }
@@ -128,39 +170,94 @@ class RoomHistoryProvider(var context: Context, override var targetId: String? =
         return result.await()
     }
 
-    private suspend fun getHistory(fromIdx: Int, direction: Int, onFetched: (MutableList<HistoryElement>) -> Unit) {
+    protected open suspend fun getCount(toIndex: Int, fromIdx: Int): List<HistoryElement> {
+        return targetId?.let { historyDao.getCount(it, toIndex, fromIdx - toIndex) }
+            ?: emptyList()
+    }
 
-        var fromIdx = fromIdx
+    private suspend fun getHistory(
+        startFromIdx: Int,
+        direction: Int,
+        onFetched: (MutableList<HistoryElement>) -> Unit
+    ) {
+
+        var fromIdx = startFromIdx
 
         val fetchOlder = direction == HistoryFetching.Older
         val historySize = count()
+
+        Log.v("history", "got history size = $historySize, fromIdx = $fromIdx")
 
         when {
             fromIdx == -1 -> {
                 fromIdx = if (fetchOlder) historySize - 1 else 0
             }
             fetchOlder -> {
-                fromIdx = historySize - fromIdx
+                fromIdx = max(historySize - fromIdx, 0)
             }
         }
 
         val toIndex = if (fetchOlder)
-            max(0, fromIdx - HistoryPageSize)
+            max(0, fromIdx - pageSize)
         else
-            min(fromIdx + HistoryPageSize, historySize - 1)
+            min(fromIdx + pageSize, historySize - 1)
 
         Log.d("history", "fetching history: total = $historySize, from $toIndex to $fromIdx")
 
         // In order to prevent Concurrent exception:
-        val accountHistory = CopyOnWriteArrayList(targetId?.let{historyDao.getCount(it, toIndex, fromIdx - toIndex)}?: emptyList())
+        val accountHistory = CopyOnWriteArrayList(getCount(toIndex, fromIdx))
 
         try {
             //Log.v("History", accountHistory.map { "item: ${it.inDate}"}.joinToString("\n"))
-            onFetched.invoke(accountHistory)
+            coroutineScope.launch(fetchDispatcher) { onFetched.invoke(accountHistory) }
 
         } catch (ex: Exception) {
             onFetched.invoke(ArrayList())
         }
 
     }
+}
+
+@ExperimentalCoroutinesApi
+class HistoryMigrationProvider(context: Context, var onDone:(()->Unit)? = null) : RoomHistoryProvider(context), ElementMigration {
+
+    init {
+        pageSize = 20
+    }
+
+    private var fetchedChunk: List<HistoryElement> = listOf()
+
+    override val fetchDispatcher: CoroutineDispatcher = Dispatchers.IO
+
+    override suspend fun getCount(toIndex: Int, fromIdx: Int): List<HistoryElement> {
+        fetchedChunk = historyDao.getCount(toIndex, fromIdx - toIndex)
+        return fetchedChunk
+    }
+
+    override fun onReplace(from: Int, migration: Map<String, StorableChatElement>?) {
+        Log.d("history", "got replace from = $from of ${migration?.size?:0} items")
+
+        coroutineScope.launch {
+            migration?.takeUnless { it.isEmpty() }?.forEach { (prevId, storable) ->
+                val (groupId, inDate) = fetchedChunk.find { it.getId() == prevId }
+                    ?.let { it.groupId to it.inDate } ?: null to null
+                groupId?.run {
+                    historyDao.delete(this, prevId)
+                    historyDao.insert(HistoryElement(this, storable).apply {
+                        this.inDate = inDate!!
+                    })
+                }
+            }
+        }
+    }
+
+    override fun onDone() {
+        this.onDone?.invoke()
+    }
+
+    override suspend fun count(): Int {
+        val result = coroutineScope.async<Int> { historyDao.count() }
+        return result.await()
+    }
+
 }
