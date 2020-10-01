@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.integration.core.Empty
 import com.integration.core.StateEvent
+import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
@@ -53,6 +54,13 @@ open class BoldChatAvailability : BoldChat() {
 
     protected open fun prepareAccount(account: BoldAccount) {
         account.skipPrechat()
+
+        /*//>>> uncomment to enable passing preconfigured encrypted info, that enables chat creation,
+                if your account demands it.
+                Replace current text with your Secured string.
+
+           account.info.securedInfo = "this is an encrypted content. Don't read"
+        */
     }
 
     override fun startChat() {
