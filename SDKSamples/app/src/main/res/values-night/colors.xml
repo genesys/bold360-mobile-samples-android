@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="form_field_background">#994444</color>
-    <color name="form_field_hint">#33ddcc</color>
+    <color name="form_field_background">#55660000</color>
 </resources>
