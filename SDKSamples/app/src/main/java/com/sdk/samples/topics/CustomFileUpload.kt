@@ -111,21 +111,33 @@ class CustomFileUpload : BoldChatAvailability() {
     //<editor-fold desc="Custom upload: step 4: React to upload trigger activation">
     // Open the source from which the user will find the file to upload
     private fun uploadFileRequest() {
-        val result: Int = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        if (result != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                READ_EXTERNAL_PERMISSION_CODE)
-        } else {
+        val permissions = mutableListOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P ) {
+            permissions.add(Manifest.permission.ACCESS_MEDIA_LOCATION)
+        }
+
+        val nonGranted = mutableListOf<String>()
+
+        permissions.forEach {
+            if (ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED) {
+                nonGranted.add(it)
+            }
+        }
+
+        if (nonGranted.isEmpty()) {
             FilePicker(this).openFilePicker()
+        } else {
+            ActivityCompat.requestPermissions(this,
+                nonGranted.toTypedArray(),
+                ACCESS_FILES_REQUEST)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            READ_EXTERNAL_PERMISSION_CODE -> {
+            ACCESS_FILES_REQUEST -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     FilePicker(this).openFilePicker()
@@ -233,7 +245,7 @@ class CustomFileUpload : BoldChatAvailability() {
     companion object {
         const val TAG = "CustomUploadSample"
 
-        const val READ_EXTERNAL_PERMISSION_CODE = 111
+        const val ACCESS_FILES_REQUEST = 111
         const val FILE_UPLOAD_REQUEST_CODE = 222
     }
 }
