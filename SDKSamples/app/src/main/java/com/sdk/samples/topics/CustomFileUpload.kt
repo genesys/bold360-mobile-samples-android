@@ -138,9 +138,19 @@ class CustomFileUpload : BoldChatAvailability() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             ACCESS_FILES_REQUEST -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                val notGranted = mutableListOf<String>()
+
+                grantResults.forEachIndexed { index, result ->
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        permissions[index]?.let {  notGranted.add(it) }
+                    }
+                }
+
+                if (notGranted.isEmpty()) {
                     FilePicker(this).openFilePicker()
+                } else {
+                    Log.w(TAG, "Not granted permissions:  $notGranted")
                 }
             }
         }
