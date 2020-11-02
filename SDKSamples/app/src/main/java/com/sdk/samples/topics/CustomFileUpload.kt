@@ -150,7 +150,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 if (notGranted.isEmpty()) {
                     FilePicker(this).openFilePicker()
                 } else {
-                    Log.w(TAG, "Not granted permissions:  $notGranted")
+                    toast(this, "Not granted permissions: $notGranted", Toast.LENGTH_LONG)
                 }
             }
         }
