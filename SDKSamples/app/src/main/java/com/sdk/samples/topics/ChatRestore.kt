@@ -17,6 +17,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.NRError
 import com.sdk.samples.R
+import com.sdk.samples.common.RestoreFragment
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
 
@@ -111,6 +112,7 @@ interface IRestoreSettings {
     fun hasChatController(): Boolean
 }
 
+/*
 
 class RestoreFragment : Fragment() {
 
@@ -174,4 +176,4 @@ class RestoreFragment : Fragment() {
 
     private fun getCheckedRadio() =
         view?.findViewById<RadioButton>(chat_action_group.checkedRadioButtonId)
-}
+}*/

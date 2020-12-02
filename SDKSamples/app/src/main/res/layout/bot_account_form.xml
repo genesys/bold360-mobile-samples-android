@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/form_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+    <ScrollView
+            android:id="@+id/scroller"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:id="@+id/bot_fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_name_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/account_hint">
+
+                    <EditText
+                            android:id="@+id/account_name_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/knowledgebase_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/kb_hint">
+
+
+                    <EditText
+                            android:id="@+id/knowledgebase_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/server_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/server_hint">
+
+
+                    <EditText
+                            android:id="@+id/server_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/api_key_layout"
+                    style="@style/TextInputLayoutAppearance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/api_key_hint">
+
+
+                <EditText
+                        android:id="@+id/api_key_edit_text"
+                        style="@style/TextInputTextAppearance" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Switch
+                    android:id="@+id/history_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="20dp"
+                    android:padding="8dp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/history_label"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp" />
+
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="20dp"
+                    android:padding="6dp"
+                    android:visibility="gone">
+
+                <Switch
+                        android:id="@+id/wm_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|start"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:text="@string/welcome_label"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="16sp" />
+
+                <EditText
+                        android:id="@+id/wm_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="36dp"
+                        android:gravity="start"
+                        android:hint="@string/welcome_hint"
+                        android:inputType="number"
+                        android:textSize="14sp" />
+
+            </FrameLayout>
+
+            <TextView
+                    android:id="@+id/context_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="26dp"
+                    android:text="@string/bot_context_list"
+                    android:textColor="@color/form_field_hint"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+            <com.sdk.samples.common.LinearContext
+                    android:id="@+id/bot_context"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                <Button
+                        android:id="@+id/add_context"
+                        style="@style/main_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/add_context" />
+            </com.sdk.samples.common.LinearContext>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+            android:id="@+id/start_chat"
+            style="@style/submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/start_chat"
+            android:text="@string/start_chat" />
+
+</LinearLayout>
+
