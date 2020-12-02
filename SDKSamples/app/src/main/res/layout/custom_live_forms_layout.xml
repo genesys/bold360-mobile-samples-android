@@ -39,5 +39,5 @@
             android:text="@string/custom_form_submit"
             android:id="@+id/custom_form_submit_button"
             android:layout_gravity="bottom"
-            style="@style/submit_button"/>
+            style="@style/submit_view"/>
 </LinearLayout>

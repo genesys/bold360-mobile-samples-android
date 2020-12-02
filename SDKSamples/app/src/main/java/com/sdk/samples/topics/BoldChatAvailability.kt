@@ -53,7 +53,7 @@ open class BoldChatAvailability : BoldChat() {
     }
 
     protected open fun prepareAccount(account: BoldAccount) {
-        account.skipPrechat()
+        //account.skipPrechat() //Uncomment to start chat immediately without displaying prechat form to the user.
 
         /*//>>> uncomment to enable passing preconfigured encrypted info, that enables chat creation,
                 if your account demands it.
