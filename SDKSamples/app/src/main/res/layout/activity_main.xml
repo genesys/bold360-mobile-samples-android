@@ -7,18 +7,23 @@
         android:padding="8dp"
         android:orientation="vertical">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select a sample:"
-            android:textSize="@dimen/topic_titles_text"
-            android:layout_marginBottom="10dp"
-            android:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/topics_recycler"
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/rect_shape"/>
+            android:id="@+id/samplesContainer">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select a sample:"
+                    android:textSize="@dimen/topic_titles_text"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/topics_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rect_shape"/>
+    </FrameLayout>
 
 </LinearLayout>

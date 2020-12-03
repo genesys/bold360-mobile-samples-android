@@ -36,13 +36,15 @@ interface DataController: AccountListener {
     fun updateAccount(context: Context?, account: Account)
 }
 
-class SharedDataController(override val onAccountData: (account: Account?, isRestore: Boolean) -> Unit): DataController {
+class SharedDataController: DataController {
 
     override var isRestore: Boolean = false
     var currentAccount: Map<String, Any?>? = null
 
+    override var onAccountData: ((account: Account?, isRestore: Boolean) -> Unit)? = null
+
     override fun onSubmit(account: Account) {
-        onAccountData(account, isRestore)
+        onAccountData?.invoke(account, isRestore)
     }
 
     override var chatType: String? = null

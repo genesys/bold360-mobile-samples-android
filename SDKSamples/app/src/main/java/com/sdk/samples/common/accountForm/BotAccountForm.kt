@@ -33,14 +33,13 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeContextView()
     }
 
     private fun initializeContextView() {
 
         bot_context.scroller = scroller
 
-        ContextHandler(bot_context, this@BotAccountForm).apply {
+        contextHandler = ContextHandler(bot_context, this@BotAccountForm).apply {
             onDelete = { _ ->
                 if (bot_context.childCount == 1) {
                     context_title.visibility = View.GONE
@@ -65,6 +64,8 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
     }
 
     override fun fillFields() {
+
+        initializeContextView()
 
         val accountData = dataController.getAccount(context)
 

@@ -37,7 +37,7 @@ class AsyncAccountForm(dataController: DataController) : LiveAccountForm(dataCon
 
     override fun validateFormData(): Account? {
         return api_key_edit_text.text.toString().takeUnless { it.isEmpty() }?.let {
-            AsyncAccount(it)
+            AsyncAccount(it, "MobileAsyncStaging123452")
         } ?: let {
             presentError(api_key_edit_text, context?.getString(R.string.error_apiKey))
             null

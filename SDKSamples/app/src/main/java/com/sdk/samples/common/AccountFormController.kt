@@ -7,24 +7,26 @@ import com.sdk.samples.common.accountForm.AccountForm
 import java.lang.ref.WeakReference
 
 interface AccountListener {
-    val onAccountData: (account: Account?, isRestore: Boolean) -> Unit
+    var onAccountData: ((account: Account?, isRestore: Boolean) -> Unit)?
 }
 
-interface FormController: AccountListener {
-    fun updateChatType(chatType: String?)
+interface FormController {
+    fun updateChatType(chatType: String?, onAccountData: (account: Account?, isRestore: Boolean) -> Unit)
 }
 
-class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>
-                            , override val onAccountData: (account: Account?, isRestore: Boolean) -> Unit): FormController {
+class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>): FormController {
 
     private val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
-    private val accountFormPresenter = AccountFormPresenter(containerRes) { account, isRestore ->
-        onAccountData(account, isRestore)
-        getFragmentManager()?.popBackStack()
-    }
+    private val accountFormPresenter = AccountFormPresenter(containerRes)
 
-    override fun updateChatType(chatType: String?) {
+    override fun updateChatType(chatType: String?, onAccountData: (account: Account?, isRestore: Boolean) -> Unit) {
+
+        accountFormPresenter.onAccountData = { account, isRestore ->
+            onAccountData.invoke(account, isRestore)
+            getFragmentManager()?.popBackStack()
+        }
+
         getFragmentManager()?.let { fm ->
             chatType?.let { accountFormPresenter.presentAccountForm(fm, chatType) }
                 ?: accountFormPresenter.presentRestoreForm(fm)
@@ -40,12 +42,15 @@ interface FormPresenter: AccountListener{
     fun presentRestoreForm(fragmentManager: FragmentManager)
 }
 
-class AccountFormPresenter(
-    override val containerRes: Int,
-    override val onAccountData: (account: Account?, isRestore: Boolean) -> Unit
-    ): FormPresenter {
+class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
-    override val dataController = SharedDataController(onAccountData)
+    override val dataController = SharedDataController()
+
+    override var onAccountData: ((account: Account?, isRestore: Boolean) -> Unit)?
+    set(value) {
+        dataController.onAccountData = value
+    }
+    get() = dataController.onAccountData
 
     override fun presentAccountForm(fragmentManager: FragmentManager, chatType: String) {
         presentForm(fragmentManager, AccountForm.newInstance(dataController, chatType), AccountForm.TAG)
@@ -63,6 +68,7 @@ class AccountFormPresenter(
     private fun presentForm(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
         fragmentManager.beginTransaction()
             .replace(containerRes, fragment, tag)
+            .addToBackStack(null)
             .commit()
     }
 }
