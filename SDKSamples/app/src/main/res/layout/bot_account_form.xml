@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/form_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -91,50 +90,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Switch
-                    android:id="@+id/history_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="20dp"
-                    android:padding="8dp"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:text="@string/history_label"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="16sp" />
-
-            <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="20dp"
-                    android:padding="6dp"
-                    android:visibility="gone">
-
-                <Switch
-                        android:id="@+id/wm_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|start"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
-                        android:text="@string/welcome_label"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="16sp" />
-
-                <EditText
-                        android:id="@+id/wm_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="36dp"
-                        android:gravity="start"
-                        android:hint="@string/welcome_hint"
-                        android:inputType="number"
-                        android:textSize="14sp" />
-
-            </FrameLayout>
-
             <TextView
                     android:id="@+id/context_title"
                     android:layout_width="wrap_content"
@@ -147,7 +102,7 @@
                     android:textSize="18sp"
                     android:visibility="gone" />
 
-            <com.sdk.samples.common.LinearContext
+            <com.sdk.samples.common.accountForm.LinearContext
                     android:id="@+id/bot_context"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,6 +112,7 @@
                 <Button
                         android:id="@+id/add_context"
                         style="@style/main_button"
+                        android:textColor="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -164,14 +120,16 @@
                         android:layout_marginLeft="6dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/add_context" />
-            </com.sdk.samples.common.LinearContext>
+
+            </com.sdk.samples.common.accountForm.LinearContext>
 
         </LinearLayout>
     </ScrollView>
 
     <Button
             android:id="@+id/start_chat"
-            style="@style/submit_button"
+            style="@style/submit_view"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"

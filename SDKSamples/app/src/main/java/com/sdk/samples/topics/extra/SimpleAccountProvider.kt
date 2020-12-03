@@ -2,8 +2,6 @@ package com.sdk.samples.topics.extra
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.integration.core.securedInfo
-import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.bot.BotAccount

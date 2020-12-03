@@ -6,23 +6,46 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.topics.Accounts
-import java.lang.ref.WeakReference
 
-interface AccountDataHandler: AccountController {
-    var isRestore: Boolean
+interface DataController: AccountListener {
+
+    /**
+     * true is the user pressed on the restore button
+     */
     var chatType: String?
+
+
+    /**
+     * true is the user pressed on the restore button at the ChatRestore sample
+     */
+    var isRestore: Boolean
+
+    /**
+     * Being called when the AccountForm had been submitted
+     */
     fun onSubmit(account: Account)
-    fun getAccount(): Map<String, Any?> // Gets the prev account data from the shared properties (according to the ChatType) \n                                                                                      If null it returns the default account
-    fun updateAccount(account: Account) // If changed, updates the shared properties to include the updated account details
+
+    /**
+     * Gets the prev account data from the shared properties (according to the ChatType), If null it returns the default account
+     */
+    fun getAccount(context: Context?): Map<String, Any?>
+
+    /**
+     * If changed, updates the shared properties to include the updated account details
+     */
+    fun updateAccount(context: Context?, account: Account)
 }
 
-class SharedPrefsDataHandler(val context: WeakReference<Context>, override var chatType: String? = null, override val onAccountReady: (account: Account, isRestore: Boolean) -> Unit): AccountDataHandler {
+class SharedDataController(override val onAccountData: (account: Account?, isRestore: Boolean) -> Unit): DataController {
 
     override var isRestore: Boolean = false
+    var currentAccount: Map<String, Any?>? = null
 
     override fun onSubmit(account: Account) {
-        onAccountReady(account, isRestore)
+        onAccountData(account, isRestore)
     }
+
+    override var chatType: String? = null
 
     private val sharedDataHandler: SharedDataHandler by lazy {
         when (chatType) {
@@ -32,8 +55,10 @@ class SharedPrefsDataHandler(val context: WeakReference<Context>, override var c
         }
     }
 
-    override fun getAccount(): Map<String, Any?> {
-        return context.get()?.let { sharedDataHandler.getAccountData(it) } ?: getDefaultAccount()
+    override fun getAccount(context: Context?): Map<String, Any?> {
+        return ( context?.let { sharedDataHandler.getAccountData(it) } ?: getDefaultAccount() ).also { accountData ->
+            currentAccount = accountData
+        }
     }
 
     private fun getDefaultAccount(): Map<String, Any?> {
@@ -44,8 +69,9 @@ class SharedPrefsDataHandler(val context: WeakReference<Context>, override var c
         }
     }
 
-    override fun updateAccount(account: Account) {
-        context.get()?.let { sharedDataHandler.saveChatData(it, account) }
+    override fun updateAccount(context: Context?, account: Account) {
+        currentAccount?.let { if (account.dataEqualsTo(it)) return}
+        context?.let { sharedDataHandler.saveChatData(it, account) }
     }
 }
 
@@ -73,7 +99,7 @@ abstract class SharedDataHandler {
 
 }
 
-class BotSharedDataHandler(): SharedDataHandler() {
+internal class BotSharedDataHandler: SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.bot"
@@ -105,7 +131,7 @@ class BotSharedDataHandler(): SharedDataHandler() {
     }
 }
 
-class AsyncSharedDataHandler: SharedDataHandler() {
+internal class AsyncSharedDataHandler: SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.async"
@@ -125,7 +151,7 @@ class AsyncSharedDataHandler: SharedDataHandler() {
     }
 }
 
-class LiveSharedDataHandler: SharedDataHandler() {
+internal class LiveSharedDataHandler: SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.bold"

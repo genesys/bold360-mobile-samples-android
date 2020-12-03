@@ -2,7 +2,10 @@ package com.sdk.samples.common
 
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+
+
 
 @Override
 internal fun BotAccount.map(): Map<String, Any?> =
@@ -26,10 +29,32 @@ internal fun AsyncAccount.map(): Map<String, Any?> =
 
 ///////////////////////////////////////////////////
 
-internal fun Map<String,Any?>?.toAccount(@ChatType chatType: String) {
-
-}
-
 fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
+}
+
+fun Account.dataEqualsTo(other: Map<String, Any?>): Boolean {
+
+        when(this) {
+                is BotAccount -> this.map()
+                is BoldAccount -> this.map()
+                else -> (this as AsyncAccount).map()
+
+        }.let { accountData ->
+
+                if (other.size != accountData.size) return false
+
+                val otherKeys = other.keys
+                val otherValues = other.values
+
+                accountData.values.forEachIndexed { index, value ->
+                        if (value != otherValues.elementAt(index)) return false
+                }
+
+                accountData.keys.forEachIndexed { index, key ->
+                        if (key != otherKeys.elementAt(index)) return false
+                }
+
+                return true
+        }
 }

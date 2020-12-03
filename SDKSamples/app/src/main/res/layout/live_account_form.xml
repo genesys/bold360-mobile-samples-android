@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/form_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,25 +38,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Switch
-                    android:id="@+id/history_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="20dp"
-                    android:padding="8dp"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:text="@string/history_label"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="16sp" />
-
         </LinearLayout>
     </ScrollView>
 
     <Button
             android:id="@+id/start_chat"
-            style="@style/submit_button"
+            style="@style/submit_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"

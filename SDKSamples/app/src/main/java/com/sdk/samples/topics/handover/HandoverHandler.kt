@@ -8,13 +8,10 @@ import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.ComponentType
 import com.nanorep.convesationui.views.autocomplete.ChatInputData
 import com.nanorep.nanoengine.AccountInfo
-import com.nanorep.nanoengine.model.configuration.ChatFeatures
-import com.nanorep.nanoengine.model.configuration.VoiceSettings
 import com.nanorep.nanoengine.model.configuration.VoiceSupport
 import com.nanorep.nanoengine.model.conversation.providerConfig
 import com.nanorep.nanoengine.model.conversation.statement.IncomingStatement
 import com.nanorep.nanoengine.model.conversation.statement.OutgoingStatement
-import com.nanorep.nanoengine.model.conversation.statement.UserInput
 import com.nanorep.sdkcore.model.ChatStatement
 import com.nanorep.sdkcore.model.StatusOk
 import com.nanorep.sdkcore.model.StatusPending

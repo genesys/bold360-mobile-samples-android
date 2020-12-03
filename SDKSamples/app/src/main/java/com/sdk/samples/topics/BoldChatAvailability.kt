@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.integration.core.Empty
 import com.integration.core.StateEvent
-import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
