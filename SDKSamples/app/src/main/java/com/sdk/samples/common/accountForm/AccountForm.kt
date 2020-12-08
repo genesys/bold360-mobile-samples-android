@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import com.nanorep.nanoengine.Account
 import com.sdk.samples.R
 import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.DataController
@@ -27,9 +26,9 @@ interface AccountFormDelegate {
 
     /**
      * Validates the form data
-     * returns Account if the data is valid else null
+     * returns Account map if the data is valid else null
      */
-    fun validateFormData(): Account?
+    fun validateFormData(): Map<String, Any?>?
 
     /**
      * Presents error on a form field
@@ -49,7 +48,7 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
         return inflater.inflate(formLayoutRes, container, false)
     }
 
-    private fun validateAndUpdate (): Account? {
+    private fun validateAndUpdate (): Map<String, Any?>? {
         return validateFormData()?.also {
             context?.let { context ->  dataController.updateAccount(context, it) }
         }

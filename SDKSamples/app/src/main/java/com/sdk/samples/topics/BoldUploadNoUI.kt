@@ -34,10 +34,13 @@ import com.integration.core.BoldLiveUploader
 import com.integration.core.FileUploadInfo
 import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
+import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
+import com.sdk.samples.common.ChatType
+import com.sdk.samples.common.toAccount
 import com.sdk.samples.topics.Accounts.defaultBoldAccount
 import kotlinx.android.synthetic.main.activity_bot_chat.topic_title
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
@@ -46,10 +49,9 @@ import java.io.ByteArrayOutputStream
 
 class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
 
-    private val account =
-        defaultBoldAccount.apply {
-            skipPrechat()
-        }
+    private val account = ((intent.getSerializableExtra("account")) ?.toAccount(ChatType.LiveChat) as? BoldAccount ?:  defaultBoldAccount).apply {
+        skipPrechat()
+    }
 
     private val uploader by lazy {
         BoldLiveUploader()

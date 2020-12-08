@@ -2,16 +2,15 @@ package com.sdk.samples.common
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.nanorep.nanoengine.Account
 import com.sdk.samples.common.accountForm.AccountForm
 import java.lang.ref.WeakReference
 
 interface AccountListener {
-    var onAccountData: ((account: Account?, isRestore: Boolean) -> Unit)?
+    var onAccountData: ((account: Map<String, Any?>?, isRestore: Boolean) -> Unit)?
 }
 
 interface FormController {
-    fun updateChatType(chatType: String?, onAccountData: (account: Account?, isRestore: Boolean) -> Unit)
+    fun updateChatType(chatType: String?, onAccountData: (account: Map<String, Any?>?, isRestore: Boolean) -> Unit)
 }
 
 class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>): FormController {
@@ -20,11 +19,11 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
     private val accountFormPresenter = AccountFormPresenter(containerRes)
 
-    override fun updateChatType(chatType: String?, onAccountData: (account: Account?, isRestore: Boolean) -> Unit) {
+    override fun updateChatType(chatType: String?, onAccountData: (account: Map<String, Any?>?, isRestore: Boolean) -> Unit) {
 
         accountFormPresenter.onAccountData = { account, isRestore ->
-            onAccountData.invoke(account, isRestore)
             getFragmentManager()?.popBackStack()
+            onAccountData.invoke(account, isRestore)
         }
 
         getFragmentManager()?.let { fm ->
@@ -46,8 +45,8 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
     override val dataController = SharedDataController()
 
-    override var onAccountData: ((account: Account?, isRestore: Boolean) -> Unit)?
-    set(value) {
+    override var onAccountData: ((account: Map<String, Any?>?, isRestore: Boolean) -> Unit)?
+        set(value) {
         dataController.onAccountData = value
     }
     get() = dataController.onAccountData

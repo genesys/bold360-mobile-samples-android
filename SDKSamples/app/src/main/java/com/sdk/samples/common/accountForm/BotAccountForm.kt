@@ -2,38 +2,33 @@ package com.sdk.samples.common.accountForm
 
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
+import com.sdk.samples.common.*
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Account_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.ApiKey_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Context_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Kb_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Server_key
-import com.sdk.samples.common.DataController
-import com.sdk.samples.common.isEmpty
+import kotlinx.android.synthetic.main.async_account_form.*
 import kotlinx.android.synthetic.main.bot_account_form.*
+import kotlinx.android.synthetic.main.bot_account_form.scroller
 import kotlinx.android.synthetic.main.bot_context_view.view.*
 import kotlin.math.max
 
-class BotAccountForm(dataController: DataController) : AccountForm(dataController), ContextAdapter {
+class BotAccountForm(dataController: DataController) : AccountForm(dataController),
+    ContextAdapter {
 
     override val formLayoutRes: Int
         get() = R.layout.bot_account_form
 
     private lateinit var contextHandler: ContextHandler
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 
     private fun initializeContextView() {
 
@@ -96,26 +91,30 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
         }
     }
 
-    override fun validateFormData(): Account? {
+    override fun validateFormData(): Map<String, Any?>? {
 
-        val accountName = account_name_edit_text?.let { accountNameView ->
-            accountNameView.text.takeUnless { it.isEmpty() }?.toString()  ?: kotlin.run {
-                presentError(accountNameView, context?.getString(R.string.error_account_name))
-                return null
-            }}
+        val accountMap = mutableMapOf<String, Any?>()
 
-        val kb = knowledgebase_edit_text?.let { kbView ->
-            kbView.text?.takeUnless { it.isEmpty() }?.toString()  ?: kotlin.run {
-                presentError(kbView, context?.getString(R.string.error_kb))
-                return null
-            }
+        account_name_edit_text.text?.takeUnless { it.isEmpty() }?.let {
+            accountMap[Account_key] = it.toString()
+        } ?: kotlin.run {
+            presentError(account_name_edit_text, context?.getString(R.string.error_account_name))
+            return null
         }
 
-        val apiKey = api_key_edit_text.text?.toString() ?: ""
-        val server = server_edit_text.text?.toString() ?: ""
-        val contexts = contextHandler.getContext()
+        knowledgebase_edit_text.text?.takeUnless { it.isEmpty() }?.let {
+            accountMap[Kb_key] = it.toString()
+        } ?: kotlin.run {
+            presentError(knowledgebase_edit_text, context?.getString(R.string.error_kb))
+            return null
+        }
 
-        return BotAccount(apiKey, accountName, kb, server, contexts)
+        accountMap[SharedDataHandler.ChatType_key] = ChatType.BotChat
+        accountMap[ApiKey_key] = api_key_edit_text.text?.toString() ?: ""
+        accountMap[Server_key] = server_edit_text.text?.toString() ?: ""
+        accountMap[Context_key] =  contextHandler.getContext()
+
+        return accountMap
     }
 
 

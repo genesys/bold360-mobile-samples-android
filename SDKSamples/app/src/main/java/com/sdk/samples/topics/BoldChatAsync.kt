@@ -1,17 +1,13 @@
 package com.sdk.samples.topics
 
-import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.nanoengine.Account
+import com.sdk.samples.common.ChatType
+import com.sdk.samples.common.toAccount
 
 open class BoldChatAsync : History() {
 
-    protected val account:AsyncAccount by lazy {
-        Accounts.defaultAsyncAccount
-    }
-
-    @JvmName("account") get
     override fun getAccount(): Account {
-        return account
+        return (intent.getSerializableExtra("account"))?.toAccount(ChatType.AsyncChat) ?: Accounts.defaultAsyncAccount
     }
 
 }

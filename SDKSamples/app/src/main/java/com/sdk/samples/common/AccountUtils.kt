@@ -4,7 +4,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-
+import java.io.Serializable
 
 
 @Override
@@ -33,28 +33,81 @@ fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
 }
 
-fun Account.dataEqualsTo(other: Map<String, Any?>): Boolean {
+fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
 
-        when(this) {
-                is BotAccount -> this.map()
-                is BoldAccount -> this.map()
-                else -> (this as AsyncAccount).map()
+        if (other.size != size) return false
 
-        }.let { accountData ->
+        val otherKeys = other.keys
+        val otherValues = other.values
 
-                if (other.size != accountData.size) return false
+        values.forEachIndexed { index, value ->
+                if (value != otherValues.elementAt(index)) return false
+        }
 
-                val otherKeys = other.keys
-                val otherValues = other.values
+        keys.forEachIndexed { index, key ->
+                if (key != otherKeys.elementAt(index)) return false
+        }
 
-                accountData.values.forEachIndexed { index, value ->
-                        if (value != otherValues.elementAt(index)) return false
-                }
+        return true
+}
 
-                accountData.keys.forEachIndexed { index, key ->
-                        if (key != otherKeys.elementAt(index)) return false
-                }
+typealias AccountMap = Map<String,Any?>
+/*
 
-                return true
+fun AccountMap.toAccount() : Account {
+        return when(SharedDataHandler.ChatType_key) {
+                ChatType.AsyncChat -> toAsyncAccount()
+                ChatType.LiveChat -> toLiveAccount()
+                else -> toBotAccount()
         }
 }
+*/
+
+fun Serializable.toAccount(@ChatType chatType: String) : Account? {
+
+        return when (chatType) {
+                ChatType.AsyncChat -> toAsyncAccount()
+                ChatType.LiveChat -> toLiveAccount()
+                else -> toBotAccount()
+        }
+}
+
+
+private fun Serializable.toBotAccount(): BotAccount? {
+        return (this as? Map<String, Any>?)?.let {
+                BotAccount(
+                        it[BotSharedDataHandler.ApiKey_key] as String,
+                        it[BotSharedDataHandler.Account_key] as String,
+                        it[BotSharedDataHandler.Kb_key] as String,
+                        it[BotSharedDataHandler.Server_key] as String,
+                        it[BotSharedDataHandler.Context_key] as Map<String, String>?)
+        }
+}
+
+private fun Serializable.toLiveAccount(): BoldAccount? {
+        return (this as? Map<String, String>)?.let {
+                BoldAccount(it[LiveSharedDataHandler.Access_key] as String)
+        }
+}
+private fun Serializable.toAsyncAccount(): AsyncAccount? {
+        return (this as? Map<String, String>)?.let {
+                AsyncAccount(it[AsyncSharedDataHandler.Access_key] as String)
+        }
+}
+/*
+
+private fun AccountMap.toBotAccount(): BotAccount {
+        return BotAccount(
+                get(BotSharedDataHandler.ApiKey_key) as String,
+                get(BotSharedDataHandler.Account_key) as String,
+                get(BotSharedDataHandler.Kb_key) as String,
+                get(BotSharedDataHandler.Server_key) as String,
+                get(BotSharedDataHandler.Context_key) as? Map<String, String>?)
+}
+
+private fun AccountMap.toLiveAccount(): BoldAccount {
+        return BoldAccount(get(LiveSharedDataHandler.Access_key) as String)
+}
+private fun AccountMap.toAsyncAccount(): AsyncAccount {
+        return AsyncAccount(get(AsyncSharedDataHandler.Access_key) as String)
+}*/

@@ -13,11 +13,15 @@ import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
 import com.nanorep.nanoengine.LinkedArticleHandler
+import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.ArticleResponse
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import com.sdk.samples.common.ChatType
+import com.sdk.samples.common.toAccount
+import com.sdk.samples.topics.extra.withId
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
 class Autocomplete : AppCompatActivity() {
@@ -31,7 +35,8 @@ class Autocomplete : AppCompatActivity() {
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = Accounts.defaultBotAccount
+            botViewModel.botChat.account = ((intent.getSerializableExtra("account"))?.toAccount(ChatType.BotChat) as? BotAccount
+                ?: Accounts.defaultBotAccount).withId(this)
         }
 
         botViewModel.onError.observe(this, Observer { error ->

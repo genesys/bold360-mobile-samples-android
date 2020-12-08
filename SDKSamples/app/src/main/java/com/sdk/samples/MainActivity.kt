@@ -21,6 +21,7 @@ import com.sdk.samples.common.AccountFormController
 import com.sdk.samples.common.ChatType
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
+import java.io.Serializable
 import java.lang.ref.WeakReference
 
 open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null, @ChatType val chatType: String?)
@@ -124,9 +125,15 @@ class MainActivity : AppCompatActivity() {
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
             accountFormController.updateChatType(topic.chatType) { account, isRestore ->
-                // -> Pass the account to the activity !
-                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+                account?.let {
+                    startActivity(
+                        Intent(topic.intentAction)
+                            .putExtra("title", topic.title)
+                            .putExtra("account", it as Serializable)
+                    )
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                }
             }
 
         }

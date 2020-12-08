@@ -84,7 +84,7 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
     }
 
     override fun getAccount(): Account {
-        return accountRecovery.restoreAccount() ?: account
+        return accountRecovery.restoreAccount() ?: super.getAccount()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

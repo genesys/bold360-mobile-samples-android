@@ -1,10 +1,6 @@
 package com.sdk.samples.common
 
 import android.content.Context
-import com.nanorep.convesationui.async.AsyncAccount
-import com.nanorep.convesationui.bold.model.BoldAccount
-import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.topics.Accounts
 
 interface DataController: AccountListener {
@@ -23,7 +19,7 @@ interface DataController: AccountListener {
     /**
      * Being called when the AccountForm had been submitted
      */
-    fun onSubmit(account: Account)
+    fun onSubmit(account: Map<String, Any?>)
 
     /**
      * Gets the prev account data from the shared properties (according to the ChatType), If null it returns the default account
@@ -33,7 +29,7 @@ interface DataController: AccountListener {
     /**
      * If changed, updates the shared properties to include the updated account details
      */
-    fun updateAccount(context: Context?, account: Account)
+    fun updateAccount(context: Context?, account: Map<String, Any?>)
 }
 
 class SharedDataController: DataController {
@@ -41,24 +37,26 @@ class SharedDataController: DataController {
     override var isRestore: Boolean = false
     var currentAccount: Map<String, Any?>? = null
 
-    override var onAccountData: ((account: Account?, isRestore: Boolean) -> Unit)? = null
+    override var onAccountData: ((account: Map<String, Any?>?, isRestore: Boolean) -> Unit)? = null
 
-    override fun onSubmit(account: Account) {
+    override fun onSubmit(account: Map<String, Any?>) {
         onAccountData?.invoke(account, isRestore)
     }
 
     override var chatType: String? = null
-
-    private val sharedDataHandler: SharedDataHandler by lazy {
-        when (chatType) {
+    set(value) {
+        field = value
+        sharedDataHandler =  when (chatType) {
             ChatType.LiveChat -> LiveSharedDataHandler()
             ChatType.AsyncChat -> AsyncSharedDataHandler()
             else -> BotSharedDataHandler()
         }
     }
 
+    private var sharedDataHandler: SharedDataHandler? = null
+
     override fun getAccount(context: Context?): Map<String, Any?> {
-        return ( context?.let { sharedDataHandler.getAccountData(it) } ?: getDefaultAccount() ).also { accountData ->
+        return ( context?.let { sharedDataHandler?.getAccountData(it) } ?: getDefaultAccount() ).also { accountData ->
             currentAccount = accountData
         }
     }
@@ -71,9 +69,9 @@ class SharedDataController: DataController {
         }
     }
 
-    override fun updateAccount(context: Context?, account: Account) {
+    override fun updateAccount(context: Context?, account: Map<String, Any?>) {
         currentAccount?.let { if (account.dataEqualsTo(it)) return}
-        context?.let { sharedDataHandler.saveChatData(it, account) }
+        context?.let { sharedDataHandler?.saveChatData(it, account) }
     }
 }
 
@@ -81,6 +79,10 @@ class SharedDataController: DataController {
  * Handles the shared preference interaction to save and retrieve last applied data to forms.
  */
 abstract class SharedDataHandler {
+
+    companion object {
+        const val ChatType_key = "chatType"
+    }
 
     @ChatType
     abstract val chatType: String
@@ -97,7 +99,7 @@ abstract class SharedDataHandler {
         editor.apply() //commit()
     }
 
-    abstract fun saveChatData(context: Context, data: Account)
+    abstract fun saveChatData(context: Context, data: Map<String, Any?>?)
 
 }
 
@@ -120,6 +122,7 @@ internal class BotSharedDataHandler: SharedDataHandler() {
     override fun getAccountData(context: Context): Map<String, Any?> {
         val shared = context.getSharedPreferences(SharedName, 0)
         return mapOf(
+            ChatType_key to chatType,
             Account_key to shared.getString(Account_key, "nanorep"),
             Kb_key to shared.getString(Kb_key, "English"),
             Server_key to shared.getString(Server_key, ""),
@@ -128,8 +131,8 @@ internal class BotSharedDataHandler: SharedDataHandler() {
         )
     }
 
-    override fun saveChatData(context: Context, data: Account) {
-        saveData(context, SharedName, (data as? BotAccount)?.map() ?: mapOf())
+    override fun saveChatData(context: Context, data: Map<String, Any?>?) {
+        saveData(context, SharedName, data ?: mapOf())
     }
 }
 
@@ -138,6 +141,12 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
     companion object {
         const val SharedName = "ChatDataPref.async"
         const val Access_key = "accessKey"
+        const val First_Name_key = "firstName"
+        const val Last_Name_key = "lastName"
+        const val Email_key = "email"
+        const val Phone_Number_key = "phoneNumber"
+        const val user_id_key = "userId"
+
     }
 
     override val chatType: String
@@ -145,11 +154,19 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
 
     override fun getAccountData(context: Context): Map<String, Any?> {
         val shared = context.getSharedPreferences(SharedName, 0)
-        return mapOf(Access_key to shared.getString(Access_key, "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2"))
+        return mapOf(
+            ChatType_key to chatType,
+            Access_key to shared.getString(Access_key, "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2"),
+            First_Name_key to shared.getString(First_Name_key, ""),
+            Last_Name_key to shared.getString(Last_Name_key, ""),
+            Email_key to shared.getString(Email_key, ""),
+            Phone_Number_key to shared.getString(Phone_Number_key, ""),
+            user_id_key to shared.getString(user_id_key, "")
+        )
     }
 
-    override fun saveChatData(context: Context, data: Account) {
-        saveData(context, SharedName, (data as? AsyncAccount)?.map() ?: mapOf())
+    override fun saveChatData(context: Context, data: Map<String, Any?>?) {
+        saveData(context, SharedName, data ?: mapOf())
     }
 }
 
@@ -165,10 +182,12 @@ internal class LiveSharedDataHandler: SharedDataHandler() {
 
     override fun getAccountData(context: Context): Map<String, Any?> {
         val shared = context.getSharedPreferences(SharedName, 0)
-        return mapOf(Access_key to shared.getString(Access_key, "2300000001700000000:2279145895771367548:MGfXyj9naYgPjOZBruFSykZjIRPzT1jl"))
+        return mapOf(
+            ChatType_key to chatType,
+            Access_key to shared.getString(Access_key, "2300000001700000000:2279145895771367548:MGfXyj9naYgPjOZBruFSykZjIRPzT1jl"))
     }
 
-    override fun saveChatData(context: Context, data: Account) {
-        saveData(context, SharedName, (data as? BoldAccount)?.map() ?: mapOf())
+    override fun saveChatData(context: Context, data: Map<String, Any?>?) {
+        saveData(context, SharedName, data ?: mapOf())
     }
 }

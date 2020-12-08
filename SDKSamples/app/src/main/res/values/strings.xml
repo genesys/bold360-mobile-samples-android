@@ -57,6 +57,8 @@
     <string name="kb_hint">Knowledge Base</string>
     <string name="server_hint">Server</string>
     <string name="api_key_hint">API Key</string>
+    <string name="firstName_hint">First Name</string>
+    <string name="lastName_hint">Last Name</string>
     <string name="access_key_hint">Access Key</string>
     <string name="history_label">Enable history support</string>
     <string name="welcome_label">Welcome message</string>
@@ -67,5 +69,8 @@
     <string name="bot_context_list"><u>Bot Context list:</u></string>
     <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
     <string name="error_apiKey">Empty Api key</string>
+    <string name="error_email">Email is not valid</string>
+    <string name="email_hint">Email</string>
+    <string name="phone_hint">Phone number</string>
 
 </resources>
