@@ -10,6 +10,10 @@ interface DataController: AccountListener {
      */
     var chatType: String?
 
+    /**
+     * Contains the wanted extra params of the account
+     */
+    var extraParams: List<String>?
 
     /**
      * true is the user pressed on the restore button at the ChatRestore sample
@@ -42,6 +46,8 @@ class SharedDataController: DataController {
     override fun onSubmit(account: Map<String, Any?>) {
         onAccountData?.invoke(account, isRestore)
     }
+
+    override var extraParams: List<String>? = null
 
     override var chatType: String? = null
     set(value) {
@@ -113,7 +119,9 @@ internal class BotSharedDataHandler: SharedDataHandler() {
         const val Context_key = "contextKey"
         const val Welcome_key = "welcomeKey"
         const val ApiKey_key = "apiKey"
-
+        const val preChat_fName_key = "preFname"
+        const val preChat_lName_key = "preLname"
+        const val preChat_deptCode_key = "preDeptCode"
     }
 
     override val chatType: String

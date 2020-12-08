@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.toAccount
 import kotlinx.android.synthetic.main.availability_activity.*
 
@@ -16,7 +15,7 @@ class CheckAvailability : AppCompatActivity() {
 
     private var chipUncheckedIcon: Drawable? = null
 
-    val account =  intent.getSerializableExtra("account")?.toAccount(ChatType.LiveChat) ?: Accounts.defaultBoldAccount
+    val account =  intent.getSerializableExtra("account")?.toAccount() ?: Accounts.defaultBoldAccount
 
     /*val model:AvailabilityViewModel? by lazy {
         activity?.let{ ViewModelProviders.of(it).get(AvailabilityViewModel::class.java)}

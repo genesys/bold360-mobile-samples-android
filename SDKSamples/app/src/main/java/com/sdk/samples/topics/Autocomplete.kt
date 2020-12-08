@@ -19,7 +19,6 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.toAccount
 import com.sdk.samples.topics.extra.withId
 import kotlinx.android.synthetic.main.autocomplete_activity.*
@@ -35,7 +34,7 @@ class Autocomplete : AppCompatActivity() {
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = ((intent.getSerializableExtra("account"))?.toAccount(ChatType.BotChat) as? BotAccount
+            botViewModel.botChat.account = ((intent.getSerializableExtra("account"))?.toAccount() as? BotAccount
                 ?: Accounts.defaultBotAccount).withId(this)
         }
 

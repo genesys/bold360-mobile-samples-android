@@ -11,4 +11,5 @@ public @interface ChatType {
     String LiveChat = "live";
     String AsyncChat = "async";
     String BotChat = "bot";
+    String NONE = "none";
 }

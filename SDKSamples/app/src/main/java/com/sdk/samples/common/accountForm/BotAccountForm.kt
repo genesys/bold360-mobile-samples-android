@@ -2,6 +2,7 @@ package com.sdk.samples.common.accountForm
 
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,8 @@ import com.sdk.samples.common.BotSharedDataHandler.Companion.ApiKey_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Context_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Kb_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.Server_key
+import com.sdk.samples.common.ExtraParams.PrechatExtraData
+import com.sdk.samples.common.ExtraParams.Welcome
 import kotlinx.android.synthetic.main.async_account_form.*
 import kotlinx.android.synthetic.main.bot_account_form.*
 import kotlinx.android.synthetic.main.bot_account_form.scroller
@@ -29,6 +32,20 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
         get() = R.layout.bot_account_form
 
     private lateinit var contextHandler: ContextHandler
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        dataController.extraParams?.let { extraParams->
+            extraParams.forEach{
+                when (it) {
+                    Welcome -> custom_welcome_layout.visibility = View.VISIBLE
+                    PrechatExtraData -> prechat_data.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        super.onViewCreated(view, savedInstanceState)
+    }
 
     private fun initializeContextView() {
 
@@ -113,6 +130,11 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
         accountMap[ApiKey_key] = api_key_edit_text.text?.toString() ?: ""
         accountMap[Server_key] = server_edit_text.text?.toString() ?: ""
         accountMap[Context_key] =  contextHandler.getContext()
+
+        custom_welcome_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.Welcome_key] = it }
+        prechat_dept_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_deptCode_key] = it }
+        prechat_fName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_fName_key] = it }
+        prechat_lName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_lName_key] = it }
 
         return accountMap
     }

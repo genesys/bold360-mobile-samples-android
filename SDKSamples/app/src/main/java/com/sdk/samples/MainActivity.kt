@@ -19,12 +19,16 @@ import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.common.AccountFormController
 import com.sdk.samples.common.ChatType
+import com.sdk.samples.common.ExtraParams.PrechatExtraData
+import com.sdk.samples.common.ExtraParams.Welcome
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 import java.io.Serializable
 import java.lang.ref.WeakReference
 
-open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null, @ChatType val chatType: String?)
+
+
+open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null, @ChatType val chatType: String?, val extraParams: List<String>? = null)
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +58,8 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
                 ContextCompat.getDrawable(this, R.drawable.outline_message_black_24),
-                ChatType.BotChat
+                ChatType.BotChat,
+                listOf(Welcome)
             ), SampleTopic(
                 "com.sdk.sample.action.VOICE_TO_VOICE",
                 getString(R.string.bot_chat_with_voc_to_voc),
@@ -93,7 +98,8 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
                 ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24),
-                ChatType.LiveChat
+                ChatType.BotChat,
+                listOf(PrechatExtraData)
             ),  SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
@@ -124,12 +130,12 @@ class MainActivity : AppCompatActivity() {
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
-            accountFormController.updateChatType(topic.chatType) { account, isRestore ->
-
+            accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, isRestore ->
                 account?.let {
                     startActivity(
                         Intent(topic.intentAction)
                             .putExtra("title", topic.title)
+                            .putExtra("isRestore", isRestore)
                             .putExtra("account", it as Serializable)
                     )
                     overridePendingTransition(R.anim.right_in, R.anim.left_out);

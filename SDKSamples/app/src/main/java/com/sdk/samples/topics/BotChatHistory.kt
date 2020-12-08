@@ -6,7 +6,6 @@ import com.nanorep.convesationui.utils.HistoryMigration.Companion.start
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.toAccount
 import com.sdk.samples.topics.extra.withId
 import com.sdk.samples.topics.history.HistoryMigrationProvider
@@ -14,7 +13,7 @@ import com.sdk.samples.topics.history.HistoryMigrationProvider
 open class BotChatHistory : History() {
 
     override fun getAccount(): Account {
-        return  ((intent.getSerializableExtra("account"))?.toAccount(ChatType.BotChat) as? BotAccount
+        return  ((intent.getSerializableExtra("account"))?.toAccount() as? BotAccount
             ?: Accounts.defaultBotAccount).withId(this)
     }
 

@@ -39,7 +39,6 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.toAccount
 import com.sdk.samples.topics.Accounts.defaultBoldAccount
 import kotlinx.android.synthetic.main.activity_bot_chat.topic_title
@@ -49,7 +48,7 @@ import java.io.ByteArrayOutputStream
 
 class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
 
-    private val account = ((intent.getSerializableExtra("account")) ?.toAccount(ChatType.LiveChat) as? BoldAccount ?:  defaultBoldAccount).apply {
+    private val account = ((intent.getSerializableExtra("account")) ?.toAccount() as? BoldAccount ?:  defaultBoldAccount).apply {
         skipPrechat()
     }
 

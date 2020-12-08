@@ -52,62 +52,35 @@ fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
 }
 
 typealias AccountMap = Map<String,Any?>
-/*
 
-fun AccountMap.toAccount() : Account {
-        return when(SharedDataHandler.ChatType_key) {
-                ChatType.AsyncChat -> toAsyncAccount()
-                ChatType.LiveChat -> toLiveAccount()
-                else -> toBotAccount()
+fun Serializable.toAccount() : Account? {
+        return (this as? AccountMap)?.let { accountMap ->
+                when (accountMap[SharedDataHandler.ChatType_key]) {
+                        ChatType.AsyncChat -> accountMap.toAsyncAccount()
+                        ChatType.LiveChat -> accountMap.toLiveAccount()
+                        ChatType.BotChat -> accountMap.toBotAccount()
+                        else -> null
+                }
         }
-}
-*/
 
-fun Serializable.toAccount(@ChatType chatType: String) : Account? {
-
-        return when (chatType) {
-                ChatType.AsyncChat -> toAsyncAccount()
-                ChatType.LiveChat -> toLiveAccount()
-                else -> toBotAccount()
-        }
 }
-
-
-private fun Serializable.toBotAccount(): BotAccount? {
-        return (this as? Map<String, Any>?)?.let {
-                BotAccount(
-                        it[BotSharedDataHandler.ApiKey_key] as String,
-                        it[BotSharedDataHandler.Account_key] as String,
-                        it[BotSharedDataHandler.Kb_key] as String,
-                        it[BotSharedDataHandler.Server_key] as String,
-                        it[BotSharedDataHandler.Context_key] as Map<String, String>?)
-        }
-}
-
-private fun Serializable.toLiveAccount(): BoldAccount? {
-        return (this as? Map<String, String>)?.let {
-                BoldAccount(it[LiveSharedDataHandler.Access_key] as String)
-        }
-}
-private fun Serializable.toAsyncAccount(): AsyncAccount? {
-        return (this as? Map<String, String>)?.let {
-                AsyncAccount(it[AsyncSharedDataHandler.Access_key] as String)
-        }
-}
-/*
 
 private fun AccountMap.toBotAccount(): BotAccount {
         return BotAccount(
-                get(BotSharedDataHandler.ApiKey_key) as String,
-                get(BotSharedDataHandler.Account_key) as String,
-                get(BotSharedDataHandler.Kb_key) as String,
-                get(BotSharedDataHandler.Server_key) as String,
-                get(BotSharedDataHandler.Context_key) as? Map<String, String>?)
+                this[BotSharedDataHandler.ApiKey_key] as String,
+                this[BotSharedDataHandler.Account_key] as String,
+                this[BotSharedDataHandler.Kb_key] as String,
+                this[BotSharedDataHandler.Server_key] as String,
+                this[BotSharedDataHandler.Context_key] as? Map<String, String>?).apply {
+                        (get(BotSharedDataHandler.Welcome_key) as? String)?.takeUnless { it.isEmpty() }?.let { welcomeMessage = it }
+        }
+
 }
 
 private fun AccountMap.toLiveAccount(): BoldAccount {
-        return BoldAccount(get(LiveSharedDataHandler.Access_key) as String)
+        return BoldAccount(this[LiveSharedDataHandler.Access_key] as String)
 }
+
 private fun AccountMap.toAsyncAccount(): AsyncAccount {
-        return AsyncAccount(get(AsyncSharedDataHandler.Access_key) as String)
-}*/
+        return  AsyncAccount(this[AsyncSharedDataHandler.Access_key] as String)
+}

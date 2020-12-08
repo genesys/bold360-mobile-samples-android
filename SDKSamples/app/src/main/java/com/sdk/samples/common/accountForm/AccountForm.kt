@@ -74,9 +74,14 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
 
         const val TAG = "AccountForm"
 
-        fun newInstance(dataController: DataController, chatType: String): AccountForm {
+        fun newInstance(
+            dataController: DataController,
+            chatType: String,
+            extraParams: List<String>?
+        ): AccountForm {
 
             dataController.chatType = chatType
+            dataController.extraParams = extraParams
 
             return when (chatType) {
                 ChatType.LiveChat -> LiveAccountForm.newInstance(dataController)

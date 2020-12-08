@@ -1,44 +1,44 @@
 package com.sdk.samples.topics
 
 import android.util.Log
-import android.view.View
 import com.integration.core.StateEvent
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.NRError
-import kotlinx.android.synthetic.main.restore_layout.*
+import com.nanorep.sdkcore.utils.toast
+import com.sdk.samples.common.toAccount
 
-
-interface IRestoreSettings {
-    fun onCreate(account: Account)
-    fun onRestore(account: Account?)
-}
-
-open class ChatRestore : History(), IRestoreSettings {
+open class ChatRestore : History() {
 
     private var account: Account? = null
 
-    override fun onRestore(account: Account?) {
+    override fun getAccount(): Account {
+        return account!!
+    }
 
-        this.account = account
+    private fun onRestore() {
 
-        try {
-            account?.getGroupId()?.let {
-                historyRepository.targetId = it
+        if (!hasChatController()) {
+            toast(this@ChatRestore,
+                "Failed to restore chat\nerror: there is no chat to restore")
+        } else {
+            try {
+                account?.getGroupId()?.let {
+                    historyRepository.targetId = it
+                }
+
+                chatController.restoreChat(account = account)
+
+            } catch (ex: IllegalStateException) {
+                onError(NRError(ex))
             }
-
-            chatController.restoreChat(account = account)
-
-        } catch (ex: IllegalStateException) {
-            onError(NRError(ex))
         }
     }
 
-    override fun onCreate(account: Account) {
-        this.account = account
+    fun onCreate() {
 
         try {
             if(hasChatController()) {
-                historyRepository.targetId = account.getGroupId()
+                historyRepository.targetId = account?.getGroupId()
             }
             createChat()
         } catch (ex: IllegalStateException) {
@@ -46,23 +46,10 @@ open class ChatRestore : History(), IRestoreSettings {
         }
     }
 
-    override fun createChat() {
-        setLoading(true)
-        super.createChat()
-
-        restore_chat.isEnabled = true
-    }
-
     override fun startChat() {
-        // should not start chat here.
-    }
+        account = intent.getSerializableExtra("account")?.toAccount()
 
-    override fun getAccount(): Account {
-        return account!!
-    }
-
-    override fun onChatLoaded() {
-        setLoading(false)
+        if (intent.getBooleanExtra("isRestore", false)) onRestore() else onCreate()
     }
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
@@ -76,9 +63,5 @@ open class ChatRestore : History(), IRestoreSettings {
 
             else -> super.onChatStateChanged(stateEvent)
         }
-    }
-
-    private fun setLoading(loading: Boolean) {
-        progressBar.visibility = if (loading) View.VISIBLE else View.INVISIBLE
     }
 }

@@ -2,7 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg">
+        android:background="@drawable/bg"
+        android:clickable="true"
+        android:focusable="true">
 
     <LinearLayout
             android:id="@+id/launchLayout"
@@ -36,27 +38,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:tag="bot_chat"
+                    android:tag="bot"
                     android:text="Bot chat" />
 
             <RadioButton
                     android:id="@+id/bold_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="bold_chat"
+                    android:tag="live"
                     android:text="Bold chat" />
 
             <RadioButton
                     android:id="@+id/async_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="async_chat"
+                    android:tag="async"
                     android:text="Async chat" />
 
             <RadioButton
                     android:id="@+id/current_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tag="none"
                     android:text="Continue last" />
 
         </RadioGroup>
@@ -93,18 +96,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:maxHeight="20dp"
-            android:visibility="invisible" />
-
 
 </FrameLayout>
 
