@@ -4,7 +4,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import java.io.Serializable
+import com.sdk.samples.topics.Accounts
 
 
 @Override
@@ -33,6 +33,15 @@ fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
 }
 
+fun <T: Account> Account?.castedNoneNull(): T? {
+        return (when (Class<T>::getName.toString()) {
+                "BotAccount" -> this as? BotAccount ?: Accounts.defaultBotAccount
+                "AsyncAccount" -> this as? AsyncAccount ?: Accounts.defaultAsyncAccount
+                else -> this as? BoldAccount ?: Accounts.defaultBoldAccount
+        } as? T )
+}
+
+
 fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
 
         if (other.size != size) return false
@@ -53,7 +62,7 @@ fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
 
 typealias AccountMap = Map<String,Any?>
 
-fun Serializable.toAccount() : Account? {
+fun AccountMap.toAccount() : Account? {
         return (this as? AccountMap)?.let { accountMap ->
                 when (accountMap[SharedDataHandler.ChatType_key]) {
                         ChatType.AsyncChat -> accountMap.toAsyncAccount()
@@ -65,7 +74,7 @@ fun Serializable.toAccount() : Account? {
 
 }
 
-private fun AccountMap.toBotAccount(): BotAccount {
+fun AccountMap.toBotAccount(): BotAccount {
         return BotAccount(
                 this[BotSharedDataHandler.ApiKey_key] as String,
                 this[BotSharedDataHandler.Account_key] as String,
@@ -77,10 +86,10 @@ private fun AccountMap.toBotAccount(): BotAccount {
 
 }
 
-private fun AccountMap.toLiveAccount(): BoldAccount {
+fun AccountMap.toLiveAccount(): BoldAccount {
         return BoldAccount(this[LiveSharedDataHandler.Access_key] as String)
 }
 
-private fun AccountMap.toAsyncAccount(): AsyncAccount {
+fun AccountMap.toAsyncAccount(): AsyncAccount {
         return  AsyncAccount(this[AsyncSharedDataHandler.Access_key] as String)
 }

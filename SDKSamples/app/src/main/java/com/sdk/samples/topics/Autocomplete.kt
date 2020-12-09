@@ -19,23 +19,28 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.common.toAccount
+import com.sdk.samples.SamplesViewModel
+import com.sdk.samples.SingletonSamplesViewModelFactory
 import com.sdk.samples.topics.extra.withId
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
 class Autocomplete : AppCompatActivity() {
 
+    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
+        SamplesViewModel.getInstance())
+    lateinit var viewModel: SamplesViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_activity)
 
+        viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
         article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = ((intent.getSerializableExtra("account"))?.toAccount() as? BotAccount
-                ?: Accounts.defaultBotAccount).withId(this)
+            botViewModel.botChat.account = (viewModel.account as BotAccount).withId(this)
         }
 
         botViewModel.onError.observe(this, Observer { error ->

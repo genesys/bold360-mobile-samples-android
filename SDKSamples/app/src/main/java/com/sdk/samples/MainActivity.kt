@@ -11,6 +11,7 @@ import android.view.View.inflate
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,16 +24,23 @@ import com.sdk.samples.common.ExtraParams.PrechatExtraData
 import com.sdk.samples.common.ExtraParams.Welcome
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
-import java.io.Serializable
 import java.lang.ref.WeakReference
 
 
 
-open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null, @ChatType val chatType: String?, val extraParams: List<String>? = null)
+open class SampleTopic(
+    val intentAction: String,
+    val title: String,
+    val icon: Drawable? = null,
+    @ChatType val chatType: String = ChatType.NONE,
+    val extraParams: List<String>? = null
+)
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var topics: ArrayList<SampleTopic>
+    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance())
+
     private var retryProviderInstall = true
     private lateinit var accountFormController: AccountFormController
 
@@ -40,8 +48,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-
-        accountFormController = AccountFormController(samplesContainer.id, WeakReference(supportFragmentManager))
+        accountFormController = AccountFormController(
+            samplesContainer.id, WeakReference(
+                supportFragmentManager
+            )
+        )
 
         topics = arrayListOf(
             SampleTopic(
@@ -100,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24),
                 ChatType.BotChat,
                 listOf(PrechatExtraData)
-            ),  SampleTopic(
+            ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
                 ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24),
@@ -114,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.RESTORE",
                 getString(R.string.chat_restore),
                 ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24),
-                null
+                ChatType.NONE
             ), SampleTopic(
                 "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
@@ -132,18 +143,25 @@ class MainActivity : AppCompatActivity() {
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
             accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, isRestore ->
                 account?.let {
+                    ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
+                        chatController = null
+                        this.isRestore = isRestore
+                        setAccountData(account)
+                    }
                     startActivity(
-                        Intent(topic.intentAction)
-                            .putExtra("title", topic.title)
-                            .putExtra("isRestore", isRestore)
-                            .putExtra("account", it as Serializable)
+                        Intent(topic.intentAction).putExtra("title", topic.title)
                     )
                     overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
 
         }
-        topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        topics_recycler.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         (topics_recycler.adapter as TopicsAdapter).updateTopics()
     }
 
@@ -155,7 +173,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == ERROR_DIALOG_REQUEST_CODE) {
@@ -169,39 +191,56 @@ class MainActivity : AppCompatActivity() {
         fun updateSecurityProvider(context: Activity) {
 
             if (Build.VERSION.SDK_INT < 21) {
-                ProviderInstaller.installIfNeededAsync(context, object : ProviderInstaller.ProviderInstallListener {
-                    override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
-                        Log.e("Security-Installer", "!!! failed to install security provider updates, Checking for recoverable error...")
+                ProviderInstaller.installIfNeededAsync(
+                    context,
+                    object : ProviderInstaller.ProviderInstallListener {
+                        override fun onProviderInstallFailed(
+                            errorCode: Int,
+                            recoveryIntent: Intent?
+                        ) {
+                            Log.e(
+                                "Security-Installer",
+                                "!!! failed to install security provider updates, Checking for recoverable error..."
+                            )
 
-                        GoogleApiAvailability.getInstance().apply {
-                            if (isUserResolvableError(errorCode) &&
-                                // check if the intent can be activated to prevent ActivityNotFoundException and
-                                // to be able to display that "Messaging won't be available"
-                                recoveryIntent?.resolveActivity(context.packageManager) != null) {
+                            GoogleApiAvailability.getInstance().apply {
+                                if (isUserResolvableError(errorCode) &&
+                                    // check if the intent can be activated to prevent ActivityNotFoundException and
+                                    // to be able to display that "Messaging won't be available"
+                                    recoveryIntent?.resolveActivity(context.packageManager) != null
+                                ) {
 
-                                // Recoverable error. Show a dialog prompting the user to
-                                // install/update/enable Google Play services.
-                                showErrorDialogFragment(context, errorCode, ERROR_DIALOG_REQUEST_CODE) {
-                                    // onCancel: The user chose not to take the recovery action
+                                    // Recoverable error. Show a dialog prompting the user to
+                                    // install/update/enable Google Play services.
+                                    showErrorDialogFragment(
+                                        context,
+                                        errorCode,
+                                        ERROR_DIALOG_REQUEST_CODE
+                                    ) {
+                                        // onCancel: The user chose not to take the recovery action
+                                        onProviderInstallerNotAvailable()
+                                    }
+                                } else {
                                     onProviderInstallerNotAvailable()
                                 }
-                            } else {
-                                onProviderInstallerNotAvailable()
                             }
                         }
-                    }
 
-                    private fun onProviderInstallerNotAvailable() {
-                        val msg = "Google play services can't be installed or updated thous Messaging may not be available"
-                        toast(context, msg)
-                        Log.e("Security-Installer", ">> $msg")
-                    }
+                        private fun onProviderInstallerNotAvailable() {
+                            val msg =
+                                "Google play services can't be installed or updated thous Messaging may not be available"
+                            toast(context, msg)
+                            Log.e("Security-Installer", ">> $msg")
+                        }
 
-                    override fun onProviderInstalled() {
-                        Log.i("Security-Installer", ">> security provider updates installed successfully")
+                        override fun onProviderInstalled() {
+                            Log.i(
+                                "Security-Installer",
+                                ">> security provider updates installed successfully"
+                            )
 
-                    }
-                })
+                        }
+                    })
             }
         }
     }

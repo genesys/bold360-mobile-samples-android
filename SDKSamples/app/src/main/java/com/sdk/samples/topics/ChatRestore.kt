@@ -5,14 +5,17 @@ import com.integration.core.StateEvent
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.common.toAccount
+import com.sdk.samples.topics.history.HistoryRepository
+import com.sdk.samples.topics.history.RoomHistoryProvider
 
-open class ChatRestore : History() {
-
-    private var account: Account? = null
+class ChatRestore : History() {
 
     override fun getAccount(): Account {
-        return account!!
+        return viewModel.account
+    }
+
+    override fun hasChatController(): Boolean {
+        return viewModel.chatController?.takeIf { !it.wasDestructed }?.let { true } ?: false
     }
 
     private fun onRestore() {
@@ -22,11 +25,11 @@ open class ChatRestore : History() {
                 "Failed to restore chat\nerror: there is no chat to restore")
         } else {
             try {
-                account?.getGroupId()?.let {
+                getAccount().getGroupId()?.let {
                     historyRepository.targetId = it
                 }
 
-                chatController.restoreChat(account = account)
+                chatController.restoreChat(account = getAccount())
 
             } catch (ex: IllegalStateException) {
                 onError(NRError(ex))
@@ -38,16 +41,20 @@ open class ChatRestore : History() {
 
         try {
             if(hasChatController()) {
-                historyRepository.targetId = account?.getGroupId()
+                historyRepository.targetId = getAccount().getGroupId()
             }
             createChat()
+
+            viewModel.chatController = chatController
+
         } catch (ex: IllegalStateException) {
             onError(NRError(ex))
         }
     }
 
     override fun startChat() {
-        account = intent.getSerializableExtra("account")?.toAccount()
+
+        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
 
         if (intent.getBooleanExtra("isRestore", false)) onRestore() else onCreate()
     }

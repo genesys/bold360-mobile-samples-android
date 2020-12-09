@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -20,6 +21,9 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import com.sdk.samples.SamplesViewModel
+import com.sdk.samples.SingletonSamplesViewModelFactory
+import com.sdk.samples.common.ChatType
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
 import kotlinx.coroutines.Dispatchers
@@ -34,14 +38,22 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         current_radio.isEnabled = !newValue
     }
 
+    @ChatType
+    protected lateinit var chatType: String
+
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
+
+    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance())
+    lateinit var viewModel: SamplesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bot_chat)
 
         topic_title.text = intent.getStringExtra("title")
+
+        viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
 
         startChat()
     }
@@ -55,7 +67,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    abstract fun getAccount(): Account
+    protected open fun getAccount(): Account = viewModel.account
 
     protected open fun getBuilder(): ChatController.Builder {
         val settings = createChatSettings()
@@ -75,7 +87,6 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     }
 
     protected open fun createChat() {
-
         if (!hasChatController()) {
             chatController = getBuilder().build(
                 getAccount(), object : ChatLoadedListener {
@@ -83,7 +94,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
                         if (isFinishing || supportFragmentManager.isStateSaved) return
 
                         hideKeyboard(window.decorView)
-                        
+
                         result.takeIf { it.error == null && it.fragment != null }?.run {
                             supportFragmentManager.beginTransaction()
                                 .add(chat_view.id, fragment!!, topic_title.text.toString())
@@ -92,8 +103,10 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
 
                             onChatLoaded()
                         } ?: kotlin.run {
-                            toast(this@BasicChat,
-                                "Failed to load chat\nerror:${result.error?:"failed to get chat fragment"}  ")
+                            toast(
+                                this@BasicChat,
+                                "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}  "
+                            )
                             onChatLoaded()
                         }
                     }
@@ -223,7 +236,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         }
     }
 
-    fun hasChatController(): Boolean {
+    open fun hasChatController(): Boolean {
         return this::chatController.isInitialized && !chatController.wasDestructed
     }
 

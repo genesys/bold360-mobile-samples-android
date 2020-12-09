@@ -37,7 +37,7 @@ abstract class History : BasicChat() {
      */
     override fun getBuilder(): ChatController.Builder {
 
-        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
+        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId()))
 
         enableMenu(historyMenu, true)
 

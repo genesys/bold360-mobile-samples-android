@@ -9,22 +9,19 @@ import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.sdk.samples.common.BotSharedDataHandler.Companion.preChat_deptCode_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.preChat_fName_key
 import com.sdk.samples.common.BotSharedDataHandler.Companion.preChat_lName_key
-import com.sdk.samples.common.toAccount
 import com.sdk.samples.topics.extra.SimpleAccountProvider
 import com.sdk.samples.topics.extra.withId
 
 class PrechatExtraData : BotChat() {
 
     override fun getAccount(): Account {
-        val intentAccountData = intent.getSerializableExtra("account")
+        val extraData = viewModel.accountExtraData
 
-        (intentAccountData as? Map<String,Any?>)?.let { accountDataMap ->
-            (accountDataMap[preChat_deptCode_key] as? String)?.takeIf { it.isNotEmpty() }?.let { BOLD_DEPARTMENT = it }
-            (accountDataMap[preChat_fName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoFirstName = it }
-            (accountDataMap[preChat_lName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoLastName = it }
-        }
+        (extraData[preChat_deptCode_key] as? String)?.takeIf { it.isNotEmpty() }?.let { BOLD_DEPARTMENT = it }
+        (extraData[preChat_fName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoFirstName = it }
+        (extraData[preChat_lName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoLastName = it }
 
-        return (intentAccountData?.toAccount() as? BotAccount ?: Accounts.defaultBotAccount).withId(this)
+        return (viewModel.account as BotAccount).withId(this)
     }
 
     override fun getBuilder(): ChatController.Builder {
