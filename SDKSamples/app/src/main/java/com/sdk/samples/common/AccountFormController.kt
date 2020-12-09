@@ -28,7 +28,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
         getFragmentManager()?.let { fm ->
             accountFormPresenter.extraParams = extraParams
-            chatType?.let { accountFormPresenter.presentAccountForm(fm, chatType) }
+            chatType?.takeIf { it != ChatType.NONE }?.let { accountFormPresenter.presentAccountForm(fm, chatType) }
                 ?: accountFormPresenter.presentRestoreForm(fm)
         }
     }
