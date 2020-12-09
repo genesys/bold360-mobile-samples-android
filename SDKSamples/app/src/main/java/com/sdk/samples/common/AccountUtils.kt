@@ -2,9 +2,7 @@ package com.sdk.samples.common
 
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
-import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.sdk.samples.topics.Accounts
 
 
 @Override
@@ -33,15 +31,6 @@ fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
 }
 
-fun <T: Account> Account?.castedNoneNull(): T? {
-        return (when (Class<T>::getName.toString()) {
-                "BotAccount" -> this as? BotAccount ?: Accounts.defaultBotAccount
-                "AsyncAccount" -> this as? AsyncAccount ?: Accounts.defaultAsyncAccount
-                else -> this as? BoldAccount ?: Accounts.defaultBoldAccount
-        } as? T )
-}
-
-
 fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
 
         if (other.size != size) return false
@@ -61,18 +50,6 @@ fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
 }
 
 typealias AccountMap = Map<String,Any?>
-
-fun AccountMap.toAccount() : Account? {
-        return (this as? AccountMap)?.let { accountMap ->
-                when (accountMap[SharedDataHandler.ChatType_key]) {
-                        ChatType.AsyncChat -> accountMap.toAsyncAccount()
-                        ChatType.LiveChat -> accountMap.toLiveAccount()
-                        ChatType.BotChat -> accountMap.toBotAccount()
-                        else -> null
-                }
-        }
-
-}
 
 fun AccountMap.toBotAccount(): BotAccount {
         return BotAccount(
