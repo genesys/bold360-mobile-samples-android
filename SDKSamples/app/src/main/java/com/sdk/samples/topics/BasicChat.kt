@@ -31,7 +31,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
-abstract class BasicChat : AppCompatActivity(), ChatEventListener {
+abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     protected lateinit var chatController: ChatController
     protected var destructWithUI: Boolean by Delegates.observable(true) { property, oldValue, newValue ->
@@ -44,16 +44,11 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
-    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance())
-    lateinit var viewModel: SamplesViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bot_chat)
 
         topic_title.text = intent.getStringExtra("title")
-
-        viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
 
         startChat()
     }
@@ -67,7 +62,7 @@ abstract class BasicChat : AppCompatActivity(), ChatEventListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    protected open fun getAccount(): Account = viewModel.account
+    protected open fun getAccount(): Account? = viewModel.account
 
     protected open fun getBuilder(): ChatController.Builder {
         val settings = createChatSettings()

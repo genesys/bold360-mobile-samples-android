@@ -21,10 +21,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -40,17 +38,12 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import com.sdk.samples.SamplesViewModel
-import com.sdk.samples.SingletonSamplesViewModelFactory
 import kotlinx.android.synthetic.main.activity_bot_chat.topic_title
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import java.io.ByteArrayOutputStream
 
 
-class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
-
-    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance())
-    lateinit var viewModel: SamplesViewModel
+class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     private val account: BoldAccount
     get() = (viewModel.account as BoldAccount).apply { skipPrechat() }
@@ -66,7 +59,6 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_no_ui)
 
-        viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
         topic_title.text = intent.getStringExtra("title")
 
         createChat()

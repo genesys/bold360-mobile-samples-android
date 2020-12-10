@@ -6,16 +6,20 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.sdk.samples.common.ChatType
 import com.sdk.samples.topics.Accounts
+import org.jetbrains.annotations.NotNull
 import java.lang.reflect.InvocationTargetException
 
 class SamplesViewModel : ViewModel() {
 
-    var account: Account? = null
+    internal var account: Account? = null
+    @NotNull
     get() = when(chatType) {
         ChatType.AsyncChat -> field ?: Accounts.defaultAsyncAccount
         ChatType.LiveChat -> field ?: Accounts.defaultBoldAccount
         else -> field ?: Accounts.defaultBotAccount
     }
+
+    var extraData: Map<String, String>? = null
 
     var chatController: ChatController? = null
 

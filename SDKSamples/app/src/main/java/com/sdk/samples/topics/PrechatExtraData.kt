@@ -15,7 +15,7 @@ import com.sdk.samples.topics.extra.withId
 class PrechatExtraData : BotChat() {
 
     override fun getAccount(): Account {
-        val extraData = viewModel.accountExtraData
+        val account = viewModel.account as BotAccount
 
         (extraData[preChat_deptCode_key] as? String)?.takeIf { it.isNotEmpty() }?.let { BOLD_DEPARTMENT = it }
         (extraData[preChat_fName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoFirstName = it }

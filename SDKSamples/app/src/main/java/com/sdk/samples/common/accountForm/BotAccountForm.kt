@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import com.sdk.samples.common.*
@@ -79,12 +80,12 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
 
         initializeContextView()
 
-        val accountData = dataController.getAccount(context)
+        val account: BotAccount = dataController.getAccount(context) as BotAccount
 
-        account_name_edit_text.setText( accountData[Account_key] as? String ?: "" )
-        knowledgebase_edit_text.setText( accountData[Kb_key] as? String ?: "" )
-        api_key_edit_text.setText( accountData[ApiKey_key] as? String ?: "" )
-        server_edit_text.setText( accountData[Server_key] as? String ?: "" )
+        account_name_edit_text.setText( account.account ?: "" )
+        knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
+        api_key_edit_text.setText( account.apiKey )
+        server_edit_text.setText( account.domain ?: "" )
 
         bot_context.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
             override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int,
@@ -94,7 +95,7 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
             }
         })
 
-        (accountData[Context_key] as? Set<String>)?.run {
+        (account.contexts as? Set<String>)?.run {
             val contextPairs = this.map { contextString ->
                 val seq = contextString.split(":", "key= ", " value= ")
                 seq[0] to Pair(seq[2], seq.last())

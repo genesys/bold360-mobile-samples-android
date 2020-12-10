@@ -5,7 +5,6 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nanorep.convesationui.fragments.ArticleFragment
@@ -19,22 +18,15 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.SamplesViewModel
-import com.sdk.samples.SingletonSamplesViewModelFactory
 import com.sdk.samples.topics.extra.withId
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
-class Autocomplete : AppCompatActivity() {
-
-    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
-        SamplesViewModel.getInstance())
-    lateinit var viewModel: SamplesViewModel
+class Autocomplete : SampleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_activity)
 
-        viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
         article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);

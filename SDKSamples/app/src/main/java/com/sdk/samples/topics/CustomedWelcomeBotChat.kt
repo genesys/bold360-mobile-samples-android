@@ -2,16 +2,13 @@ package com.sdk.samples.topics
 
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.sdk.samples.common.BotSharedDataHandler
 import com.sdk.samples.topics.extra.withId
 
 class CustomedWelcomeBotChat : BotChat() {
 
     override fun getAccount(): Account {
 
-        return (viewModel.account as BotAccount).withId(this).apply {
-            welcomeMessage = (viewModel.accountExtraData[BotSharedDataHandler.Welcome_key] as? String) ?: "1009689562"
-        }
+        return (viewModel.account as BotAccount).withId(this)
     }
 
     companion object{

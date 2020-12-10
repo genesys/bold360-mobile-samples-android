@@ -4,22 +4,15 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
-import com.sdk.samples.SamplesViewModel
-import com.sdk.samples.SingletonSamplesViewModelFactory
 import kotlinx.android.synthetic.main.availability_activity.*
 
-class CheckAvailability : AppCompatActivity() {
+class CheckAvailability : SampleActivity() {
 
     private var chipUncheckedIcon: Drawable? = null
-    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
-        SamplesViewModel.getInstance())
-    lateinit var viewModel: SamplesViewModel
 
     val account: BoldAccount
     get() = viewModel.account as BoldAccount
@@ -33,7 +26,6 @@ class CheckAvailability : AppCompatActivity() {
 
         setContentView(R.layout.availability_activity)
 
-        viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
         chipUncheckedIcon = action_chip.closeIcon
         action_chip.closeIcon = resources.getDrawable(R.drawable.chat_channel)
         action_chip.setOnCloseIconClickListener { _ ->

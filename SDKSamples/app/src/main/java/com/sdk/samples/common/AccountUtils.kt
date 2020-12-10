@@ -1,5 +1,6 @@
 package com.sdk.samples.common
 
+import com.integration.async.core.UserInfo
 import com.integration.core.applicationId
 import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
@@ -63,11 +64,14 @@ fun AccountMap.toLiveAccount(): BoldAccount {
 
 fun AccountMap.toAsyncAccount(): AsyncAccount {
         return AsyncAccount(this[AsyncSharedDataHandler.Access_key] as String, this[AsyncSharedDataHandler.App_id_Key] as String).apply {
-                info.userInfo.email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as String
-                info.userInfo.phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as String
-                info.userInfo.firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as String
-                info.userInfo.lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as String
-                info.userInfo.countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as String
+                val userId = this@toAsyncAccount[AsyncSharedDataHandler.user_id_key] as String
+                info.userInfo = (userId.takeIf { it.isNotEmpty() }?.let { UserInfo(it) } ?: UserInfo()).apply {
+                        email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as String
+                        phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as String
+                        firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as String
+                        lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as String
+                        countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as String
+                }
         }
 }
 

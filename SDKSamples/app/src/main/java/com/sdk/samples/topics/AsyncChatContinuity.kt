@@ -1,34 +1,18 @@
 package com.sdk.samples.topics
 
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.text.InputFilter
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.integration.async.core.UserInfo
-import com.integration.core.*
+import com.integration.core.LastReceivedMessageId
+import com.integration.core.SenderId
+import com.integration.core.applicationId
+import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
-import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.handlers.AccountSessionListener
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys.LastReceivedMessageId
 import com.nanorep.sdkcore.utils.Completion
-import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_bot_chat.*
-import kotlinx.android.synthetic.main.async_chat_config.*
-import kotlin.reflect.KProperty
 
 /*
 Async continuity is enabled by:
@@ -45,86 +29,79 @@ Async continuity is enabled by:
 missed messages = messages that were sent from the agent to the user while the user was off.
 */
 
-class ChatData(val account: AsyncAccount, val restore: Boolean)
-
-class ChatViewModel : ViewModel() {
-    var account: AsyncAccount? = null
-
-    val onStart = SingleLiveData<ChatData>()
-    internal fun startChat(chatData: ChatData) {
-        this.onStart.value = chatData
-    }
-}
-
 private const val ASYNC_TAG = "async"
-private const val ASYNC_FORM = "async_form"
 
 /**
  * Enables restore and reconnect of last async chat.
  */
-open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
+open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener /*[1]*/ {
 
-    /**
-     * Handles account save/recover and listens on chat to account updates
-     */
-    private lateinit var accountRecovery: AsyncAccountRecovery
-
-    private lateinit var chatViewModel: ChatViewModel
+    private var senderId: String = ""
+    private var lastReceivedMessageId: String = ""
 
     /**
      * setting the accountProvider in order to receive account related updates, and be able to restore chats.
      */
     override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().accountProvider(accountRecovery)
+        return super.getBuilder().accountProvider(this)
     }
 
-    override fun startChat() {
-        chatViewModel.startChat(ChatData(getAccount() as AsyncAccount, viewModel.restoreRequest))
+//<editor-fold desc=">>>>> AccountSessionListener implementation <<<<<" >
+
+    override fun provide(info: AccountInfo, callback: Completion<AccountInfo>) {
+        return callback.onComplete((info as? AsyncAccount)?.let { restoreAccount() } ?: info)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private fun restoreAccount(): Account? {
+        return (viewModel.account as AsyncAccount).apply {
+            info.let {
+                it.SenderId = senderId.toLongOrNull()
+                it.LastReceivedMessageId = lastReceivedMessageId
+            }
 
-        accountRecovery = AsyncAccountRecovery(this)
-
-        chatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java).apply {
-
-            onStart.observe(this@AsyncChatContinuity, Observer<ChatData?> { data ->
-                //-> Start Chat was pressed:
-                data?.run {
-                    accountRecovery.saveAccount(this)
-
-                    Log.d(ASYNC_TAG, "creating chat with account ${(this.account).log()}")
-
-                    createChat()
-                }
-            })
-        }
-
-        super.onCreate(savedInstanceState)
-    }
-
-    /**
-     * Opens the async account details form
-     */
-    private fun openAsyncForm() {
-        chatViewModel.account = getAccount() as AsyncAccount//accountRecovery.restoreAccount()
-
-        Log.d("async", "Open async form ")
-        supportFragmentManager.takeIf { it.findFragmentByTag(ASYNC_FORM) == null }?.beginTransaction()?.add(chat_view.id, AsyncChatForm(), ASYNC_FORM)
-            ?.addToBackStack(null)?.commit()
-    }
-
-    override fun onChatClose() {
-        if( isFinishing && hasChatController() ){
-            chatController.destruct()
         }
     }
+
+    override fun update(account: AccountInfo) {
+        try {
+            Log.d(ASYNC_TAG, "onUpdate: got to update account senderId ${account.getInfo().SenderId}")
+
+            account.getInfo().SenderId?.let {
+                senderId = "$it" // updates SenderId in shared preferences
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onConfigUpdate(account: AccountInfo, updateKey: String, updatedValue: Any?) {
+        try {
+            Log.d(ASYNC_TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
+            when (updateKey) {
+                // updates LastReceivedMessageId in shared preferences
+                LastReceivedMessageId -> lastReceivedMessageId = (updatedValue as? String) ?: ""
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+    fun AsyncAccount.log(): String {
+        return "Account: [apiKey:$apiKey],[applicationId:${info.applicationId}],[userId:${info.userInfo.userId}]," +
+                " [senderId:${info.SenderId}],[lastMessage:${info.LastReceivedMessageId}]"
+    }
+
+//</editor-fold>
 }
 
+/*
 
+*/
 /**
  * Async account details form
- */
+ *//*
+
 class AsyncChatForm : Fragment() {
 
     private val chatViewModel: ChatViewModel by lazy {
@@ -165,9 +142,11 @@ class AsyncChatForm : Fragment() {
         }
     }
 
-    /**
+    */
+/**
      * validates account fields and create account for chat start
-     */
+     *//*
+
     private fun generateAccount(): AsyncAccount? {
         val apiKey = apiKey_edit.text.toString()
         val applicationId = application_edit.text.toString()
@@ -208,11 +187,13 @@ class AsyncChatForm : Fragment() {
 //<editor-fold desc=">>> Account save & recover <<<" >
 
 
+*/
 /**
  * last chat details save/recover mechanism based on shared preferences.
  * Also implements AccountSessionListener to be able to get session related updates from the SDK
  * while chatting like "LastReceivedMessageId", which is needed for retrieving missed messages.
- */
+ *//*
+
 class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
 
     private val sharedPrefs: SharedPreferences = context.getSharedPreferences("async_shared", 0)
@@ -240,9 +221,11 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
 
     private var lastReceivedMessageId: String by this
 
-    /**
+    */
+/**
      * Save provided chat details to the shared preferences.
-     */
+     *//*
+
     fun saveAccount(chatData: ChatData, senderId: Long? = null, lastMessage: String? = null) {
         sharedPrefs.run {
 
@@ -269,11 +252,13 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
                         putString(this@AsyncAccountRecovery::phoneNumber.name, info.userInfo.phoneNumber)
                     }
 
-                    /* override session details, SenderId and LastReceivedMessageId if:
+                    */
+/* override session details, SenderId and LastReceivedMessageId if:
                        1. new values were provided
                        2. apiKey is different from the saved account key
                        3. restore is disabled.
-                     */
+                     *//*
+
                     (senderId?.toString() ?: "".takeUnless { canRestore })?.let {
                         putString(this@AsyncAccountRecovery::senderId.name, it)
                     }
@@ -290,9 +275,11 @@ class AsyncAccountRecovery(var context: Context) : AccountSessionListener {
         saveAccount(ChatData(account, true), account.info.SenderId, account.info.LastReceivedMessageId)
     }
 
-    /**
+    */
+/**
      * restores saved account from the shared preferences if exists
-     */
+     *//*
+
     fun restoreAccount(account: AsyncAccount? = null): AsyncAccount? {
 
         val restored = when {
@@ -380,3 +367,4 @@ fun AsyncAccount.log(): String {
             " [senderId:${info.SenderId}],[lastMessage:${info.LastReceivedMessageId}]"
 }
 
+*/

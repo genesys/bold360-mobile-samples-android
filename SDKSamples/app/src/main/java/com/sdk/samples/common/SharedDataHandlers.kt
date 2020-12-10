@@ -5,6 +5,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+import com.sdk.samples.common.AccountListener.Companion.RestoreState
 import com.sdk.samples.topics.Accounts
 
 interface RestoreStateProvider {
@@ -59,10 +60,10 @@ class SharedDataController: DataController, RestoreStateProvider {
 
     private var restoreState = false to false
 
-    override var onAccountData: ((account: Account?, restoreState: Pair<Boolean, Boolean>) -> Unit)? = null
+    override var onAccountData: ((account: Account?, chatData: Map<String, Any?>?) -> Unit?)? = null
 
     override fun onSubmit(account: Account) {
-        onAccountData?.invoke(account, restoreState)
+        onAccountData?.invoke(account, mapOf(RestoreState to restoreState))
     }
 
     override fun updateRestorable(restorable: Boolean) {
@@ -122,6 +123,15 @@ abstract class SharedDataHandler {
 
     companion object {
         const val ChatType_key = "chatType"
+        const val Access_key = "accessKey"
+        const val App_id_Key = "appIdKey"
+        const val First_Name_key = "firstName"
+        const val Last_Name_key = "lastName"
+        const val Country_Abbrev_key = "countryAbbrev"
+        const val Email_key = "email"
+        const val Phone_Number_key = "phoneNumber"
+        const val user_id_key = "userIdKey"
+        const val deptCode_key = "preDeptCode"
     }
 
     @ChatType
@@ -153,9 +163,6 @@ internal class BotSharedDataHandler: SharedDataHandler() {
         const val Context_key = "contextKey"
         const val Welcome_key = "welcomeKey"
         const val ApiKey_key = "apiKey"
-        const val preChat_fName_key = "preFname"
-        const val preChat_lName_key = "preLname"
-        const val preChat_deptCode_key = "preDeptCode"
     }
 
     override val chatType: String
@@ -182,15 +189,6 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.async"
-        const val Access_key = "accessKey"
-        const val App_id_Key = "appIdKey"
-        const val First_Name_key = "firstName"
-        const val Last_Name_key = "lastName"
-        const val Country_Abbrev_key = "countryAbbrev"
-        const val Email_key = "email"
-        const val Phone_Number_key = "phoneNumber"
-        const val user_id_key = "userIdKey"
-
     }
 
     override val chatType: String
@@ -220,7 +218,6 @@ internal class LiveSharedDataHandler: SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.bold"
-        const val Access_key = "accessKey"
     }
 
     override val chatType: String
