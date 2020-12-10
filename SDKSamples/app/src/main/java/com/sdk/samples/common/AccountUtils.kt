@@ -1,9 +1,11 @@
 package com.sdk.samples.common
 
+import com.integration.core.applicationId
+import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-
 
 @Override
 internal fun BotAccount.map(): Map<String, Any?> =
@@ -31,25 +33,17 @@ fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
 }
 
-fun Map<String, Any?>.dataEqualsTo(other: Map<String, Any?>): Boolean {
-
-        if (other.size != size) return false
-
-        val otherKeys = other.keys
-        val otherValues = other.values
-
-        values.forEachIndexed { index, value ->
-                if (value != otherValues.elementAt(index)) return false
-        }
-
-        keys.forEachIndexed { index, key ->
-                if (key != otherKeys.elementAt(index)) return false
-        }
-
-        return true
-}
-
 typealias AccountMap = Map<String,Any?>
+
+fun Account?.isRestorable(savedAccount: Account?): Boolean {
+
+        return when(this) {
+                is BoldAccount -> liveRestorable(savedAccount as? BoldAccount)
+                is AsyncAccount -> asyncRestorable(savedAccount as? AsyncAccount)
+                is BotAccount -> botRestorable(savedAccount as? BotAccount)
+                else -> false
+        }
+}
 
 fun AccountMap.toBotAccount(): BotAccount {
         return BotAccount(
@@ -68,5 +62,23 @@ fun AccountMap.toLiveAccount(): BoldAccount {
 }
 
 fun AccountMap.toAsyncAccount(): AsyncAccount {
-        return  AsyncAccount(this[AsyncSharedDataHandler.Access_key] as String)
+        return AsyncAccount(this[AsyncSharedDataHandler.Access_key] as String, this[AsyncSharedDataHandler.App_id_Key] as String).apply {
+                info.userInfo.email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as String
+                info.userInfo.phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as String
+                info.userInfo.firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as String
+                info.userInfo.lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as String
+                info.userInfo.countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as String
+        }
+}
+
+fun AsyncAccount.asyncRestorable(savedAccount: AsyncAccount?): Boolean {
+        return apiKey == savedAccount?.apiKey &&
+                getInfo().applicationId == savedAccount.getInfo().applicationId &&
+                getInfo().userInfo.userId == savedAccount.getInfo().userInfo.userId
+}
+
+fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean  = savedAccount != null
+
+fun BoldAccount.liveRestorable(savedAccount: BoldAccount?): Boolean {
+        return (this.apiKey == savedAccount?.apiKey)
 }

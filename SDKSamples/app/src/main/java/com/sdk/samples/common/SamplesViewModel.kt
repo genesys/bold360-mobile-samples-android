@@ -4,41 +4,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
-import com.sdk.samples.common.*
+import com.sdk.samples.common.ChatType
 import com.sdk.samples.topics.Accounts
 import java.lang.reflect.InvocationTargetException
 
-
 class SamplesViewModel : ViewModel() {
 
-    lateinit var account: Account
+    var account: Account? = null
+    get() = when(chatType) {
+        ChatType.AsyncChat -> field ?: Accounts.defaultAsyncAccount
+        ChatType.LiveChat -> field ?: Accounts.defaultBoldAccount
+        else -> field ?: Accounts.defaultBotAccount
+    }
+
     var chatController: ChatController? = null
-    var isRestore = false
+
+    var restoreRequest = false
+    var restoreable: Boolean = false
 
     @ChatType
     private var chatType: String = ChatType.BotChat
-
-    var accountExtraData = mutableMapOf<String,Any?>()
-
-    fun setAccountData(accountData: Map<String,Any?>?) {
-
-        accountData?.let { data ->
-            chatType = data[SharedDataHandler.ChatType_key] as String
-            accountExtraData.apply {
-                data[BotSharedDataHandler.Welcome_key]?.let { accountExtraData.put(BotSharedDataHandler.Welcome_key, it) }
-                data[BotSharedDataHandler.preChat_deptCode_key]?.let { accountExtraData.put(BotSharedDataHandler.preChat_deptCode_key, it) }
-                data[BotSharedDataHandler.preChat_fName_key]?.let { accountExtraData.put(BotSharedDataHandler.preChat_fName_key, it)  }
-                data[BotSharedDataHandler.preChat_lName_key]?.let { accountExtraData.put(BotSharedDataHandler.preChat_lName_key, it) }
-            }
-        }
-
-        account = when(chatType) {
-            ChatType.AsyncChat -> accountData?.toAsyncAccount() ?: Accounts.defaultAsyncAccount
-            ChatType.LiveChat -> accountData?.toLiveAccount() ?: Accounts.defaultBoldAccount
-            else -> accountData?.toBotAccount() ?: Accounts.defaultBotAccount
-        }
-    }
-
 
     companion object {
 

@@ -41,8 +41,8 @@
 
 
     <string name="start_async_chat">Start Chat</string>
-    <string name="application_id">Application Id</string>
-    <string name="user_id">User Id</string>
+    <string name="application_id_hint">Application Id</string>
+    <string name="user_id_hint">User Id</string>
     <string name="user_first">First name</string>
     <string name="user_last">Last name</string>
     <string name="restore_if_available">Restore if available</string>

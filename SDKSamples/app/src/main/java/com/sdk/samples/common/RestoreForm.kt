@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.restore_layout.*
 
-class RestoreForm() : Fragment() {
+class RestoreForm : Fragment() {
 
     @ChatType private val selectedChatType: String
         get() = getCheckedRadio()?.tag?.toString() ?: ChatType.BotChat

@@ -10,4 +10,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface ExtraParams {
     String Welcome = "welcome";
     String PrechatExtraData = "PrechatExtraData";
+    String RestoreSwitch = "restoreSwitch";
 }

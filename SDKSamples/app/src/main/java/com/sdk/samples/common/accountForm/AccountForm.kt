@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import com.nanorep.nanoengine.Account
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType
-import com.sdk.samples.common.DataController
+import com.sdk.samples.common.*
 
 
 interface AccountFormDelegate {
@@ -48,9 +48,16 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
         return inflater.inflate(formLayoutRes, container, false)
     }
 
-    private fun validateAndUpdate (): Map<String, Any?>? {
-        return validateFormData()?.also {
-            context?.let { context ->  dataController.updateAccount(context, it) }
+    private fun validateAndUpdate (): Account? {
+
+        return validateFormData()?.let {
+            when (it[SharedDataHandler.ChatType_key]) {
+                ChatType.AsyncChat -> it.toAsyncAccount()
+                ChatType.LiveChat -> it.toLiveAccount()
+                else -> it.toBotAccount()
+            }.also { account ->
+                context?.let { dataController.updateAccount(this.context, account) }
+            }
         }
     }
 

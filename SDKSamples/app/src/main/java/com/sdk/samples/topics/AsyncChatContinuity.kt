@@ -21,7 +21,6 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.handlers.AccountSessionListener
-import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys.LastReceivedMessageId
 import com.nanorep.sdkcore.utils.Completion
@@ -80,11 +79,7 @@ open class AsyncChatContinuity : BoldChatAsync() /*[1]*/ {
     }
 
     override fun startChat() {
-        openAsyncForm()
-    }
-
-    override fun getAccount(): Account {
-        return accountRecovery.restoreAccount() ?: super.getAccount()
+        chatViewModel.startChat(ChatData(getAccount() as AsyncAccount, viewModel.restoreRequest))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

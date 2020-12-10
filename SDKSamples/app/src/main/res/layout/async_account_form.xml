@@ -39,68 +39,121 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/firstName_layout"
+                    android:id="@+id/async_application_id_layout"
                     style="@style/TextInputLayoutAppearance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:hint="@string/firstName_hint">
+                    android:hint="@string/application_id_hint">
 
 
                 <EditText
-                        android:id="@+id/firstName_edit_text"
+                        android:id="@+id/async_application_id_edit_text"
                         style="@style/TextInputTextAppearance" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lastName_layout"
-                    style="@style/TextInputLayoutAppearance"
+            <LinearLayout
+                    android:id="@+id/async_extra_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:hint="@string/lastName_hint">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
 
-                <EditText
-                        android:id="@+id/lastName_edit_text"
-                        style="@style/TextInputTextAppearance" />
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/async_user_id_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/user_id_hint">
 
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/email_layout"
-                    style="@style/TextInputLayoutAppearance"
-                    android:layout_width="match_parent"
+                    <EditText
+                            android:id="@+id/user_id_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/firstName_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/firstName_hint">
+
+
+                    <EditText
+                            android:id="@+id/firstName_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lastName_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/lastName_hint">
+
+
+                    <EditText
+                            android:id="@+id/lastName_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/email_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/email_hint">
+
+
+                    <EditText
+                            android:id="@+id/email_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/phone_layout"
+                        style="@style/TextInputLayoutAppearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/phone_hint">
+
+
+                    <EditText
+                            android:id="@+id/phone_edit_text"
+                            style="@style/TextInputTextAppearance" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/restore_switch"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:hint="@string/email_hint">
-
-
-                <EditText
-                        android:id="@+id/email_edit_text"
-                        style="@style/TextInputTextAppearance" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/phone_layout"
-                    style="@style/TextInputLayoutAppearance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:hint="@string/phone_hint">
-
-
-                <EditText
-                        android:id="@+id/phone_edit_text"
-                        style="@style/TextInputTextAppearance" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_gravity="start"
+                    android:layout_marginTop="14dp"
+                    android:checked="false"
+                    android:text="@string/restore_if_available"
+                    android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>

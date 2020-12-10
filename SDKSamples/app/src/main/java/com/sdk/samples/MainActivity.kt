@@ -20,8 +20,7 @@ import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.common.AccountFormController
 import com.sdk.samples.common.ChatType
-import com.sdk.samples.common.ExtraParams.PrechatExtraData
-import com.sdk.samples.common.ExtraParams.Welcome
+import com.sdk.samples.common.ExtraParams.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 import java.lang.ref.WeakReference
@@ -94,7 +93,8 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.ASYNC_CONTINUITY",
                 getString(R.string.async_chat_continuity),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
-                ChatType.AsyncChat
+                ChatType.AsyncChat,
+                listOf(RestoreSwitch)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
@@ -141,11 +141,14 @@ class MainActivity : AppCompatActivity() {
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
-            accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, isRestore ->
+            accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState ->
                 account?.let {
                     ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                         chatController = null
-                        this.isRestore = isRestore
+
+                        restoreRequest = restoreState.first
+                        restoreable = restoreState.second
+
                         setAccountData(account)
                     }
                     startActivity(

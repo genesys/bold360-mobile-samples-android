@@ -2,33 +2,37 @@ package com.sdk.samples.common
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.nanorep.nanoengine.Account
+import com.sdk.samples.SamplesViewModel
 import com.sdk.samples.common.ChatType.NONE
 import com.sdk.samples.common.accountForm.AccountForm
 import java.lang.ref.WeakReference
 
 interface AccountListener {
-    var onAccountData: ((account: Map<String, Any?>?, isRestore: Boolean) -> Unit)?
+    var onAccountData: ((account: Account?, restoreState: Pair<Boolean, Boolean>) -> Unit)?
 }
 
 interface FormController {
-    fun updateChatType(chatType: String?, extraParams: List<String>?, onAccountData: (account: Map<String, Any?>?, isRestore: Boolean) -> Unit)
+    fun updateChatType(chatType: String?, extraParams: List<String>?, onAccountSubmitted: () -> Unit)
 }
 
-class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>): FormController {
+class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>, val viewModel: SamplesViewModel): FormController {
 
     private val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
     private val accountFormPresenter = AccountFormPresenter(containerRes)
 
-    override fun updateChatType(chatType: String?, extraParams: List<String>?, onAccountData: (account: Map<String, Any?>?, isRestore: Boolean) -> Unit) {
+    override fun updateChatType(chatType: String?, extraParams: List<String>?, onAccountSubmitted: () -> Unit) {
 
-        accountFormPresenter.onAccountData = { account, isRestore ->
-            onAccountData.invoke(account, isRestore)
+        accountFormPresenter.onAccountData = { account, restoreState ->
+            viewModel.restoreRequest = restoreState.first
+            viewModel.restoreable = restoreState.second
+            viewModel.account = account
         }
 
         getFragmentManager()?.let { fm ->
             accountFormPresenter.extraParams = extraParams
-            chatType?.takeIf { it != ChatType.NONE }?.let { accountFormPresenter.presentAccountForm(fm, chatType) }
+            chatType?.takeIf { it != NONE }?.let { accountFormPresenter.presentAccountForm(fm, chatType) }
                 ?: accountFormPresenter.presentRestoreForm(fm)
         }
     }
@@ -53,11 +57,11 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
     override var extraParams: List<String>? = null
 
-    override var onAccountData: ((account: Map<String, Any?>?, isRestore: Boolean) -> Unit)?
+    override var onAccountData: ((account: Account?, restoreState: Pair<Boolean, Boolean>) -> Unit)?
         set(value) {
-        dataController.onAccountData = value
-    }
-    get() = dataController.onAccountData
+            dataController.onAccountData = value
+        }
+        get() = dataController.onAccountData
 
     override fun presentAccountForm(
         fragmentManager: FragmentManager,
@@ -69,10 +73,12 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
     override fun presentRestoreForm(fragmentManager: FragmentManager) {
         val fragment = RestoreForm.newInstance()
 
-        fragment.onChatRestore = { chatType, isRestore ->
-            dataController.isRestore = isRestore
+        fragment.onChatRestore = { chatType, restoreRequest ->
+
+            dataController.updateRestoreRequest(restoreRequest)
 
             if (chatType != NONE) {
+
                 presentForm(
                     fragmentManager,
                     AccountForm.newInstance(dataController, chatType, extraParams),
@@ -80,7 +86,7 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
                 )
 
             } else {
-                onAccountData?.invoke(null, isRestore)
+                onAccountData?.invoke(null, dataController.getRestoreState())
             }
         }
 

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
+    <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="14dp"
-                android:text="@string/application_id"
+                android:text="@string/application_id_hint"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
@@ -42,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:hint="@string/application_id"
+                android:hint="@string/application_id_hint"
                 android:lines="1"
                 android:textColorHint="@color/form_field_hint"
                 android:textSize="14sp" />
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="14dp"
-                android:text="@string/user_id"
+                android:text="@string/user_id_hint"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
@@ -61,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:hint="@string/user_id"
+                android:hint="@string/user_id_hint"
                 android:inputType="numberDecimal"
                 android:lines="1"
                 android:textColorHint="@color/form_field_hint"
@@ -123,5 +124,5 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/start_async_chat" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 </androidx.core.widget.NestedScrollView>
