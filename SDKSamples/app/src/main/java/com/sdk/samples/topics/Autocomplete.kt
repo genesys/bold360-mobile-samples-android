@@ -32,7 +32,7 @@ class Autocomplete : SampleActivity() {
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = (viewModel.account as BotAccount).withId(this)
+            botViewModel.botChat.account = (viewModel.getAccount() as BotAccount).withId(this)
         }
 
         botViewModel.onError.observe(this, Observer { error ->

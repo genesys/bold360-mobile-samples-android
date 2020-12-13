@@ -5,26 +5,32 @@ import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.sdk.samples.common.ChatType
+import com.sdk.samples.common.RestoreState
 import com.sdk.samples.topics.Accounts
-import org.jetbrains.annotations.NotNull
 import java.lang.reflect.InvocationTargetException
 
 class SamplesViewModel : ViewModel() {
 
-    internal var account: Account? = null
-    @NotNull
-    get() = when(chatType) {
-        ChatType.AsyncChat -> field ?: Accounts.defaultAsyncAccount
-        ChatType.LiveChat -> field ?: Accounts.defaultBoldAccount
-        else -> field ?: Accounts.defaultBotAccount
+    private var account: Account? = null
+
+    @JvmName("account")
+    fun setAccount(account: Account?) { this.account = account }
+
+    @JvmName("account")
+    fun getAccount() : Account {
+       return when(chatType) {
+           ChatType.AsyncChat -> account ?: Accounts.defaultAsyncAccount
+           ChatType.LiveChat -> account ?: Accounts.defaultBoldAccount
+           else -> account ?: Accounts.defaultBotAccount
+       }
     }
 
-    var extraData: Map<String, String>? = null
+
+
+    var extraData: Map<String, Any?>? = null
+    var restoreState: RestoreState = RestoreState()
 
     var chatController: ChatController? = null
-
-    var restoreRequest = false
-    var restoreable: Boolean = false
 
     @ChatType
     private var chatType: String = ChatType.BotChat

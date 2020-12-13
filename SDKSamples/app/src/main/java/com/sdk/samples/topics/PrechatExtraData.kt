@@ -15,13 +15,14 @@ import com.sdk.samples.topics.extra.withId
 class PrechatExtraData : BotChat() {
 
     override fun getAccount(): Account {
-        val account = viewModel.account as BotAccount
 
-        (extraData[preChat_deptCode_key] as? String)?.takeIf { it.isNotEmpty() }?.let { BOLD_DEPARTMENT = it }
-        (extraData[preChat_fName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoFirstName = it }
-        (extraData[preChat_lName_key] as? String)?.takeIf { it.isNotEmpty() }?.let { DemoLastName = it }
+        (viewModel.extraData)?.let { extraData ->
+            extraData[preChat_deptCode_key]?.let {  BOLD_DEPARTMENT = it.toString() }
+            extraData[preChat_fName_key]?.let {  DemoFirstName = it.toString() }
+            extraData[preChat_lName_key]?.let {  DemoLastName = it.toString() }
+        }
 
-        return (viewModel.account as BotAccount).withId(this)
+        return (super.getAccount() as BotAccount).withId(this)
     }
 
     override fun getBuilder(): ChatController.Builder {

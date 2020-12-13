@@ -8,7 +8,7 @@ import com.sdk.samples.topics.extra.withId
 open class BotChat : BasicChat() {
 
     override fun getAccount(): Account {
-        return (viewModel.account as BotAccount).withId(this)
+        return (super.getAccount() as BotAccount).withId(this)
     }
 
     override fun onUploadFileRequest() {

@@ -81,7 +81,7 @@ fun AsyncAccount.asyncRestorable(savedAccount: AsyncAccount?): Boolean {
                 getInfo().userInfo.userId == savedAccount.getInfo().userInfo.userId
 }
 
-fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean  = savedAccount != null
+fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean = savedAccount != null
 
 fun BoldAccount.liveRestorable(savedAccount: BoldAccount?): Boolean {
         return (this.apiKey == savedAccount?.apiKey)

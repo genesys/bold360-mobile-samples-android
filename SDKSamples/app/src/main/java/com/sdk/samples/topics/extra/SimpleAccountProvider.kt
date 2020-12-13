@@ -36,7 +36,7 @@ open class SimpleAccountProvider() : AccountInfoProvider {
 }
 
 protected open fun addAccount(account: AccountInfo) {
-accounts[account.getApiKey()] = account
+    accounts[account.getApiKey()] = account
 }
 
 }

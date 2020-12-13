@@ -15,7 +15,7 @@ class CheckAvailability : SampleActivity() {
     private var chipUncheckedIcon: Drawable? = null
 
     val account: BoldAccount
-    get() = viewModel.account as BoldAccount
+    get() = getAccount() as BoldAccount
 
     /*val model:AvailabilityViewModel? by lazy {
         activity?.let{ ViewModelProviders.of(it).get(AvailabilityViewModel::class.java)}

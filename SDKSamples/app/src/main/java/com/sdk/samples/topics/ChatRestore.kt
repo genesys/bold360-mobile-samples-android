@@ -2,17 +2,12 @@ package com.sdk.samples.topics
 
 import android.util.Log
 import com.integration.core.StateEvent
-import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.topics.history.HistoryRepository
 import com.sdk.samples.topics.history.RoomHistoryProvider
 
 class ChatRestore : History() {
-
-    override fun getAccount(): Account {
-        return viewModel.account
-    }
 
     override fun hasChatController(): Boolean {
         return viewModel.chatController?.takeIf { !it.wasDestructed }?.let { true } ?: false
@@ -23,9 +18,10 @@ class ChatRestore : History() {
         if (!hasChatController()) {
             toast(this@ChatRestore,
                 "Failed to restore chat\nerror: there is no chat to restore")
+            finish()
         } else {
             try {
-                getAccount().getGroupId()?.let {
+                getAccount()?.getGroupId()?.let {
                     historyRepository.targetId = it
                 }
 
@@ -41,7 +37,7 @@ class ChatRestore : History() {
 
         try {
             if(hasChatController()) {
-                historyRepository.targetId = getAccount().getGroupId()
+                historyRepository.targetId = getAccount()?.getGroupId()
             }
             createChat()
 
@@ -54,9 +50,18 @@ class ChatRestore : History() {
 
     override fun startChat() {
 
-        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
+        val restoreState = viewModel.restoreState
 
-        if (intent.getBooleanExtra("isRestore", false)) onRestore() else onCreate()
+        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId()))
+
+        when {
+            restoreState.restoreRequest && restoreState.restorable -> onRestore()
+            !restoreState.restoreRequest -> onCreate()
+            else -> {
+                toast(this@ChatRestore, "Account is not restorable")
+                finish()
+            }
+        }
     }
 
     override fun onChatStateChanged(stateEvent: StateEvent) {

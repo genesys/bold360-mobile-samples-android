@@ -141,13 +141,13 @@ class MainActivity : AppCompatActivity() {
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
-            accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState ->
+            accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState, extraData ->
                 account.let {
                     ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                         chatController = null
-                        this.account = account
-                        restoreRequest = restoreState.first
-                        restoreable = restoreState.second
+                        setAccount(account)
+                        this.restoreState = restoreState
+                        this.extraData = extraData
                     }
                     startActivity(
                         Intent(topic.intentAction).putExtra("title", topic.title)

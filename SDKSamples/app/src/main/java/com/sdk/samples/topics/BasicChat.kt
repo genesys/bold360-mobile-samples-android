@@ -6,23 +6,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.Nullable
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
-import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.SamplesViewModel
-import com.sdk.samples.SingletonSamplesViewModelFactory
 import com.sdk.samples.common.ChatType
 import kotlinx.android.synthetic.main.activity_bot_chat.*
 import kotlinx.android.synthetic.main.restore_layout.*
@@ -61,8 +56,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         super.finish()
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
-
-    protected open fun getAccount(): Account? = viewModel.account
 
     protected open fun getBuilder(): ChatController.Builder {
         val settings = createChatSettings()

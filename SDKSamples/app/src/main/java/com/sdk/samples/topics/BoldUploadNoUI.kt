@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream
 class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     private val account: BoldAccount
-    get() = (viewModel.account as BoldAccount).apply { skipPrechat() }
+    get() = (getAccount() as BoldAccount).apply { skipPrechat() }
 
     private val uploader by lazy {
         BoldLiveUploader()

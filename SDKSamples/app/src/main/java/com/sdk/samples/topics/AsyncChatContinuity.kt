@@ -53,7 +53,7 @@ open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener /*[1]*/
     }
 
     private fun restoreAccount(): Account? {
-        return (viewModel.account as AsyncAccount).apply {
+        return (super.getAccount() as AsyncAccount).apply {
             info.let {
                 it.SenderId = senderId.toLongOrNull()
                 it.LastReceivedMessageId = lastReceivedMessageId

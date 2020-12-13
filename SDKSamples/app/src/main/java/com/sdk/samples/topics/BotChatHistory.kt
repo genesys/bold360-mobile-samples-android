@@ -12,7 +12,7 @@ import com.sdk.samples.topics.history.HistoryMigrationProvider
 open class BotChatHistory : History() {
 
     override fun getAccount(): Account {
-        return (viewModel.account as BotAccount).withId(this)
+        return (super.getAccount() as BotAccount).withId(this)
     }
 
     override fun onUploadFileRequest() {

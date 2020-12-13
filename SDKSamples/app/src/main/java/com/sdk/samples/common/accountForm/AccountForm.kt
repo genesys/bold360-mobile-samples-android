@@ -50,13 +50,18 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
 
     private fun validateAndUpdate (): Account? {
 
-        return validateFormData()?.let {
-            when (it[SharedDataHandler.ChatType_key]) {
-                ChatType.AsyncChat -> it.toAsyncAccount()
-                ChatType.LiveChat -> it.toLiveAccount()
-                else -> it.toBotAccount()
+        return validateFormData()?.let { accountData ->
+            when (accountData[SharedDataHandler.ChatType_key]) {
+                ChatType.AsyncChat -> accountData.toAsyncAccount()
+                ChatType.LiveChat -> accountData.toLiveAccount()
+                else -> accountData.toBotAccount()
             }.also { account ->
-                context?.let { dataController.updateAccount(this.context, account) }
+                val extraData = accountData.filter {
+                            it.key == BotSharedDataHandler.preChat_deptCode_key ||
+                            it.key == BotSharedDataHandler.preChat_lName_key ||
+                            it.key == BotSharedDataHandler.preChat_fName_key
+                }
+                context?.let { dataController.updateAccount(this.context, account, extraData) }
             }
         }
     }
