@@ -5,7 +5,6 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.sdk.samples.topics.Accounts
 
 interface RestoreStateProvider {
 
@@ -26,7 +25,7 @@ interface DataController: AccountListener, RestoreStateProvider {
     /**
      * true is the user pressed on the restore button
      */
-    var chatType: String?
+    var chatType: String
 
     /**
      * Contains the wanted extra params of the account
@@ -63,7 +62,7 @@ class SharedDataController: DataController, RestoreStateProvider {
 
     override var extraParams: List<String>? = null
 
-    override var chatType: String? = null
+    override var chatType: String = ChatType.NONE
     set(value) {
         field = value
         sharedDataHandler =  when (chatType) {
@@ -76,15 +75,7 @@ class SharedDataController: DataController, RestoreStateProvider {
     private var sharedDataHandler: SharedDataHandler? = null
 
     override fun getAccount(context: Context?): Account {
-        return ( context?.let { sharedDataHandler?.getAccount(it) } ?: getDefaultAccount() )
-    }
-
-    private fun getDefaultAccount(): Account {
-        return when (chatType) {
-                ChatType.LiveChat -> Accounts.defaultBoldAccount
-                ChatType.AsyncChat -> Accounts.defaultAsyncAccount
-                else -> Accounts.defaultBotAccount
-        }
+        return ( context?.let { sharedDataHandler?.getAccount(it) }.orDefault(chatType) )
     }
 
     override fun updateAccount(context: Context?, account: Account, extraData: Map<String, Any?>?) {

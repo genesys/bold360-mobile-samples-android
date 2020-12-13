@@ -39,8 +39,8 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
         dataController.extraParams?.let { extraParams->
             extraParams.forEach{
                 when (it) {
-                    Welcome -> custom_welcome_layout.visibility = View.VISIBLE
-                    PrechatExtraData -> prechat_data.visibility = View.VISIBLE
+                    Welcome -> bot_welcome_layout.visibility = View.VISIBLE
+                    PrechatExtraData -> bot_prechat_data.visibility = View.VISIBLE
                 }
             }
         }
@@ -55,7 +55,7 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
         contextHandler = ContextHandler(bot_context, this@BotAccountForm).apply {
             onDelete = { _ ->
                 if (bot_context.childCount == 1) {
-                    context_title.visibility = View.GONE
+                    bot_context_title.visibility = View.GONE
                 }
             }
         }
@@ -65,7 +65,7 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
                 val lastContext = contextHandler.container.getLast()
                 if (lastContext == null || !lastContext.isEmpty()) {
                     if (lastContext == null) {
-                        context_title.visibility = View.VISIBLE
+                        bot_context_title.visibility = View.VISIBLE
                     }
 
                     contextHandler.addContext()
@@ -82,10 +82,10 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
 
         val account: BotAccount = dataController.getAccount(context) as BotAccount
 
-        account_name_edit_text.setText( account.account ?: "" )
-        knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
-        api_key_edit_text.setText( account.apiKey )
-        server_edit_text.setText( account.domain ?: "" )
+        bot_account_name_edit_text.setText( account.account ?: "" )
+        bot_knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
+        bot_api_key_edit_text.setText( account.apiKey )
+        bot_server_edit_text.setText( account.domain ?: "" )
 
         bot_context.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
             override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int,
@@ -103,7 +103,7 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
                 .sortedBy { k -> k.first }
                 .map { t -> t.second }
 
-            context_title.visibility = if (contextPairs.isEmpty()) View.GONE else View.VISIBLE
+            bot_context_title.visibility = if (contextPairs.isEmpty()) View.GONE else View.VISIBLE
 
             contextHandler.setContexts(contextPairs)
         }
@@ -113,29 +113,29 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
 
         val accountMap = mutableMapOf<String, Any?>()
 
-        account_name_edit_text.text?.takeUnless { it.isEmpty() }?.let {
+        bot_account_name_edit_text.text?.takeUnless { it.isEmpty() }?.let {
             accountMap[Account_key] = it.toString()
         } ?: kotlin.run {
-            presentError(account_name_edit_text, context?.getString(R.string.error_account_name))
+            presentError(bot_account_name_edit_text, context?.getString(R.string.error_account_name))
             return null
         }
 
-        knowledgebase_edit_text.text?.takeUnless { it.isEmpty() }?.let {
+        bot_knowledgebase_edit_text.text?.takeUnless { it.isEmpty() }?.let {
             accountMap[Kb_key] = it.toString()
         } ?: kotlin.run {
-            presentError(knowledgebase_edit_text, context?.getString(R.string.error_kb))
+            presentError(bot_knowledgebase_edit_text, context?.getString(R.string.error_kb))
             return null
         }
 
         accountMap[SharedDataHandler.ChatType_key] = ChatType.BotChat
-        accountMap[ApiKey_key] = api_key_edit_text.text?.toString() ?: ""
-        accountMap[Server_key] = server_edit_text.text?.toString() ?: ""
+        accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString() ?: ""
+        accountMap[Server_key] = bot_server_edit_text.text?.toString() ?: ""
         accountMap[Context_key] =  contextHandler.getContext()
 
-        custom_welcome_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.Welcome_key] = it }
-        prechat_dept_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_deptCode_key] = it }
-        prechat_fName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_fName_key] = it }
-        prechat_lName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_lName_key] = it }
+        bot_welcome_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.Welcome_key] = it }
+        bot_prechat_dept_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_deptCode_key] = it }
+        bot_prechat_fName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_fName_key] = it }
+        bot_prechat_lName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_lName_key] = it }
 
         return accountMap
     }

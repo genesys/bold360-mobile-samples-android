@@ -73,6 +73,6 @@
     <string name="error_email">Email is not valid</string>
     <string name="email_hint">Email</string>
     <string name="phone_hint">Phone number</string>
-    <string name="bold_parameters_title">Bold Parameters</string>
+    <string name="bold_parameters_title">Bold extra data</string>
 
 </resources>

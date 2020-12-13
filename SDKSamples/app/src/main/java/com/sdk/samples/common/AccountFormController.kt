@@ -19,7 +19,7 @@ interface AccountListener {
 
 interface FormController {
     fun updateChatType(
-        chatType: String?,
+        chatType: String,
         extraParams: List<String>?,
         onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
     )
@@ -32,7 +32,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
     private val accountFormPresenter = AccountFormPresenter(containerRes)
 
     override fun updateChatType(
-        chatType: String?,
+        chatType: String,
         extraParams: List<String>?,
         onAccountData: (account: Account?, RestoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
     ) {

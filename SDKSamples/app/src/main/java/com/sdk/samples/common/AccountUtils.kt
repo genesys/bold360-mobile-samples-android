@@ -7,6 +7,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+import com.sdk.samples.topics.Accounts
 
 @Override
 internal fun BotAccount.map(): Map<String, Any?> =
@@ -32,6 +33,14 @@ internal fun AsyncAccount.map(): Map<String, Any?> =
 
 fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
+}
+
+fun Account?.orDefault(@ChatType chatType: String): Account {
+        return this ?: when (chatType) {
+                ChatType.LiveChat -> Accounts.defaultBoldAccount
+                ChatType.AsyncChat -> Accounts.defaultAsyncAccount
+                else -> Accounts.defaultBotAccount
+        }
 }
 
 typealias AccountMap = Map<String,Any?>
@@ -81,7 +90,7 @@ fun AsyncAccount.asyncRestorable(savedAccount: AsyncAccount?): Boolean {
                 getInfo().userInfo.userId == savedAccount.getInfo().userInfo.userId
 }
 
-fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean = savedAccount != null
+fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean = savedAccount?.info?.userInfo?.userId == info.userInfo.userId
 
 fun BoldAccount.liveRestorable(savedAccount: BoldAccount?): Boolean {
         return (this.apiKey == savedAccount?.apiKey)

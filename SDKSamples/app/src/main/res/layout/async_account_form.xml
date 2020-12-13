@@ -73,7 +73,7 @@
 
 
                     <EditText
-                            android:id="@+id/user_id_edit_text"
+                            android:id="@+id/async_user_id_edit_text"
                             style="@style/TextInputTextAppearance" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +90,7 @@
 
 
                     <EditText
-                            android:id="@+id/firstName_edit_text"
+                            android:id="@+id/async_firstName_edit_text"
                             style="@style/TextInputTextAppearance" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -106,7 +106,7 @@
 
 
                     <EditText
-                            android:id="@+id/lastName_edit_text"
+                            android:id="@+id/async_lastName_edit_text"
                             style="@style/TextInputTextAppearance" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -123,7 +123,7 @@
 
 
                     <EditText
-                            android:id="@+id/email_edit_text"
+                            android:id="@+id/async_email_edit_text"
                             style="@style/TextInputTextAppearance" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -139,7 +139,7 @@
 
 
                     <EditText
-                            android:id="@+id/phone_edit_text"
+                            android:id="@+id/async_phone_edit_text"
                             style="@style/TextInputTextAppearance" />
 
                 </com.google.android.material.textfield.TextInputLayout>

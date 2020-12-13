@@ -13,16 +13,16 @@ open class LiveAccountForm(dataController: DataController) : AccountForm(dataCon
         get() = R.layout.live_account_form
 
     override fun fillFields() {
-        api_key_edit_text.setText( dataController.getAccount(context).apiKey as? String ?: "" )
+        live_api_key_edit_text.setText( dataController.getAccount(context).apiKey as? String ?: "" )
     }
 
     override fun validateFormData(): Map<String, Any?>? {
 
-        return api_key_edit_text.text.toString().takeUnless { it.isEmpty() }?.let {
+        return live_api_key_edit_text.text.toString().takeUnless { it.isEmpty() }?.let {
             mapOf(ChatType_key to ChatType.LiveChat, LiveSharedDataHandler.Access_key to it)
 
         } ?: run {
-            presentError(api_key_edit_text, context?.getString(R.string.error_apiKey))
+            presentError(live_api_key_edit_text, context?.getString(R.string.error_apiKey))
             null
 
         }

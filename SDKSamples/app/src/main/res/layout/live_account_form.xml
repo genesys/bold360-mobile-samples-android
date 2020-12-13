@@ -23,7 +23,7 @@
                 android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/api_key_layout"
+                    android:id="@+id/bot_api_key_layout"
                     style="@style/TextInputLayoutAppearance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 
 
                 <EditText
-                        android:id="@+id/api_key_edit_text"
+                        android:id="@+id/live_api_key_edit_text"
                         style="@style/TextInputTextAppearance" />
 
             </com.google.android.material.textfield.TextInputLayout>

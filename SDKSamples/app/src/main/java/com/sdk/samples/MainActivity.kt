@@ -21,6 +21,7 @@ import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.common.AccountFormController
 import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.ExtraParams.*
+import com.sdk.samples.common.orDefault
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 import java.lang.ref.WeakReference
@@ -94,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.async_chat_continuity),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
                 ChatType.AsyncChat,
-                listOf(RestoreSwitch)
+                listOf(RestoreSwitch, AsyncExtraData)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
@@ -145,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                 account.let {
                     ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                         chatController = null
-                        setAccount(account)
+                        setAccount(account.orDefault(topic.chatType))
                         this.restoreState = restoreState
                         this.extraData = extraData
                     }

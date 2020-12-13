@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
-import com.sdk.samples.common.ChatType
 import com.sdk.samples.common.RestoreState
-import com.sdk.samples.topics.Accounts
 import java.lang.reflect.InvocationTargetException
 
 class SamplesViewModel : ViewModel() {
@@ -14,26 +12,19 @@ class SamplesViewModel : ViewModel() {
     private var account: Account? = null
 
     @JvmName("account")
-    fun setAccount(account: Account?) { this.account = account }
+    fun setAccount(account: Account) {
+        this.account = account
+    }
 
     @JvmName("account")
     fun getAccount() : Account {
-       return when(chatType) {
-           ChatType.AsyncChat -> account ?: Accounts.defaultAsyncAccount
-           ChatType.LiveChat -> account ?: Accounts.defaultBoldAccount
-           else -> account ?: Accounts.defaultBotAccount
-       }
+       return account!!
     }
-
-
 
     var extraData: Map<String, Any?>? = null
     var restoreState: RestoreState = RestoreState()
 
     var chatController: ChatController? = null
-
-    @ChatType
-    private var chatType: String = ChatType.BotChat
 
     companion object {
 
