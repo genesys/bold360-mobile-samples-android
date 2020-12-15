@@ -22,7 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/rect_shape"
-            android:padding="3dp" />
+            android:padding="3dp">
+
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/basic_loading" />
+
+    </FrameLayout>
 
 </LinearLayout>
 

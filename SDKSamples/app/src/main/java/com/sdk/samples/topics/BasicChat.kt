@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.FragmentManager
@@ -36,24 +35,18 @@ open class BasicChat : SampleActivity(), ChatEventListener {
         setContentView(R.layout.activity_basic)
 
         topic_title.text = intent.getStringExtra("title")
-        startChat()
-    }
 
-    override fun onCreateView(
-        parent: View?,
-        name: String,
-        context: Context,
-        attrs: AttributeSet
-    ): View? {
         chatProvider.onChatLoaded =  { fragment ->
 
             if (!isFinishing && !supportFragmentManager.isStateSaved) {
+
+                basic_loading.visibility = View.GONE
 
                 hideKeyboard(window.decorView)
 
                 supportFragmentManager.beginTransaction()
                     .add(
-                        (parent as ViewGroup).basic_chat_view.id,
+                        basic_chat_view.id,
                         fragment,
                         topic_title.text.toString()
                     )
@@ -63,6 +56,17 @@ open class BasicChat : SampleActivity(), ChatEventListener {
                 finish()
             }
         }
+
+        startChat()
+    }
+
+    override fun onCreateView(
+        parent: View?,
+        name: String,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
+
         return super.onCreateView(parent, name, context, attrs)
     }
 

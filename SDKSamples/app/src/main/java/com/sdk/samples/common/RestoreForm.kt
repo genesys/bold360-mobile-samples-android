@@ -22,35 +22,17 @@ class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean)
         return inflater.inflate(R.layout.restore_form, container, false)
     }
 
-    override fun onResume() {
-        enableChatAction(true)
-        super.onResume()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         create_chat.setOnClickListener {
-            enableChatAction(false)
             onChatRestore(selectedChatType, false)
         }
 
         restore_chat.setOnClickListener {
-            enableChatAction(false)
             onChatRestore(selectedChatType, true)
         }
 
         chat_action_group.check(bot_radio.id)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        enableChatAction(true)
-    }
-
-    private fun enableChatAction(enable: Boolean) {
-        create_chat.isEnabled = enable
-        restore_chat.isEnabled = enable
     }
 
     private fun getCheckedRadio() =

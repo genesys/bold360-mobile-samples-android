@@ -12,7 +12,6 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
-import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
@@ -30,6 +29,7 @@ interface ChatProvider {
 
     /**
      * Restores the chat (if available) for the current account
+     * If chat controller doesn't exists it creates a new chat
      */
     fun restore()
 
@@ -44,11 +44,6 @@ interface ChatProvider {
      * Clears the chat and the ChatController
      */
     fun destruct()
-
-    /**
-     * Nullable context dependent
-     */
-    fun getUIProvider(): ChatUIProvider?
 
     fun getChatController() : ChatController
     fun hasChatController(): Boolean
@@ -156,10 +151,6 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
                 }
                 return
             } ?: create()
-        }
-
-        override fun getUIProvider() : ChatUIProvider? {
-            return context?.let { ChatUIProvider(it) }
         }
 
         override fun create(chatBuilder: ChatController.Builder?) {

@@ -3,6 +3,7 @@ package com.sdk.samples.common
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.nanorep.nanoengine.Account
+import com.sdk.samples.R
 import com.sdk.samples.common.ChatType.NONE
 import com.sdk.samples.common.accountForm.AccountForm
 import java.lang.ref.WeakReference
@@ -43,7 +44,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
         getFragmentManager()?.let { fm ->
             accountFormPresenter.extraParams = extraParams
-            chatType?.takeIf { it != NONE }?.let { accountFormPresenter.presentAccountForm(
+            chatType.takeIf { it != NONE }?.let { accountFormPresenter.presentAccountForm(
                 fm,
                 chatType
             ) } ?: accountFormPresenter.presentRestoreForm(fm)
@@ -110,7 +111,8 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
     private fun presentForm(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
         fragmentManager.beginTransaction()
-            .replace(containerRes, fragment, tag)
+            .setCustomAnimations(R.anim.right_in, R.anim.right_out, R.anim.right_in, R.anim.right_out)
+            .add(containerRes, fragment, tag)
             .addToBackStack(null)
             .commit()
     }

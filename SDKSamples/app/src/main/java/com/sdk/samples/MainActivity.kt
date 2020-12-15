@@ -167,8 +167,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).chatProvider.destruct()
+
+        ViewModelProvider(this, singletonSamplesViewModelFactory)
+            .get(SamplesViewModel::class.java).chatProvider.destruct()
+
         singletonSamplesViewModelFactory.clear()
+
         super.onDestroy()
     }
 
