@@ -42,8 +42,8 @@ open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener /*[1]*/
     /**
      * setting the accountProvider in order to receive account related updates, and be able to restore chats.
      */
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().accountProvider(this)
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.accountProvider(this)
     }
 
 //<editor-fold desc=">>>>> AccountSessionListener implementation <<<<<" >

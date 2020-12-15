@@ -28,10 +28,6 @@ import kotlinx.coroutines.launch
 
 open class BasicChat : SampleActivity(), ChatEventListener {
 
-    protected var chatController: ChatController
-    set(value) { chatProvider.chatController = value }
-    get() = chatProvider.chatController!!
-
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
@@ -79,19 +75,23 @@ open class BasicChat : SampleActivity(), ChatEventListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    protected open fun getBuilder() = chatProvider.getBuilder().apply {
-        chatEventListener(this@BasicChat)
+    protected open fun createChat() {
+        chatProvider.create(getChatBuilder())
+    }
+
+    protected open fun getChatBuilder(): ChatController.Builder? {
+        return ChatController.Builder(applicationContext)
+            .conversationSettings(createChatSettings())
+            .chatEventListener(this)
     }
 
     protected open fun createChatSettings(): ConversationSettings {
-        return chatProvider.createSettings().apply {
+        return ConversationSettings().apply {
             /*!- uncomment to set custom datestamp format:
              .datestamp(true, SampleDatestampFactory())
          */
         }
     }
-
-    protected open fun createChat() = chatProvider.create()
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
 

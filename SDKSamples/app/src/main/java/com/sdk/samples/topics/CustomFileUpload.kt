@@ -70,8 +70,8 @@ class CustomFileUpload : BoldChatAvailability() {
     //</editor-fold>
 
     //<editor-fold desc="Custom upload: step 2: Disable the SDKs upload button">
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().apply {
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.apply {
             chatUIProvider(ChatUIProvider(this@CustomFileUpload).apply {
                 chatInputUIProvider.uiConfig.showUpload = false
             })

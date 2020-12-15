@@ -22,8 +22,8 @@ class BoldCustomChatForm : BoldChatAvailability() {
 
     private val formProvider = FormProviderSample()
 
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().formProvider(formProvider)
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.formProvider(formProvider)
     }
 
     override fun prepareAccount(account: BoldAccount) {

@@ -5,13 +5,7 @@ import com.sdk.samples.topics.handover.MyHandoverHandler
 
 open class Handover : BotChat() {
 
-    override fun getBuilder(): ChatController.Builder {
-
-        val settings = createChatSettings()
-
-        return ChatController.Builder(this)
-            .chatEventListener(this)
-            .conversationSettings(settings)
-            .chatHandoverHandler(MyHandoverHandler(this))
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.chatHandoverHandler(MyHandoverHandler(this))
     }
 }

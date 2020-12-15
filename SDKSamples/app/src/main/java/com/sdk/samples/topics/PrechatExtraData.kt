@@ -25,8 +25,8 @@ class PrechatExtraData : BotChat() {
         return (super.getAccount() as BotAccount).withId(this)
     }
 
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().accountProvider( Companion )
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.accountProvider( Companion )
     }
 
     companion object : SimpleAccountProvider() {

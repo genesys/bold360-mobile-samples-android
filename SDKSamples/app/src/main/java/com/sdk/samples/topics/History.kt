@@ -1,6 +1,5 @@
 package com.sdk.samples.topics
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -23,10 +22,6 @@ abstract class History : BasicChat() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         historyMenu = menu?.findItem(R.id.clear_history)
@@ -40,14 +35,13 @@ abstract class History : BasicChat() {
     /**
      * Adding history save support to the ChatController
      */
-    override fun getBuilder(): ChatController.Builder {
+    override fun getChatBuilder(): ChatController.Builder? {
 
         historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
 
         enableMenu(historyMenu, true)
 
-        return super.getBuilder()
-            .chatElementListener(historyRepository)
+        return super.getChatBuilder()?.chatElementListener(historyRepository)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

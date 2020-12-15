@@ -24,11 +24,11 @@ open class BotVocToVocChat : BotChat() {
     }
 
     override fun createChatSettings(): ConversationSettings {
-        return super.createChatSettings().voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
+        return ConversationSettings().voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
     }
 
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder()
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()
            // Uncomment this to enable the read alter provider: .ttsReadAlterProvider(readAlterProvider)
     }
 }

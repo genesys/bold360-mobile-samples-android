@@ -37,10 +37,9 @@ annotation class CustomUIOption
 
 open class CustomizedUI : BotChat() {
 
-    override fun getBuilder(): ChatController.Builder {
+    override fun getChatBuilder(): ChatController.Builder? {
 
-        return super.getBuilder()
-            .chatUIProvider(
+        return super.getChatBuilder()?.chatUIProvider(
                 UIProviderFactory.create(
                     this,
                     intent?.getStringExtra("type") ?: override

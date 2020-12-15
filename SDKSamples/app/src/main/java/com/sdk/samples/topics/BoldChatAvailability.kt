@@ -79,8 +79,8 @@ open class BoldChatAvailability : BoldChat() {
         }
     }
 
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().apply {
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.apply {
             this.chatUIProvider(ChatUIProvider(this@BoldChatAvailability).apply {
                 chatInputUIProvider.uiConfig.showUpload = false
             })

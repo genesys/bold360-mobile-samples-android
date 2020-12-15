@@ -13,8 +13,8 @@ open class EntitiesProviderChat : BotChat() {
         }
     }
 
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().entitiesProvider(BalanceEntitiesProvider())
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.entitiesProvider(BalanceEntitiesProvider())
     }
 
 }

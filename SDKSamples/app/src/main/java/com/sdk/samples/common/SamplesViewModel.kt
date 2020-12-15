@@ -2,6 +2,7 @@ package com.sdk.samples.common
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
@@ -13,18 +14,14 @@ import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
+import com.nanorep.sdkcore.utils.weakRef
+import java.lang.ref.WeakReference
 import java.lang.reflect.InvocationTargetException
 
 interface ChatProvider {
-
-    /**
-     * @param chatController is the ChatController of the SDK
-     */
-    var chatController: ChatController?
 
     /**
      * Being invoked when the chat fragment had been fetched and ready to be presented
@@ -38,19 +35,23 @@ interface ChatProvider {
 
     /**
      * Creates the chat controller and starts the chat
+     * @param chatBuilder optional injection of a custom ChatController.Builder
      * When ready the chat fragment would be passed by 'onChatLoaded' invocation
      */
-    fun create()
+    fun create(chatBuilder: ChatController.Builder? = null)
 
     /**
      * Clears the chat and the ChatController
      */
     fun destruct()
 
-    fun getBuilder() : ChatController.Builder
+    /**
+     * Nullable context dependent
+     */
+    fun getUIProvider(): ChatUIProvider?
+
+    fun getChatController() : ChatController
     fun hasChatController(): Boolean
-    fun createSettings(): ConversationSettings
-    fun getUIProvider(): ChatUIProvider
 }
 
 interface AccountProvider {
@@ -61,10 +62,12 @@ interface AccountProvider {
 
 class SamplesViewModel(application: Application) : AndroidViewModel(application) {
 
-    var accountProvider = AccountHolder()
+    val accountProvider = AccountHolder()
 
-    fun getChat() = chatHolder as ChatProvider
-    private var chatHolder = ChatHolder()
+    val chatProvider: ChatProvider
+    get() = chatHolder
+
+    private val chatHolder = ChatHolder(application.applicationContext.weakRef())
 
     companion object {
 
@@ -88,38 +91,42 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
             field = value.also {
                 // If there is no chat restore request, the chat would be destructed
                 if (!it.restoreRequest) {
-                    getChat().destruct()
+                    chatHolder.destruct()
                 }
             }
         }
     }
 
-    private inner class ChatHolder : ChatProvider {
+    private inner class ChatHolder(wContext: WeakReference<Context>) : ChatProvider {
 
-        val context: Context = getApplication<Application>().applicationContext
+        private val context = wContext.get()
 
-        override var chatController: ChatController? = null
+        private var controller: ChatController? = null
 
         override var onChatLoaded: ((Fragment) -> Unit)? = null
 
-        override fun hasChatController(): Boolean = chatController?.wasDestructed == false
+        override fun getChatController(): ChatController {
+            if (controller == null) {
+                create()
+            }
+            return controller!!
+        }
+
+        override fun hasChatController(): Boolean = controller?.wasDestructed == false
 
         override fun destruct() {
-            chatController?.let {
+            controller?.let {
                 it.terminateChat()
                 it.destruct()
             }
-            chatController = null
+            controller = null
         }
 
         private var chatLoadedListener: ChatLoadedListener = object : ChatLoadedListener {
 
             override fun onComplete(result: ChatLoadResponse) {
-                result.error?.run {
-                    toast(
-                        context,
-                        "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}  "
-                    )
+                result.error?.takeIf { context != null }?.run {
+                    toast( context!!, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}")
                 } ?: runMain {
                     result.fragment?.let {
                         onChatLoaded?.invoke(it)
@@ -141,7 +148,7 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
         }
 
         override fun restore() {
-            chatController?.run {
+            controller?.run {
                 if(hasOpenChats() && isActive) {
                     restoreChat()
                 } else {
@@ -151,23 +158,15 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
             } ?: create()
         }
 
-        override fun getUIProvider() : ChatUIProvider {
-            return ChatUIProvider(context)
+        override fun getUIProvider() : ChatUIProvider? {
+            return context?.let { ChatUIProvider(it) }
         }
 
-        override fun createSettings(): ConversationSettings {
-            return  ConversationSettings()
-        }
-
-        override fun getBuilder(): ChatController.Builder {
-            return ChatController.Builder(context)
-                .conversationSettings(createSettings())
-                .chatUIProvider(getUIProvider())
-        }
-
-        override fun create() {
-            destruct()
-            chatController = getBuilder().build(prepareAccount(), chatLoadedListener)
+        override fun create(chatBuilder: ChatController.Builder?) {
+            val builder = chatBuilder ?: context?.let { ChatController.Builder(context) }
+            builder?.build(prepareAccount(), chatLoadedListener)?.let {
+                controller = it
+            } ?: kotlin.run { Log.e("ChatHolder", "Failed to create chat") }
         }
     }
 }
