@@ -1,9 +1,13 @@
 package com.sdk.samples.topics
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.FragmentManager
@@ -11,41 +15,59 @@ import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
-import com.nanorep.convesationui.structure.controller.ChatLoadResponse
-import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType
-import kotlinx.android.synthetic.main.activity_bot_chat.*
-import kotlinx.android.synthetic.main.restore_layout.*
+import kotlinx.android.synthetic.main.activity_basic.*
+import kotlinx.android.synthetic.main.activity_basic.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
-abstract class BasicChat : SampleActivity(), ChatEventListener {
+open class BasicChat : SampleActivity(), ChatEventListener {
 
-    protected lateinit var chatController: ChatController
-    protected var destructWithUI: Boolean by Delegates.observable(true) { property, oldValue, newValue ->
-        current_radio.isEnabled = !newValue
-    }
-
-    @ChatType
-    protected lateinit var chatType: String
+    protected var chatController: ChatController
+    set(value) { chatProvider.chatController = value }
+    get() = chatProvider.chatController!!
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bot_chat)
+        setContentView(R.layout.activity_basic)
 
         topic_title.text = intent.getStringExtra("title")
-
         startChat()
+    }
+
+    override fun onCreateView(
+        parent: View?,
+        name: String,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
+        chatProvider.onChatLoaded =  { fragment ->
+
+            if (!isFinishing && !supportFragmentManager.isStateSaved) {
+
+                hideKeyboard(window.decorView)
+
+                supportFragmentManager.beginTransaction()
+                    .add(
+                        (parent as ViewGroup).basic_chat_view.id,
+                        fragment,
+                        topic_title.text.toString()
+                    )
+                    .addToBackStack(ChatTag)
+                    .commit()
+            } else {
+                finish()
+            }
+        }
+        return super.onCreateView(parent, name, context, attrs)
     }
 
     open fun startChat() {
@@ -57,64 +79,28 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
-    protected open fun getBuilder(): ChatController.Builder {
-        val settings = createChatSettings()
-
-        return ChatController.Builder(this)
-            .chatEventListener(this)
-            .conversationSettings(settings)
-        /*!- uncomment to set AccountInfoProvider:
-             .accountProvider(SimpleAccountWithIdProvider(this)) */
+    protected open fun getBuilder() = chatProvider.getBuilder().apply {
+        chatEventListener(this@BasicChat)
     }
 
     protected open fun createChatSettings(): ConversationSettings {
-        return ConversationSettings()
-        /*!- uncomment to set custom datestamp format:
+        return chatProvider.createSettings().apply {
+            /*!- uncomment to set custom datestamp format:
              .datestamp(true, SampleDatestampFactory())
          */
-    }
-
-    protected open fun createChat() {
-        if (!hasChatController()) {
-            chatController = getBuilder().build(
-                getAccount(), object : ChatLoadedListener {
-                    override fun onComplete(result: ChatLoadResponse) {
-                        if (isFinishing || supportFragmentManager.isStateSaved) return
-
-                        hideKeyboard(window.decorView)
-
-                        result.takeIf { it.error == null && it.fragment != null }?.run {
-                            supportFragmentManager.beginTransaction()
-                                .add(chat_view.id, fragment!!, topic_title.text.toString())
-                                .addToBackStack(ChatTag)
-                                .commit()
-
-                            onChatLoaded()
-                        } ?: kotlin.run {
-                            toast(
-                                this@BasicChat,
-                                "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}  "
-                            )
-                            onChatLoaded()
-                        }
-                    }
-                })
-        } else {
-            chatController.startChat(getAccount())
         }
-
-        enableMenu(destructMenu, true)
     }
 
-    protected open fun onChatLoaded() {
-
-    }
+    protected open fun createChat() = chatProvider.create()
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
         Log.d(TAG, "chat in state: ${stateEvent.state}")
 
         when (stateEvent.state) {
+
+            StateEvent.ChatWindowLoaded -> enableMenu(endMenu, chatController.hasOpenChats())
+
             StateEvent.Started -> enableMenu(endMenu, chatController.hasOpenChats())
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
@@ -150,7 +136,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         /* !- launch suspended on a different deamon to prevent activation while on a previous
               fragmentManagerTransaction (exp: onBackPressed on postchat form, triggers StateEvent.Ended
               event call, which calls to remove the chat fragment */
-        GlobalScope.launch(Dispatchers.Main) {
+        CoroutineScope(Dispatchers.Main).launch {
             try {
                 supportFragmentManager.takeUnless { it.isDestroyed }?.popBackStackImmediate(
                     ChatTag,
@@ -166,22 +152,13 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         finishIfLast()
     }
 
-    protected fun finishIfLast() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            finish()
-        }
-    }
-
     override fun onStop() {
         onChatClose()
         super.onStop()
     }
 
     protected open fun onChatClose() {
-        takeIf { isFinishing && ::chatController.isInitialized }?.run {
-            chatController.terminateChat()
-            chatController.destruct()
-        }
+        if (isFinishing) { chatProvider.destruct() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -224,9 +201,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         }
     }
 
-    open fun hasChatController(): Boolean {
-        return this::chatController.isInitialized && !chatController.wasDestructed
-    }
+    protected fun hasChatController(): Boolean = chatProvider.hasChatController()
 
     override fun onUrlLinkSelected(url: String) {
         toast(this, "got link: $url")

@@ -47,7 +47,6 @@ open class CustomizedUI : BotChat() {
                 )
             )
     }
-
 }
 
 private class UIProviderFactory {

@@ -8,6 +8,8 @@
         android:background="@drawable/bg"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
         android:padding="10dp">
 
     <ScrollView

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_bot_chat.*
+import kotlinx.android.synthetic.main.activity_basic.*
 import kotlinx.android.synthetic.main.custom_ui_options_layout.*
 
 
@@ -14,7 +14,7 @@ open class CustomUIChat : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bot_chat)
+        setContentView(R.layout.activity_basic)
 
         topic_title.text = intent.getStringExtra("title")
 
@@ -30,7 +30,7 @@ open class CustomUIChat : AppCompatActivity() {
 
     private fun initOptionsView(){
 
-        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, chat_view, true)
+        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, basic_chat_view, true)
         buttonSetup(configure_option, configure)
         buttonSetup(override_option, override)
     }

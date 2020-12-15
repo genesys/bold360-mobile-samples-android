@@ -46,7 +46,7 @@ open class BoldChatAvailability : BoldChat() {
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.chat_view, BoldAvailability(), AvailabilityTag)
+            .add(R.id.basic_chat_view, BoldAvailability(), AvailabilityTag)
             .addToBackStack(AvailabilityTag)
             .commit()
     }

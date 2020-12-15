@@ -35,6 +35,24 @@ fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
 }
 
+fun AccountMap.equalsTo(other: AccountMap): Boolean {
+
+        if (other.size != size) return false
+
+        val otherKeys = other.keys
+        val otherValues = other.values
+
+        values.forEachIndexed { index, value ->
+                if (value != otherValues.elementAt(index)) return false
+        }
+
+        keys.forEachIndexed { index, key ->
+                if (key != otherKeys.elementAt(index)) return false
+        }
+
+        return true
+}
+
 fun Account?.orDefault(@ChatType chatType: String): Account {
         return this ?: when (chatType) {
                 ChatType.LiveChat -> Accounts.defaultBoldAccount

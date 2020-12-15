@@ -80,14 +80,10 @@ class SharedDataController: DataController, RestoreStateProvider {
 
     override fun updateAccount(context: Context?, account: Account, extraData: Map<String, Any?>?) {
 
-        val savedAccount = getAccount(context)
-
-        restorable = account.isRestorable(savedAccount)
+        restorable = account.isRestorable(getAccount(context))
         this.extraData = extraData
 
-        context?.takeIf { account != savedAccount }?.let {
-            sharedDataHandler?.saveAccount(it, account)
-        }
+        context?.let { sharedDataHandler?.saveAccount(it, account) }
     }
 }
 
@@ -150,7 +146,7 @@ internal class BotSharedDataHandler: SharedDataHandler() {
     }
 
     override fun saveAccount(context: Context, data: Account?) {
-        saveData(context, LiveSharedDataHandler.SharedName, (data as? BotAccount)?.map() ?: mapOf())
+        saveData(context, SharedName, (data as? BotAccount)?.map() ?: mapOf())
     }
 }
 
@@ -188,7 +184,7 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
     }
 
     override fun saveAccount(context: Context, data: Account?) {
-        saveData(context, LiveSharedDataHandler.SharedName, (data as? AsyncAccount)?.map() ?: mapOf())
+        saveData(context, SharedName, (data as? AsyncAccount)?.map() ?: mapOf())
     }
 }
 

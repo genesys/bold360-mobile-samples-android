@@ -18,7 +18,7 @@
             android:textSize="18sp" />
 
     <FrameLayout
-            android:id="@+id/chat_view"
+            android:id="@+id/basic_chat_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/rect_shape"

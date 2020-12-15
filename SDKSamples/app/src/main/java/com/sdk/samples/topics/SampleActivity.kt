@@ -1,22 +1,45 @@
 package com.sdk.samples.topics
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.nanorep.nanoengine.Account
-import com.sdk.samples.SamplesViewModel
-import com.sdk.samples.SingletonSamplesViewModelFactory
+import com.sdk.samples.common.AccountProvider
+import com.sdk.samples.common.ChatProvider
+import com.sdk.samples.common.SamplesViewModel
+import com.sdk.samples.common.SingletonSamplesViewModelFactory
 
 abstract class SampleActivity  : AppCompatActivity() {
 
-    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance())
-    lateinit var viewModel: SamplesViewModel
+    private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory
 
-    protected open fun getAccount(): Account = viewModel.getAccount()
+    private lateinit var viewModel: SamplesViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    protected lateinit var chatProvider: ChatProvider
+    protected lateinit var accountProvider: AccountProvider
+
+    protected open fun getAccount(): Account = accountProvider.account
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
+            SamplesViewModel.getInstance(application))
+
         viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
+
+        chatProvider = viewModel.getChat()
+
+        accountProvider = viewModel.accountProvider
     }
+
+    protected fun finishIfLast() {
+        finish()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishIfLast()
+    }
+
 }

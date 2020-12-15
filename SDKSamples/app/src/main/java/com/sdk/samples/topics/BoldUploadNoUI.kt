@@ -38,7 +38,6 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_bot_chat.topic_title
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import java.io.ByteArrayOutputStream
 
@@ -198,7 +197,6 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     override fun finish() {
         super.finish()
-
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 

@@ -1,7 +1,6 @@
 package com.sdk.samples.topics
 
 import android.util.Log
-import com.integration.core.StateEvent
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.topics.history.HistoryRepository
@@ -9,23 +8,22 @@ import com.sdk.samples.topics.history.RoomHistoryProvider
 
 class ChatRestore : History() {
 
-    override fun hasChatController(): Boolean {
-        return viewModel.chatController?.takeIf { !it.wasDestructed }?.let { true } ?: false
-    }
-
     private fun onRestore() {
 
         if (!hasChatController()) {
-            toast(this@ChatRestore,
-                "Failed to restore chat\nerror: there is no chat to restore")
+            toast(
+                this@ChatRestore,
+                "Failed to restore chat\nerror: there is no chat to restore"
+            )
             finish()
         } else {
             try {
-                getAccount()?.getGroupId()?.let {
+
+                getAccount().getGroupId()?.let {
                     historyRepository.targetId = it
                 }
 
-                chatController.restoreChat(account = getAccount())
+                chatProvider.restore()
 
             } catch (ex: IllegalStateException) {
                 onError(NRError(ex))
@@ -37,11 +35,9 @@ class ChatRestore : History() {
 
         try {
             if(hasChatController()) {
-                historyRepository.targetId = getAccount()?.getGroupId()
+                historyRepository.targetId = getAccount().getGroupId()
             }
             createChat()
-
-            viewModel.chatController = chatController
 
         } catch (ex: IllegalStateException) {
             onError(NRError(ex))
@@ -50,13 +46,13 @@ class ChatRestore : History() {
 
     override fun startChat() {
 
-        val restoreState = viewModel.restoreState
+        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
 
-        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId()))
+        val restoreState = accountProvider.restoreState
 
         when {
-            restoreState.restoreRequest && restoreState.restorable -> onRestore()
             !restoreState.restoreRequest -> onCreate()
+            restoreState.restoreRequest && restoreState.restorable -> onRestore()
             else -> {
                 toast(this@ChatRestore, "Account is not restorable")
                 finish()
@@ -64,16 +60,8 @@ class ChatRestore : History() {
         }
     }
 
-    override fun onChatStateChanged(stateEvent: StateEvent) {
-        Log.d("Chat event", "chat in state: ${stateEvent.state}")
-
-        when (stateEvent.state) {
-            StateEvent.Idle, StateEvent.ChatWindowDetached -> {
-                if (supportFragmentManager.backStackEntryCount > 1)
-                    onBackPressed()
-            }
-
-            else -> super.onChatStateChanged(stateEvent)
-        }
+    override fun onChatClose() {
+        Log.i("RestoreSample", "ChatController hadn't been destructed")
+        finish()
     }
 }

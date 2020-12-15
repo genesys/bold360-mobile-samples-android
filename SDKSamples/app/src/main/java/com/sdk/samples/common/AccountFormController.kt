@@ -8,10 +8,10 @@ import com.sdk.samples.common.accountForm.AccountForm
 import java.lang.ref.WeakReference
 
 /**
- * @param restorable is true if the restoration is possible for the account
  * @param restoreRequest is true if the user requested to restore the chat
+ * @param restorable is true if the restoration is possible for the account
 */
-class RestoreState(val restorable: Boolean = false, val restoreRequest: Boolean = false)
+class RestoreState(val restoreRequest: Boolean = false, val restorable: Boolean = false)
 
 interface AccountListener {
     var onAccountData: ((account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit?)?
@@ -34,7 +34,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
     override fun updateChatType(
         chatType: String,
         extraParams: List<String>?,
-        onAccountData: (account: Account?, RestoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
+        onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
     ) {
 
         accountFormPresenter.onAccountData = { account, restoreState, extraData ->
@@ -88,9 +88,7 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
     }
 
     override fun presentRestoreForm(fragmentManager: FragmentManager) {
-        val fragment = RestoreForm.newInstance()
-
-        fragment.onChatRestore = { chatType, restoreRequest ->
+        val fragment = RestoreForm.newInstance { chatType, restoreRequest ->
 
             dataController.restoreRequest = restoreRequest
 

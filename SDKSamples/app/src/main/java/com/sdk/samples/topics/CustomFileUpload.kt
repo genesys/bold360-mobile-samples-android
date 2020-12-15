@@ -29,7 +29,7 @@ import com.nanorep.sdkcore.utils.px
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import com.sdk.samples.topics.ui.live.toFileUploadInfo
-import kotlinx.android.synthetic.main.activity_bot_chat.*
+import kotlinx.android.synthetic.main.activity_basic.*
 import java.util.*
 
 /**
@@ -89,7 +89,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 enableMenu(destructMenu, true)
                 
                 // !- first, make sure the Upload feature is enabled
-                if(chatController.isEnabled(ChatFeatures.FileUpload)) {
+                if(chatController!!.isEnabled(ChatFeatures.FileUpload)) {
                     imageButton.visibility = View.VISIBLE
                 } else {
                     toast(this, getString(R.string.file_transfer_not_enabled))
@@ -179,7 +179,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 Log.e(TAG, "file path is invalid")
             }
 
-            chatController.post(
+            chatController!!.post(
                 SystemStatement(
                     ex.error.description ?: getString(R.string.upload_failure_general)
                 )
@@ -203,7 +203,7 @@ class CustomFileUpload : BoldChatAvailability() {
         }
 
         chosenUploadsTarget.forEach { uploadInfo ->
-            chatController.uploadFile(uploadInfo, this::onUploadResults)
+            chatController!!.uploadFile(uploadInfo, this::onUploadResults)
         }
     }
     //</editor-fold>

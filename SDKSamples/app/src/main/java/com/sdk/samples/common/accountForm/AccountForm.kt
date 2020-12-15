@@ -57,11 +57,11 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
                 else -> accountData.toBotAccount()
             }.also { account ->
                 val extraData = accountData.filter {
-                            it.key == BotSharedDataHandler.preChat_deptCode_key ||
+                    it.key == BotSharedDataHandler.preChat_deptCode_key ||
                             it.key == BotSharedDataHandler.preChat_lName_key ||
                             it.key == BotSharedDataHandler.preChat_fName_key
                 }
-                context?.let { dataController.updateAccount(this.context, account, extraData) }
+                context?.let { dataController.updateAccount(context, account, extraData) }
             }
         }
     }

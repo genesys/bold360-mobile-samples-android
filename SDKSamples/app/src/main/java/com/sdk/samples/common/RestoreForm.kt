@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.restore_layout.*
+import kotlinx.android.synthetic.main.restore_form.*
 
-class RestoreForm : Fragment() {
+class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean) -> Unit) : Fragment() {
 
     @ChatType private val selectedChatType: String
         get() = getCheckedRadio()?.tag?.toString() ?: ChatType.BotChat
@@ -19,10 +19,13 @@ class RestoreForm : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.restore_layout, container, false)
+        return inflater.inflate(R.layout.restore_form, container, false)
     }
 
-    var onChatRestore: (chatType: String, isRestore: Boolean) -> Unit = { chatType, isRestore ->  }
+    override fun onResume() {
+        enableChatAction(true)
+        super.onResume()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -57,8 +60,8 @@ class RestoreForm : Fragment() {
     companion object {
         const val TAG = "RestoreForm"
 
-        fun newInstance(): RestoreForm {
-            return RestoreForm()
+        fun newInstance(onChatRestore: (chatType: String, restoreRequest: Boolean) -> Unit): RestoreForm {
+            return RestoreForm(onChatRestore)
         }
     }
 }

@@ -18,10 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.common.AccountFormController
-import com.sdk.samples.common.ChatType
+import com.sdk.samples.common.*
 import com.sdk.samples.common.ExtraParams.*
-import com.sdk.samples.common.orDefault
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 import java.lang.ref.WeakReference
@@ -39,7 +37,7 @@ open class SampleTopic(
 class MainActivity : AppCompatActivity() {
 
     private lateinit var topics: ArrayList<SampleTopic>
-    private val singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance())
+    private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory
 
     private var retryProviderInstall = true
     private lateinit var accountFormController: AccountFormController
@@ -53,6 +51,8 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
             )
         )
+
+        singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance(application))
 
         topics = arrayListOf(
             SampleTopic(
@@ -145,14 +145,13 @@ class MainActivity : AppCompatActivity() {
             accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState, extraData ->
                 account.let {
                     ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
-                        chatController = null
-                        setAccount(account.orDefault(topic.chatType))
-                        this.restoreState = restoreState
-                        this.extraData = extraData
+                        accountProvider.apply {
+                            this.account = account.orDefault(topic.chatType)
+                            this.restoreState = restoreState
+                            this.extraData = extraData
+                        }
                     }
-                    startActivity(
-                        Intent(topic.intentAction).putExtra("title", topic.title)
-                    )
+                    startActivity(Intent(topic.intentAction).putExtra("title", topic.title).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
                     overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
@@ -165,6 +164,12 @@ class MainActivity : AppCompatActivity() {
             )
         )
         (topics_recycler.adapter as TopicsAdapter).updateTopics()
+    }
+
+    override fun onDestroy() {
+        ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).getChat().destruct()
+        singletonSamplesViewModelFactory.clear()
+        super.onDestroy()
     }
 
     override fun onPostResume() {

@@ -103,7 +103,7 @@ class BoldCustomChatForm : BoldChatAvailability() {
                     R.anim.right_in,
                     R.anim.right_out
                 )
-                .add(R.id.chat_view, fragment, CustomFormTag)
+                .add(R.id.basic_chat_view, fragment, CustomFormTag)
                 .addToBackStack(CustomFormTag)
                 .commit()
         }

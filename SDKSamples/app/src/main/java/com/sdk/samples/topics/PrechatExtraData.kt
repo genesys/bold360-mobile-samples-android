@@ -16,7 +16,7 @@ class PrechatExtraData : BotChat() {
 
     override fun getAccount(): Account {
 
-        (viewModel.extraData)?.let { extraData ->
+        (accountProvider.extraData)?.let { extraData ->
             extraData[preChat_deptCode_key]?.let {  BOLD_DEPARTMENT = it.toString() }
             extraData[preChat_fName_key]?.let {  DemoFirstName = it.toString() }
             extraData[preChat_lName_key]?.let {  DemoLastName = it.toString() }
