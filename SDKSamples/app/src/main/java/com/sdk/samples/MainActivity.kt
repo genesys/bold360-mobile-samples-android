@@ -50,8 +50,6 @@ class MainActivity : AppCompatActivity() {
             samplesContainer.id, supportFragmentManager.weakRef()
         )
 
-        singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(SamplesViewModel.getInstance(application))
-
         topics = arrayListOf(
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
@@ -139,6 +137,9 @@ class MainActivity : AppCompatActivity() {
                 ChatType.Bot
             )
         )
+        singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
+            SamplesViewModel.getInstance{ applicationContext.weakRef() }
+        )
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
@@ -169,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
 
         ViewModelProvider(this, singletonSamplesViewModelFactory)
-            .get(SamplesViewModel::class.java).clear()
+            .get(SamplesViewModel::class.java).release()
 
         singletonSamplesViewModelFactory.clear()
 

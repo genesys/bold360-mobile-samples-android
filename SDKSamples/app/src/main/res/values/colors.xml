@@ -5,7 +5,6 @@
     <color name="colorAccent">#79B0FF</color>
     <color name="demo_text_color">#F44336</color>
 
-    <color name="form_field_background">#dddddd</color>
     <color name="form_field_hint">@color/colorAccent</color>
 
 </resources>

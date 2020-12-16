@@ -14,14 +14,14 @@ import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import com.sdk.samples.common.*
 import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.accountUtils.ExtraParams.PrechatExtraData
+import com.sdk.samples.common.accountUtils.ExtraParams.Welcome
+import com.sdk.samples.common.loginForms.BotSharedDataHandler
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Account_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.ApiKey_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Context_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Kb_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Server_key
-import com.sdk.samples.common.accountUtils.ExtraParams.PrechatExtraData
-import com.sdk.samples.common.accountUtils.ExtraParams.Welcome
-import com.sdk.samples.common.loginForms.BotSharedDataHandler
 import com.sdk.samples.common.loginForms.DataController
 import com.sdk.samples.common.loginForms.SharedDataHandler
 import kotlinx.android.synthetic.main.async_account_form.*

@@ -34,7 +34,7 @@ private const val ASYNC_TAG = "async"
 /**
  * Enables restore and reconnect of last async chat.
  */
-open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener /*[1]*/ {
+open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener {
 
     private var senderId: String = ""
     private var lastReceivedMessageId: String = ""
@@ -46,7 +46,7 @@ open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener /*[1]*/
         return super.getChatBuilder()?.accountProvider(this)
     }
 
-//<editor-fold desc=">>>>> AccountSessionListener implementation <<<<<" >
+//<editor-fold desc=">>>>> AccountSessionListener implementation [2, 3]<<<<<" >
 
     override fun provide(info: AccountInfo, callback: Completion<AccountInfo>) {
         return callback.onComplete((info as? AsyncAccount)?.let { restoreAccount() } ?: info)
@@ -86,13 +86,12 @@ open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener /*[1]*/
         }
     }
 
+//</editor-fold>
 
     fun AsyncAccount.log(): String {
         return "Account: [apiKey:$apiKey],[applicationId:${info.applicationId}],[userId:${info.userInfo.userId}]," +
                 " [senderId:${info.SenderId}],[lastMessage:${info.LastReceivedMessageId}]"
     }
-
-//</editor-fold>
 }
 
 /*

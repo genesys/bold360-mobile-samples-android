@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
+import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.SamplesViewModel
 
 abstract class SampleActivity  : AppCompatActivity() {
@@ -24,7 +25,8 @@ abstract class SampleActivity  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
-            SamplesViewModel.getInstance(application))
+            SamplesViewModel.getInstance{ applicationContext.weakRef() }
+        )
 
         viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
 
@@ -33,13 +35,17 @@ abstract class SampleActivity  : AppCompatActivity() {
         accountProvider = viewModel.accountProvider
     }
 
-    protected fun finishIfLast() {
-        finish()
+    override fun onBackPressed() {
+
+        super.onBackPressed()
+
+        finishIfLast()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishIfLast()
+    protected fun finishIfLast() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            finish()
+        }
     }
 
 }

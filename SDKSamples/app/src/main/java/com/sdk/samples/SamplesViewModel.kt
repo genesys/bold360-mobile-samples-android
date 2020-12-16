@@ -1,13 +1,10 @@
 package com.sdk.samples
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -17,13 +14,11 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
-import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.common.accountUtils.ChatType
 import com.sdk.samples.common.history.HistoryRepository
 import com.sdk.samples.common.loginForms.RestoreState
 import com.sdk.samples.common.loginForms.SharedDataHandler
 import java.lang.ref.WeakReference
-import java.lang.reflect.InvocationTargetException
 
 interface ChatProvider {
 
@@ -89,22 +84,23 @@ interface AccountProvider {
     var restoreState: RestoreState
 }
 
-class SamplesViewModel(application: Application) : AndroidViewModel(application) {
+class SamplesViewModel( provideChatContext: () -> WeakReference<Context>? ) : ViewModel() {
 
     val accountProvider = AccountHolder()
 
     val chatProvider: ChatProvider
-    get() = chatHolder
+        get() = chatHolder
 
-    private val chatHolder = ChatHolder(application.applicationContext.weakRef())
+    private val chatHolder: ChatHolder = ChatHolder( provideChatContext.invoke() )
 
     companion object {
 
         private var myViewModel: SamplesViewModel? = null
 
-        fun getInstance(application: Application) : SamplesViewModel {
+        @Synchronized
+        fun getInstance(provideChatContext: () -> WeakReference<Context>?) : SamplesViewModel {
             if (myViewModel == null) {
-                myViewModel = SamplesViewModel(application)
+                myViewModel = SamplesViewModel(provideChatContext)
             }
             return myViewModel!!
         }
@@ -116,18 +112,18 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
         override var extraData: Map<String, Any?>? = null
 
         override var restoreState = RestoreState()
-        set(value) {
-            field = value.also {
+            set(value) {
+                field = value.also {
 
-                // If there is no chat restore request, the chat would be destructed
-                if (!it.restoreRequest) chatHolder.destruct()
+                    // If there is no chat restore request, the chat would be destructed
+                    if (!it.restoreRequest) chatHolder.destruct()
+                }
             }
-        }
     }
 
-    private inner class ChatHolder(wContext: WeakReference<Context>) : ChatProvider {
+    private inner class ChatHolder(wContext: WeakReference<Context>?) : ChatProvider {
 
-        private var context: Context? = wContext.get()
+        private var context: Context? = wContext?.get()
 
         private var controller: ChatController? = null
 
@@ -222,50 +218,7 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun clear() {
+    fun release() {
         chatProvider.clear()
     }
-}
-
-class SingletonSamplesViewModelFactory(vmInstance: SamplesViewModel) : NewInstanceFactory() {
-
-    private val samplesViewModel: SamplesViewModel = vmInstance
-    private val viewModelFactory: MutableMap<Class<out ViewModel>, ViewModel> = mutableMapOf()
-
-    fun clear() {
-        viewModelFactory.clear()
-    }
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-        viewModelFactory[modelClass] = samplesViewModel
-
-        if (SamplesViewModel::class.java.isAssignableFrom(modelClass)) {
-
-            val shareVM: SamplesViewModel
-
-            if (viewModelFactory.containsKey(modelClass)) {
-                shareVM = viewModelFactory[modelClass] as SamplesViewModel
-            } else {
-                shareVM = try {
-                    modelClass.getConstructor(Runnable::class.java).newInstance(
-                        Runnable { viewModelFactory.remove(modelClass) }) as SamplesViewModel
-
-                } catch (e: Exception) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                } catch (e: IllegalAccessException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                } catch (e: InstantiationException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                } catch (e: InvocationTargetException) {
-                    throw RuntimeException("Cannot create an instance of $modelClass", e)
-                }
-                viewModelFactory[modelClass] = shareVM
-            }
-            return shareVM as T
-        }
-
-        return super.create(modelClass)
-    }
-
 }

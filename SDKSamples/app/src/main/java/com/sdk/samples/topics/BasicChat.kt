@@ -24,7 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-open class BasicChat : SampleActivity(), ChatEventListener {
+abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
@@ -90,14 +90,13 @@ open class BasicChat : SampleActivity(), ChatEventListener {
         }
     }
 
+    protected open fun onChatLoaded() {}
+
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
         Log.d(TAG, "chat in state: ${stateEvent.state}")
 
         when (stateEvent.state) {
-
-            StateEvent.ChatWindowLoaded -> enableMenu(endMenu, chatController.hasOpenChats())
-
             StateEvent.Started -> enableMenu(endMenu, chatController.hasOpenChats())
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
@@ -123,10 +122,7 @@ open class BasicChat : SampleActivity(), ChatEventListener {
 
     override fun onBackPressed() {
         enableMenu(endMenu, hasChatController() && chatController.hasOpenChats())
-
         super.onBackPressed()
-
-        finishIfLast()
     }
 
     protected fun removeChatFragment() {

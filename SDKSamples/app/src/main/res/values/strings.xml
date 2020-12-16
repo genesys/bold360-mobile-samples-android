@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Bold SDK Samples</string>
-    <string name="action_settings">Settings</string>
 
     <string name="hide_departments">Press to hide departments list</string>
     <string name="start_chat">Start Chat</string>
@@ -24,7 +23,6 @@
     <string name="custom_UI">Customizing the chat UI</string>
     <string name="chat_restore">Chat creation &amp; restoring</string>
     <string name="bot_chat_with_handover">Chat with AI: Handover</string>
-    <string name="bot_chat_with_entities">Chat with AI: Entities Provider</string>
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
 
     <string name="end_chat">End chat</string>
@@ -40,16 +38,9 @@
     <string name="department_code">Department Code</string>
 
 
-    <string name="start_async_chat">Start Chat</string>
     <string name="application_id_hint">Application Id</string>
     <string name="user_id_hint">User Id</string>
-    <string name="user_first">First name</string>
-    <string name="user_last">Last name</string>
     <string name="restore_if_available">Restore if available</string>
-    <string name="missing_apikey">Apikey is required</string>
-    <string name="missing_applicationId">Application id is required</string>
-    <string name="restore_chat_with_no_user">Can\'t restore chat without previous user id</string>
-    <string name="apikey">ApiKey</string>
     <string name="custom_form_submit">submit</string>
 
     <string name="error_account_name">Account name is empty</string>
@@ -60,9 +51,6 @@
     <string name="api_key_hint">API Key</string>
     <string name="firstName_hint">First Name</string>
     <string name="lastName_hint">Last Name</string>
-    <string name="access_key_hint">Access Key</string>
-    <string name="history_label">Enable history support</string>
-    <string name="welcome_label">Welcome message</string>
     <string name="welcome_hint">Insert welcome message id</string>
     <string name="context_name">Context Name</string>
     <string name="context_value">Context Value</string>
