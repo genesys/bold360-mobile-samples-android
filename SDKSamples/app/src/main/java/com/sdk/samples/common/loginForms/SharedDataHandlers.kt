@@ -101,7 +101,7 @@ abstract class SharedDataHandler {
     @ChatType
     abstract val chatType: String
 
-    abstract fun getAccount(context: Context): Account
+    abstract fun getAccount(context: Context): Account?
 
     protected fun saveData(context: Context, sharedName: String, data: Map<String, Any?>) {
         val shared = context.getSharedPreferences(sharedName, 0)
@@ -135,7 +135,7 @@ internal class BotSharedDataHandler: SharedDataHandler() {
     override val chatType: String
         get() = ChatType.Bot
 
-    override fun getAccount(context: Context): BotAccount {
+    override fun getAccount(context: Context): BotAccount? {
         val shared = context.getSharedPreferences(SharedName, 0)
         return mapOf(
             ChatType_key to chatType,
@@ -170,7 +170,7 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
     override val chatType: String
         get() = ChatType.Async
 
-    override fun getAccount(context: Context): AsyncAccount {
+    override fun getAccount(context: Context): AsyncAccount? {
         val shared = context.getSharedPreferences(SharedName, 0)
         return mapOf(
             ChatType_key to chatType,
@@ -200,7 +200,7 @@ internal class LiveSharedDataHandler: SharedDataHandler() {
     override val chatType: String
         get() = ChatType.Live
 
-    override fun getAccount(context: Context): BoldAccount {
+    override fun getAccount(context: Context): BoldAccount? {
         val shared = context.getSharedPreferences(SharedName, 0)
         return mapOf(
             ChatType_key to chatType,

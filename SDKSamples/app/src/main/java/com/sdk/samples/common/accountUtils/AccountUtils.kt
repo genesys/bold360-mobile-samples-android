@@ -77,31 +77,36 @@ fun Account?.isRestorable(savedAccount: Account?): Boolean {
         }
 }
 
-fun AccountMap.toBotAccount(): BotAccount {
-        return BotAccount(
-                this[BotSharedDataHandler.ApiKey_key] as String,
-                this[BotSharedDataHandler.Account_key] as String,
-                this[BotSharedDataHandler.Kb_key] as String,
-                this[BotSharedDataHandler.Server_key] as String,
-                this[BotSharedDataHandler.Context_key] as? Map<String, String>?).apply {
-                        (get(BotSharedDataHandler.Welcome_key) as? String)?.takeUnless { it.isEmpty() }?.let { welcomeMessage = it }
+fun AccountMap.toBotAccount(): BotAccount? {
+        return (this[BotSharedDataHandler.ApiKey_key] as? String)?.let { apiKey ->
+                BotAccount(apiKey,
+                        this[BotSharedDataHandler.Account_key] as String,
+                        this[BotSharedDataHandler.Kb_key] as String,
+                        this[BotSharedDataHandler.Server_key] as String,
+                        this[BotSharedDataHandler.Context_key] as? Map<String, String>?).apply {
+                                (get(BotSharedDataHandler.Welcome_key) as? String)
+                                        ?.takeUnless { it.isEmpty() }?.let { welcomeMessage = it }
+                        }
         }
-
 }
 
-fun AccountMap.toLiveAccount(): BoldAccount {
-        return BoldAccount(this[LiveSharedDataHandler.Access_key] as String)
+fun AccountMap.toLiveAccount(): BoldAccount? {
+        return (this[LiveSharedDataHandler.Access_key] as? String)?.let { BoldAccount(it) }
 }
 
-fun AccountMap.toAsyncAccount(): AsyncAccount {
-        return AsyncAccount(this[AsyncSharedDataHandler.Access_key] as String, this[AsyncSharedDataHandler.App_id_Key] as String).apply {
-                val userId = this@toAsyncAccount[AsyncSharedDataHandler.user_id_key] as String
-                info.userInfo = (userId.takeIf { it.isNotEmpty() }?.let { UserInfo(it) } ?: UserInfo()).apply {
-                        email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as String
-                        phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as String
-                        firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as String
-                        lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as String
-                        countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as String
+fun AccountMap.toAsyncAccount(): AsyncAccount? {
+        val accessKey = this[AsyncSharedDataHandler.Access_key] as? String
+        return accessKey?.let {
+                AsyncAccount(it, this[AsyncSharedDataHandler.App_id_Key] as? String ?: "").apply {
+                        val userId = this@toAsyncAccount[AsyncSharedDataHandler.user_id_key] as? String ?: ""
+                        info.userInfo =
+                                (userId.takeIf { userId.isNotEmpty() }?.let { UserInfo(userId) } ?: UserInfo()).apply {
+                                        email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as? String ?: ""
+                                        phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as? String ?: ""
+                                        firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as? String ?: ""
+                                        lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as? String ?: ""
+                                        countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as? String ?: ""
+                                }
                 }
         }
 }
