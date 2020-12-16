@@ -1,6 +1,7 @@
 package com.sdk.samples.topics
 
 import android.util.Log
+import android.widget.Toast
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 
@@ -11,7 +12,8 @@ class ChatRestore : History() {
         if (!hasChatController()) {
             toast(
                 this@ChatRestore,
-                "Failed to restore chat\nerror: there is no chat to restore"
+                "Failed to restore chat\nerror: there is no chat to restore",
+                Toast.LENGTH_SHORT
             )
             finish()
         } else {
@@ -48,7 +50,8 @@ class ChatRestore : History() {
         } ?: kotlin.run {
             toast(
                 this@ChatRestore,
-                "Cannot create chat without a valid account"
+                "Cannot create chat without a valid account",
+                Toast.LENGTH_SHORT
             )
             finish()
         }

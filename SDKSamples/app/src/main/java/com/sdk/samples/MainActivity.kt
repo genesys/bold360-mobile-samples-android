@@ -150,8 +150,8 @@ class MainActivity : AppCompatActivity() {
                         this.restoreState = restoreState
                         this.extraData = extraData
                     }
-                    topic.extraParams?.takeIf { !it.contains(UsingHistory) }?.let { chatProvider.clearHistory() }
                 }
+
                 startActivity(Intent(topic.intentAction).putExtra("title", topic.title).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }

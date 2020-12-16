@@ -40,6 +40,7 @@ open class BasicChat : SampleActivity(), ChatEventListener {
 
     override fun onStart() {
         super.onStart()
+
         chatProvider.onChatLoaded =  { fragment ->
 
             if (!isFinishing && !supportFragmentManager.isStateSaved) {
