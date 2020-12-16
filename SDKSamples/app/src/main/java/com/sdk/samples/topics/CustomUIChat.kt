@@ -3,6 +3,7 @@ package com.sdk.samples.topics
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.sdk.samples.R
@@ -29,7 +30,7 @@ open class CustomUIChat : AppCompatActivity() {
 
 
     private fun initOptionsView(){
-
+        basic_loading.visibility = View.GONE
         LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, basic_chat_view, true)
         buttonSetup(configure_option, configure)
         buttonSetup(override_option, override)
