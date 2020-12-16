@@ -1,11 +1,15 @@
-package com.sdk.samples.common.accountForm
+package com.sdk.samples.common.loginForms.accountForm
 
 import android.os.Bundle
 import android.view.View
 import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.sdk.samples.R
-import com.sdk.samples.common.*
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.accountUtils.ExtraParams
+import com.sdk.samples.common.loginForms.AsyncSharedDataHandler
+import com.sdk.samples.common.loginForms.DataController
+import com.sdk.samples.common.loginForms.SharedDataHandler
 import kotlinx.android.synthetic.main.async_account_form.*
 
 class AsyncAccountForm(dataController: DataController) : LiveAccountForm(dataController) {
@@ -71,7 +75,7 @@ class AsyncAccountForm(dataController: DataController) : LiveAccountForm(dataCon
             accountMap[AsyncSharedDataHandler.Phone_Number_key] = it.toString()
         }
 
-        accountMap[SharedDataHandler.ChatType_key] = ChatType.AsyncChat
+        accountMap[SharedDataHandler.ChatType_key] = ChatType.Async
 
         dataController.restoreRequest = restore_switch.isChecked
 

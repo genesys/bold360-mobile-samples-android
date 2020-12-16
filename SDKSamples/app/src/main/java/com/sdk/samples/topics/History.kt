@@ -6,13 +6,12 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.R
-import com.sdk.samples.topics.history.HistoryRepository
-import com.sdk.samples.topics.history.RoomHistoryProvider
+import com.sdk.samples.common.history.HistoryRepository
+import com.sdk.samples.common.history.RoomHistoryProvider
 
 abstract class History : BasicChat() {
 
-    protected lateinit var historyRepository: HistoryRepository
-    protected var historyMenu: MenuItem? = null
+    private var historyMenu: MenuItem? = null
 
     companion object {
         const val HistoryPageSize = 8
@@ -37,11 +36,11 @@ abstract class History : BasicChat() {
      */
     override fun getChatBuilder(): ChatController.Builder? {
 
-        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
+        chatProvider.updateHistoryRepo(HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId())))
 
         enableMenu(historyMenu, true)
 
-        return super.getChatBuilder()?.chatElementListener(historyRepository)
+        return super.getChatBuilder()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -49,20 +48,11 @@ abstract class History : BasicChat() {
 
         when (item.itemId) {
             R.id.clear_history -> {
-                historyRepository.clear()
+                chatProvider.clearHistory()
                 return true
             }
         }
 
         return false
-    }
-
-    override fun onStop() {
-        destructHistory()
-        super.onStop()
-    }
-
-    fun destructHistory() {
-        takeIf { isFinishing && ::historyRepository.isInitialized }?.historyRepository?.release()
     }
 }

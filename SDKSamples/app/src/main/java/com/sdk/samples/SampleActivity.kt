@@ -1,14 +1,11 @@
-package com.sdk.samples.topics
+package com.sdk.samples
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
-import com.sdk.samples.common.AccountProvider
-import com.sdk.samples.common.ChatProvider
-import com.sdk.samples.common.SamplesViewModel
-import com.sdk.samples.common.SingletonSamplesViewModelFactory
+import com.sdk.samples.SamplesViewModel
 
 abstract class SampleActivity  : AppCompatActivity() {
 
@@ -21,7 +18,7 @@ abstract class SampleActivity  : AppCompatActivity() {
 
     protected lateinit var chatController: ChatController
 
-    protected open fun getAccount(): Account = accountProvider.account
+    protected open fun getAccount(): Account? = accountProvider.account
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +29,6 @@ abstract class SampleActivity  : AppCompatActivity() {
         viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
 
         chatProvider = viewModel.chatProvider
-
-        chatController = chatProvider.getChatController()
 
         accountProvider = viewModel.accountProvider
     }

@@ -1,4 +1,4 @@
-package com.sdk.samples.common.accountForm
+package com.sdk.samples.common.loginForms.accountForm
 
 import android.content.Context
 import android.os.Build
@@ -13,13 +13,17 @@ import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import com.sdk.samples.common.*
-import com.sdk.samples.common.BotSharedDataHandler.Companion.Account_key
-import com.sdk.samples.common.BotSharedDataHandler.Companion.ApiKey_key
-import com.sdk.samples.common.BotSharedDataHandler.Companion.Context_key
-import com.sdk.samples.common.BotSharedDataHandler.Companion.Kb_key
-import com.sdk.samples.common.BotSharedDataHandler.Companion.Server_key
-import com.sdk.samples.common.ExtraParams.PrechatExtraData
-import com.sdk.samples.common.ExtraParams.Welcome
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Account_key
+import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.ApiKey_key
+import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Context_key
+import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Kb_key
+import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Server_key
+import com.sdk.samples.common.accountUtils.ExtraParams.PrechatExtraData
+import com.sdk.samples.common.accountUtils.ExtraParams.Welcome
+import com.sdk.samples.common.loginForms.BotSharedDataHandler
+import com.sdk.samples.common.loginForms.DataController
+import com.sdk.samples.common.loginForms.SharedDataHandler
 import kotlinx.android.synthetic.main.async_account_form.*
 import kotlinx.android.synthetic.main.bot_account_form.*
 import kotlinx.android.synthetic.main.bot_account_form.scroller
@@ -127,7 +131,7 @@ class BotAccountForm(dataController: DataController) : AccountForm(dataControlle
             return null
         }
 
-        accountMap[SharedDataHandler.ChatType_key] = ChatType.BotChat
+        accountMap[SharedDataHandler.ChatType_key] = ChatType.Bot
         accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString() ?: ""
         accountMap[Server_key] = bot_server_edit_text.text?.toString() ?: ""
         accountMap[Context_key] =  contextHandler.getContext()

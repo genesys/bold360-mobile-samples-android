@@ -1,4 +1,4 @@
-package com.sdk.samples.topics.extra
+package com.sdk.samples.common.extra
 
 import android.content.Context
 import android.graphics.Color

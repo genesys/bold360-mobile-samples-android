@@ -1,4 +1,4 @@
-package com.sdk.samples.common
+package com.sdk.samples.common.loginForms
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import com.sdk.samples.R
+import com.sdk.samples.common.accountUtils.ChatType
 import kotlinx.android.synthetic.main.restore_form.*
 
 class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean) -> Unit) : Fragment() {
 
-    @ChatType private val selectedChatType: String
-        get() = getCheckedRadio()?.tag?.toString() ?: ChatType.BotChat
+    @ChatType
+    private val selectedChatType: String
+        get() = getCheckedRadio()?.tag?.toString() ?: ChatType.Bot
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,15 +26,9 @@ class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        create_chat.setOnClickListener {
-            onChatRestore(selectedChatType, false)
+        start_chat.setOnClickListener {
+            onChatRestore(selectedChatType, restore_switch.isChecked)
         }
-
-        restore_chat.setOnClickListener {
-            onChatRestore(selectedChatType, true)
-        }
-
-        chat_action_group.check(bot_radio.id)
     }
 
     private fun getCheckedRadio() =

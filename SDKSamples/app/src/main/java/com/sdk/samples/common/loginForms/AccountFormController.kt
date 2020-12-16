@@ -1,11 +1,11 @@
-package com.sdk.samples.common
+package com.sdk.samples.common.loginForms
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.nanorep.nanoengine.Account
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType.NONE
-import com.sdk.samples.common.accountForm.AccountForm
+import com.sdk.samples.common.accountUtils.ChatType.None
+import com.sdk.samples.common.loginForms.accountForm.AccountForm
 import java.lang.ref.WeakReference
 
 /**
@@ -26,7 +26,8 @@ interface FormController {
     )
 }
 
-class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>): FormController {
+class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>):
+    FormController {
 
     private val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
@@ -44,7 +45,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
         getFragmentManager()?.let { fm ->
             accountFormPresenter.extraParams = extraParams
-            chatType.takeIf { it != NONE }?.let { accountFormPresenter.presentAccountForm(
+            chatType.takeIf { it != None }?.let { accountFormPresenter.presentAccountForm(
                 fm,
                 chatType
             ) } ?: accountFormPresenter.presentRestoreForm(fm)
@@ -52,7 +53,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
     }
 }
 
-interface FormPresenter: AccountListener{
+interface FormPresenter: AccountListener {
     val containerRes: Int
     val dataController: DataController?
 
@@ -93,7 +94,7 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
             dataController.restoreRequest = restoreRequest
 
-            if (chatType != NONE) {
+            if (chatType != None) {
 
                 presentForm(
                     fragmentManager,

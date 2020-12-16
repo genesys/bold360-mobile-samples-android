@@ -7,6 +7,10 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.AsyncSharedDataHandler
+import com.sdk.samples.common.loginForms.BotSharedDataHandler
+import com.sdk.samples.common.loginForms.LiveSharedDataHandler
 import com.sdk.samples.topics.Accounts
 
 @Override
@@ -55,8 +59,8 @@ fun AccountMap.equalsTo(other: AccountMap): Boolean {
 
 fun Account?.orDefault(@ChatType chatType: String): Account {
         return this ?: when (chatType) {
-                ChatType.LiveChat -> Accounts.defaultBoldAccount
-                ChatType.AsyncChat -> Accounts.defaultAsyncAccount
+                ChatType.Live -> Accounts.defaultBoldAccount
+                ChatType.Async -> Accounts.defaultAsyncAccount
                 else -> Accounts.defaultBotAccount
         }
 }

@@ -1,8 +1,6 @@
 package com.sdk.samples.topics
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +17,7 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import com.sdk.samples.SampleActivity
 import kotlinx.android.synthetic.main.activity_basic.*
 import kotlinx.android.synthetic.main.activity_basic.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +35,11 @@ open class BasicChat : SampleActivity(), ChatEventListener {
 
         topic_title.text = intent.getStringExtra("title")
 
+        startChat()
+    }
+
+    override fun onStart() {
+        super.onStart()
         chatProvider.onChatLoaded =  { fragment ->
 
             if (!isFinishing && !supportFragmentManager.isStateSaved) {
@@ -56,18 +60,6 @@ open class BasicChat : SampleActivity(), ChatEventListener {
                 finish()
             }
         }
-
-        startChat()
-    }
-
-    override fun onCreateView(
-        parent: View?,
-        name: String,
-        context: Context,
-        attrs: AttributeSet
-    ): View? {
-
-        return super.onCreateView(parent, name, context, attrs)
     }
 
     open fun startChat() {
@@ -80,7 +72,7 @@ open class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     protected open fun createChat() {
-        chatProvider.create(getChatBuilder())
+        chatController = chatProvider.create(getChatBuilder())!!
     }
 
     protected open fun getChatBuilder(): ChatController.Builder? {

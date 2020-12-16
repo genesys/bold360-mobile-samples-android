@@ -1,4 +1,4 @@
-package com.sdk.samples.common
+package com.sdk.samples
 
 import android.app.Application
 import android.content.Context
@@ -17,10 +17,24 @@ import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.history.HistoryRepository
+import com.sdk.samples.common.loginForms.RestoreState
+import com.sdk.samples.common.loginForms.SharedDataHandler
 import java.lang.ref.WeakReference
 import java.lang.reflect.InvocationTargetException
 
 interface ChatProvider {
+
+    /**
+     * To be called only after chat creation.
+     * @return ChatController
+     * @throws NullPointerException
+     */
+    @Throws(NullPointerException::class)
+    fun getChatController() : ChatController
+
+    fun updateHistoryRepo(historyRepository: HistoryRepository? = null, targetId: String? = null)
 
     /**
      * Being invoked when the chat fragment had been fetched and ready to be presented
@@ -28,8 +42,7 @@ interface ChatProvider {
     var onChatLoaded: ((Fragment) -> Unit)?
 
     /**
-     * Restores the chat (if available) for the current account
-     * If chat controller doesn't exists it creates a new chat
+     * Restores the chat (if hasChatController) for the current account
      */
     fun restore()
 
@@ -38,20 +51,40 @@ interface ChatProvider {
      * @param chatBuilder optional injection of a custom ChatController.Builder
      * When ready the chat fragment would be passed by 'onChatLoaded' invocation
      */
-    fun create(chatBuilder: ChatController.Builder? = null)
+    fun create(chatBuilder: ChatController.Builder? = null): ChatController?
+
+    /**
+     * @return true if the chat controller exists and had not been destructed
+     */
+    fun hasChatController(): Boolean
 
     /**
      * Clears the chat and the ChatController
      */
     fun destruct()
 
-    fun getChatController() : ChatController
-    fun hasChatController(): Boolean
+    /**
+     * Clears the history and frees its resources
+     */
+    fun clearHistory()
+
+    /**
+     * Clears all the chat resources (includes the history)
+     */
+    fun clear()
 }
 
 interface AccountProvider {
-    var account: Account
+    var account: Account?
+
+    /**
+     * Extra Account parameters to be submitted for the sample
+     */
     var extraData: Map<String, Any?>?
+
+    /**
+     * The RestoreState of the account
+     */
     var restoreState: RestoreState
 }
 
@@ -77,45 +110,39 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
     }
 
     inner class AccountHolder: AccountProvider {
-        override lateinit var account: Account
+        override var account: Account? = null
 
         override var extraData: Map<String, Any?>? = null
 
         override var restoreState = RestoreState()
         set(value) {
             field = value.also {
+
                 // If there is no chat restore request, the chat would be destructed
-                if (!it.restoreRequest) {
-                    chatHolder.destruct()
-                }
+                if (!it.restoreRequest) chatHolder.destruct()
             }
         }
     }
 
     private inner class ChatHolder(wContext: WeakReference<Context>) : ChatProvider {
 
-        private val context = wContext.get()
+        private var context: Context? = wContext.get()
 
         private var controller: ChatController? = null
 
+        private var historyProvider: HistoryRepository? = null
+
         override var onChatLoaded: ((Fragment) -> Unit)? = null
 
-        override fun getChatController(): ChatController {
-            if (controller == null) {
-                create()
-            }
-            return controller!!
+        override fun updateHistoryRepo(historyRepository: HistoryRepository?, targetId: String?) {
+            historyRepository?.let { historyProvider = historyRepository }
+            historyProvider?.targetId = targetId
         }
 
         override fun hasChatController(): Boolean = controller?.wasDestructed == false
 
-        override fun destruct() {
-            controller?.let {
-                it.terminateChat()
-                it.destruct()
-            }
-            controller = null
-        }
+        @Throws(NullPointerException::class)
+        override fun getChatController(): ChatController = controller!!
 
         private var chatLoadedListener: ChatLoadedListener = object : ChatLoadedListener {
 
@@ -130,8 +157,8 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
             }
         }
 
-        private fun prepareAccount(): Account {
-            return accountProvider.account.apply {
+        private fun prepareAccount(): Account? {
+            return accountProvider.account?.apply {
                 (this as? BoldAccount)?.let {
                     it.info.securedInfo = getSecuredInfo()
                 }
@@ -143,22 +170,59 @@ class SamplesViewModel(application: Application) : AndroidViewModel(application)
         }
 
         override fun restore() {
-            controller?.run {
-                if(hasOpenChats() && isActive) {
-                    restoreChat()
-                } else {
-                    restoreChat(account = prepareAccount())
+
+            controller?.takeIf { !it.wasDestructed }?.run {
+                val chatType = accountProvider.extraData?.get(SharedDataHandler.ChatType_key) as String
+                val continueLast = chatType == ChatType.None || accountProvider.account == null
+                when {
+                    continueLast && hasOpenChats() && isActive -> restoreChat()
+
+                    accountProvider.restoreState.restorable -> restoreChat( account = prepareAccount() )
+
+                    else -> context?.run{ toast(this, "The Account is not restorable") }
                 }
-                return
-            } ?: create()
+
+            } ?: kotlin.run { Log.e("ChatHolder", "Failed to restore chat, hasChatController() must be checked first") }
         }
 
-        override fun create(chatBuilder: ChatController.Builder?) {
-            val builder = chatBuilder ?: context?.let { ChatController.Builder(context) }
-            builder?.build(prepareAccount(), chatLoadedListener)?.let {
-                controller = it
-            } ?: kotlin.run { Log.e("ChatHolder", "Failed to create chat") }
+        override fun create(chatBuilder: ChatController.Builder?): ChatController? {
+
+            val builder = (chatBuilder ?: context?.let { ChatController.Builder(it) })?.apply {
+                historyProvider?.let { chatElementListener(it) }
+            }
+
+            prepareAccount()?.let { account ->
+                builder?.build(account, chatLoadedListener)?.also {
+                    controller = it
+                }
+            }
+
+            return controller
         }
+
+        override fun destruct() {
+            controller?.let {
+                it.terminateChat()
+                it.destruct()
+            }
+            controller = null
+            onChatLoaded = null
+            context = null
+        }
+
+        override fun clearHistory() {
+            historyProvider?.clear()
+            historyProvider = null
+        }
+
+        override fun clear() {
+            clearHistory()
+            destruct()
+        }
+    }
+
+    fun clear() {
+        chatProvider.clear()
     }
 }
 

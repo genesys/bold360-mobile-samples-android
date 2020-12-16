@@ -38,6 +38,7 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
+import com.sdk.samples.SampleActivity
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import java.io.ByteArrayOutputStream
 

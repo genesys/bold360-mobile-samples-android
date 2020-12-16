@@ -1,4 +1,4 @@
-package com.sdk.samples.topics.handover
+package com.sdk.samples.common.handover
 
 import android.content.Context
 import android.os.Handler

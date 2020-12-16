@@ -1,4 +1,4 @@
-package com.sdk.samples.topics.ui.live
+package com.sdk.samples.common.live
 
 import android.content.Context
 import android.net.Uri

@@ -28,7 +28,7 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.px
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.topics.ui.live.toFileUploadInfo
+import com.sdk.samples.common.live.toFileUploadInfo
 import kotlinx.android.synthetic.main.activity_basic.*
 import java.util.*
 

@@ -3,8 +3,6 @@ package com.sdk.samples.topics
 import android.util.Log
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.topics.history.HistoryRepository
-import com.sdk.samples.topics.history.RoomHistoryProvider
 
 class ChatRestore : History() {
 
@@ -19,13 +17,17 @@ class ChatRestore : History() {
         } else {
             try {
 
-                getAccount().getGroupId()?.let {
-                    historyRepository.targetId = it
+                chatController = chatProvider.getChatController()
+
+                getAccount()?.getGroupId()?.let {
+                    chatProvider.updateHistoryRepo(targetId = it)
                 }
 
                 chatProvider.restore()
 
             } catch (ex: IllegalStateException) {
+                onError(NRError(ex))
+            } catch (ex: NullPointerException) {
                 onError(NRError(ex))
             }
         }
@@ -33,31 +35,30 @@ class ChatRestore : History() {
 
     fun onCreate() {
 
-        try {
-            if(hasChatController()) {
-                historyRepository.targetId = getAccount().getGroupId()
-            }
-            createChat()
+        getAccount()?.let { account ->
+            try {
+                if (hasChatController()) {
+                    chatProvider.updateHistoryRepo(targetId = account.getGroupId())
+                }
+                super.createChat()
 
-        } catch (ex: IllegalStateException) {
-            onError(NRError(ex))
+            } catch (ex: IllegalStateException) {
+                onError(NRError(ex))
+            }
+        } ?: kotlin.run {
+            toast(
+                this@ChatRestore,
+                "Cannot create chat without a valid account"
+            )
+            finish()
         }
     }
 
     override fun startChat() {
 
-        historyRepository = HistoryRepository(RoomHistoryProvider(this, getAccount().getGroupId()))
-
         val restoreState = accountProvider.restoreState
 
-        when {
-            !restoreState.restoreRequest -> onCreate()
-            restoreState.restoreRequest && restoreState.restorable -> onRestore()
-            else -> {
-                toast(this@ChatRestore, "Account is not restorable")
-                finish()
-            }
-        }
+        if (restoreState.restoreRequest) onRestore() else onCreate()
     }
 
     override fun onChatClose() {

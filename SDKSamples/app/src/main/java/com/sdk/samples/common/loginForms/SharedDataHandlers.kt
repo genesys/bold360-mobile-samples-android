@@ -1,10 +1,12 @@
-package com.sdk.samples.common
+package com.sdk.samples.common.loginForms
 
 import android.content.Context
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+import com.sdk.samples.common.*
+import com.sdk.samples.common.accountUtils.ChatType
 
 interface RestoreStateProvider {
 
@@ -62,12 +64,12 @@ class SharedDataController: DataController, RestoreStateProvider {
 
     override var extraParams: List<String>? = null
 
-    override var chatType: String = ChatType.NONE
+    override var chatType: String = ChatType.None
     set(value) {
         field = value
         sharedDataHandler =  when (chatType) {
-            ChatType.LiveChat -> LiveSharedDataHandler()
-            ChatType.AsyncChat -> AsyncSharedDataHandler()
+            ChatType.Live -> LiveSharedDataHandler()
+            ChatType.Async -> AsyncSharedDataHandler()
             else -> BotSharedDataHandler()
         }
     }
@@ -131,7 +133,7 @@ internal class BotSharedDataHandler: SharedDataHandler() {
     }
 
     override val chatType: String
-        get() = ChatType.BotChat
+        get() = ChatType.Bot
 
     override fun getAccount(context: Context): BotAccount {
         val shared = context.getSharedPreferences(SharedName, 0)
@@ -166,7 +168,7 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
     }
 
     override val chatType: String
-        get() = ChatType.AsyncChat
+        get() = ChatType.Async
 
     override fun getAccount(context: Context): AsyncAccount {
         val shared = context.getSharedPreferences(SharedName, 0)
@@ -196,7 +198,7 @@ internal class LiveSharedDataHandler: SharedDataHandler() {
     }
 
     override val chatType: String
-        get() = ChatType.LiveChat
+        get() = ChatType.Live
 
     override fun getAccount(context: Context): BoldAccount {
         val shared = context.getSharedPreferences(SharedName, 0)

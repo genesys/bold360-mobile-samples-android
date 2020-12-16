@@ -1,4 +1,4 @@
-package com.sdk.samples.topics.history
+package com.sdk.samples.common.history
 
 import android.content.Context
 import android.util.Log

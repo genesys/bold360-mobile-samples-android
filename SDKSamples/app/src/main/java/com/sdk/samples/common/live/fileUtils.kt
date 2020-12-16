@@ -1,4 +1,4 @@
-package com.sdk.samples.topics.ui.live
+package com.sdk.samples.common.live
 
 import android.annotation.SuppressLint
 import android.content.ContentUris

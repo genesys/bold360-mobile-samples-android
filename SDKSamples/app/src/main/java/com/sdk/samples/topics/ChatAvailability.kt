@@ -8,6 +8,7 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
+import com.sdk.samples.SampleActivity
 import kotlinx.android.synthetic.main.availability_activity.*
 
 class CheckAvailability : SampleActivity() {

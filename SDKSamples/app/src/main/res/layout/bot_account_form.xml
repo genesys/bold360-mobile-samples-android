@@ -104,7 +104,7 @@
                     android:textSize="18sp"
                     android:visibility="gone" />
 
-            <com.sdk.samples.common.accountForm.LinearContext
+            <com.sdk.samples.common.loginForms.accountForm.LinearContext
                     android:id="@+id/bot_context"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
                         android:layout_marginTop="8dp"
                         android:text="@string/add_context" />
 
-            </com.sdk.samples.common.accountForm.LinearContext>
+            </com.sdk.samples.common.loginForms.accountForm.LinearContext>
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/bot_welcome_layout"

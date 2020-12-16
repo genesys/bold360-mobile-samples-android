@@ -1,10 +1,10 @@
-package com.sdk.samples.common.accountForm
+package com.sdk.samples.common.loginForms.accountForm
 
 import com.sdk.samples.R
-import com.sdk.samples.common.ChatType
-import com.sdk.samples.common.DataController
-import com.sdk.samples.common.LiveSharedDataHandler
-import com.sdk.samples.common.SharedDataHandler.Companion.ChatType_key
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.DataController
+import com.sdk.samples.common.loginForms.LiveSharedDataHandler
+import com.sdk.samples.common.loginForms.SharedDataHandler.Companion.ChatType_key
 import kotlinx.android.synthetic.main.live_account_form.*
 
 open class LiveAccountForm(dataController: DataController) : AccountForm(dataController) {
@@ -19,7 +19,7 @@ open class LiveAccountForm(dataController: DataController) : AccountForm(dataCon
     override fun validateFormData(): Map<String, Any?>? {
 
         return live_api_key_edit_text.text.toString().takeUnless { it.isEmpty() }?.let {
-            mapOf(ChatType_key to ChatType.LiveChat, LiveSharedDataHandler.Access_key to it)
+            mapOf(ChatType_key to ChatType.Live, LiveSharedDataHandler.Access_key to it)
 
         } ?: run {
             presentError(live_api_key_edit_text, context?.getString(R.string.error_apiKey))

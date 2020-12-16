@@ -1,4 +1,4 @@
-package com.sdk.samples.common.accountForm
+package com.sdk.samples.common.loginForms.accountForm
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,13 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.nanorep.nanoengine.Account
 import com.sdk.samples.R
-import com.sdk.samples.common.*
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.BotSharedDataHandler
+import com.sdk.samples.common.loginForms.DataController
+import com.sdk.samples.common.loginForms.SharedDataHandler
+import com.sdk.samples.common.toAsyncAccount
+import com.sdk.samples.common.toBotAccount
+import com.sdk.samples.common.toLiveAccount
 
 
 interface AccountFormDelegate {
@@ -52,12 +58,13 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
 
         return validateFormData()?.let { accountData ->
             when (accountData[SharedDataHandler.ChatType_key]) {
-                ChatType.AsyncChat -> accountData.toAsyncAccount()
-                ChatType.LiveChat -> accountData.toLiveAccount()
+                ChatType.Async -> accountData.toAsyncAccount()
+                ChatType.Live -> accountData.toLiveAccount()
                 else -> accountData.toBotAccount()
             }.also { account ->
                 val extraData = accountData.filter {
-                    it.key == BotSharedDataHandler.preChat_deptCode_key ||
+                    it.key == SharedDataHandler.ChatType_key ||
+                            it.key == BotSharedDataHandler.preChat_deptCode_key ||
                             it.key == BotSharedDataHandler.preChat_lName_key ||
                             it.key == BotSharedDataHandler.preChat_fName_key
                 }
@@ -96,8 +103,8 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
             dataController.extraParams = extraParams
 
             return when (chatType) {
-                ChatType.LiveChat -> LiveAccountForm.newInstance(dataController)
-                ChatType.AsyncChat -> AsyncAccountForm.newInstance(dataController)
+                ChatType.Live -> LiveAccountForm.newInstance(dataController)
+                ChatType.Async -> AsyncAccountForm.newInstance(dataController)
                 else -> BotAccountForm.newInstance(dataController)
             }
         }
