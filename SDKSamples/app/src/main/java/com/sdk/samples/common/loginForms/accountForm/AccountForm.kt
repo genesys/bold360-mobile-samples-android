@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import com.nanorep.nanoengine.Account
 import com.sdk.samples.R
 import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.accountUtils.toAsyncAccount
+import com.sdk.samples.common.accountUtils.toBotAccount
+import com.sdk.samples.common.accountUtils.toLiveAccount
 import com.sdk.samples.common.loginForms.BotSharedDataHandler
 import com.sdk.samples.common.loginForms.DataController
 import com.sdk.samples.common.loginForms.SharedDataHandler
-import com.sdk.samples.common.toAsyncAccount
-import com.sdk.samples.common.toBotAccount
-import com.sdk.samples.common.toLiveAccount
 
 
 interface AccountFormDelegate {
@@ -96,14 +96,12 @@ abstract class AccountForm(override val dataController: DataController) : Fragme
 
         fun newInstance(
             dataController: DataController,
-            chatType: String,
             extraParams: List<String>?
         ): AccountForm {
 
-            dataController.chatType = chatType
             dataController.extraParams = extraParams
 
-            return when (chatType) {
+            return when (dataController.chatType) {
                 ChatType.Live -> LiveAccountForm.newInstance(dataController)
                 ChatType.Async -> AsyncAccountForm.newInstance(dataController)
                 else -> BotAccountForm.newInstance(dataController)

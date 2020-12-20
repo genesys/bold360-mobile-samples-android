@@ -67,17 +67,17 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         createChat()
     }
 
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
-    }
-
     protected open fun createChat() {
-        chatController = chatProvider.create(getChatBuilder())!!
+        chatProvider.create(getChatBuilder())?.let {
+            chatController = it
+        } ?: kotlin.run {
+            toast(baseContext, "Could not initiate Chat", Toast.LENGTH_SHORT)
+            finishIfLast()
+        }
     }
 
     protected open fun getChatBuilder(): ChatController.Builder? {
-        return ChatController.Builder(applicationContext)
+        return ChatController.Builder(baseContext)
             .conversationSettings(createChatSettings())
             .chatEventListener(this)
     }

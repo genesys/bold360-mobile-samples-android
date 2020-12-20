@@ -16,6 +16,7 @@ import com.sdk.samples.common.*
 import com.sdk.samples.common.accountUtils.ChatType
 import com.sdk.samples.common.accountUtils.ExtraParams.PrechatExtraData
 import com.sdk.samples.common.accountUtils.ExtraParams.Welcome
+import com.sdk.samples.common.accountUtils.isEmpty
 import com.sdk.samples.common.loginForms.BotSharedDataHandler
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.Account_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.ApiKey_key

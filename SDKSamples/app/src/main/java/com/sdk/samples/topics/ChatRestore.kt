@@ -3,7 +3,13 @@ package com.sdk.samples.topics
 import android.util.Log
 import android.widget.Toast
 import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
+import com.nanorep.sdkcore.utils.weakRef
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.AccountFormController
+import com.sdk.samples.common.loginForms.RestoreForm
+import kotlinx.android.synthetic.main.activity_basic.*
 
 class ChatRestore : History() {
 
@@ -59,13 +65,32 @@ class ChatRestore : History() {
 
     override fun startChat() {
 
-        val restoreState = accountProvider.restoreState
+        val restoreState = chatProvider.restoreState
 
         if (restoreState.restoreRequest) onRestore() else onCreate()
     }
 
-    override fun onChatClose() {
+    override fun onBackPressed() {
+        if (supportFragmentManager.getCurrent()?.tag == RestoreForm.TAG) {
+            finish()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
+    override fun onChatUIDetached() {
+        reloadForms()
+    }
+
+    private fun reloadForms() {
         Log.i("RestoreSample", "ChatController hadn't been destructed")
-        finish()
+        val accountFormController = AccountFormController(basic_chat_view.id, supportFragmentManager.weakRef())
+        accountFormController.updateChatType(ChatType.None, null){ account, restoreState, extraData ->
+            chatProvider.account = account
+            chatProvider.restoreState = restoreState
+            chatProvider.extraData = extraData
+
+            if (restoreState.restoreRequest) onRestore() else onCreate()
+        }
     }
 }

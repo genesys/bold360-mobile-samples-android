@@ -6,7 +6,7 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.common.*
-import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.accountUtils.*
 
 interface RestoreStateProvider {
 

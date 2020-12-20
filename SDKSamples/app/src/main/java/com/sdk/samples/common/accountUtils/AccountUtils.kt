@@ -1,4 +1,4 @@
-package com.sdk.samples.common
+package com.sdk.samples.common.accountUtils
 
 import com.integration.async.core.UserInfo
 import com.integration.core.applicationId
@@ -7,7 +7,6 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.sdk.samples.common.accountUtils.ChatType
 import com.sdk.samples.common.loginForms.AsyncSharedDataHandler
 import com.sdk.samples.common.loginForms.BotSharedDataHandler
 import com.sdk.samples.common.loginForms.LiveSharedDataHandler

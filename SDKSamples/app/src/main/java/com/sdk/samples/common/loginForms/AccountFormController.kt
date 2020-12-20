@@ -3,8 +3,8 @@ package com.sdk.samples.common.loginForms
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.nanorep.nanoengine.Account
-import com.sdk.samples.R
-import com.sdk.samples.common.accountUtils.ChatType.None
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.SharedDataHandler.Companion.ChatType_key
 import com.sdk.samples.common.loginForms.accountForm.AccountForm
 import java.lang.ref.WeakReference
 
@@ -45,10 +45,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
         getFragmentManager()?.let { fm ->
             accountFormPresenter.extraParams = extraParams
-            chatType.takeIf { it != None }?.let { accountFormPresenter.presentAccountForm(
-                fm,
-                chatType
-            ) } ?: accountFormPresenter.presentRestoreForm(fm)
+            accountFormPresenter.presentForm(fm, chatType)
         }
     }
 }
@@ -59,11 +56,7 @@ interface FormPresenter: AccountListener {
 
     var extraParams: List<String>?
 
-    fun presentAccountForm(
-        fragmentManager: FragmentManager,
-        chatType: String
-    )
-    fun presentRestoreForm(fragmentManager: FragmentManager)
+    fun presentForm(fragmentManager: FragmentManager, chatType: String)
 }
 
 class AccountFormPresenter(override val containerRes: Int): FormPresenter {
@@ -78,32 +71,34 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
         }
         get() = dataController.onAccountData
 
-    override fun presentAccountForm(
+    override fun presentForm(fragmentManager: FragmentManager, chatType: String) {
+        when (chatType) {
+            ChatType.None -> presentRestoreForm(fragmentManager)
+            else -> presentAccountForm(fragmentManager, chatType)
+        }
+    }
+
+    private fun presentAccountForm(
         fragmentManager: FragmentManager,
         chatType: String
     ) {
+        dataController.chatType = chatType
         presentForm(
             fragmentManager,
-            AccountForm.newInstance(dataController, chatType, extraParams),
+            AccountForm.newInstance(dataController, extraParams),
             AccountForm.TAG
         )
     }
 
-    override fun presentRestoreForm(fragmentManager: FragmentManager) {
+    private fun presentRestoreForm(fragmentManager: FragmentManager) {
         val fragment = RestoreForm.newInstance { chatType, restoreRequest ->
 
             dataController.restoreRequest = restoreRequest
 
-            if (chatType != None) {
-
-                presentForm(
-                    fragmentManager,
-                    AccountForm.newInstance(dataController, chatType, extraParams),
-                    AccountForm.TAG
-                )
-
+            if (chatType != ChatType.None) {
+                presentForm(fragmentManager, chatType)
             } else {
-                onAccountData?.invoke(null, RestoreState(restoreRequest, false), dataController.extraData)
+                onAccountData?.invoke(null, RestoreState(restoreRequest, false), mapOf<String, Any>(ChatType_key to ChatType.None))
             }
         }
 
@@ -112,7 +107,6 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
     private fun presentForm(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
         fragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.right_in, R.anim.right_out, R.anim.right_in, R.anim.right_out)
             .add(containerRes, fragment, tag)
             .addToBackStack(null)
             .commit()

@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
         singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
-            SamplesViewModel.getInstance{ applicationContext.weakRef() }
+            SamplesViewModel.getInstance()
         )
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 startActivity(Intent(topic.intentAction).putExtra("title", topic.title).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
             }
 
         }
@@ -169,12 +169,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
 
-        ViewModelProvider(this, singletonSamplesViewModelFactory)
-            .get(SamplesViewModel::class.java).release()
-
         singletonSamplesViewModelFactory.clear()
 
         super.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        supportFragmentManager.fragments.forEach { _ ->
+            supportFragmentManager.popBackStack()
+        }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onPostResume() {
