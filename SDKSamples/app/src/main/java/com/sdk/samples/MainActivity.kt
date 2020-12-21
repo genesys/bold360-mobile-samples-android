@@ -177,9 +177,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+
+        // Pops the form fragments after the transaction to the selected Sample
         supportFragmentManager.fragments.forEach { _ ->
             supportFragmentManager.popBackStack()
         }
+
         super.onSaveInstanceState(outState)
     }
 

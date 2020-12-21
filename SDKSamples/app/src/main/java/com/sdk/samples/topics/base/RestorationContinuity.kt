@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.activity_basic.*
 
 abstract class RestorationContinuity : History() {
 
-    // Needed for reloading the relevant forms
-    abstract val chatType: String
+
+    abstract val chatType: String // Needed for reloading the relevant forms
 
     /**
      * Reloads the login forms according to the ChatType
@@ -26,6 +26,9 @@ abstract class RestorationContinuity : History() {
         accountFormController.updateChatType(chatType, listOf(RestoreSwitch, AsyncExtraData, UsingHistory), onAccountData)
     }
 
+    /**
+     * The callback from the forms presentation
+     */
     abstract val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
 
     override fun onChatUIDetached() {
@@ -35,8 +38,11 @@ abstract class RestorationContinuity : History() {
     override fun onBackPressed() {
 
         when {
+
+            // if there are no fragments we represent the forms
             supportFragmentManager.fragments.isEmpty() -> reloadForms(onAccountData)
 
+            // if forms are presented, back press will finish the sample
             supportFragmentManager.getCurrent()?.tag == RestoreForm.TAG
                     || supportFragmentManager.getCurrent()?.tag == AccountForm.TAG -> finish()
 

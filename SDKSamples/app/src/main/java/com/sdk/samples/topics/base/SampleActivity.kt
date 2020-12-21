@@ -59,7 +59,6 @@ abstract class SampleActivity  : AppCompatActivity() {
     }
 
     protected fun finishIfLast() {
-
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }

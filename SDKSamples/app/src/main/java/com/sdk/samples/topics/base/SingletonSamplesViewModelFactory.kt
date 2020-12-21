@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import java.lang.reflect.InvocationTargetException
 
+/**
+ * A Singletone factory used to transfer data between activities through the SamplesViewModels
+ */
+
 class SingletonSamplesViewModelFactory(vmInstance: SamplesViewModel) : ViewModelProvider.NewInstanceFactory() {
 
     private val samplesViewModel: SamplesViewModel = vmInstance
@@ -39,6 +43,8 @@ class SingletonSamplesViewModelFactory(vmInstance: SamplesViewModel) : ViewModel
                 }
                 viewModelFactory[modelClass] = shareVM
             }
+
+            @Suppress("UNCHECKED_CAST")
             return shareVM as T
         }
 
