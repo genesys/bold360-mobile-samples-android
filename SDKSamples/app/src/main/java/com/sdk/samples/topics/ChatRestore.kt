@@ -1,27 +1,39 @@
 package com.sdk.samples.topics
 
-import android.util.Log
 import android.widget.Toast
+import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.NRError
-import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
-import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.common.accountUtils.ChatType
-import com.sdk.samples.common.loginForms.AccountFormController
-import com.sdk.samples.common.loginForms.RestoreForm
+import com.sdk.samples.common.loginForms.RestoreState
+import com.sdk.samples.topics.base.RestorationContinuity
 import kotlinx.android.synthetic.main.activity_basic.*
 
-class ChatRestore : History() {
+class ChatRestore : RestorationContinuity() {
 
-    private fun onRestore() {
+    override val chatType: String
+        get() = ChatType.None
 
+    override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
+
+        get() = { account, restoreState, extraData ->
+
+            chatProvider.account = account
+            chatProvider.restoreState = restoreState
+            chatProvider.extraData = extraData
+
+            if (restoreState.restoreRequest) restore() else create()
+
+        }
+
+    private fun restore(): Account? {
         if (!hasChatController()) {
             toast(
                 this@ChatRestore,
                 "Failed to restore chat\nerror: there is no chat to restore",
                 Toast.LENGTH_SHORT
             )
-            finish()
+            finishIfLast()
         } else {
             try {
 
@@ -39,9 +51,10 @@ class ChatRestore : History() {
                 onError(NRError(ex))
             }
         }
+        return null
     }
 
-    fun onCreate() {
+    private fun create() {
 
         getAccount()?.let { account ->
             try {
@@ -56,10 +69,10 @@ class ChatRestore : History() {
         } ?: kotlin.run {
             toast(
                 this@ChatRestore,
-                "Cannot create chat without a valid account",
+                "Cannot create chat without a valid restorable account",
                 Toast.LENGTH_SHORT
             )
-            finish()
+            finishIfLast()
         }
     }
 
@@ -67,30 +80,7 @@ class ChatRestore : History() {
 
         val restoreState = chatProvider.restoreState
 
-        if (restoreState.restoreRequest) onRestore() else onCreate()
+        if (restoreState.restoreRequest) restore() else create()
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.getCurrent()?.tag == RestoreForm.TAG) {
-            finish()
-        } else {
-            supportFragmentManager.popBackStack()
-        }
-    }
-
-    override fun onChatUIDetached() {
-        reloadForms()
-    }
-
-    private fun reloadForms() {
-        Log.i("RestoreSample", "ChatController hadn't been destructed")
-        val accountFormController = AccountFormController(basic_chat_view.id, supportFragmentManager.weakRef())
-        accountFormController.updateChatType(ChatType.None, null){ account, restoreState, extraData ->
-            chatProvider.account = account
-            chatProvider.restoreState = restoreState
-            chatProvider.extraData = extraData
-
-            if (restoreState.restoreRequest) onRestore() else onCreate()
-        }
-    }
 }

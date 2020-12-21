@@ -8,6 +8,8 @@ import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.common.extra.withId
 import com.sdk.samples.common.history.HistoryMigrationProvider
+import com.sdk.samples.topics.base.History
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 open class BotChatHistory : History() {
 
@@ -19,6 +21,7 @@ open class BotChatHistory : History() {
         toast(this@BotChatHistory, "The file upload action is not available for this sample.")
     }
 
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,7 +33,5 @@ open class BotChatHistory : History() {
         })
     }
 
-    override fun startChat() {
-
-    }
+    override fun startChat() {}
 }

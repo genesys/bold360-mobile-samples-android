@@ -1,4 +1,4 @@
-package com.sdk.samples.topics
+package com.sdk.samples.common.loginForms
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -16,10 +17,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.integration.core.Department
-import com.integration.core.annotations.VisitorDataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.controller.ChatAvailability
+import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
@@ -54,10 +55,6 @@ class CheckAvailabilityViewModel : ViewModel() {
 
 
 class BoldAvailability : Fragment() {
-
-    companion object {
-        fun newInstance() = BoldAvailability()
-    }
 
     private val viewModel: CheckAvailabilityViewModel? by lazy {
         activity?.let { ViewModelProvider(it).get(CheckAvailabilityViewModel::class.java) }
@@ -100,7 +97,7 @@ class BoldAvailability : Fragment() {
 
         view.availability_status.apply {
 
-            closeIcon = resources.getDrawable(R.drawable.chat_channel)
+            closeIcon = ContextCompat.getDrawable(context, R.drawable.chat_channel)
 
             setOnCloseIconClickListener { _ ->
 
@@ -204,14 +201,14 @@ class BoldAvailability : Fragment() {
             text = getString(R.string.show_departments)
             isActivated = false
         }
-        viewModel?.account?.removeExtraData(VisitorDataKeys.Department)
+        viewModel?.account?.removeExtraData(SessionInfoKeys.Department)
         resetChip()
     }
 
     private fun resetChip() {
         Log.e("availability_fragment", "Reset availability state")
 
-        availability_status.performCloseIconClick()
+        availability_status?.performCloseIconClick()
         /*availability_status.apply {
             isSelected = false
             chipIcon = null

@@ -96,11 +96,5 @@ class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: 
 
     override fun clearHistory() {
         historyProvider?.clear()
-        historyProvider = null
-    }
-
-    override fun clear() {
-        clearHistory()
-        destruct()
     }
 }

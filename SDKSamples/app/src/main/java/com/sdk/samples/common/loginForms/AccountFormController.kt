@@ -106,9 +106,11 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
     }
 
     private fun presentForm(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
-        fragmentManager.beginTransaction()
-            .add(containerRes, fragment, tag)
-            .addToBackStack(null)
-            .commit()
+        if (!fragmentManager.isStateSaved) {
+            fragmentManager.beginTransaction()
+                .add(containerRes, fragment, tag)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

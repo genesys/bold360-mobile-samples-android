@@ -29,6 +29,11 @@ class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean)
         start_chat.setOnClickListener {
             onChatRestore(selectedChatType, restore_switch.isChecked)
         }
+
+        current_radio.setOnCheckedChangeListener { _, isChecked ->
+            restore_switch.isChecked = isChecked
+        }
+
     }
 
     private fun getCheckedRadio() =

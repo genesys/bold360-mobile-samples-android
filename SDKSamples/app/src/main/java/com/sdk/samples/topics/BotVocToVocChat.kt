@@ -11,6 +11,7 @@ import com.nanorep.nanoengine.model.configuration.VoiceSupport
 open class BotVocToVocChat : BotChat() {
 
     private val readAlterProvider:TTSReadAlterProvider = object : TTSReadAlterProvider{
+
         override fun alter(readRequest: ReadRequest, callback: (ReadRequest) -> Unit) {
             readRequest.readoutMessage.setPersistentPrefix("Persistent Option");
             (readRequest.readoutMessage as? CarouselReadoutMessage)?.setPrefixToItemsOptions("Carousel Option");
@@ -20,6 +21,7 @@ open class BotVocToVocChat : BotChat() {
 //            readRequest.readoutResult = "Response text was altered"
 
             callback.invoke(readRequest)
+
         }
     }
 

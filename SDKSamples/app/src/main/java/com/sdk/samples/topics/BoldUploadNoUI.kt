@@ -38,7 +38,7 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import com.sdk.samples.SampleActivity
+import com.sdk.samples.topics.base.SampleActivity
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import java.io.ByteArrayOutputStream
 
@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream
 class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     private val account: BoldAccount
-    get() = (getAccount() as BoldAccount).apply { skipPrechat() }
+    get() = ( getAccount() as BoldAccount ).apply { skipPrechat() }
 
     private val uploader by lazy {
         BoldLiveUploader()
@@ -59,7 +59,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_no_ui)
 
-        topic_title.text = intent.getStringExtra("title")
+        topic_title.text = topicTitle
 
         createChat()
 
@@ -194,11 +194,6 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
                 Log.e(TAG, "null response")
             }
         }
-    }
-
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
     internal class ProgressController(private val container: ViewGroup){

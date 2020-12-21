@@ -6,6 +6,6 @@ import com.sdk.samples.common.handover.MyHandoverHandler
 open class Handover : BotChat() {
 
     override fun getChatBuilder(): ChatController.Builder? {
-        return super.getChatBuilder()?.chatHandoverHandler(MyHandoverHandler(this))
+        return super.getChatBuilder()?.chatHandoverHandler( MyHandoverHandler(this) )
     }
 }

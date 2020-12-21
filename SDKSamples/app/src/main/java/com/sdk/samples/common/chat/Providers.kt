@@ -86,8 +86,4 @@ interface ChatProvider {
      */
     fun clearHistory()
 
-    /**
-     * Clears all the chat resources (includes the history)
-     */
-    fun clear()
 }

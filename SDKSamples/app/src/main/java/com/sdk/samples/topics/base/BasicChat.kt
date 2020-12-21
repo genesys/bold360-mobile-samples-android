@@ -1,4 +1,4 @@
-package com.sdk.samples.topics
+package com.sdk.samples.topics.base
 
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
@@ -17,7 +18,6 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.SampleActivity
 import kotlinx.android.synthetic.main.activity_basic.*
 import kotlinx.android.synthetic.main.activity_basic.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -29,38 +29,34 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
+    override var onChatLoaded: (fragment: Fragment) -> Unit = { fragment ->
+
+        if (!isFinishing && !supportFragmentManager.isStateSaved) {
+
+            basic_loading.visibility = View.GONE
+
+            hideKeyboard(window.decorView)
+
+            supportFragmentManager.beginTransaction()
+                .add(
+                    basic_chat_view.id,
+                    fragment,
+                    topicTitle
+                )
+                .addToBackStack(ChatTag)
+                .commit()
+        } else {
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic)
 
-        topic_title.text = intent.getStringExtra("title")
+        topic_title.text = topicTitle
 
         startChat()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        chatProvider.onChatLoaded =  { fragment ->
-
-            if (!isFinishing && !supportFragmentManager.isStateSaved) {
-
-                basic_loading.visibility = View.GONE
-
-                hideKeyboard(window.decorView)
-
-                supportFragmentManager.beginTransaction()
-                    .add(
-                        basic_chat_view.id,
-                        fragment,
-                        topic_title.text.toString()
-                    )
-                    .addToBackStack(ChatTag)
-                    .commit()
-            } else {
-                finish()
-            }
-        }
     }
 
     open fun startChat() {
@@ -142,16 +138,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     protected open fun onChatUIDetached() {
-        finishIfLast()
-    }
-
-    override fun onStop() {
-        onChatClose()
-        super.onStop()
-    }
-
-    protected open fun onChatClose() {
-        if (isFinishing) { chatProvider.destruct() }
+        Log.d("","")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

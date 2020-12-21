@@ -8,7 +8,7 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
-import com.sdk.samples.SampleActivity
+import com.sdk.samples.topics.base.SampleActivity
 import kotlinx.android.synthetic.main.availability_activity.*
 
 class CheckAvailability : SampleActivity() {
@@ -47,7 +47,7 @@ class CheckAvailability : SampleActivity() {
 
         action_chip.setOnClickListener { chip ->
             if (chip.isSelected) {
-                startActivity(Intent("com.sdk.sample.action.BOLD_CHAT").putExtra("title", intent.getStringExtra("title")))
+                startActivity(Intent("com.sdk.sample.action.BOLD_CHAT").putExtra("title", topicTitle))
             }
         }
 

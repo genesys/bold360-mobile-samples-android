@@ -1,4 +1,4 @@
-package com.sdk.samples
+package com.sdk.samples.topics.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

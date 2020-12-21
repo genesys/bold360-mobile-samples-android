@@ -1,4 +1,4 @@
-package com.sdk.samples.topics
+package com.sdk.samples.topics.base
 
 import android.view.Menu
 import android.view.MenuItem

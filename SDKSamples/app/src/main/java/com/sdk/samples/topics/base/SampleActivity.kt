@@ -1,11 +1,13 @@
-package com.sdk.samples
+package com.sdk.samples.topics.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.weakRef
+import com.sdk.samples.R
 import com.sdk.samples.common.chat.ChatHolder
 
 abstract class SampleActivity  : AppCompatActivity() {
@@ -18,10 +20,16 @@ abstract class SampleActivity  : AppCompatActivity() {
 
     protected lateinit var chatController: ChatController
 
+    protected lateinit var topicTitle: String
+
+    open lateinit var onChatLoaded: (fragment: Fragment) -> Unit
+
     protected open fun getAccount(): Account? = chatProvider.account
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        topicTitle = intent.getStringExtra("title") ?: ""
 
         singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
             SamplesViewModel.getInstance()
@@ -30,24 +38,34 @@ abstract class SampleActivity  : AppCompatActivity() {
         viewModel = ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java)
 
         chatProvider = ChatHolder(baseContext.weakRef(), viewModel.accountProvider)
+
+        chatProvider.onChatLoaded = onChatLoaded
+    }
+
+    override fun onStop() {
+        onSampleClose()
+        super.onStop()
+    }
+
+    protected open fun onSampleClose() {
+        if (isFinishing) { chatProvider.destruct() }
     }
 
     override fun onBackPressed() {
 
         super.onBackPressed()
 
-        finishIfLast()
+        if (!isFinishing) { finishIfLast() }
     }
 
     protected fun finishIfLast() {
+
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
     }
 
     override fun finish() {
-        chatProvider.clear()
-
         super.finish()
         overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }

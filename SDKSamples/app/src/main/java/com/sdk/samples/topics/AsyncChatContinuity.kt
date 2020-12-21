@@ -13,6 +13,9 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys.LastReceivedMessageId
 import com.nanorep.sdkcore.utils.Completion
+import com.sdk.samples.common.accountUtils.ChatType
+import com.sdk.samples.common.loginForms.RestoreState
+import com.sdk.samples.topics.base.RestorationContinuity
 
 /*
 Async continuity is enabled by:
@@ -34,10 +37,35 @@ private const val ASYNC_TAG = "async"
 /**
  * Enables restore and reconnect of last async chat.
  */
-open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener {
+open class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
+
+    override val chatType: String
+        get() = ChatType.Async
 
     private var senderId: String = ""
     private var lastReceivedMessageId: String = ""
+
+    override fun getAccount(): Account? {
+        return restoreAccount() ?: super.getAccount()
+    }
+
+    override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
+        get() = { account, restoreState, extraData ->
+            chatProvider.account = account
+            chatProvider.restoreState = restoreState
+            chatProvider.extraData = extraData
+
+            createChat()
+        }
+
+    private fun restoreAccount(): Account? {
+        return (super.getAccount() as? AsyncAccount).takeIf { chatProvider.restoreState.restorable }?.apply {
+            info.let {
+                it.SenderId = senderId.toLongOrNull()
+                it.LastReceivedMessageId = lastReceivedMessageId
+            }
+        }
+    }
 
     /**
      * setting the accountProvider in order to receive account related updates, and be able to restore chats.
@@ -50,16 +78,6 @@ open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener {
 
     override fun provide(info: AccountInfo, callback: Completion<AccountInfo>) {
         return callback.onComplete((info as? AsyncAccount)?.let { restoreAccount() } ?: info)
-    }
-
-    private fun restoreAccount(): Account? {
-        return (super.getAccount() as AsyncAccount).apply {
-            info.let {
-                it.SenderId = senderId.toLongOrNull()
-                it.LastReceivedMessageId = lastReceivedMessageId
-            }
-
-        }
     }
 
     override fun update(account: AccountInfo) {
@@ -85,8 +103,6 @@ open class AsyncChatContinuity : BoldChatAsync(), AccountSessionListener {
             e.printStackTrace()
         }
     }
-
-//</editor-fold>
 
     fun AsyncAccount.log(): String {
         return "Account: [apiKey:$apiKey],[applicationId:${info.applicationId}],[userId:${info.userInfo.userId}]," +

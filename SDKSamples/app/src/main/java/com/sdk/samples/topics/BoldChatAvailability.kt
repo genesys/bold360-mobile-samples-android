@@ -11,6 +11,8 @@ import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.sdk.samples.R
+import com.sdk.samples.common.loginForms.BoldAvailability
+import com.sdk.samples.common.loginForms.CheckAvailabilityViewModel
 
 open class BoldChatAvailability : BoldChat() {
 
@@ -62,8 +64,7 @@ open class BoldChatAvailability : BoldChat() {
         */
     }
 
-    override fun startChat() {
-    }
+    override fun startChat() {}
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
         super.onChatStateChanged(stateEvent)

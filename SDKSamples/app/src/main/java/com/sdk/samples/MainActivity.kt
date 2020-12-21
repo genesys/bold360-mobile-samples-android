@@ -22,6 +22,8 @@ import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.common.accountUtils.ChatType
 import com.sdk.samples.common.accountUtils.ExtraParams.*
 import com.sdk.samples.common.loginForms.AccountFormController
+import com.sdk.samples.topics.base.SamplesViewModel
+import com.sdk.samples.topics.base.SingletonSamplesViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 

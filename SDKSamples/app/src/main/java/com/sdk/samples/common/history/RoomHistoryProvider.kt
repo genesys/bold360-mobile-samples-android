@@ -7,7 +7,7 @@ import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.convesationui.utils.ElementMigration
 import com.nanorep.sdkcore.utils.SystemUtil
-import com.sdk.samples.topics.History.Companion.HistoryPageSize
+import com.sdk.samples.topics.base.History.Companion.HistoryPageSize
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
