@@ -8,7 +8,7 @@ import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.nanoengine.model.configuration.VoiceSettings
 import com.nanorep.nanoengine.model.configuration.VoiceSupport
 
-open class BotVocToVocChat : BotChat() {
+class BotVocToVocChat : BotChat() {
 
     private val readAlterProvider:TTSReadAlterProvider = object : TTSReadAlterProvider{
 

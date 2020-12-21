@@ -11,7 +11,7 @@ import com.sdk.samples.common.history.HistoryMigrationProvider
 import com.sdk.samples.topics.base.History
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-open class BotChatHistory : History() {
+class BotChatHistory : History() {
 
     override fun getAccount(): Account {
         return (super.getAccount() as BotAccount).withId(this)

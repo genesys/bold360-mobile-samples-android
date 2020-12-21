@@ -37,7 +37,7 @@ private const val ASYNC_TAG = "async"
 /**
  * Enables restore and reconnect of last async chat.
  */
-open class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
+class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
 
     override val chatType: String
         get() = ChatType.Async
@@ -59,7 +59,8 @@ open class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener
         }
 
     private fun restoreAccount(): Account? {
-        return (super.getAccount() as? AsyncAccount).takeIf { chatProvider.restoreState.restorable }?.apply {
+
+        return (super.getAccount() as AsyncAccount).takeIf { chatProvider.restoreState.restorable }?.apply {
             info.let {
                 it.SenderId = senderId.toLongOrNull()
                 it.LastReceivedMessageId = lastReceivedMessageId
@@ -103,6 +104,8 @@ open class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener
             e.printStackTrace()
         }
     }
+
+//    </editor-fold>
 
     fun AsyncAccount.log(): String {
         return "Account: [apiKey:$apiKey],[applicationId:${info.applicationId}],[userId:${info.userInfo.userId}]," +

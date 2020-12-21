@@ -15,28 +15,29 @@ class ChatRestore : RestorationContinuity() {
         get() = ChatType.None
 
     override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
-
         get() = { account, restoreState, extraData ->
 
             chatProvider.account = account
             chatProvider.restoreState = restoreState
             chatProvider.extraData = extraData
 
-            if (restoreState.restoreRequest) restore() else create()
-
+            startChat()
         }
 
-    private fun restore(): Account? {
+    private fun restoreChat(): Account? {
+
         if (!hasChatController()) {
+
             toast(
                 this@ChatRestore,
                 "Failed to restore chat\nerror: there is no chat to restore",
                 Toast.LENGTH_SHORT
             )
             finishIfLast()
-        } else {
-            try {
 
+        } else {
+
+            try {
                 chatController = chatProvider.getChatController()
 
                 getAccount()?.getGroupId()?.let {
@@ -54,9 +55,10 @@ class ChatRestore : RestorationContinuity() {
         return null
     }
 
-    private fun create() {
+    override fun createChat() {
 
         getAccount()?.let { account ->
+
             try {
                 if (hasChatController()) {
                     chatProvider.updateHistoryRepo(targetId = account.getGroupId())
@@ -66,21 +68,21 @@ class ChatRestore : RestorationContinuity() {
             } catch (ex: IllegalStateException) {
                 onError(NRError(ex))
             }
+
         } ?: kotlin.run {
+
             toast(
                 this@ChatRestore,
                 "Cannot create chat without a valid restorable account",
                 Toast.LENGTH_SHORT
             )
             finishIfLast()
+
         }
     }
 
     override fun startChat() {
-
-        val restoreState = chatProvider.restoreState
-
-        if (restoreState.restoreRequest) restore() else create()
+        if ( chatProvider.restoreState.restoreRequest ) restoreChat() else createChat()
     }
 
 }
