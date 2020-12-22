@@ -6,6 +6,7 @@
         android:background="@drawable/bg"
         android:clickable="true"
         android:focusable="true"
+        android:padding="10dp"
         android:layout_gravity="center">
 
     <LinearLayout
@@ -84,6 +85,18 @@
                 android:checked="false"
                 android:gravity="center"
                 android:text="@string/restore_if_available" />
+
+        <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/history_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="14dp"
+                android:textSize="@dimen/topic_titles_text"
+                android:checked="false"
+                android:gravity="center"
+                android:text="@string/history_support"
+                android:visibility="gone" />
 
     </LinearLayout>
 

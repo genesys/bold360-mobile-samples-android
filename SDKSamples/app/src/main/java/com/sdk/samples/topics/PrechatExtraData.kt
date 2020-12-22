@@ -6,8 +6,8 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
-import com.sdk.samples.common.extra.SimpleAccountProvider
-import com.sdk.samples.common.extra.withId
+import com.sdk.samples.common.customProviders.SimpleAccountProvider
+import com.sdk.samples.common.customProviders.withId
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.preChat_deptCode_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.preChat_fName_key
 import com.sdk.samples.common.loginForms.BotSharedDataHandler.Companion.preChat_lName_key

@@ -8,6 +8,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.R
 import com.sdk.samples.common.history.HistoryRepository
 import com.sdk.samples.common.history.RoomHistoryProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 abstract class History : BasicChat() {
 
@@ -34,6 +35,7 @@ abstract class History : BasicChat() {
     /**
      * Adding history save support to the ChatController
      */
+    @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
 
         chatProvider.updateHistoryRepo(HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId())))

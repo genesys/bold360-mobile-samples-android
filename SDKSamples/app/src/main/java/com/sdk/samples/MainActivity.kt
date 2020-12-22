@@ -137,6 +137,11 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.standalone_autocomplete),
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
                 ChatType.Bot
+            ), SampleTopic(
+                "com.sdk.sample.action.FULL_DEMO",
+                getString(R.string.full_demo),
+                ContextCompat.getDrawable(this, R.drawable.sample_image),
+                ChatType.None
             )
         )
         singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
@@ -155,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                startActivity(Intent(topic.intentAction).putExtra("title", topic.title).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
+                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)
             }
 

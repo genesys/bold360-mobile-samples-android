@@ -188,6 +188,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".topics.FullDemo"
+                android:configChanges="orientation|screenSize|locale|layoutDirection"
+                android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.FULL_DEMO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

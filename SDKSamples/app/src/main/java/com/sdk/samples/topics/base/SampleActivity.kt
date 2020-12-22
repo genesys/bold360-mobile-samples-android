@@ -39,21 +39,22 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         chatProvider = ChatHolder(baseContext.weakRef(), viewModel.accountProvider)
 
-        chatProvider.onChatLoaded = onChatLoaded
     }
 
     override fun onStop() {
-        onSampleClose()
+        onSampleStop()
         super.onStop()
     }
 
-    protected open fun onSampleClose() {
+    protected open fun onSampleStop() {
         if (isFinishing) { chatProvider.destruct() }
     }
 
     override fun onBackPressed() {
 
         super.onBackPressed()
+
+        supportFragmentManager.executePendingTransactions()
 
         if (!isFinishing) { finishIfLast() }
     }

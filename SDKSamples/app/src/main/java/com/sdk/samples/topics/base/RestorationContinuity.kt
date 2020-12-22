@@ -6,9 +6,7 @@ import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.common.accountUtils.ExtraParams.*
 import com.sdk.samples.common.loginForms.AccountFormController
-import com.sdk.samples.common.loginForms.RestoreForm
 import com.sdk.samples.common.loginForms.RestoreState
-import com.sdk.samples.common.loginForms.accountForm.AccountForm
 import kotlinx.android.synthetic.main.activity_basic.*
 
 abstract class RestorationContinuity : History() {
@@ -32,21 +30,28 @@ abstract class RestorationContinuity : History() {
     abstract val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
 
     override fun onChatUIDetached() {
-        reloadForms(onAccountData)
+
+        // if there are no fragments at the backStack we represent the forms at the Sample context
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            reloadForms(onAccountData)
+        }
     }
 
     override fun onBackPressed() {
 
         when {
 
-            // if there are no fragments we represent the forms
-            supportFragmentManager.fragments.isEmpty() -> reloadForms(onAccountData)
+            supportFragmentManager.fragments.isNotEmpty()
+                    && supportFragmentManager.getCurrent()?.tag == topicTitle -> {
+                removeChatFragment()
+                supportFragmentManager.executePendingTransactions()
+            }
 
-            // if forms are presented, back press will finish the sample
-            supportFragmentManager.getCurrent()?.tag == RestoreForm.TAG
-                    || supportFragmentManager.getCurrent()?.tag == AccountForm.TAG -> finish()
+            else -> {
+                supportFragmentManager.popBackStackImmediate()
+                if (!isFinishing) finishIfLast()
+            }
 
-            else -> supportFragmentManager.popBackStack()
         }
     }
 

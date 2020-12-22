@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -44,6 +45,12 @@ class CustomFileUpload : BoldChatAvailability() {
         super.onCreate(savedInstanceState)
 
         initUploadButton()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        destructMenu?.isVisible = true
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     //<editor-fold desc="Custom upload: step 1: Create your custom upload trigger">
@@ -89,7 +96,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 enableMenu(destructMenu, true)
                 
                 // !- first, make sure the Upload feature is enabled
-                if(chatController!!.isEnabled(ChatFeatures.FileUpload)) {
+                if(chatController.isEnabled(ChatFeatures.FileUpload)) {
                     imageButton.visibility = View.VISIBLE
                 } else {
                     toast(this, getString(R.string.file_transfer_not_enabled))
@@ -179,7 +186,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 Log.e(TAG, "file path is invalid")
             }
 
-            chatController!!.post(
+            chatController.post(
                 SystemStatement(
                     ex.error.description ?: getString(R.string.upload_failure_general)
                 )
@@ -203,7 +210,7 @@ class CustomFileUpload : BoldChatAvailability() {
         }
 
         chosenUploadsTarget.forEach { uploadInfo ->
-            chatController!!.uploadFile(uploadInfo, this::onUploadResults)
+            chatController.uploadFile(uploadInfo, this::onUploadResults)
         }
     }
     //</editor-fold>
@@ -250,6 +257,10 @@ class CustomFileUpload : BoldChatAvailability() {
                 toast(activity, activity.getString(R.string.FileChooserError), Toast.LENGTH_LONG)
             }
         }
+    }
+
+    override fun onSampleStop() {
+
     }
 
     companion object {

@@ -56,6 +56,8 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
 
         topic_title.text = topicTitle
 
+        chatProvider.onChatLoaded = onChatLoaded
+
         startChat()
     }
 
@@ -138,7 +140,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     protected open fun onChatUIDetached() {
-        Log.d("","")
+        finishIfLast()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -150,22 +152,28 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
 
         if (hasChatController()) {
             enableMenu(endMenu, chatController.hasOpenChats())
-            enableMenu(destructMenu, true)
+            enableMenu(destructMenu, hasChatController() && !chatController.wasDestructed)
         }
 
         return true
+    }
+
+    protected open fun destructChat() {
+        if (hasChatController()) chatController.destruct()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.end_current_chat -> {
                 chatController.endChat(false)
+                item.isEnabled = false
                 return true
             }
 
             R.id.destruct_chat -> {
+                destructChat()
+                enableMenu(endMenu, false)
                 item.isEnabled = false
-                finish()
                 return true
             }
 
@@ -189,6 +197,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     companion object {
         protected const val TAG = "BasicChat"
-        protected const val ChatTag = "ChatFragment"
+        const val ChatTag = "ChatFragment"
     }
 }

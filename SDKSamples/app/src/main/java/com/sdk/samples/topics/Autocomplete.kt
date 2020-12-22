@@ -18,7 +18,7 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.common.extra.withId
+import com.sdk.samples.common.customProviders.withId
 import com.sdk.samples.topics.base.SampleActivity
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 

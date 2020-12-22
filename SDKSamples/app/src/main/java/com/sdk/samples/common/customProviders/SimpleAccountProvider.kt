@@ -1,4 +1,4 @@
-package com.sdk.samples.common.extra
+package com.sdk.samples.common.customProviders
 
 import android.content.Context
 import android.content.SharedPreferences

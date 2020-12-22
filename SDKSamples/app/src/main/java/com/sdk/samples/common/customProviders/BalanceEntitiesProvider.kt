@@ -1,4 +1,4 @@
-package com.sdk.samples.common.extra
+package com.sdk.samples.common.customProviders
 
 import com.nanorep.nanoengine.Entity
 import com.nanorep.nanoengine.NRConversationMissingEntities

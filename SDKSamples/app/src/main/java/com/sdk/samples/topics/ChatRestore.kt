@@ -9,7 +9,7 @@ import com.sdk.samples.common.loginForms.RestoreState
 import com.sdk.samples.topics.base.RestorationContinuity
 import kotlinx.android.synthetic.main.activity_basic.*
 
-class ChatRestore : RestorationContinuity() {
+open class ChatRestore : RestorationContinuity() {
 
     override val chatType: String
         get() = ChatType.None

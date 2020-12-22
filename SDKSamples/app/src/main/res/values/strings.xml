@@ -17,6 +17,7 @@
     <string name="bot_chat_with_welcome">Chat with AI: Custom welcome message</string>
     <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice support</string>
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
+    <string name="full_demo">Full Demo</string>
     <string name="custom_form">Custom Bold chat form</string>
     <string name="custom_form_departments_title">Available departments: \n\n</string>
     <string name="custom_form_departments_details">Name: %1$s ,Status: %2$s, Code to Input: %3$s</string>
@@ -25,10 +26,11 @@
     <string name="bot_chat_with_handover">Chat with AI: Handover</string>
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
 
-    <string name="end_chat">End chat</string>
-    <string name="destruct_chat_controller">Destruct chat controller</string>
+    <string name="end_chat">End current chat</string>
+    <string name="destruct_chat_controller">Destruct</string>
     <string name="upload_file">upload file</string>
     <string name="clear_history">Clear History</string>
+    <string name="history_support">History Support</string>
     <string name="cutomized_ui">Customize by %s</string>
     <string name="bold_upload_without_ui">Uploading with live uploader</string>
     <string name="take_a_picture_text">Take a picture</string>
