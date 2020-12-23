@@ -1,8 +1,10 @@
 package com.sdk.samples.topics.base
 
 import android.util.Log
+import android.widget.Toast
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
+import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.common.accountUtils.ExtraParams.*
 import com.sdk.samples.common.loginForms.AccountFormController
@@ -37,9 +39,16 @@ abstract class RestorationContinuity : History() {
         }
     }
 
+    fun onRestoreFailed(reason: String) {
+        toast( baseContext, reason, Toast.LENGTH_SHORT )
+        onBackPressed()
+    }
+
     override fun onBackPressed() {
 
         when {
+
+            supportFragmentManager.fragments.isEmpty() -> reloadForms(onAccountData)
 
             supportFragmentManager.fragments.isNotEmpty()
                     && supportFragmentManager.getCurrent()?.tag == topicTitle -> {

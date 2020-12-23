@@ -21,11 +21,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
-import com.integration.core.FileUploadInfo
-import com.integration.core.FormResults
-import com.integration.core.InQueueEvent
-import com.integration.core.StateEvent
+import com.integration.core.*
 import com.integration.core.annotations.FormType
+import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.ui.ChatFormViewModel
 import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
@@ -33,9 +31,11 @@ import com.nanorep.convesationui.structure.UploadNotification
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
 import com.nanorep.convesationui.structure.controller.FormProvider
-import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
+import com.nanorep.convesationui.structure.handlers.AccountSessionListener
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.*
+import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.*
@@ -43,7 +43,7 @@ import com.sdk.samples.BuildConfig
 import com.sdk.samples.R
 import com.sdk.samples.common.extra.CustomForm
 import com.sdk.samples.common.live.toFileUploadInfo
-import com.sdk.samples.topics.FullDemo.Companion.My_TAG
+import com.sdk.samples.topics.FullDemo.Companion.FULL_DEMO_TAG
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.io.File
@@ -133,7 +133,6 @@ class FullDemo : ChatRestore() {
 
         super.startChat()
 
-        // Verifies that the chatController had been initialized:
         if ( hasChatController() ) {
             chatController.apply {
                 subscribeNotifications(
@@ -158,7 +157,7 @@ class FullDemo : ChatRestore() {
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
         Log.d(
-            My_TAG,
+            FULL_DEMO_TAG,
             "onChatStateChanged: state " + stateEvent.state + ", scope = " + stateEvent.scope
         )
 
@@ -175,7 +174,7 @@ class FullDemo : ChatRestore() {
 
             StateEvent.InQueue -> {
                 (stateEvent as? InQueueEvent)?.position?.run {
-                    Log.i(My_TAG, "user is waiting in queue event: user position = $this")
+                    Log.i(FULL_DEMO_TAG, "user is waiting in queue event: user position = $this")
                 }
             }
 
@@ -199,7 +198,7 @@ class FullDemo : ChatRestore() {
     override fun onUrlLinkSelected(url: String) {
         // sample code for handling given link
         try {
-            Log.d(My_TAG, ">> got url link selection: [$url]")
+            Log.d(FULL_DEMO_TAG, ">> got url link selection: [$url]")
 
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 if (isFileUrl(url)) {
@@ -219,7 +218,7 @@ class FullDemo : ChatRestore() {
             startActivity(intent)
 
         } catch (e: Exception) {
-            Log.w(My_TAG, ">> Failed to activate link on default app: " + e.message)
+            Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
             toast(
                 this,
                 ">> got url: [$url]",
@@ -321,7 +320,7 @@ class FullDemo : ChatRestore() {
 
         for (uploadInfo in chosenUploadsTarget) {
             chatController.uploadFile(uploadInfo) { uploadResult ->
-                Log.i(My_TAG, "got Upload results: $uploadResult")
+                Log.i(FULL_DEMO_TAG, "got Upload results: $uploadResult")
 
                 uploadResult.error?.run {
                     if (NRError.Canceled != reason) {
@@ -509,7 +508,7 @@ class FullDemo : ChatRestore() {
 
         if (requestCode == FILE_UPLOAD_REQUEST_CODE) {
             if (resultCode != RESULT_OK || resultData == null) {
-                Log.w(My_TAG, "no file was selected to be uploaded")
+                Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded")
                 return
             }
 
@@ -520,34 +519,73 @@ class FullDemo : ChatRestore() {
 //  </editor-fold>
 
     companion object {
-        const val My_TAG = "FullDemo"
+        const val FULL_DEMO_TAG = "FullDemo"
         const val Custom_Form = "CustomForm"
         private const val FILE_UPLOAD_REQUEST_CODE = 111
     }
 }
 
-
+//  </editor-fold>
 
 ////////////////////////////////////////
 
-class AccountHandler : AccountInfoProvider {
+//  <editor-fold desc=">>>>> Providers implementations <<<<<" >
+
+/**
+ * An account provider that supports chat continuity
+ */
+class AccountHandler : AccountSessionListener {
+
+    private var senderId: String = ""
+    private var lastReceivedMessageId: String = ""
 
     private val accounts: MutableMap<String, AccountInfo> = mutableMapOf()
 
-    fun addAccount(account: AccountInfo) {
+    private fun addAccount(account: AccountInfo) {
         accounts[account.getApiKey()] = account
+    }
+
+    private fun continueAsync(account: Account? = null): Account? {
+
+        return account?.apply {
+            info.let {
+                it.SenderId = senderId.toLongOrNull()
+                it.LastReceivedMessageId = lastReceivedMessageId
+            }
+        }
     }
 
     override fun provide(info: AccountInfo, callback: Completion<AccountInfo>) {
         val account = accounts[info.getApiKey()]
-        callback.onComplete(account ?: info)
+        callback.onComplete((account as? AsyncAccount)?.let { continueAsync(account) } ?: info)
     }
 
     override fun update(account: AccountInfo) {
+
         accounts[account.getApiKey()]?.run {
+
+            account.getInfo().SenderId?.let {
+                senderId = "$it"
+            }
+
             update(account)
+
         } ?: kotlin.run {
             addAccount(account)
+        }
+
+
+    }
+
+    override fun onConfigUpdate(account: AccountInfo, updateKey: String, updatedValue: Any?) {
+        try {
+            Log.d(FULL_DEMO_TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
+            when (updateKey) {
+                SessionInfoConfigKeys.LastReceivedMessageId -> lastReceivedMessageId =
+                    (updatedValue as? String) ?: ""
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
@@ -563,13 +601,13 @@ internal class NotificationsReceiver : Notifiable {
                 val results = notification.data as FormResults?
                 if (results != null) {
                     Log.i(
-                        My_TAG, "Got notified for form results for form: " +
+                        FULL_DEMO_TAG, "Got notified for form results for form: " +
                                 results.data +
                                 if (results.error != null) ", with error: " + results.error!! else ""
                     )
 
                 } else {
-                    Log.w(My_TAG, "Got notified for form results but results are null")
+                    Log.w(FULL_DEMO_TAG, "Got notified for form results but results are null")
                 }
             }
 
@@ -579,10 +617,11 @@ internal class NotificationsReceiver : Notifiable {
             Notifications.UploadFailed -> {
                 val uploadNotification = notification as UploadNotification
                 Log.d(
-                    My_TAG, "Got upload event ${uploadNotification.notification} on " +
+                    FULL_DEMO_TAG, "Got upload event ${uploadNotification.notification} on " +
                             "file: ${uploadNotification.uploadInfo.name}"
                 )
             }
         }
     }
 }
+//  </editor-fold>

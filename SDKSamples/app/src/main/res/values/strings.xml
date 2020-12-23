@@ -47,6 +47,17 @@
 
     <string name="error_account_name">Account name is empty</string>
     <string name="error_kb">Knowledge Base is empty</string>
+    <string name="error_apiKey">Empty Api key</string>
+    <string name="error_email">Email is not valid</string>
+
+    <string name="context_name">Context Name</string>
+    <string name="context_value">Context Value</string>
+    <string name="add_context">Add Context</string>
+    <string name="bot_context_list"><u>Bot Context list:</u></string>
+    <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
+
+    <string name="bold_parameters_title">Bold extra data</string>
+
     <string name="account_hint">Account Name</string>
     <string name="kb_hint">Knowledge Base</string>
     <string name="server_hint">Server</string>
@@ -54,15 +65,7 @@
     <string name="firstName_hint">First Name</string>
     <string name="lastName_hint">Last Name</string>
     <string name="welcome_hint">Insert welcome message id</string>
-    <string name="context_name">Context Name</string>
-    <string name="context_value">Context Value</string>
-    <string name="add_context">Add Context</string>
-    <string name="bot_context_list"><u>Bot Context list:</u></string>
-    <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
-    <string name="error_apiKey">Empty Api key</string>
-    <string name="error_email">Email is not valid</string>
     <string name="email_hint">Email</string>
     <string name="phone_hint">Phone number</string>
-    <string name="bold_parameters_title">Bold extra data</string>
 
 </resources>

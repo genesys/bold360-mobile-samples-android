@@ -16,6 +16,7 @@ import com.nanorep.sdkcore.utils.Completion
 import com.sdk.samples.common.accountUtils.ChatType
 import com.sdk.samples.common.loginForms.RestoreState
 import com.sdk.samples.topics.base.RestorationContinuity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /*
 Async continuity is enabled by:
@@ -71,6 +72,7 @@ class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
     /**
      * setting the accountProvider in order to receive account related updates, and be able to restore chats.
      */
+    @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.accountProvider(this)
     }
@@ -78,7 +80,7 @@ class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
 //<editor-fold desc=">>>>> AccountSessionListener implementation [2, 3]<<<<<" >
 
     override fun provide(info: AccountInfo, callback: Completion<AccountInfo>) {
-        return callback.onComplete((info as? AsyncAccount)?.let { restoreAccount() } ?: info)
+        callback.onComplete((info as? AsyncAccount)?.let { restoreAccount() } ?: info)
     }
 
     override fun update(account: AccountInfo) {
@@ -86,7 +88,7 @@ class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
             Log.d(ASYNC_TAG, "onUpdate: got to update account senderId ${account.getInfo().SenderId}")
 
             account.getInfo().SenderId?.let {
-                senderId = "$it" // updates SenderId in shared preferences
+                senderId = "$it"
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -97,7 +99,6 @@ class AsyncChatContinuity : RestorationContinuity(), AccountSessionListener {
         try {
             Log.d(ASYNC_TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
             when (updateKey) {
-                // updates LastReceivedMessageId in shared preferences
                 LastReceivedMessageId -> lastReceivedMessageId = (updatedValue as? String) ?: ""
             }
         } catch (e: Exception) {
