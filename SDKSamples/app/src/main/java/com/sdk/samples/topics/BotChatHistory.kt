@@ -6,9 +6,9 @@ import com.nanorep.convesationui.utils.HistoryMigration.Companion.start
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.common.customProviders.withId
-import com.sdk.samples.common.history.HistoryMigrationProvider
 import com.sdk.samples.topics.base.History
+import com.sdk.utils.customProviders.withId
+import com.sdk.utils.history.HistoryMigrationProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class BotChatHistory : History() {

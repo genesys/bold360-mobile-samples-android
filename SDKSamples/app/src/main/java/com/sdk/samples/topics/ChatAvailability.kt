@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
@@ -28,7 +29,7 @@ class CheckAvailability : SampleActivity() {
         setContentView(R.layout.availability_activity)
 
         chipUncheckedIcon = action_chip.closeIcon
-        action_chip.closeIcon = resources.getDrawable(R.drawable.chat_channel)
+        action_chip.closeIcon = ContextCompat.getDrawable(baseContext, R.drawable.chat_channel)
         action_chip.setOnCloseIconClickListener { _ ->
             ChatAvailability.checkAvailability(account, callback = object : ChatAvailability.Callback{
                 override fun onComplete(result: ChatAvailability.AvailabilityResult) {

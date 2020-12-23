@@ -13,9 +13,9 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys.LastReceivedMessageId
 import com.nanorep.sdkcore.utils.Completion
-import com.sdk.samples.common.accountUtils.ChatType
-import com.sdk.samples.common.loginForms.RestoreState
 import com.sdk.samples.topics.base.RestorationContinuity
+import com.sdk.utils.accountUtils.ChatType
+import com.sdk.utils.loginForms.RestoreState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /*

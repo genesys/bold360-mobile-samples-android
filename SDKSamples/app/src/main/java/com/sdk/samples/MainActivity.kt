@@ -19,11 +19,11 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
-import com.sdk.samples.common.accountUtils.ChatType
-import com.sdk.samples.common.accountUtils.ExtraParams.*
-import com.sdk.samples.common.loginForms.AccountFormController
 import com.sdk.samples.topics.base.SamplesViewModel
 import com.sdk.samples.topics.base.SingletonSamplesViewModelFactory
+import com.sdk.utils.accountUtils.ChatType
+import com.sdk.utils.accountUtils.ExtraParams.*
+import com.sdk.utils.loginForms.AccountFormController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 
@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
             accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState, extraData ->
 
+
                 ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                     accountProvider.apply {
                         this.account = account
@@ -160,17 +161,20 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
-                overridePendingTransition(R.anim.right_in, R.anim.left_out)
+                supportFragmentManager.fragments.forEach { _ ->
+                    supportFragmentManager.popBackStackImmediate()
+                }
 
                 showLoading(true)
 
-                supportFragmentManager.fragments.forEach { _ ->
-                    supportFragmentManager.popBackStack()
-                }
+                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
+
+
             }
 
         }
+
         topics_recycler.addItemDecoration(
             DividerItemDecoration(
                 this,

@@ -6,9 +6,9 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
-import com.sdk.samples.common.accountUtils.ExtraParams.*
-import com.sdk.samples.common.loginForms.AccountFormController
-import com.sdk.samples.common.loginForms.RestoreState
+import com.sdk.utils.accountUtils.ExtraParams.*
+import com.sdk.utils.loginForms.AccountFormController
+import com.sdk.utils.loginForms.RestoreState
 import kotlinx.android.synthetic.main.activity_basic.*
 
 abstract class RestorationContinuity : History() {

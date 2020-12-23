@@ -166,7 +166,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         when (item.itemId) {
             R.id.end_current_chat -> {
                 chatController.endChat(false)
-                item.isEnabled = false
+                item.isEnabled = chatController.hasOpenChats()
                 return true
             }
 

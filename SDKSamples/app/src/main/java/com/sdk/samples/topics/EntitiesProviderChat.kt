@@ -3,7 +3,7 @@ package com.sdk.samples.topics
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.sdk.samples.common.customProviders.BalanceEntitiesProvider
+import com.sdk.utils.customProviders.BalanceEntitiesProvider
 
 open class EntitiesProviderChat : BotChat() {
 

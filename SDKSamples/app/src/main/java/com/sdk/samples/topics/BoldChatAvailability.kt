@@ -11,8 +11,8 @@ import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.sdk.samples.R
-import com.sdk.samples.common.loginForms.BoldAvailability
-import com.sdk.samples.common.loginForms.CheckAvailabilityViewModel
+import com.sdk.utils.loginForms.BoldAvailability
+import com.sdk.utils.loginForms.CheckAvailabilityViewModel
 
 open class BoldChatAvailability : BoldChat() {
 

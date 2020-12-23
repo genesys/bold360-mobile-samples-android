@@ -6,8 +6,8 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.samples.R
-import com.sdk.samples.common.history.HistoryRepository
-import com.sdk.samples.common.history.RoomHistoryProvider
+import com.sdk.utils.history.HistoryRepository
+import com.sdk.utils.history.RoomHistoryProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 abstract class History : BasicChat() {
@@ -15,7 +15,6 @@ abstract class History : BasicChat() {
     private var historyMenu: MenuItem? = null
 
     companion object {
-        const val HistoryPageSize = 8
 
         internal fun Account.getGroupId(): String? {
             return apiKey.takeUnless { it.isBlank() } ?: (this as? BotAccount)?.let { "${it.account ?: ""}#${it.knowledgeBase}" }
@@ -38,7 +37,7 @@ abstract class History : BasicChat() {
     @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
 
-        chatProvider.updateHistoryRepo(HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId())))
+        chatProvider.updateHistoryRepo(HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId(), 8)))
 
         enableMenu(historyMenu, true)
 

@@ -2,7 +2,7 @@ package com.sdk.samples.topics.base
 
 import androidx.lifecycle.ViewModel
 import com.nanorep.nanoengine.Account
-import com.sdk.samples.common.loginForms.RestoreState
+import com.sdk.utils.loginForms.RestoreState
 
 class SamplesViewModel : ViewModel() {
 
@@ -21,7 +21,7 @@ class SamplesViewModel : ViewModel() {
         }
     }
 
-    inner class AccountHolder: com.sdk.samples.common.chat.AccountHolder {
+    inner class AccountHolder: com.sdk.utils.chat.AccountHolder {
         override var account: Account? = null
 
         override var extraData: Map<String, Any?>? = null

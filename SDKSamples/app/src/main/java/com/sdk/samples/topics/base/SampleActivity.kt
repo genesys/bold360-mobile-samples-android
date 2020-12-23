@@ -8,7 +8,7 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import com.sdk.samples.common.chat.ChatHolder
+import com.sdk.utils.chat.ChatHolder
 
 abstract class SampleActivity  : AppCompatActivity() {
 

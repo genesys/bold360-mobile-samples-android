@@ -41,13 +41,12 @@ import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.*
 import com.sdk.samples.BuildConfig
 import com.sdk.samples.R
-import com.sdk.samples.common.extra.CustomForm
-import com.sdk.samples.common.live.toFileUploadInfo
 import com.sdk.samples.topics.FullDemo.Companion.FULL_DEMO_TAG
+import com.sdk.utils.CustomForm
+import com.sdk.utils.live.toFileUploadInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
 
 class FullDemo : ChatRestore() {
 

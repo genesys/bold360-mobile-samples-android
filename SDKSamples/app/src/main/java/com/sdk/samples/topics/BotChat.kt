@@ -3,8 +3,8 @@ package com.sdk.samples.topics
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.common.customProviders.withId
 import com.sdk.samples.topics.base.BasicChat
+import com.sdk.utils.customProviders.withId
 
 open class BotChat : BasicChat() {
 

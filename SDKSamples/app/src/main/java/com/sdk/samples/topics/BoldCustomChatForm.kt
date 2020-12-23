@@ -15,7 +15,7 @@ import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.FormProvider
 import com.sdk.samples.R
-import com.sdk.samples.common.extra.CustomForm
+import com.sdk.utils.CustomForm
 
 
 class BoldCustomChatForm : BoldChatAvailability() {
