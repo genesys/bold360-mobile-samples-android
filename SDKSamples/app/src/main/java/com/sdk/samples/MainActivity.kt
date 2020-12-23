@@ -157,6 +157,12 @@ class MainActivity : AppCompatActivity() {
 
                 startActivity(Intent(topic.intentAction).putExtra("title", topic.title).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)
+
+                showLoading(true)
+
+                supportFragmentManager.fragments.forEach { _ ->
+                    supportFragmentManager.popBackStack()
+                }
             }
 
         }
@@ -169,21 +175,26 @@ class MainActivity : AppCompatActivity() {
         (topics_recycler.adapter as TopicsAdapter).updateTopics()
     }
 
+    private fun showLoading(show: Boolean) {
+        if (show) {
+            sampleLoading.visibility = View.VISIBLE
+            topics_recycler.visibility = View.GONE
+        } else {
+            sampleLoading.visibility = View.GONE
+            topics_recycler.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        showLoading(false)
+    }
+
     override fun onDestroy() {
 
         singletonSamplesViewModelFactory.clear()
 
         super.onDestroy()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-
-        // Pops the form fragments after the transaction to the selected Sample
-        supportFragmentManager.fragments.forEach { _ ->
-            supportFragmentManager.popBackStack()
-        }
-
-        super.onSaveInstanceState(outState)
     }
 
     override fun onPostResume() {
