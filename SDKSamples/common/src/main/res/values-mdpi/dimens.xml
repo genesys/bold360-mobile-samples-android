@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="department_gap">0dp</dimen>
+    <dimen name="chip_top_gap">5dp</dimen>
+    <dimen name="chip_inner_padding">0dp</dimen>
+    <dimen name="topic_titles_text">14sp</dimen>
+    <dimen name="buttons_text">10sp</dimen>
+
+</resources>

@@ -23,6 +23,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.common.topicsbase.SampleActivity
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -38,7 +39,6 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import com.sdk.samples.topics.base.SampleActivity
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import java.io.ByteArrayOutputStream
 

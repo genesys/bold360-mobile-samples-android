@@ -1,16 +1,16 @@
 package com.sdk.samples.topics
 
+import com.common.utils.customProviders.SimpleAccountProvider
+import com.common.utils.customProviders.withId
+import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_deptCode_key
+import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_fName_key
+import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_lName_key
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
-import com.sdk.utils.customProviders.SimpleAccountProvider
-import com.sdk.utils.customProviders.withId
-import com.sdk.utils.loginForms.BotSharedDataHandler.Companion.preChat_deptCode_key
-import com.sdk.utils.loginForms.BotSharedDataHandler.Companion.preChat_fName_key
-import com.sdk.utils.loginForms.BotSharedDataHandler.Companion.preChat_lName_key
 
 class PrechatExtraData : BotChat() {
 

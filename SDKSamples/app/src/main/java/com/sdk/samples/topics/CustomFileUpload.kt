@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo
 import com.integration.core.StateEvent
 import com.integration.core.UploadResult
@@ -29,7 +30,6 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.px
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.utils.live.toFileUploadInfo
 import kotlinx.android.synthetic.main.activity_basic.*
 import java.util.*
 

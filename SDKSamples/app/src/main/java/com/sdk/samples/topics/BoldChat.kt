@@ -1,5 +1,5 @@
 package com.sdk.samples.topics
 
-import com.sdk.samples.topics.base.BasicChat
+import com.common.topicsbase.BasicChat
 
 open class BoldChat : BasicChat()

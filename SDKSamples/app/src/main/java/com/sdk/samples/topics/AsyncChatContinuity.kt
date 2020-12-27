@@ -1,7 +1,9 @@
 package com.sdk.samples.topics
 
-
 import android.util.Log
+import com.common.topicsbase.RestorationContinuity
+import com.common.utils.accountUtils.ChatType
+import com.common.utils.loginForms.RestoreState
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.integration.core.applicationId
@@ -13,9 +15,6 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys.LastReceivedMessageId
 import com.nanorep.sdkcore.utils.Completion
-import com.sdk.samples.topics.base.RestorationContinuity
-import com.sdk.utils.accountUtils.ChatType
-import com.sdk.utils.loginForms.RestoreState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /*

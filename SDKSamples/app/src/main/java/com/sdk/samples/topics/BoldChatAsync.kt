@@ -1,5 +1,5 @@
 package com.sdk.samples.topics
 
-import com.sdk.samples.topics.base.History
+import com.common.topicsbase.History
 
 open class BoldChatAsync : History()

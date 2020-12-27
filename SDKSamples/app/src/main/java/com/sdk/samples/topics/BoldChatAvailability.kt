@@ -3,6 +3,8 @@ package com.sdk.samples.topics
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.common.utils.loginForms.BoldAvailability
+import com.common.utils.loginForms.CheckAvailabilityViewModel
 import com.integration.core.Empty
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.bold.model.BoldAccount
@@ -11,8 +13,6 @@ import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.sdk.samples.R
-import com.sdk.utils.loginForms.BoldAvailability
-import com.sdk.utils.loginForms.CheckAvailabilityViewModel
 
 open class BoldChatAvailability : BoldChat() {
 

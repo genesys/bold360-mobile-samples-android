@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
+import com.common.utils.handover.MyHandoverHandler
 import com.nanorep.convesationui.structure.controller.ChatController
-import com.sdk.utils.handover.MyHandoverHandler
 
 open class Handover : BotChat() {
 

@@ -5,11 +5,11 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import com.common.topicsbase.SampleActivity
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
-import com.sdk.samples.topics.base.SampleActivity
 import kotlinx.android.synthetic.main.availability_activity.*
 
 class CheckAvailability : SampleActivity() {

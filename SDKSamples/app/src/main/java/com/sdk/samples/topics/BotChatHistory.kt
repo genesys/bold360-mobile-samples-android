@@ -2,13 +2,13 @@ package com.sdk.samples.topics
 
 import android.os.Bundle
 import android.util.Log
+import com.common.topicsbase.History
+import com.common.utils.customProviders.withId
+import com.common.utils.history.HistoryMigrationProvider
 import com.nanorep.convesationui.utils.HistoryMigration.Companion.start
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.topics.base.History
-import com.sdk.utils.customProviders.withId
-import com.sdk.utils.history.HistoryMigrationProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class BotChatHistory : History() {

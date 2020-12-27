@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.common.topicsbase.SampleActivity
+import com.common.utils.customProviders.withId
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
@@ -18,8 +20,6 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.topics.base.SampleActivity
-import com.sdk.utils.customProviders.withId
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
 class Autocomplete : SampleActivity() {

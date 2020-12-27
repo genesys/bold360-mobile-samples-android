@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.common.utils.CustomForm
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
@@ -15,8 +16,6 @@ import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.FormProvider
 import com.sdk.samples.R
-import com.sdk.utils.CustomForm
-
 
 class BoldCustomChatForm : BoldChatAvailability() {
 

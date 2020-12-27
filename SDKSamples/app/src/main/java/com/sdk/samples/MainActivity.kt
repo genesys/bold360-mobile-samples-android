@@ -15,15 +15,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.common.topicsbase.FullDemoSample
+import com.common.topicsbase.SamplesViewModel
+import com.common.topicsbase.SingletonSamplesViewModelFactory
+import com.common.utils.accountUtils.ChatType
+import com.common.utils.accountUtils.ExtraParams.*
+import com.common.utils.loginForms.AccountFormController
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
-import com.sdk.samples.topics.base.SamplesViewModel
-import com.sdk.samples.topics.base.SingletonSamplesViewModelFactory
-import com.sdk.utils.accountUtils.ChatType
-import com.sdk.utils.accountUtils.ExtraParams.*
-import com.sdk.utils.loginForms.AccountFormController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.sample_topic.view.*
 
@@ -138,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
                 ChatType.Bot
             ), SampleTopic(
-                "com.sdk.sample.action.FULL_DEMO",
+                FullDemoSample.FULL_DEMO_TAG,
                 getString(R.string.full_demo),
                 ContextCompat.getDrawable(this, R.drawable.sample_image),
                 ChatType.None
@@ -167,7 +168,13 @@ class MainActivity : AppCompatActivity() {
 
                 showLoading(true)
 
-                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
+                val intent = if (topic.intentAction == FullDemoSample.FULL_DEMO_TAG) {
+                    Intent(this, FullDemoSample::class.java)
+                } else {
+                    Intent(topic.intentAction)
+                }.putExtra("title", topic.title)
+
+                startActivity(intent)
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)
 
 

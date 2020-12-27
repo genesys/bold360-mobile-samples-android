@@ -1,10 +1,10 @@
 package com.sdk.samples.topics
 
+import com.common.topicsbase.BasicChat
+import com.common.utils.customProviders.withId
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.topics.base.BasicChat
-import com.sdk.utils.customProviders.withId
 
 open class BotChat : BasicChat() {
 

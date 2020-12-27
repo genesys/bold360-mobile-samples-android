@@ -1,10 +1,10 @@
 package com.sdk.samples.topics
 
+import com.common.topicsbase.RestorationContinuity
+import com.common.utils.accountUtils.ChatType
+import com.common.utils.loginForms.RestoreState
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.NRError
-import com.sdk.samples.topics.base.RestorationContinuity
-import com.sdk.utils.accountUtils.ChatType
-import com.sdk.utils.loginForms.RestoreState
 
 open class ChatRestore : RestorationContinuity() {
 
@@ -21,7 +21,7 @@ open class ChatRestore : RestorationContinuity() {
             startChat()
         }
 
-    private fun restoreChat(): Account? {
+    private fun restoreChat() {
 
         if (!hasChatController()) {
 
@@ -44,7 +44,6 @@ open class ChatRestore : RestorationContinuity() {
                 onError(NRError(ex))
             }
         }
-        return null
     }
 
     override fun createChat() {
