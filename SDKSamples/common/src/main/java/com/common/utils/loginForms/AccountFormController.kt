@@ -2,9 +2,10 @@ package com.common.utils.loginForms
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.nanorep.nanoengine.Account
 import com.common.utils.accountUtils.ChatType
+import com.common.utils.accountUtils.ExtraParams.NonSample
 import com.common.utils.loginForms.SharedDataHandler.Companion.ChatType_key
+import com.nanorep.nanoengine.Account
 import java.lang.ref.WeakReference
 
 /**
@@ -20,7 +21,7 @@ interface AccountListener {
 interface FormController {
     fun updateChatType(
         chatType: String,
-        extraParams: List<String>?,
+        extraParams: List<String>,
         onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
     )
 }
@@ -34,7 +35,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
     override fun updateChatType(
         chatType: String,
-        extraParams: List<String>?,
+        extraParams: List<String>,
         onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
     ) {
 
@@ -53,7 +54,7 @@ interface FormPresenter: AccountListener {
     val containerRes: Int
     val dataController: DataController?
 
-    var extraParams: List<String>?
+    var extraParams: List<String>
 
     fun presentForm(fragmentManager: FragmentManager, chatType: String)
 }
@@ -62,7 +63,7 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
     override val dataController = SharedDataController()
 
-    override var extraParams: List<String>? = null
+    override lateinit var extraParams: List<String>
 
     override  var onAccountData: ((account: Account?, restoreState: RestoreState, chatData: Map<String, Any?>?) -> Unit?)?
         set(value) {
@@ -110,10 +111,14 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
     private fun presentForm(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
         if (!fragmentManager.isStateSaved) {
-            fragmentManager.beginTransaction()
+            val transaction = fragmentManager.beginTransaction()
                 .add(containerRes, fragment, tag)
-                .addToBackStack(null)
-                .commit()
+
+            if (!extraParams.contains(NonSample) || fragmentManager.fragments.isNotEmpty()) {
+                transaction.addToBackStack(null)
+            }
+
+            transaction.commit()
         }
     }
 }

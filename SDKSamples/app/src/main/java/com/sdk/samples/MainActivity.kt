@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.common.topicsbase.FullDemoSample
+import com.common.topicsbase.FullDemo
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.accountUtils.ChatType
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
                 ChatType.Bot
             ), SampleTopic(
-                FullDemoSample.FULL_DEMO_TAG,
+                FullDemo.FULL_DEMO_TAG,
                 getString(R.string.full_demo),
                 ContextCompat.getDrawable(this, R.drawable.sample_image),
                 ChatType.None
@@ -168,8 +168,8 @@ class MainActivity : AppCompatActivity() {
 
                 showLoading(true)
 
-                val intent = if (topic.intentAction == FullDemoSample.FULL_DEMO_TAG) {
-                    Intent(this, FullDemoSample::class.java)
+                val intent = if (topic.intentAction == FullDemo.FULL_DEMO_TAG) {
+                    Intent(this, FullDemo::class.java)
                 } else {
                     Intent(topic.intentAction)
                 }.putExtra("title", topic.title)
@@ -208,8 +208,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
 
-        singletonSamplesViewModelFactory.clear()
-
+        if (::singletonSamplesViewModelFactory.isInitialized) {
+            singletonSamplesViewModelFactory.clear()
+        }
         super.onDestroy()
     }
 

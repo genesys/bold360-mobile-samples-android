@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.common.topicsbase.FullDemoSample.Companion.FULL_DEMO_TAG
+import com.common.topicsbase.FullDemo.Companion.FULL_DEMO_TAG
 import com.common.utils.CustomForm
 import com.common.utils.accountUtils.ChatType
 import com.common.utils.live.toFileUploadInfo
@@ -49,7 +49,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import nanorep.com.common.R
 
-class FullDemoSample : RestorationContinuity() {
+class FullDemo : RestorationContinuity() {
 
     private var uploadFile: MenuItem? = null
     private var isSample = false
@@ -435,13 +435,13 @@ class FullDemoSample : RestorationContinuity() {
                We're using the [com.nanorep.convesationui.bold.ui.ChatFormViewModel] provided by the SDK,
                since it fits our needs.
              */
-            ViewModelProvider(this@FullDemoSample).get(ChatFormViewModel::class.java).apply {
+            ViewModelProvider(this@FullDemo).get(ChatFormViewModel::class.java).apply {
 
                 //-> sets the form data (fields, branding) on the ViewModel for the CustomForm fragment to use
                 onFormData(formData)
 
                 //-> sets an observer to listen to form submission results.
-                observeSubmission(this@FullDemoSample,
+                observeSubmission(this@FullDemo,
                     Observer { event ->
                         Log.e(Custom_Form, "Got form submission event ${event?.state}")
 
@@ -454,7 +454,7 @@ class FullDemoSample : RestorationContinuity() {
                         }
                     })
 
-                observeLanguageChanges(this@FullDemoSample, Observer { languageChange ->
+                observeLanguageChanges(this@FullDemo, Observer { languageChange ->
                     val language = languageChange?.first
 
                     Log.i("CustomForm", "Prechat: Language change detected: [${language ?: ""}]")

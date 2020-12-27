@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.common.topicsbase.FullDemoSample
+import com.common.topicsbase.FullDemo
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.accountUtils.ChatType
+import com.common.utils.accountUtils.ExtraParams.NonSample
 import com.common.utils.loginForms.AccountFormController
 import com.nanorep.sdkcore.utils.weakRef
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         val singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
 
-        AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf()) { account, restoreState, extraData ->
+        AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf(NonSample)) { account, restoreState, extraData ->
 
             ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                 accountProvider.apply {
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
             showLoading(true)
 
-            startActivity(Intent(this, FullDemoSample::class.java)
+            startActivity(Intent(this, FullDemo::class.java)
                 .putExtra("isSample", false)
                 .putExtra("title", "Full Demo"))
 
@@ -60,7 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
 
-        singletonSamplesViewModelFactory.clear()
+        if (::singletonSamplesViewModelFactory.isInitialized) {
+            singletonSamplesViewModelFactory.clear()
+        }
 
         super.onDestroy()
     }

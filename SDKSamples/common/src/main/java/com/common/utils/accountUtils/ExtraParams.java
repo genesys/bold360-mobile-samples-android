@@ -13,4 +13,5 @@ public @interface ExtraParams {
     String AsyncExtraData = "AsyncExtraData";
     String RestoreSwitch = "RestoreSwitch";
     String UsingHistory = "UsingHistory";
+    String NonSample = "NonSample";
 }

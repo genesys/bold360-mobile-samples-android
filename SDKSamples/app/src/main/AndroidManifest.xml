@@ -190,7 +190,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.common.topicsbase.FullDemoSample"
+        <activity android:name="com.common.topicsbase.FullDemo"
                 android:configChanges="orientation|screenSize|locale|layoutDirection"
                 android:windowSoftInputMode="adjustResize">
             <intent-filter>
