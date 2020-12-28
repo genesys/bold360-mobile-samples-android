@@ -1,14 +1,15 @@
 package com.common.utils.chat
 
 import androidx.fragment.app.Fragment
+import com.common.topicsbase.SamplesViewModel
+import com.common.utils.history.HistoryRepository
+import com.common.utils.loginForms.RestoreState
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
-import com.common.utils.history.HistoryRepository
-import com.common.utils.loginForms.RestoreState
 
-interface AccountHolder {
+interface AccountProvider {
 
     var account: Account?
 
@@ -36,7 +37,7 @@ interface ChatProvider {
     /**
      * Holds the current account details
      */
-    val accountHolder: AccountHolder
+    val accountHolder: SamplesViewModel.AccountHolder
 
     fun getSecuredInfo(): String
 

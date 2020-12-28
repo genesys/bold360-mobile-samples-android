@@ -1,8 +1,9 @@
 package com.common.topicsbase
 
 import androidx.lifecycle.ViewModel
-import com.nanorep.nanoengine.Account
+import com.common.utils.chat.AccountProvider
 import com.common.utils.loginForms.RestoreState
+import com.nanorep.nanoengine.Account
 
 class SamplesViewModel : ViewModel() {
 
@@ -21,7 +22,7 @@ class SamplesViewModel : ViewModel() {
         }
     }
 
-    inner class AccountHolder: com.common.utils.chat.AccountHolder {
+    inner class AccountHolder: AccountProvider {
         override var account: Account? = null
 
         override var extraData: Map<String, Any?>? = null
