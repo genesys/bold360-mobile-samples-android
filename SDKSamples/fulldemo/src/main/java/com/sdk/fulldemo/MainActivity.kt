@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.common.topicsbase.FullDemo
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
+import com.common.utils.ERROR_DIALOG_REQUEST_CODE
 import com.common.utils.accountUtils.ChatType
 import com.common.utils.accountUtils.ExtraParams.NonSample
 import com.common.utils.loginForms.AccountFormController
+import com.common.utils.updateSecurityProvider
 import com.nanorep.sdkcore.utils.weakRef
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -20,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory
+    private var retryProviderInstall = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,5 +72,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onDestroy()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        if (retryProviderInstall) {
+            this.updateSecurityProvider()
+            retryProviderInstall = false
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == ERROR_DIALOG_REQUEST_CODE) {
+            retryProviderInstall = true
+        }
     }
 }
