@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.topicsbase.FullDemo.Companion.FULL_DEMO_TAG
 import com.common.utils.CustomBoldForm
+import com.common.utils.customProviders.ContinuityAccountHandler
 import com.common.utils.live.toFileUploadInfo
 import com.common.utils.loginForms.RestoreState
 import com.common.utils.loginForms.accountUtils.ChatType
@@ -29,7 +30,6 @@ import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
 import com.integration.core.*
 import com.integration.core.annotations.FormType
-import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.ui.ChatFormViewModel
 import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
@@ -38,11 +38,8 @@ import com.nanorep.convesationui.structure.UploadNotification
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
 import com.nanorep.convesationui.structure.controller.FormProvider
-import com.nanorep.convesationui.structure.handlers.AccountSessionListener
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.*
-import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.SystemStatement
@@ -60,7 +57,7 @@ class FullDemo : RestorationContinuity() {
 
 //  <editor-fold desc=">>>>> Providers initialization <<<<<" >
 
-    private var accountProvider: AccountHandler? = null
+    private var accountProvider: ContinuityAccountHandler? = null
     private var entitiesProvider: EntitiesProvider? = null
     private var handoverHandler: HandoverHandler? = null
     private var formProvider: FormProvider? = null
@@ -68,7 +65,11 @@ class FullDemo : RestorationContinuity() {
 
     init {
 
-//         Uncomment to apply a custom form provider :
+//        Uncomment to config a custom account provider that supports continuity  :
+//        accountProvider = ContinuityAccountHandler()
+
+
+//         Uncomment to config a custom form provider :
 //         formProvider = CustomFormProvider()
 
 //         Uncomment to register Phone call broadcast to trigger onChatInterruption.
@@ -83,13 +84,11 @@ class FullDemo : RestorationContinuity() {
             }
         }*/
 
-//        Uncomment to apply a custom handover handler :
+//        Uncomment to config a custom handover handler :
 //        handoverHandler = CustomHandoverHandler(baseContext)
 
-//        Uncomment to apply the Balance Entities provider handler :
+//        Uncomment to init the Balance Entities provider handler :
 //        entitiesProvider = BalanceEntitiesProvider()
-
-        accountProvider = AccountHandler()
 
     }
 
@@ -580,65 +579,6 @@ class FullDemo : RestorationContinuity() {
 ////////////////////////////////////////
 
 //  <editor-fold desc=">>>>> Providers implementations <<<<<" >
-
-/**
- * An account provider that supports chat continuity
- */
-class AccountHandler : AccountSessionListener {
-
-    private var senderId: String = ""
-    private var lastReceivedMessageId: String = ""
-
-    private val accounts: MutableMap<String, AccountInfo> = mutableMapOf()
-
-    private fun addAccount(account: AccountInfo) {
-        accounts[account.getApiKey()] = account
-    }
-
-    private fun continueAsync(account: Account? = null): Account? {
-
-        return account?.apply {
-            info.let {
-                it.SenderId = senderId.toLongOrNull()
-                it.LastReceivedMessageId = lastReceivedMessageId
-            }
-        }
-    }
-
-    override fun provide(info: AccountInfo, callback: Completion<AccountInfo>) {
-        val account = accounts[info.getApiKey()]
-        callback.onComplete((account as? AsyncAccount)?.let { continueAsync(account) } ?: info)
-    }
-
-    override fun update(account: AccountInfo) {
-
-        accounts[account.getApiKey()]?.run {
-
-            account.getInfo().SenderId?.let {
-                senderId = "$it"
-            }
-
-            update(account)
-
-        } ?: kotlin.run {
-            addAccount(account)
-        }
-
-
-    }
-
-    override fun onConfigUpdate(account: AccountInfo, updateKey: String, updatedValue: Any?) {
-        try {
-            Log.d(FULL_DEMO_TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
-            when (updateKey) {
-                SessionInfoConfigKeys.LastReceivedMessageId -> lastReceivedMessageId =
-                    (updatedValue as? String) ?: ""
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-}
 
 ////////////////////////////////////////
 
