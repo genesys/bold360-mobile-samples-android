@@ -14,6 +14,9 @@ import com.common.utils.loginForms.AccountFormController
 import com.nanorep.sdkcore.utils.weakRef
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * This app presents the Full Demo sample independently
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory

@@ -52,7 +52,7 @@ import nanorep.com.common.R
 class FullDemo : RestorationContinuity() {
 
     private var uploadFile: MenuItem? = null
-    private var isSample = false
+    private var isSample = true
 
 //  <editor-fold desc=">>>>> Providers initialization <<<<<" >
 
@@ -63,18 +63,12 @@ class FullDemo : RestorationContinuity() {
 
     init {
 
-        // unComment to apply a custom form provider :
-        /*  formProvider = ChatFormProvider(
-                 fragmentManager = {
-                     supportFragmentManager
-                 },
-                 onFormPresent = { formType ->
+//         unComment to apply a custom form provider :
+//         formProvider = CustomFormProvider()
 
-                 })*/
-
-        // Uncomment to register Phone call broadcast to trigger onChatInterruption.
-        // A Broadcast which triggers Interruption to the chat.
-        // This is used to stop the voice recognition/readout during phone actions.
+//         Uncomment to register Phone call broadcast to trigger onChatInterruption.
+//         A Broadcast which triggers Interruption to the chat.
+//         This is used to stop the voice recognition/readout during phone actions.
         /*phoneReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 Log.d("callAction", "Got broadcast on call action")
@@ -85,7 +79,6 @@ class FullDemo : RestorationContinuity() {
         }*/
 
         accountProvider = AccountHandler()
-
 
     }
 

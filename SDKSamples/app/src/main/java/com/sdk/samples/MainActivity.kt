@@ -153,7 +153,6 @@ class MainActivity : AppCompatActivity() {
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
             accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState, extraData ->
 
-
                 ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                     accountProvider.apply {
                         this.account = account
@@ -168,6 +167,8 @@ class MainActivity : AppCompatActivity() {
 
                 showLoading(true)
 
+                // This is done here inorder to open the FullDemo Sample by this App explicitly
+                // (without the intentAction selection dialog presentation)
                 val intent = if (topic.intentAction == FullDemo.FULL_DEMO_TAG) {
                     Intent(this, FullDemo::class.java)
                 } else {
@@ -176,8 +177,7 @@ class MainActivity : AppCompatActivity() {
 
                 startActivity(intent)
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)
-
-
+                
             }
 
         }
