@@ -1,4 +1,4 @@
-package com.common.utils
+package com.common.utils.loginForms
 
 import com.integration.async.core.UserInfo
 import com.integration.core.userInfo
@@ -7,7 +7,7 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
 import java.util.*
 
-object Accounts {
+internal object Accounts {
 
     private val formalBoldAccount: BoldAccount
         get() = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile

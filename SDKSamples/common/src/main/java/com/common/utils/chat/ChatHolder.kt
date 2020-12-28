@@ -4,19 +4,20 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.common.topicsbase.SamplesViewModel
+import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.history.HistoryRepository
+import com.common.utils.loginForms.SharedDataHandler
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
-import com.common.utils.accountUtils.ChatType
-import com.common.utils.history.HistoryRepository
-import com.common.utils.loginForms.SharedDataHandler
 import java.lang.ref.WeakReference
 
-class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: AccountHolder)
-    : ChatProvider, AccountHolder by accountHolder {
+class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: SamplesViewModel.AccountHolder)
+    : ChatProvider, AccountProvider by accountHolder {
 
     private var context: Context? = wContext?.get()
 

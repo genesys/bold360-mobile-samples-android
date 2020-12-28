@@ -1,4 +1,4 @@
-package com.common.utils.accountUtils;
+package com.common.utils.loginForms.accountUtils;
 
 import androidx.annotation.StringDef;
 

@@ -11,10 +11,10 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
-import com.common.utils.accountUtils.ChatType
-import com.common.utils.accountUtils.ExtraParams.PrechatExtraData
-import com.common.utils.accountUtils.ExtraParams.Welcome
-import com.common.utils.accountUtils.isEmpty
+import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ExtraParams.PrechatExtraData
+import com.common.utils.loginForms.accountUtils.ExtraParams.Welcome
+import com.common.utils.loginForms.accountUtils.isEmpty
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.Account_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.ApiKey_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.Context_key

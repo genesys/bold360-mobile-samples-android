@@ -5,7 +5,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.common.utils.accountUtils.*
+import com.common.utils.loginForms.accountUtils.*
 
 interface RestoreStateProvider {
 

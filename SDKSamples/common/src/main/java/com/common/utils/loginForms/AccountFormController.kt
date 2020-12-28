@@ -2,8 +2,8 @@ package com.common.utils.loginForms
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.common.utils.accountUtils.ChatType
-import com.common.utils.accountUtils.ExtraParams.NonSample
+import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ExtraParams.NonSample
 import com.common.utils.loginForms.SharedDataHandler.Companion.ChatType_key
 import com.nanorep.nanoengine.Account
 import java.lang.ref.WeakReference

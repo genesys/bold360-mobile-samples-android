@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.common.utils.CustomForm
+import com.common.utils.CustomBoldForm
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
@@ -92,7 +92,7 @@ class BoldCustomChatForm : BoldChatAvailability() {
                 })
             }
 
-            val fragment = CustomForm.create()
+            val fragment = CustomBoldForm.create()
 
             supportFragmentManager
                 .beginTransaction()

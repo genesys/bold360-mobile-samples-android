@@ -20,10 +20,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.topicsbase.FullDemo.Companion.FULL_DEMO_TAG
-import com.common.utils.CustomForm
-import com.common.utils.accountUtils.ChatType
+import com.common.utils.CustomBoldForm
 import com.common.utils.live.toFileUploadInfo
 import com.common.utils.loginForms.RestoreState
+import com.common.utils.loginForms.accountUtils.ChatType
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
@@ -33,6 +33,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.ui.ChatFormViewModel
 import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
+import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.UploadNotification
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
@@ -42,6 +43,7 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.*
 import com.nanorep.nanoengine.model.conversation.SessionInfoConfigKeys
+import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.*
@@ -52,18 +54,21 @@ import nanorep.com.common.R
 class FullDemo : RestorationContinuity() {
 
     private var uploadFile: MenuItem? = null
+
     private var isSample = true
+    private val notificationsReceiver = NotificationsReceiver()
 
 //  <editor-fold desc=">>>>> Providers initialization <<<<<" >
 
-    private val notificationsReceiver = NotificationsReceiver()
     private var accountProvider: AccountHandler? = null
+    private var entitiesProvider: EntitiesProvider? = null
+    private var handoverHandler: HandoverHandler? = null
     private var formProvider: FormProvider? = null
     private var phoneReceiver: BroadcastReceiver? = null
 
     init {
 
-//         unComment to apply a custom form provider :
+//         Uncomment to apply a custom form provider :
 //         formProvider = CustomFormProvider()
 
 //         Uncomment to register Phone call broadcast to trigger onChatInterruption.
@@ -78,6 +83,12 @@ class FullDemo : RestorationContinuity() {
             }
         }*/
 
+//        Uncomment to apply a custom handover handler :
+//        handoverHandler = CustomHandoverHandler(baseContext)
+
+//        Uncomment to apply the Balance Entities provider handler :
+//        entitiesProvider = BalanceEntitiesProvider()
+
         accountProvider = AccountHandler()
 
     }
@@ -90,13 +101,13 @@ class FullDemo : RestorationContinuity() {
         return super.createChatSettings()
             .voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
             .enableMultiRequestsOnLiveAgent(true)
+            .datestamp(true, FriendlyDatestampFormatFactory(this))
             .timestampConfig(
                 true, TimestampStyle(
                     "dd.MM hh:mm:ss", 10,
                     Color.parseColor("#33aa33"), null
                 )
             )
-            .datestamp(true, FriendlyDatestampFormatFactory(this))
     }
 
     @ExperimentalCoroutinesApi
@@ -104,6 +115,8 @@ class FullDemo : RestorationContinuity() {
         return super.getChatBuilder()?.apply {
             accountProvider?.let { accountProvider(it) }
             formProvider?.let { formProvider(it) }
+            handoverHandler?.let { chatHandoverHandler(it) }
+            entitiesProvider?.let { entitiesProvider(it) }
         }
     }
 
@@ -474,7 +487,7 @@ class FullDemo : RestorationContinuity() {
                 })
             }
 
-            val fragment = CustomForm.create()
+            val fragment = CustomBoldForm.create()
 
             val p = window.decorView.findViewById<FrameLayout>(android.R.id.content)
 

@@ -34,14 +34,14 @@ import nanorep.com.common.R
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
  */
-class CustomForm : Fragment() {
+class CustomBoldForm : Fragment() {
 
     private var isSubmitted = false
 
     companion object {
         @JvmStatic
         fun create(): Fragment {
-            return CustomForm()
+            return CustomBoldForm()
         }
     }
 
@@ -172,7 +172,7 @@ class CustomForm : Fragment() {
             formField: FormField, formConfiguration: FormConfiguration) {
 
         fieldsContainer.addView(SelectionView(context, formField, formConfiguration).apply {
-            selectionChangeListener = this@CustomForm.selectionListener
+            selectionChangeListener = this@CustomBoldForm.selectionListener
             this.tag = index
         }, index)
     }

@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.RestoreState
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.NRError

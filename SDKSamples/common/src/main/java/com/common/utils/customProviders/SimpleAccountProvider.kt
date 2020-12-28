@@ -33,50 +33,50 @@ open class SimpleAccountProvider : AccountInfoProvider {
                     info.securedInfo = "this is an encrypted content. Don't read"
                 }?:account)
         */
-}
+    }
 
-protected open fun addAccount(account: AccountInfo) {
-    accounts[account.getApiKey()] = account
-}
+    protected open fun addAccount(account: AccountInfo) {
+        accounts[account.getApiKey()] = account
+    }
 
 }
 
 class SimpleAccountWithIdProvider(context: Context) : SimpleAccountProvider() {
 
-private var wContext: WeakReference<Context> = context.weakRef()
+    private var wContext: WeakReference<Context> = context.weakRef()
 
-override fun update(account: AccountInfo) {
-super.update(account)
-(account as? BotAccount)?.let { updateBotSession(it) }
-}
-
-private fun updateBotSession(account: BotAccount) {
-wContext.get()?.run {
-    try {
-        val preferences: SharedPreferences = getSharedPreferences(
-            "bot_chat_session",
-            Context.MODE_PRIVATE
-        )
-        preferences.edit().putString("botUserId_" + account.account, account.userId).apply()
-    } catch (ex: Exception) {
-        ex.printStackTrace()
+    override fun update(account: AccountInfo) {
+        super.update(account)
+        (account as? BotAccount)?.let { updateBotSession(it) }
     }
-}
-}
+
+    private fun updateBotSession(account: BotAccount) {
+        wContext.get()?.run {
+            try {
+                val preferences: SharedPreferences = getSharedPreferences(
+                    "bot_chat_session",
+                    Context.MODE_PRIVATE
+                )
+                preferences.edit().putString("botUserId_" + account.account, account.userId).apply()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
 }
 
 fun BotAccount.withId(context: Context) = apply {
 
-try {
-val preferences: SharedPreferences = context.getSharedPreferences(
-    "bot_chat_session",
-    Context.MODE_PRIVATE
-)
-val userId = preferences.getString("botUserId_$account", null)
-this.userId = userId
-} catch (ex: Exception) {
-ex.printStackTrace()
-}
+    try {
+        val preferences: SharedPreferences = context.getSharedPreferences(
+            "bot_chat_session",
+            Context.MODE_PRIVATE
+        )
+        val userId = preferences.getString("botUserId_$account", null)
+        this.userId = userId
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+    }
 }
 
 

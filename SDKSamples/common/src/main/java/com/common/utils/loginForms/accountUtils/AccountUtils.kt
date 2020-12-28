@@ -1,5 +1,9 @@
-package com.common.utils.accountUtils
+package com.common.utils.loginForms.accountUtils
 
+import com.common.utils.loginForms.Accounts
+import com.common.utils.loginForms.AsyncSharedDataHandler
+import com.common.utils.loginForms.BotSharedDataHandler
+import com.common.utils.loginForms.LiveSharedDataHandler
 import com.integration.async.core.UserInfo
 import com.integration.core.applicationId
 import com.integration.core.userInfo
@@ -7,10 +11,6 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
-import com.common.utils.Accounts
-import com.common.utils.loginForms.AsyncSharedDataHandler
-import com.common.utils.loginForms.BotSharedDataHandler
-import com.common.utils.loginForms.LiveSharedDataHandler
 
 @Override
 internal fun BotAccount.map(): Map<String, Any?> =
@@ -34,11 +34,11 @@ internal fun AsyncAccount.map(): Map<String, Any?> =
 
 ///////////////////////////////////////////////////
 
-fun Pair<String, String>.isEmpty(): Boolean {
+internal fun Pair<String, String>.isEmpty(): Boolean {
     return first.isBlank() || second.isBlank()
 }
 
-fun AccountMap.equalsTo(other: AccountMap): Boolean {
+internal fun AccountMap.equalsTo(other: AccountMap): Boolean {
 
         if (other.size != size) return false
 
@@ -56,7 +56,7 @@ fun AccountMap.equalsTo(other: AccountMap): Boolean {
         return true
 }
 
-fun Account?.orDefault(@ChatType chatType: String): Account {
+internal fun Account?.orDefault(@ChatType chatType: String): Account {
         return this ?: when (chatType) {
                 ChatType.Live -> Accounts.defaultBoldAccount
                 ChatType.Async -> Accounts.defaultAsyncAccount
@@ -64,9 +64,9 @@ fun Account?.orDefault(@ChatType chatType: String): Account {
         }
 }
 
-typealias AccountMap = Map<String,Any?>
+private typealias AccountMap = Map<String,Any?>
 
-fun Account?.isRestorable(savedAccount: Account?): Boolean {
+internal fun Account?.isRestorable(savedAccount: Account?): Boolean {
 
         return when(this) {
                 is BoldAccount -> liveRestorable(savedAccount as? BoldAccount)
@@ -76,7 +76,7 @@ fun Account?.isRestorable(savedAccount: Account?): Boolean {
         }
 }
 
-fun AccountMap.toBotAccount(): BotAccount? {
+internal fun AccountMap.toBotAccount(): BotAccount? {
         return (this[BotSharedDataHandler.ApiKey_key] as? String)?.let { apiKey ->
                 BotAccount(apiKey,
                         this[BotSharedDataHandler.Account_key] as String,
@@ -89,11 +89,11 @@ fun AccountMap.toBotAccount(): BotAccount? {
         }
 }
 
-fun AccountMap.toLiveAccount(): BoldAccount? {
+internal fun AccountMap.toLiveAccount(): BoldAccount? {
         return (this[LiveSharedDataHandler.Access_key] as? String)?.let { BoldAccount(it) }
 }
 
-fun AccountMap.toAsyncAccount(): AsyncAccount? {
+internal fun AccountMap.toAsyncAccount(): AsyncAccount? {
         val accessKey = this[AsyncSharedDataHandler.Access_key] as? String
         return accessKey?.let {
                 AsyncAccount(it, this[AsyncSharedDataHandler.App_id_Key] as? String ?: "").apply {
@@ -110,14 +110,14 @@ fun AccountMap.toAsyncAccount(): AsyncAccount? {
         }
 }
 
-fun AsyncAccount.asyncRestorable(savedAccount: AsyncAccount?): Boolean {
+internal fun AsyncAccount.asyncRestorable(savedAccount: AsyncAccount?): Boolean {
         return apiKey == savedAccount?.apiKey &&
                 getInfo().applicationId == savedAccount.getInfo().applicationId &&
                 getInfo().userInfo.userId == savedAccount.getInfo().userInfo.userId
 }
 
-fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean = savedAccount?.info?.userInfo?.userId == info.userInfo.userId
+internal fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean = savedAccount?.info?.userInfo?.userId == info.userInfo.userId
 
-fun BoldAccount.liveRestorable(savedAccount: BoldAccount?): Boolean {
+internal fun BoldAccount.liveRestorable(savedAccount: BoldAccount?): Boolean {
         return (this.apiKey == savedAccount?.apiKey)
 }

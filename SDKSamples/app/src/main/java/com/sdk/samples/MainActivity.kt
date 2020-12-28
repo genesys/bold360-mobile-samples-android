@@ -16,8 +16,8 @@ import com.common.topicsbase.FullDemo
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.ERROR_DIALOG_REQUEST_CODE
-import com.common.utils.accountUtils.ChatType
-import com.common.utils.accountUtils.ExtraParams.*
+import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.updateSecurityProvider
 import com.nanorep.sdkcore.utils.weakRef

@@ -8,10 +8,10 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.nanorep.nanoengine.Account
-import com.common.utils.accountUtils.ChatType
-import com.common.utils.accountUtils.toAsyncAccount
-import com.common.utils.accountUtils.toBotAccount
-import com.common.utils.accountUtils.toLiveAccount
+import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.toAsyncAccount
+import com.common.utils.loginForms.accountUtils.toBotAccount
+import com.common.utils.loginForms.accountUtils.toLiveAccount
 import nanorep.com.common.R
 
 

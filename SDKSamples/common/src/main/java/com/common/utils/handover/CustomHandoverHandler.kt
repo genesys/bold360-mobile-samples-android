@@ -21,7 +21,7 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.getAs
 import java.util.*
 
-class MyHandoverHandler(context: Context) : HandoverHandler(context) {
+class CustomHandoverHandler(context: Context) : HandoverHandler(context) {
 
     private var handlerConfiguration: String? = null
     private val handler = Handler(Looper.myLooper()!!)

@@ -6,7 +6,7 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
-import com.common.utils.accountUtils.ExtraParams.*
+import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.RestoreState
 import kotlinx.android.synthetic.main.activity_basic.*

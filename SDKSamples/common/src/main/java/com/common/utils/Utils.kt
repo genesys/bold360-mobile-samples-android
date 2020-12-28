@@ -1,12 +1,17 @@
 package com.common.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
+import com.nanorep.nanoengine.model.configuration.DatestampFormatFactory
 import com.nanorep.sdkcore.utils.toast
+import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val ERROR_DIALOG_REQUEST_CODE = 665
 
@@ -63,5 +68,25 @@ fun Activity.updateSecurityProvider() {
 
                 }
             })
+    }
+}
+
+class SampleDatestampFactory : DatestampFormatFactory {
+
+    @SuppressLint("SimpleDateFormat")
+    private val simpleDateFormat = SimpleDateFormat("EEEEE MMM HH:mm:ss", DateFormatSymbols(Locale.getDefault()).apply {
+        weekdays = arrayOf(
+            "Unused",
+            "Sad Sunday",
+            "Manic Monday",
+            "Thriving Tuesday",
+            "Wet Wednesday",
+            "Total Thursday",
+            "Fat Friday",
+            "Super Saturday")
+    })
+
+    override fun formatDate(datestamp: Long): String {
+        return simpleDateFormat.format(datestamp)
     }
 }

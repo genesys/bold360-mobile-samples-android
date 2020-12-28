@@ -2,7 +2,7 @@ package com.sdk.samples.topics
 
 import android.util.Log
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.RestoreState
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
