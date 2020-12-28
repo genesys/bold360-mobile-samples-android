@@ -22,6 +22,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.topicsbase.FullDemo.Companion.FULL_DEMO_TAG
 import com.common.utils.CustomBoldForm
 import com.common.utils.customProviders.ContinuityAccountHandler
+import com.common.utils.customProviders.CustomTTSAlterProvider
+import com.common.utils.handover.CustomHandoverHandler
 import com.common.utils.live.toFileUploadInfo
 import com.common.utils.loginForms.RestoreState
 import com.common.utils.loginForms.accountUtils.ChatType
@@ -35,6 +37,7 @@ import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
 import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.UploadNotification
+import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
 import com.nanorep.convesationui.structure.controller.FormProvider
@@ -58,43 +61,47 @@ class FullDemo : RestorationContinuity() {
 //  <editor-fold desc=">>>>> Providers initialization <<<<<" >
 
     private var accountProvider: ContinuityAccountHandler? = null
-    private var entitiesProvider: EntitiesProvider? = null
     private var handoverHandler: HandoverHandler? = null
+    private var ttsAlterProvider: TTSReadAlterProvider? = null
     private var formProvider: FormProvider? = null
-    private var phoneReceiver: BroadcastReceiver? = null
+
+    private var entitiesProvider: EntitiesProvider? = null
 
     init {
 
-//        Uncomment to config a custom account provider that supports continuity  :
-//        accountProvider = ContinuityAccountHandler()
+        // Configuring a custom account provider that supports continuity :
+        accountProvider = ContinuityAccountHandler()
 
+        // Configuring a custom TTS alter provider :
+        ttsAlterProvider = CustomTTSAlterProvider()
 
-//         Uncomment to config a custom form provider :
-//         formProvider = CustomFormProvider()
+        // Configuring a custom form provider :
+         formProvider = CustomFormProvider()
 
-//         Uncomment to register Phone call broadcast to trigger onChatInterruption.
-//         A Broadcast which triggers Interruption to the chat.
-//         This is used to stop the voice recognition/readout during phone actions.
-        /*phoneReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                Log.d("callAction", "Got broadcast on call action")
-                if (chatController.isActive) {
-                    chatController.onChatInterruption()
-                }
-            }
-        }*/
+        // Configuring a custom handover handler :
+        handoverHandler = CustomHandoverHandler(baseContext)
 
-//        Uncomment to config a custom handover handler :
-//        handoverHandler = CustomHandoverHandler(baseContext)
-
-//        Uncomment to init the Balance Entities provider handler :
-//        entitiesProvider = BalanceEntitiesProvider()
+        // Uncomment to init the Balance Entities provider handler :
+        // entitiesProvider = BalanceEntitiesProvider()
 
     }
 
 //  </editor-fold>
 
 //  <editor-fold desc=">>>>> Chat initialization <<<<<" >
+
+    override val chatType: String
+        get() = ChatType.None
+
+    override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
+        get() = { account, restoreState, extraData ->
+
+            chatProvider.account = account
+            chatProvider.restoreState = restoreState
+            chatProvider.extraData = extraData
+
+            startChat()
+        }
 
     override fun createChatSettings(): ConversationSettings {
         return super.createChatSettings()
@@ -116,30 +123,14 @@ class FullDemo : RestorationContinuity() {
             formProvider?.let { formProvider(it) }
             handoverHandler?.let { chatHandoverHandler(it) }
             entitiesProvider?.let { entitiesProvider(it) }
+            ttsAlterProvider?.let { ttsReadAlterProvider(it) }
         }
     }
-
-    override val chatType: String
-        get() = ChatType.None
-
-    override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
-        get() = { account, restoreState, extraData ->
-
-            chatProvider.account = account
-            chatProvider.restoreState = restoreState
-            chatProvider.extraData = extraData
-
-            startChat()
-        }
 
     override fun onChatUIDetached() {
         destructMenu?.isVisible = true
         enableMenu(destructMenu, hasChatController())
-        if (isSample) {
-            super.onChatUIDetached()
-        } else {
-            finishIfLast()
-        }
+        if (isSample) super.onChatUIDetached() else finishIfLast()
     }
 
     override fun destructChat() {
@@ -171,17 +162,34 @@ class FullDemo : RestorationContinuity() {
         }
     }
 
+    /**
+     *   A Broadcast which triggers Interruption to the chat.
+     *   This is used to stop the voice recognition/readout during phone actions
+     */
+    fun initInterfaceReceiver() {
+
+        LocalBroadcastManager.getInstance(baseContext).registerReceiver(
+            object : BroadcastReceiver() {
+
+                override fun onReceive(context: Context, intent: Intent) {
+                    Log.d("callAction", "Got broadcast on call action")
+                    if (chatController.isActive) {
+                        chatController.onChatInterruption()
+                    }
+                }
+            }, IntentFilter("android.CHAT_CALL_ACTION"))
+    }
+
+
     override fun startChat() {
 
-        phoneReceiver?.let {
-            LocalBroadcastManager.getInstance(baseContext).registerReceiver(
-                it, IntentFilter("android.CHAT_CALL_ACTION")
-            )
-        }
+        // Uncomment to register a Phone call broadcast to trigger onChatInterruption.
+        // initInterfaceReceiver()
 
-
+        // Creates the chat controller (/restores the chat)
         if ( chatProvider.restoreState.restoreRequest ) restoreChat() else createChat()
 
+        // Registers to the wanted chat Notifications
         if ( hasChatController() ) {
             chatController.apply {
                 subscribeNotifications(
@@ -578,10 +586,7 @@ class FullDemo : RestorationContinuity() {
 
 ////////////////////////////////////////
 
-//  <editor-fold desc=">>>>> Providers implementations <<<<<" >
-
-////////////////////////////////////////
-
+//  <editor-fold desc=">>>>> NotificationsReceiver implementation <<<<<" >
 
 internal class NotificationsReceiver : Notifiable {
 
@@ -614,4 +619,5 @@ internal class NotificationsReceiver : Notifiable {
         }
     }
 }
+
 //  </editor-fold>

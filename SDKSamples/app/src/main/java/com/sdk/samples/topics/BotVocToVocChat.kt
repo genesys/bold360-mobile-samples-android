@@ -1,8 +1,5 @@
 package com.sdk.samples.topics
 
-import com.nanorep.convesationui.bot.CarouselReadoutMessage
-import com.nanorep.convesationui.structure.components.ReadRequest
-import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.nanoengine.model.configuration.VoiceSettings
@@ -10,27 +7,14 @@ import com.nanorep.nanoengine.model.configuration.VoiceSupport
 
 class BotVocToVocChat : BotChat() {
 
-    private val readAlterProvider:TTSReadAlterProvider = object : TTSReadAlterProvider{
-
-        override fun alter(readRequest: ReadRequest, callback: (ReadRequest) -> Unit) {
-            readRequest.readoutMessage.setPersistentPrefix("Persistent Option");
-            (readRequest.readoutMessage as? CarouselReadoutMessage)?.setPrefixToItemsOptions("Carousel Option");
-            readRequest.readoutMessage.setQuickPrefix("Quick Option");
-
-            // OR:
-//            readRequest.readoutResult = "Response text was altered"
-
-            callback.invoke(readRequest)
-
-        }
-    }
-
     override fun createChatSettings(): ConversationSettings {
         return ConversationSettings().voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
     }
 
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()
-           // Uncomment this to enable the read alter provider: .ttsReadAlterProvider(readAlterProvider)
+        // Uncomment this to enable the read alter provider: .ttsReadAlterProvider(CustomTTSAlterProvider())
+
+
     }
 }
