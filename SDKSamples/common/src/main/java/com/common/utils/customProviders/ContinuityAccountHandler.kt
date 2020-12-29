@@ -1,7 +1,6 @@
 package com.common.utils.customProviders
 
 import android.util.Log
-import com.common.topicsbase.FullDemo
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.nanorep.convesationui.async.AsyncAccount
@@ -60,7 +59,7 @@ class ContinuityAccountHandler : AccountSessionListener {
 
     override fun onConfigUpdate(account: AccountInfo, updateKey: String, updatedValue: Any?) {
         try {
-            Log.d(FullDemo.FULL_DEMO_TAG, "onConfigUpdate: got to update $updateKey with $updatedValue")
+            Log.d("AccountSessionListener", "onConfigUpdate: got to update $updateKey with $updatedValue")
             when (updateKey) {
                 SessionInfoConfigKeys.LastReceivedMessageId -> lastReceivedMessageId =
                     (updatedValue as? String) ?: ""

@@ -2,7 +2,6 @@ package com.sdk.samples.topics
 
 import com.common.topicsbase.RestorationContinuity
 import com.common.utils.customProviders.ContinuityAccountHandler
-import com.common.utils.loginForms.RestoreState
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
@@ -43,15 +42,6 @@ class AsyncChatContinuity : RestorationContinuity() {
     override fun getAccount(): Account? {
         return super.getAccount()?.apply { continueLast(this as AsyncAccount) }
     }
-
-    override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
-        get() = { account, restoreState, extraData ->
-            chatProvider.account = account
-            chatProvider.restoreState = restoreState
-            chatProvider.extraData = extraData
-
-            createChat()
-        }
 
     /**
      * Continues the last chat with this account (if available)

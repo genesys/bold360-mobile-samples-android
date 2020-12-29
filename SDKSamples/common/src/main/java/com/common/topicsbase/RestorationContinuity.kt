@@ -2,18 +2,20 @@ package com.common.topicsbase
 
 import android.util.Log
 import android.widget.Toast
+import com.common.utils.loginForms.AccountFormController
+import com.common.utils.loginForms.RestoreState
+import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
-import com.common.utils.loginForms.accountUtils.ExtraParams.*
-import com.common.utils.loginForms.AccountFormController
-import com.common.utils.loginForms.RestoreState
 import kotlinx.android.synthetic.main.activity_basic.*
 
 abstract class RestorationContinuity : History() {
 
-    abstract val chatType: String // Needed for reloading the relevant forms
+    protected open val chatType: String // Needed for reloading the relevant forms
+    get() = ChatType.None
 
     /**
      * Reloads the login forms according to the ChatType
@@ -28,7 +30,14 @@ abstract class RestorationContinuity : History() {
     /**
      * The callback from the forms presentation
      */
-    abstract val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
+    private val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
+        get() = { account, restoreState, extraData ->
+            chatProvider.account = account
+            chatProvider.restoreState = restoreState
+            chatProvider.extraData = extraData
+
+            startChat()
+        }
 
     override fun onChatUIDetached() {
 

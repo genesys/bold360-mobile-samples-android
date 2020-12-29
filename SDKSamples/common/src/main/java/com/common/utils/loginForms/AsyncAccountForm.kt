@@ -2,10 +2,10 @@ package com.common.utils.loginForms
 
 import android.os.Bundle
 import android.view.View
-import com.integration.core.userInfo
-import com.nanorep.convesationui.async.AsyncAccount
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.ExtraParams
+import com.integration.core.userInfo
+import com.nanorep.convesationui.async.AsyncAccount
 import kotlinx.android.synthetic.main.async_account_form.*
 import nanorep.com.common.R
 

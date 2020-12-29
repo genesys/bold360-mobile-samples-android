@@ -12,13 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.common.topicsbase.FullDemo
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.ERROR_DIALOG_REQUEST_CODE
+import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.ExtraParams.*
-import com.common.utils.loginForms.AccountFormController
 import com.common.utils.updateSecurityProvider
 import com.nanorep.sdkcore.utils.weakRef
 import kotlinx.android.synthetic.main.activity_main.*
@@ -135,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
                 ChatType.Bot
             ), SampleTopic(
-                FullDemo.FULL_DEMO_TAG,
+                "com.sdk.sample.action.FULL_DEMO_SAMPLE",
                 getString(R.string.full_demo),
                 ContextCompat.getDrawable(this, R.drawable.sample_image),
                 ChatType.None
@@ -163,15 +162,7 @@ class MainActivity : AppCompatActivity() {
 
                 showLoading(true)
 
-                // This is done here inorder to open the FullDemo Sample by this App explicitly
-                // (without the intentAction selection dialog presentation)
-                val intent = if (topic.intentAction == FullDemo.FULL_DEMO_TAG) {
-                    Intent(this, FullDemo::class.java)
-                } else {
-                    Intent(topic.intentAction)
-                }.putExtra("title", topic.title)
-
-                startActivity(intent)
+                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)
 
             }

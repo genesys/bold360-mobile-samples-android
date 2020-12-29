@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.common.topicsbase.FullDemo
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.ERROR_DIALOG_REQUEST_CODE
@@ -40,29 +39,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            showLoading(true)
+            supportFragmentManager.fragments.forEach { _ ->
+                supportFragmentManager.popBackStackImmediate()
+            }
 
-            startActivity(Intent(this, FullDemo::class.java)
-                .putExtra("isSample", false)
-                .putExtra("title", "Full Demo"))
+            demoLoading.visibility = View.VISIBLE
+            demoContainer.visibility = View.GONE
 
+            startActivity(Intent(this, FullDemo::class.java).putExtra("title", "Full Demo"))
             overridePendingTransition(R.anim.right_in, R.anim.left_out)
 
         }
-    }
-    private fun showLoading(show: Boolean) {
-        if (show) {
-            demoLoading.visibility = View.VISIBLE
-            demoContainer.visibility = View.GONE
-        } else {
-            demoLoading.visibility = View.GONE
-            demoContainer.visibility = View.VISIBLE
-        }
-    }
 
-    override fun onRestart() {
-        super.onRestart()
-        showLoading(false)
     }
 
     override fun onDestroy() {

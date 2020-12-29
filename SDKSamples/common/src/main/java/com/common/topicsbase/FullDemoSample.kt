@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,14 +18,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.common.topicsbase.FullDemo.Companion.FULL_DEMO_TAG
+import com.common.topicsbase.FullDemoSample.Companion.FULL_DEMO_Sample_TAG
 import com.common.utils.CustomBoldForm
 import com.common.utils.customProviders.ContinuityAccountHandler
 import com.common.utils.customProviders.CustomTTSAlterProvider
 import com.common.utils.handover.CustomHandoverHandler
 import com.common.utils.live.toFileUploadInfo
-import com.common.utils.loginForms.RestoreState
-import com.common.utils.loginForms.accountUtils.ChatType
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
@@ -41,7 +38,6 @@ import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
 import com.nanorep.convesationui.structure.controller.FormProvider
-import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.*
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
@@ -51,14 +47,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import nanorep.com.common.R
 
-class FullDemo : RestorationContinuity() {
+open class FullDemoSample : RestorationContinuity() {
 
     private var uploadFile: MenuItem? = null
 
-    private var isSample = true
-    private val notificationsReceiver = NotificationsReceiver()
+//  <editor-fold desc=">>>>> Chat initialization <<<<<" >
 
-//  <editor-fold desc=">>>>> Providers initialization <<<<<" >
+    private val notificationsReceiver = NotificationsReceiver()
 
     private var accountProvider: ContinuityAccountHandler? = null
     private var handoverHandler: HandoverHandler? = null
@@ -67,8 +62,7 @@ class FullDemo : RestorationContinuity() {
 
     private var entitiesProvider: EntitiesProvider? = null
 
-    init {
-
+    private fun initializeProviders() {
         // Configuring a custom account provider that supports continuity :
         accountProvider = ContinuityAccountHandler()
 
@@ -76,7 +70,7 @@ class FullDemo : RestorationContinuity() {
         ttsAlterProvider = CustomTTSAlterProvider()
 
         // Configuring a custom form provider :
-         formProvider = CustomFormProvider()
+        formProvider = CustomFormProvider()
 
         // Configuring a custom handover handler :
         handoverHandler = CustomHandoverHandler(baseContext)
@@ -86,24 +80,8 @@ class FullDemo : RestorationContinuity() {
 
     }
 
-//  </editor-fold>
-
-//  <editor-fold desc=">>>>> Chat initialization <<<<<" >
-
-    override val chatType: String
-        get() = ChatType.None
-
-    override val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
-        get() = { account, restoreState, extraData ->
-
-            chatProvider.account = account
-            chatProvider.restoreState = restoreState
-            chatProvider.extraData = extraData
-
-            startChat()
-        }
-
     override fun createChatSettings(): ConversationSettings {
+        initializeProviders()
         return super.createChatSettings()
             .voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
             .enableMultiRequestsOnLiveAgent(true)
@@ -127,10 +105,9 @@ class FullDemo : RestorationContinuity() {
         }
     }
 
-    override fun onChatUIDetached() {
+    protected fun presentFormMenu(){
         destructMenu?.isVisible = true
         enableMenu(destructMenu, hasChatController())
-        if (isSample) super.onChatUIDetached() else finishIfLast()
     }
 
     override fun destructChat() {
@@ -214,7 +191,7 @@ class FullDemo : RestorationContinuity() {
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
         Log.d(
-            FULL_DEMO_TAG,
+            FULL_DEMO_Sample_TAG,
             "onChatStateChanged: state " + stateEvent.state + ", scope = " + stateEvent.scope
         )
 
@@ -231,7 +208,7 @@ class FullDemo : RestorationContinuity() {
 
             StateEvent.InQueue -> {
                 (stateEvent as? InQueueEvent)?.position?.run {
-                    Log.i(FULL_DEMO_TAG, "user is waiting in queue event: user position = $this")
+                    Log.i(FULL_DEMO_Sample_TAG, "user is waiting in queue event: user position = $this")
                 }
             }
 
@@ -254,7 +231,7 @@ class FullDemo : RestorationContinuity() {
     override fun onUrlLinkSelected(url: String) {
         // sample code for handling given link
         try {
-            Log.d(FULL_DEMO_TAG, ">> got url link selection: [$url]")
+            Log.d(FULL_DEMO_Sample_TAG, ">> got url link selection: [$url]")
 
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 if (isFileUrl(url)) {
@@ -274,7 +251,7 @@ class FullDemo : RestorationContinuity() {
             startActivity(intent)
 
         } catch (e: Exception) {
-            Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
+            Log.w(FULL_DEMO_Sample_TAG, ">> Failed to activate link on default app: " + e.message)
             toast(
                 this,
                 ">> got url: [$url]",
@@ -376,7 +353,7 @@ class FullDemo : RestorationContinuity() {
 
         for (uploadInfo in chosenUploadsTarget) {
             chatController.uploadFile(uploadInfo) { uploadResult ->
-                Log.i(FULL_DEMO_TAG, "got Upload results: $uploadResult")
+                Log.i(FULL_DEMO_Sample_TAG, "got Upload results: $uploadResult")
 
                 uploadResult.error?.run {
                     if (NRError.Canceled != reason) {
@@ -448,13 +425,13 @@ class FullDemo : RestorationContinuity() {
                We're using the [com.nanorep.convesationui.bold.ui.ChatFormViewModel] provided by the SDK,
                since it fits our needs.
              */
-            ViewModelProvider(this@FullDemo).get(ChatFormViewModel::class.java).apply {
+            ViewModelProvider(this@FullDemoSample).get(ChatFormViewModel::class.java).apply {
 
                 //-> sets the form data (fields, branding) on the ViewModel for the CustomForm fragment to use
                 onFormData(formData)
 
                 //-> sets an observer to listen to form submission results.
-                observeSubmission(this@FullDemo,
+                observeSubmission(this@FullDemoSample,
                     Observer { event ->
                         Log.e(Custom_Form, "Got form submission event ${event?.state}")
 
@@ -467,7 +444,7 @@ class FullDemo : RestorationContinuity() {
                         }
                     })
 
-                observeLanguageChanges(this@FullDemo, Observer { languageChange ->
+                observeLanguageChanges(this@FullDemoSample, Observer { languageChange ->
                     val language = languageChange?.first
 
                     Log.i("CustomForm", "Prechat: Language change detected: [${language ?: ""}]")
@@ -537,11 +514,6 @@ class FullDemo : RestorationContinuity() {
 
 //  <editor-fold desc=">>>>> Lifecycle handling <<<<<" >
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        isSample = intent.getBooleanExtra("isSample", true)
-    }
-
     private fun clearAllResources() {
         try {
             chatController.run {
@@ -564,19 +536,16 @@ class FullDemo : RestorationContinuity() {
         super.onActivityResult(requestCode, resultCode, resultData)
 
         if (requestCode == FILE_UPLOAD_REQUEST_CODE) {
-            if (resultCode != RESULT_OK || resultData == null) {
-                Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded")
-                return
-            }
-
-            handleFileUploads(resultData)
+            resultData?.takeIf { resultCode == RESULT_OK }?.run {
+                handleFileUploads(this)
+            } ?: kotlin.run { Log.w(FULL_DEMO_Sample_TAG, "no file was selected to be uploaded") }
         }
     }
 
 //  </editor-fold>
 
     companion object {
-        const val FULL_DEMO_TAG = "FullDemo"
+        const val FULL_DEMO_Sample_TAG = "FullDemoSample"
         const val Custom_Form = "CustomForm"
         private const val FILE_UPLOAD_REQUEST_CODE = 111
     }
@@ -596,13 +565,13 @@ internal class NotificationsReceiver : Notifiable {
                 val results = notification.data as FormResults?
                 if (results != null) {
                     Log.i(
-                        FULL_DEMO_TAG, "Got notified for form results for form: " +
+                        FULL_DEMO_Sample_TAG, "Got notified for form results for form: " +
                                 results.data +
                                 if (results.error != null) ", with error: " + results.error!! else ""
                     )
 
                 } else {
-                    Log.w(FULL_DEMO_TAG, "Got notified for form results but results are null")
+                    Log.w(FULL_DEMO_Sample_TAG, "Got notified for form results but results are null")
                 }
             }
 
@@ -612,7 +581,7 @@ internal class NotificationsReceiver : Notifiable {
             Notifications.UploadFailed -> {
                 val uploadNotification = notification as UploadNotification
                 Log.d(
-                    FULL_DEMO_TAG, "Got upload event ${uploadNotification.notification} on " +
+                    FULL_DEMO_Sample_TAG, "Got upload event ${uploadNotification.notification} on " +
                             "file: ${uploadNotification.uploadInfo.name}"
                 )
             }

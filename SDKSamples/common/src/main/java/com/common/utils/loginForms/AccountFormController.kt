@@ -2,9 +2,9 @@ package com.common.utils.loginForms
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.common.utils.loginForms.SharedDataHandler.Companion.ChatType_key
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.ExtraParams.NonSample
-import com.common.utils.loginForms.SharedDataHandler.Companion.ChatType_key
 import com.nanorep.nanoengine.Account
 import java.lang.ref.WeakReference
 
@@ -83,7 +83,7 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
         chatType: String
     ) {
         dataController.chatType = chatType
-        presentForm(
+        startFormTransaction(
             fragmentManager,
             AccountForm.newInstance(dataController, extraParams),
             AccountForm.TAG
@@ -106,11 +106,12 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
             }
         }
 
-        presentForm(fragmentManager, fragment, RestoreForm.TAG)
+        startFormTransaction(fragmentManager, fragment, RestoreForm.TAG)
     }
 
-    private fun presentForm(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
+    private fun startFormTransaction(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {
         if (!fragmentManager.isStateSaved) {
+
             val transaction = fragmentManager.beginTransaction()
                 .add(containerRes, fragment, tag)
 
