@@ -30,7 +30,6 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.px
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_basic.*
 import java.util.*
 
 /**
@@ -64,7 +63,7 @@ class CustomFileUpload : BoldChatAvailability() {
 
         }
 
-        chat_root.addView(imageButton, 0,
+        findViewById<ViewGroup>(R.id.chat_root).addView(imageButton, 0,
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT

@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_basic.*
 import kotlinx.android.synthetic.main.custom_ui_options_layout.*
 
 
@@ -17,7 +19,7 @@ open class CustomUIChat : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic)
 
-        topic_title.text = intent.getStringExtra("title")
+        findViewById<TextView>(R.id.topic_title).text = intent.getStringExtra("title")
 
         initOptionsView()
 
@@ -30,8 +32,8 @@ open class CustomUIChat : AppCompatActivity() {
 
 
     private fun initOptionsView(){
-        basic_loading.visibility = View.GONE
-        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, basic_chat_view, true)
+        findViewById<ProgressBar>(R.id.basic_loading).visibility = View.GONE
+        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, findViewById<FrameLayout>(R.id.basic_chat_view), true)
         buttonSetup(configure_option, configure)
         buttonSetup(override_option, override)
     }
