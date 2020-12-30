@@ -146,6 +146,7 @@ class MainActivity : AppCompatActivity() {
 
         topics_recycler.layoutManager = LinearLayoutManager(this)
         topics_recycler.adapter = TopicsAdapter(topics) { topic ->
+
             accountFormController.updateChatType(topic.chatType, topic.extraParams) { account, restoreState, extraData ->
 
                 ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {

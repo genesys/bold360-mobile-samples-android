@@ -105,7 +105,8 @@ open class FullDemoSample : RestorationContinuity() {
         }
     }
 
-    protected fun presentFormMenu(){
+    override fun onChatUIDetached() {
+        super.onChatUIDetached()
         destructMenu?.isVisible = true
         enableMenu(destructMenu, hasChatController())
     }
