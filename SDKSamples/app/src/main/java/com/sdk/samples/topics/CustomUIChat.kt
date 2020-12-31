@@ -19,6 +19,8 @@ open class CustomUIChat : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic)
 
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
+
         findViewById<TextView>(R.id.topic_title).text = intent.getStringExtra("title")
 
         initOptionsView()

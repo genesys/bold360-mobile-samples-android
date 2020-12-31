@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -55,8 +54,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic)
 
-        val toolbar: Toolbar = findViewById<View>(R.id.sample_toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
 
         topic_title.text = topicTitle
 
@@ -133,10 +131,11 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
               event call, which calls to remove the chat fragment */
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                supportFragmentManager.takeUnless { it.isDestroyed }?.popBackStackImmediate(
+                val fragmentFound = supportFragmentManager.takeUnless { it.isDestroyed }?.popBackStackImmediate(
                     ChatTag,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
+                if (fragmentFound == false) onChatUIDetached()
             } catch (ex: IllegalStateException) {
                 ex.printStackTrace()
             }

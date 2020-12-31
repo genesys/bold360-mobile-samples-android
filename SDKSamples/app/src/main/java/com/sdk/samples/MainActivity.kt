@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
+
         accountFormController = AccountFormController(
             samplesContainer.id, supportFragmentManager.weakRef()
         )

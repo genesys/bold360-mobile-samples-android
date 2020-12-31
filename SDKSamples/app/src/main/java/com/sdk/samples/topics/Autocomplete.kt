@@ -28,6 +28,8 @@ class Autocomplete : SampleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_activity)
 
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
+
         article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);

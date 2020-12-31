@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
@@ -55,9 +54,10 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
     private var boldChat: BoldChat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_no_ui)
+
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
 
         topic_title.text = topicTitle
 
@@ -103,9 +103,8 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
         if (!isFinishing) {
             runMain {
-                toast(this, "Chat unavailable", background = ColorDrawable(Color.GRAY))
+                toast(this, "Chat unavailable")
             }
-            finish()
         }
     }
 
