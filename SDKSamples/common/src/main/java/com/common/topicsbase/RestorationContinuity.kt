@@ -56,9 +56,7 @@ abstract class RestorationContinuity : History() {
 
         when {
 
-            supportFragmentManager.fragments.isEmpty() -> reloadForms(onAccountData)
-
-            supportFragmentManager.getCurrent()?.tag == topicTitle -> {
+            supportFragmentManager.fragments.isEmpty() || supportFragmentManager.getCurrent()?.tag == topicTitle -> {
                 removeChatFragment()
                 supportFragmentManager.executePendingTransactions()
             }
