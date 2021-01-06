@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:tag="none"
                     android:textSize="@dimen/topic_titles_text"
+                    android:visibility="gone"
                     android:text="Continue last" />
 
         </RadioGroup>
@@ -82,8 +83,9 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="14dp"
                 android:textSize="@dimen/topic_titles_text"
-                android:checked="false"
+                android:checked="true"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="@string/restore_if_available" />
 
         <androidx.appcompat.widget.SwitchCompat

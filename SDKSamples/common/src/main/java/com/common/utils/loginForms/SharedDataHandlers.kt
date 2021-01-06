@@ -36,7 +36,7 @@ interface DataController: AccountListener, RestoreStateProvider {
     /**
      * Being called when the AccountForm had been submitted
      */
-    fun onSubmit(account: Account)
+    fun onSubmit(account: Account?)
 
     /**
      * Gets the prev account data from the shared properties (according to the ChatType), If null it returns the default account
@@ -57,7 +57,7 @@ class SharedDataController: DataController, RestoreStateProvider {
 
     override var onAccountData: ((account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit?)? = null
 
-    override fun onSubmit(account: Account) {
+    override fun onSubmit(account: Account?) {
         onAccountData?.invoke(account, RestoreState(restoreRequest, restorable), extraData)
     }
 

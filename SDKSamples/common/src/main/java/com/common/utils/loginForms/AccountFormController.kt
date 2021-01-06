@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.common.utils.loginForms.SharedDataHandler.Companion.ChatType_key
 import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ExtraParams.EnableRestore
 import com.common.utils.loginForms.accountUtils.ExtraParams.NonSample
 import com.nanorep.nanoengine.Account
 import java.lang.ref.WeakReference
@@ -12,7 +13,7 @@ import java.lang.ref.WeakReference
  * @param restoreRequest is true if the user requested to restore the chat
  * @param restorable is true if the restoration is possible for the account
 */
-class RestoreState(val restoreRequest: Boolean = false, val restorable: Boolean = false)
+class RestoreState(val restoreRequest: Boolean = false, var restorable: Boolean = false)
 
 interface AccountListener {
     var onAccountData: ((account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit?)?
@@ -39,9 +40,7 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
         onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
     ) {
 
-        accountFormPresenter.onAccountData = { account, restoreState, extraData ->
-            onAccountData.invoke(account, restoreState, extraData)
-        }
+        accountFormPresenter.onAccountData = onAccountData
 
         getFragmentManager()?.let { fm ->
             accountFormPresenter.extraParams = extraParams
@@ -69,7 +68,8 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
         set(value) {
             dataController.onAccountData = value
         }
-        get() = dataController.onAccountData
+        get() =
+            dataController.onAccountData
 
     override fun presentForm(fragmentManager: FragmentManager, chatType: String) {
         when (chatType) {
@@ -91,22 +91,19 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
     }
 
     private fun presentRestoreForm(fragmentManager: FragmentManager) {
-        val fragment = RestoreForm.newInstance { chatType, restoreRequest ->
+        val fragment = AccountTypeSelectionForm.newInstance(extraParams.contains(EnableRestore)) { chatType, restoreRequest ->
 
             dataController.restoreRequest = restoreRequest
 
             if (chatType != ChatType.None) {
                 presentForm(fragmentManager, chatType)
             } else {
-                onAccountData?.invoke(
-                    null,
-                    RestoreState(restoreRequest, false),
-                    mapOf<String, Any>(ChatType_key to ChatType.None)
-                )
+                dataController.extraData = mapOf<String, Any>(ChatType_key to ChatType.None)
+                dataController.onSubmit(null)
             }
         }
 
-        startFormTransaction(fragmentManager, fragment, RestoreForm.TAG)
+        startFormTransaction(fragmentManager, fragment, AccountTypeSelectionForm.TAG)
     }
 
     private fun startFormTransaction(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {

@@ -73,14 +73,30 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.bot_chat_with_voc_to_voc),
                 ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24),
                 ChatType.Bot
-            ), /*SampleTopic(
+            ), SampleTopic(
+                "com.sdk.sample.action.CONTEXT_SUPPORT",
+                getString(R.string.bot_context_support),
+                ContextCompat.getDrawable(this, R.drawable.context_support_24dp),
+                ChatType.Bot,
+                listOf(UsingContext)
+            ), SampleTopic(
                 "com.sdk.sample.action.ENTITIES",
                 getString(R.string.bot_chat_with_entities),
                 ContextCompat.getDrawable(this, R.drawable.entities_24)
-            ),*/SampleTopic(
+            ),SampleTopic(
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24),
+                ChatType.Bot
+            ), SampleTopic(
+                "com.sdk.sample.action.CUSTOM_UI",
+                getString(R.string.custom_UI),
+                ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24),
+                ChatType.Bot
+            ), SampleTopic(
+                "com.sdk.sample.action.AUTOCOMPLETE",
+                getString(R.string.standalone_autocomplete),
+                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
                 ChatType.Bot
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_ASYNC_CHAT",
@@ -92,7 +108,13 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.async_chat_continuity),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
                 ChatType.Async,
-                listOf(RestoreSwitch, AsyncExtraData, UsingHistory)
+                listOf(AsyncExtraData, UsingHistory)
+            ), SampleTopic(
+                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
+                getString(R.string.bot_to_bold_with_prechat),
+                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24),
+                ChatType.Bot,
+                listOf(PrechatExtraData)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
@@ -103,12 +125,6 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.custom_form),
                 ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24),
                 ChatType.Live
-            ), SampleTopic(
-                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
-                getString(R.string.bot_to_bold_with_prechat),
-                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24),
-                ChatType.Bot,
-                listOf(PrechatExtraData)
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
@@ -126,20 +142,11 @@ class MainActivity : AppCompatActivity() {
                 ChatType.None,
                 listOf(UsingHistory)
             ), SampleTopic(
-                "com.sdk.sample.action.CUSTOM_UI",
-                getString(R.string.custom_UI),
-                ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24),
-                ChatType.Bot
-            ), SampleTopic(
-                "com.sdk.sample.action.AUTOCOMPLETE",
-                getString(R.string.standalone_autocomplete),
-                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
-                ChatType.Bot
-            ), SampleTopic(
                 "com.sdk.sample.action.FULL_DEMO_SAMPLE",
                 getString(R.string.full_demo),
                 ContextCompat.getDrawable(this, R.drawable.sample_image),
-                ChatType.None
+                ChatType.None,
+                listOf(AsyncExtraData, UsingHistory, UsingContext, Welcome)
             )
         )
         singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(
@@ -224,8 +231,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-
 
 class TopicsAdapter(var topics: ArrayList<SampleTopic>, val gotoTopic: (topic: SampleTopic) -> Unit) :
     RecyclerView.Adapter<TopicViewHolder>() {

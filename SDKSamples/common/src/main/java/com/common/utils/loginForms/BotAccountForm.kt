@@ -15,8 +15,7 @@ import com.common.utils.loginForms.BotSharedDataHandler.Companion.Context_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.Kb_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.Server_key
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.PrechatExtraData
-import com.common.utils.loginForms.accountUtils.ExtraParams.Welcome
+import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.common.utils.loginForms.accountUtils.isEmpty
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
@@ -39,6 +38,7 @@ class BotAccountForm : AccountForm(),
             extraParams.forEach{
                 when (it) {
                     Welcome -> bot_welcome_layout.visibility = View.VISIBLE
+                    UsingContext -> bot_context.visibility = View.VISIBLE
                     PrechatExtraData -> bot_prechat_data.visibility = View.VISIBLE
                 }
             }

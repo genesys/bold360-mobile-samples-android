@@ -24,6 +24,7 @@ import com.common.utils.customProviders.ContinuityAccountHandler
 import com.common.utils.customProviders.CustomTTSAlterProvider
 import com.common.utils.handover.CustomHandoverHandler
 import com.common.utils.live.toFileUploadInfo
+import com.common.utils.loginForms.accountUtils.ExtraParams
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
@@ -48,6 +49,11 @@ import kotlinx.coroutines.launch
 import nanorep.com.common.R
 
 open class FullDemoSample : RestorationContinuity() {
+
+    override val extraFormsParams = super.extraFormsParams.apply {
+        add(ExtraParams.UsingContext)
+        add(ExtraParams.Welcome)
+    }
 
     private var uploadFile: MenuItem? = null
 
@@ -115,31 +121,6 @@ open class FullDemoSample : RestorationContinuity() {
         chatController.destruct()
     }
 
-    private fun restoreChat() {
-
-        if (!hasChatController()) {
-
-            onRestoreFailed("There is no chat to restore")
-
-        } else {
-
-            try {
-                chatController = chatProvider.getChatController()
-
-                getAccount()?.getGroupId()?.let {
-                    chatProvider.updateHistoryRepo(targetId = it)
-                }
-
-                chatProvider.restore()
-
-            } catch (ex: IllegalStateException) {
-                onError(NRError(ex))
-            } catch (ex: NullPointerException) {
-                onError(NRError(ex))
-            }
-        }
-    }
-
     /**
      *   A Broadcast which triggers Interruption to the chat.
      *   This is used to stop the voice recognition/readout during phone actions
@@ -158,16 +139,17 @@ open class FullDemoSample : RestorationContinuity() {
             }, IntentFilter("android.CHAT_CALL_ACTION"))
     }
 
-
+    // Runs on the first creation of the Demo
+    // After wards the Chat is being restored/created via the "reloadForms" method
     override fun startChat() {
 
         // Uncomment to register a Phone call broadcast to trigger onChatInterruption.
         // initInterfaceReceiver()
 
-        // Creates the chat controller (/restores the chat)
-        if ( chatProvider.restoreState.restoreRequest ) restoreChat() else createChat()
+        // Creates the chat controller
+        super.startChat()
 
-        // Registers to the wanted chat Notifications
+        // Registers to the wanted chat Notifications to the created ChatController
         if ( hasChatController() ) {
             chatController.apply {
                 subscribeNotifications(

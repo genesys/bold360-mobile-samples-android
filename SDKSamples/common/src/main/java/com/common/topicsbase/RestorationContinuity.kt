@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.RestoreState
+import com.common.utils.loginForms.SharedDataHandler
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.nanorep.nanoengine.Account
@@ -13,6 +14,8 @@ import com.nanorep.sdkcore.utils.weakRef
 import kotlinx.android.synthetic.main.activity_basic.*
 
 abstract class RestorationContinuity : History() {
+
+    protected open val extraFormsParams = mutableListOf(AsyncExtraData, UsingHistory)
 
     protected open val chatType: String // Needed for reloading the relevant forms
     get() = ChatType.None
@@ -24,7 +27,15 @@ abstract class RestorationContinuity : History() {
         supportFragmentManager.fragments.clear()
         Log.i("RestoreSample", "ChatController hadn't been destructed")
         val accountFormController = AccountFormController(basic_chat_view.id, supportFragmentManager.weakRef())
-        accountFormController.updateChatType(chatType, listOf(RestoreSwitch, AsyncExtraData, UsingHistory), onAccountData)
+
+        if (hasChatController()) {
+            extraFormsParams.add(EnableRestore)
+        }
+
+        accountFormController.updateChatType(
+            chatType,
+            extraFormsParams,
+            onAccountData)
     }
 
     /**
@@ -33,10 +44,21 @@ abstract class RestorationContinuity : History() {
     private val onAccountData: (account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit
         get() = { account, restoreState, extraData ->
             chatProvider.account = account
-            chatProvider.restoreState = restoreState
+            chatProvider.restoreState = restoreState.apply {
+
+                extraData?.takeIf { it[SharedDataHandler.ChatType_key] == ChatType.None }
+                    ?.let { restorable = chatController.hasOpenChats() }
+
+            }
+
             chatProvider.extraData = extraData
 
-            startChat()
+            getAccount()?.getGroupId()?.let {
+                chatProvider.updateHistoryRepo(targetId = it)
+            }
+
+            // Restores the chat when there is a chat controller
+            if (hasChatController()) chatProvider.restore() else super.startChat()
         }
 
     override fun onChatUIDetached() {

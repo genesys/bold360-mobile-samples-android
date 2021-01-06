@@ -10,7 +10,7 @@ import com.common.utils.loginForms.accountUtils.ChatType
 import kotlinx.android.synthetic.main.restore_form.*
 import nanorep.com.common.R
 
-class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean) -> Unit) : Fragment() {
+class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onTypeSelected: (chatType: String, restoreRequest: Boolean) -> Unit) : Fragment() {
 
     @ChatType
     private val selectedChatType: String
@@ -26,12 +26,18 @@ class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        if (enableRestoreFields) {
+            restore_switch.visibility = View.VISIBLE
+            current_radio.visibility = View.VISIBLE
+        }
+
         start_chat.setOnClickListener {
-            onChatRestore(selectedChatType, restore_switch.isChecked)
+            onTypeSelected(selectedChatType, restore_switch.isChecked)
         }
 
         current_radio.setOnCheckedChangeListener { _, isChecked ->
-            restore_switch.isChecked = isChecked
+            if (!restore_switch.isChecked) restore_switch.isChecked = true
+            restore_switch.isEnabled = !isChecked
         }
 
     }
@@ -43,8 +49,8 @@ class RestoreForm(val onChatRestore: (chatType: String, restoreRequest: Boolean)
     companion object {
         const val TAG = "RestoreForm"
 
-        fun newInstance(onChatRestore: (chatType: String, restoreRequest: Boolean) -> Unit): RestoreForm {
-            return RestoreForm(onChatRestore)
+        fun newInstance(enableRestoreFields: Boolean = false, onTypeSelected: (chatType: String, restoreRequest: Boolean) -> Unit): AccountTypeSelectionForm {
+            return AccountTypeSelectionForm(enableRestoreFields, onTypeSelected)
         }
     }
 }

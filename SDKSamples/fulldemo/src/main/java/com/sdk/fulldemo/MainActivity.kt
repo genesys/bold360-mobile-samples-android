@@ -10,7 +10,7 @@ import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.ERROR_DIALOG_REQUEST_CODE
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.NonSample
+import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.common.utils.updateSecurityProvider
 import com.nanorep.sdkcore.utils.weakRef
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
 
-        AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf(NonSample)) { account, restoreState, extraData ->
+        AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf(AsyncExtraData, UsingHistory, UsingContext, Welcome, NonSample)) { account, restoreState, extraData ->
 
             ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                 accountProvider.apply {

@@ -6,8 +6,15 @@ import android.widget.TextView
 import com.common.topicsbase.FullDemoSample
 import com.common.topicsbase.SamplesViewModel
 import com.common.topicsbase.SingletonSamplesViewModelFactory
+import com.common.utils.loginForms.accountUtils.ExtraParams
 
 internal class FullDemo : FullDemoSample() {
+
+    override val extraFormsParams = super.extraFormsParams.apply { add(ExtraParams.NonSample) }
+
+    /*override var extraParams = super.extraParams.apply {
+        add(ExtraParams.NonSample)
+    }*/
 
     private var singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
 
