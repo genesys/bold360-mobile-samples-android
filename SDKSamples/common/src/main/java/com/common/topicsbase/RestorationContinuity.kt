@@ -46,8 +46,8 @@ abstract class RestorationContinuity : History() {
             chatProvider.account = account
             chatProvider.restoreState = restoreState.apply {
 
-                extraData?.takeIf { it[SharedDataHandler.ChatType_key] == ChatType.None }
-                    ?.let { restorable = chatController.hasOpenChats() }
+                if ( extraData?.get(SharedDataHandler.ChatType_key) == ChatType.None && hasChatController() )
+                     restorable = chatController.hasOpenChats()
 
             }
 
@@ -57,7 +57,8 @@ abstract class RestorationContinuity : History() {
                 chatProvider.updateHistoryRepo(targetId = it)
             }
 
-            // Restores the chat when there is a chat controller
+            // Restores the chat when there is a ChatController,
+            // else it creates a new ChatController
             if (hasChatController()) chatProvider.restore() else super.startChat()
         }
 
