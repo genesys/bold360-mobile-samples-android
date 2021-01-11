@@ -7,8 +7,8 @@ import com.common.chatComponents.history.RoomHistoryProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+import com.sdk.common.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import nanorep.com.common.R
 
 abstract class History : BasicChat() {
 
@@ -37,7 +37,7 @@ abstract class History : BasicChat() {
     @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
 
-        chatProvider.updateHistoryRepo(HistoryRepository(RoomHistoryProvider(this, getAccount()?.getGroupId(), 8)))
+        chatProvider.updateHistoryRepo( HistoryRepository( RoomHistoryProvider(this, getAccount()?.getGroupId(), 8) ) )
 
         enableMenu(historyMenu, true)
 

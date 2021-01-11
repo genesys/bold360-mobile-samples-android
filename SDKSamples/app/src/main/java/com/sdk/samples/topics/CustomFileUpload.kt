@@ -17,7 +17,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.common.utils.live.getPickerIntent
+import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo
 import com.integration.core.StateEvent
@@ -216,11 +216,12 @@ class CustomFileUpload : BoldChatAvailability() {
     //</editor-fold>
 
     private fun startPickerActivity() {
-        getPickerIntent{
+
+        createPickerIntent{
             try {
                 ActivityCompat.startActivityForResult(
                     this,
-                    Intent.createChooser(intent, "Select a File to Upload"),
+                    it,
                     FILE_UPLOAD_REQUEST_CODE, null
                 )
             } catch (e: ActivityNotFoundException) {

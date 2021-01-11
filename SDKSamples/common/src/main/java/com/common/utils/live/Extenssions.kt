@@ -8,7 +8,7 @@ import com.integration.core.FileUploadInfo
 import com.integration.core.annotations.FileType
 import com.nanorep.sdkcore.utils.ErrorException
 import com.nanorep.sdkcore.utils.NRError
-import nanorep.com.common.R
+import com.sdk.common.R
 import java.io.File
 
 @FileType

@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.common.chatComponents.history.HistoryRepository
-import com.common.topicsbase.SamplesViewModel
 import com.common.utils.loginForms.SharedDataHandler
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -16,16 +15,15 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import java.lang.ref.WeakReference
 
-class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: SamplesViewModel.AccountHolder)
-    : ChatProvider, AccountProvider by accountHolder {
+class ChatHolder(wContext: WeakReference<Context>?, override var onChatLoaded: ((Fragment) -> Unit)?) : ChatProvider {
+
+    override lateinit var accountData: AccountProvider
 
     private var context: Context? = wContext?.get()
 
     private var controller: ChatController? = null
 
     private var historyProvider: HistoryRepository? = null
-
-    override var onChatLoaded: ((Fragment) -> Unit)? = null
 
     override fun updateHistoryRepo(historyRepository: HistoryRepository?, targetId: String?) {
         historyRepository?.let { historyProvider = historyRepository }
@@ -41,7 +39,7 @@ class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: 
 
         override fun onComplete(result: ChatLoadResponse) {
             result.error?.takeIf { context != null }?.run {
-                toast( context!!, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                toast(context!!, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
             } ?: runMain {
                 result.fragment?.let {
                     onChatLoaded?.invoke(it)
@@ -57,17 +55,32 @@ class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: 
     override fun restore() {
 
         controller?.takeIf { !it.wasDestructed }?.run {
-            val chatType = accountHolder.extraData?.get(SharedDataHandler.ChatType_key) as String
-            val continueLast = chatType == ChatType.None || accountHolder.account == null
+
+            val chatType = accountData.extraData?.get(SharedDataHandler.ChatType_key) as String
+
+            val continueLast = chatType == ChatType.None || accountData.account == null
+
             when {
                 continueLast && hasOpenChats() && isActive -> restoreChat()
 
-                accountHolder.restoreState.restorable -> restoreChat( account = accountHolder.prepareAccount(getSecuredInfo()) )
+                accountData.restoreState.restorable -> restoreChat(
+                    account = accountData.prepareAccount(
+                        getSecuredInfo()
+                    )
+                )
 
-                else -> context?.run{ toast(this, "The Account is not restorable") }
+                else -> {
+                    context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT)}
+                    startChat(accountInfo = accountData.prepareAccount(getSecuredInfo()))
+                }
             }
 
-        } ?: kotlin.run { Log.e("ChatHolder", "Failed to restore chat, hasChatController() must be checked first") }
+        } ?: kotlin.run {
+            Log.e(
+                "ChatHolder",
+                "Failed to restore chat, hasChatController() must be checked first"
+            )
+        }
     }
 
     override fun create(chatBuilder: ChatController.Builder?): ChatController? {
@@ -76,7 +89,7 @@ class ChatHolder(wContext: WeakReference<Context>?, override val accountHolder: 
             historyProvider?.let { chatElementListener(it) }
         }
 
-        accountHolder.prepareAccount(getSecuredInfo())?.let { account ->
+        accountData.prepareAccount(getSecuredInfo())?.let { account ->
             builder?.build(account, chatLoadedListener)?.also {
                 controller = it
             }

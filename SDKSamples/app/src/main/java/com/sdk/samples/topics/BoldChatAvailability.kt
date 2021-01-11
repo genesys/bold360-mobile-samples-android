@@ -16,12 +16,6 @@ import com.sdk.samples.R
 
 open class BoldChatAvailability : BoldChat() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        loadAvailabilityCheck()
-    }
-
     private val availabilityViewModel: CheckAvailabilityViewModel by lazy {
         ViewModelProvider(this).get(CheckAvailabilityViewModel::class.java)
     }
@@ -64,7 +58,9 @@ open class BoldChatAvailability : BoldChat() {
         */
     }
 
-    override fun startChat() {}
+    override fun startChat(savedInstanceState: Bundle?) {
+        loadAvailabilityCheck()
+    }
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
         super.onChatStateChanged(stateEvent)

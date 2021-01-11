@@ -5,6 +5,7 @@ import com.common.chatComponents.customProviders.withId
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_deptCode_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_fName_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_lName_key
+import com.common.utils.loginForms.accountUtils.ExtraParams
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
@@ -14,9 +15,11 @@ import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 
 class PrechatExtraData : BotChat() {
 
+    override val extraFormsParams = mutableListOf(ExtraParams.PrechatExtraData)
+
     override fun getAccount(): Account {
 
-        (chatProvider.extraData)?.let { extraData ->
+        (chatProvider.accountData.extraData)?.let { extraData ->
             extraData[preChat_deptCode_key]?.let {  BOLD_DEPARTMENT = it.toString() }
             extraData[preChat_fName_key]?.let {  DemoFirstName = it.toString() }
             extraData[preChat_lName_key]?.let {  DemoLastName = it.toString() }

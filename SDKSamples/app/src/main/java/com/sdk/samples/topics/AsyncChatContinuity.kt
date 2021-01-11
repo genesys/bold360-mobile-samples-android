@@ -36,6 +36,9 @@ class AsyncChatContinuity : RestorationContinuity() {
 
     private val accountHandler = ContinuityAccountHandler()
 
+    override val extraFormsParams: MutableList<String>
+        get() = super.extraFormsParams
+
     override val chatType: String
         get() = ChatType.Async
 
@@ -47,7 +50,7 @@ class AsyncChatContinuity : RestorationContinuity() {
      * Continues the last chat with this account (if available)
      */
     private fun continueLast(account: AsyncAccount) {
-        account.takeIf { chatProvider.restoreState.restorable }?.apply {
+        account.takeIf { chatProvider.accountData.restoreState.restorable }?.apply {
             info.let {
                 it.SenderId = accountHandler.senderId.toLongOrNull()
                 it.LastReceivedMessageId = accountHandler.lastReceivedMessageId

@@ -2,7 +2,6 @@ package com.common.utils.chat
 
 import androidx.fragment.app.Fragment
 import com.common.chatComponents.history.HistoryRepository
-import com.common.topicsbase.SamplesViewModel
 import com.common.utils.loginForms.RestoreState
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
@@ -11,17 +10,17 @@ import com.nanorep.nanoengine.Account
 
 interface AccountProvider {
 
-    var account: Account?
+    val account: Account?
 
     /**
      * Extra Account parameters to be submitted for the sample
      */
-    var extraData: Map<String, Any?>?
+    val extraData: Map<String, Any?>?
 
     /**
      * The RestoreState of the account
      */
-    var restoreState: RestoreState
+    val restoreState: RestoreState
 
     fun prepareAccount(securesInfo: String): Account? {
         return account?.apply {
@@ -37,7 +36,7 @@ interface ChatProvider {
     /**
      * Holds the current account details
      */
-    val accountHolder: SamplesViewModel.AccountHolder
+    var accountData: AccountProvider
 
     fun getSecuredInfo(): String
 

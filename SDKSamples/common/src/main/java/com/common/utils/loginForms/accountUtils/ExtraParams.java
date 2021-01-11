@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
 @StringDef({ExtraParams.Welcome, ExtraParams.PrechatExtraData, ExtraParams.AsyncExtraData,
-        ExtraParams.EnableRestore, ExtraParams.UsingContext, ExtraParams.NonSample})
+        ExtraParams.EnableRestore, ExtraParams.UsingContext})
 
 public @interface ExtraParams {
     String Welcome = "welcome";
@@ -15,5 +15,4 @@ public @interface ExtraParams {
     String AsyncExtraData = "AsyncExtraData";
     String EnableRestore = "RestoreSwitch";
     String UsingContext = "UsingContext";
-    String NonSample = "NonSample";
 }

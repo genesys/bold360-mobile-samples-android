@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.toAsyncAccount
 import com.common.utils.loginForms.accountUtils.toBotAccount
 import com.common.utils.loginForms.accountUtils.toLiveAccount
 import com.nanorep.nanoengine.Account
-import nanorep.com.common.R
+import com.sdk.common.R
 
 
 interface AccountFormDelegate {
@@ -20,7 +21,7 @@ interface AccountFormDelegate {
     /**
      * Controls the data flow from the form and to it
      */
-    val dataController: DataController
+    val formViewModel: DataController
 
     /**
      * Takes the fields data from the shared properties
@@ -41,10 +42,9 @@ interface AccountFormDelegate {
 
 abstract class AccountForm : Fragment(), AccountFormDelegate {
 
-    override lateinit var dataController: DataController
+    override val formViewModel: FormViewModel by activityViewModels()
 
     abstract val formLayoutRes: Int
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +58,9 @@ abstract class AccountForm : Fragment(), AccountFormDelegate {
 
         return validateFormData()?.let { accountData ->
             val chatType = accountData[SharedDataHandler.ChatType_key] as String
+
+            formViewModel.chatType = chatType
+
             when (chatType) {
                 ChatType.Async -> accountData.toAsyncAccount()
                 ChatType.Live -> accountData.toLiveAccount()
@@ -69,7 +72,7 @@ abstract class AccountForm : Fragment(), AccountFormDelegate {
                             it.key == BotSharedDataHandler.preChat_lName_key ||
                             it.key == BotSharedDataHandler.preChat_fName_key
                 }
-                context?.let { dataController.updateAccount(context, account, extraData) }
+                context?.let { formViewModel.updateAccount(context, account, extraData) }
             }
         }
     }
@@ -81,32 +84,26 @@ abstract class AccountForm : Fragment(), AccountFormDelegate {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        fillFields()
-
-        view.findViewById<Button>(R.id.start_chat).setOnClickListener {
-            validateAndUpdate()?.run {
-                dataController.onSubmit(this)
+        view.findViewById<Button>(R.id.start_chat).apply {
+            setOnClickListener {
+                validateAndUpdate()?.run {
+                    formViewModel.onSubmit(this)
+                }
             }
         }
+
+        fillFields()
     }
 
     companion object {
 
         const val TAG = "AccountForm"
 
-        fun newInstance(
-            dataController: DataController,
-            extraParams: List<String>?
-        ): AccountForm {
-
-            dataController.extraParams = extraParams
-
-            return when (dataController.chatType) {
+        fun newInstance(@ChatType chatType: String): AccountForm {
+            return when (chatType) {
                 ChatType.Live -> LiveAccountForm.newInstance()
                 ChatType.Async -> AsyncAccountForm.newInstance()
                 else -> BotAccountForm.newInstance()
-            }.apply {
-                this.dataController = dataController
             }
         }
     }

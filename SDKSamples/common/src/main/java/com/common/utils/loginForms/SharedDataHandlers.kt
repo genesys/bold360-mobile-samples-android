@@ -1,11 +1,57 @@
 package com.common.utils.loginForms
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.common.utils.chat.AccountProvider
 import com.common.utils.loginForms.accountUtils.*
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
+
+class FormViewModel : ViewModel(), DataController {
+
+    val accountData: MutableLiveData<AccountProvider> = MutableLiveData()
+
+    override var restorable: Boolean = false
+    override var restoreRequest: Boolean = false
+    override var extraData: Map<String, Any?>? = null
+
+    override var extraParams: List<String>? = null
+
+    override var chatType: String = ChatType.None
+        set(value) {
+            field = value
+            sharedDataHandler = when (chatType) {
+                ChatType.Live -> LiveSharedDataHandler()
+                ChatType.Async -> AsyncSharedDataHandler()
+                else -> BotSharedDataHandler()
+            }
+        }
+
+    private var sharedDataHandler: SharedDataHandler? = null
+
+    override fun getAccount(context: Context?): Account {
+        return (context?.let { sharedDataHandler?.getAccount(it) }.orDefault(chatType))
+    }
+
+    override fun updateAccount(context: Context?, account: Account, extraData: Map<String, Any?>?) {
+
+        restorable = account.isRestorable(getAccount(context))
+        this.extraData = extraData
+
+        context?.let { sharedDataHandler?.saveAccount(it, account) }
+    }
+
+    override fun onSubmit(account: Account?) {
+        accountData.value = object : AccountProvider {
+            override var account = account
+            override var extraData = this@FormViewModel.extraData
+            override var restoreState = RestoreState(restoreRequest, restorable)
+        }
+    }
+}
 
 interface RestoreStateProvider {
 
@@ -18,10 +64,15 @@ interface RestoreStateProvider {
     /**
      * @param isRestore is true if the user requested to restore the chat
      */
-    var restoreRequest : Boolean
+    var restoreRequest: Boolean
 }
 
-interface DataController: AccountListener, RestoreStateProvider {
+interface DataController : RestoreStateProvider {
+
+    /**
+     * Extra data relates the account
+     */
+    var extraData: Map<String, Any?>?
 
     /**
      * true is the user pressed on the restore button
@@ -36,7 +87,7 @@ interface DataController: AccountListener, RestoreStateProvider {
     /**
      * Being called when the AccountForm had been submitted
      */
-    fun onSubmit(account: Account?)
+    fun onSubmit(account: Account?) {}
 
     /**
      * Gets the prev account data from the shared properties (according to the ChatType), If null it returns the default account
@@ -47,45 +98,6 @@ interface DataController: AccountListener, RestoreStateProvider {
      * If changed, updates the shared properties to include the updated account details
      */
     fun updateAccount(context: Context?, account: Account, extraData: Map<String, Any?>? = null)
-}
-
-class SharedDataController: DataController, RestoreStateProvider {
-
-    override var restorable: Boolean = false
-    override var restoreRequest: Boolean = false
-    var extraData: Map<String, Any?>? = null
-
-    override var onAccountData: ((account: Account?, restoreState: RestoreState, extraData: Map<String, Any?>?) -> Unit?)? = null
-
-    override fun onSubmit(account: Account?) {
-        onAccountData?.invoke(account, RestoreState(restoreRequest, restorable), extraData)
-    }
-
-    override var extraParams: List<String>? = null
-
-    override var chatType: String = ChatType.None
-    set(value) {
-        field = value
-        sharedDataHandler =  when (chatType) {
-            ChatType.Live -> LiveSharedDataHandler()
-            ChatType.Async -> AsyncSharedDataHandler()
-            else -> BotSharedDataHandler()
-        }
-    }
-
-    private var sharedDataHandler: SharedDataHandler? = null
-
-    override fun getAccount(context: Context?): Account {
-        return ( context?.let { sharedDataHandler?.getAccount(it) }.orDefault(chatType) )
-    }
-
-    override fun updateAccount(context: Context?, account: Account, extraData: Map<String, Any?>?) {
-
-        restorable = account.isRestorable(getAccount(context))
-        this.extraData = extraData
-
-        context?.let { sharedDataHandler?.saveAccount(it, account) }
-    }
 }
 
 /**
@@ -116,7 +128,7 @@ abstract class SharedDataHandler {
 
 }
 
-class BotSharedDataHandler: SharedDataHandler() {
+class BotSharedDataHandler : SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.bot"
@@ -151,7 +163,7 @@ class BotSharedDataHandler: SharedDataHandler() {
     }
 }
 
-internal class AsyncSharedDataHandler: SharedDataHandler() {
+internal class AsyncSharedDataHandler : SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.async"
@@ -173,7 +185,10 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
         val shared = context.getSharedPreferences(SharedName, 0)
         return mapOf(
             ChatType_key to chatType,
-            Access_key to shared.getString(Access_key, "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2"),
+            Access_key to shared.getString(
+                Access_key,
+                "2307475884:2403340045369405:KCxHNTjbS7qDY3CVmg0Z5jqHIIceg85X:alphawd2"
+            ),
             First_Name_key to shared.getString(First_Name_key, ""),
             Last_Name_key to shared.getString(Last_Name_key, ""),
             Country_Abbrev_key to shared.getString(Country_Abbrev_key, ""),
@@ -189,7 +204,7 @@ internal class AsyncSharedDataHandler: SharedDataHandler() {
     }
 }
 
-internal class LiveSharedDataHandler: SharedDataHandler() {
+internal class LiveSharedDataHandler : SharedDataHandler() {
 
     companion object {
         const val SharedName = "ChatDataPref.bold"
@@ -203,7 +218,10 @@ internal class LiveSharedDataHandler: SharedDataHandler() {
         val shared = context.getSharedPreferences(SharedName, 0)
         return mapOf(
             ChatType_key to chatType,
-            Access_key to shared.getString(Access_key, "2300000001700000000:2279145895771367548:MGfXyj9naYgPjOZBruFSykZjIRPzT1jl")
+            Access_key to shared.getString(
+                Access_key,
+                "2300000001700000000:2279145895771367548:MGfXyj9naYgPjOZBruFSykZjIRPzT1jl"
+            )
         ).toLiveAccount()
     }
 

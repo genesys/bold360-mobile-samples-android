@@ -1,26 +1,16 @@
 package com.sdk.fulldemo
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.common.topicsbase.SamplesViewModel
-import com.common.topicsbase.SingletonSamplesViewModelFactory
 import com.common.utils.ERROR_DIALOG_REQUEST_CODE
-import com.common.utils.loginForms.AccountFormController
-import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.common.utils.updateSecurityProvider
-import com.nanorep.sdkcore.utils.weakRef
-import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * This app presents the Full Demo sample independently
  */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory
+//    private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory
     private var retryProviderInstall = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
 
-        val singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
+       /* val singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
 
         AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf(AsyncExtraData, UsingContext, Welcome, NonSample)) { account, restoreState, extraData ->
 
@@ -51,15 +41,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, FullDemo::class.java))
             overridePendingTransition(R.anim.right_in, R.anim.left_out)
 
-        }
+        }*/
 
     }
 
     override fun onDestroy() {
 
-        if (::singletonSamplesViewModelFactory.isInitialized) {
+    /*    if (::singletonSamplesViewModelFactory.isInitialized) {
             singletonSamplesViewModelFactory.clear()
-        }
+        }*/
 
         super.onDestroy()
     }

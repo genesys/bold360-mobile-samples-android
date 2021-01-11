@@ -2,10 +2,10 @@ package com.sdk.samples.topics
 
 import android.os.Bundle
 import android.util.Log
-import com.common.topicsbase.History
 import com.common.chatComponents.customProviders.withId
 import com.common.chatComponents.history.HistoryMigrationProvider
-import com.nanorep.convesationui.utils.HistoryMigration.Companion.start
+import com.common.topicsbase.History
+import com.nanorep.convesationui.utils.HistoryMigration
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast
@@ -22,16 +22,12 @@ class BotChatHistory : History() {
     }
 
     @ExperimentalCoroutinesApi
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        start(HistoryMigrationProvider(this){
+    override fun startChat(savedInstanceState: Bundle?) {
+        HistoryMigration.start(HistoryMigrationProvider(this) {
             runOnUiThread {
                 Log.d("BotChatHistory", "Migration completed. starting chat...")
-                super.startChat()
+                super.startChat(savedInstanceState)
             }
         })
     }
-
-    override fun startChat() {}
 }

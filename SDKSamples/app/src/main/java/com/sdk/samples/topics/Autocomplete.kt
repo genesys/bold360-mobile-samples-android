@@ -5,10 +5,12 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.common.topicsbase.SampleActivity
 import com.common.chatComponents.customProviders.withId
+import com.common.topicsbase.SampleActivity
+import com.common.utils.loginForms.accountUtils.ChatType
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
@@ -20,13 +22,22 @@ import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import kotlinx.android.synthetic.main.autocomplete_activity.*
+import kotlinx.android.synthetic.main.autocomplete_activity.topic_title
 
 class Autocomplete : SampleActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.autocomplete_activity)
+    override val chatType: String
+        get() = ChatType.Bot
+
+    override val containerId: Int
+        get() = R.id.autocomplete_view
+
+    override val onChatLoaded: (fragment: Fragment) -> Unit
+        get() = { /* We don't present the chat fragment at this Sample*/ }
+
+    override fun startChat(savedInstanceState: Bundle?) {
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
 
@@ -56,10 +67,18 @@ class Autocomplete : SampleActivity() {
             supportFragmentManager.beginTransaction().apply {
                 supportFragmentManager.findFragmentByTag("autocompleteFrag")?.run { this@apply.attach(this) }?.commit()
                     ?: run {
-                        add(R.id.root_layout, BotAutocompleteFragment(), "autocompleteFrag").commit()
+                        add(R.id.autocomplete_view, BotAutocompleteFragment(), "autocompleteFrag").commit()
                     }
             }
         }
+    }
+
+    override val extraFormsParams = mutableListOf<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.autocomplete_activity)
+        topic_title.text = topicTitle
     }
 
     private fun onError(error: NRError) {

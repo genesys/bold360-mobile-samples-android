@@ -10,6 +10,7 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import com.common.utils.loginForms.accountUtils.ChatType
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
@@ -17,19 +18,28 @@ import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
+import com.sdk.common.R
 import kotlinx.android.synthetic.main.activity_basic.*
 import kotlinx.android.synthetic.main.activity_basic.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import nanorep.com.common.R
 
 abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
-    override var onChatLoaded: (fragment: Fragment) -> Unit = { fragment ->
+    override val containerId: Int
+        get() = R.id.basic_chat_view
+
+    override val chatType: String
+        get() = ChatType.Bot
+
+    override val extraFormsParams = mutableListOf<String>()
+
+    override val onChatLoaded: (fragment: Fragment) -> Unit
+    get() = { fragment ->
 
         if (!isFinishing && !supportFragmentManager.isStateSaved) {
 
@@ -55,16 +65,11 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         setContentView(R.layout.activity_basic)
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
-
         topic_title.text = topicTitle
-
-        chatProvider.onChatLoaded = onChatLoaded
-
-        startChat()
     }
 
-    open fun startChat() {
-        createChat()
+    override fun startChat(savedInstanceState: Bundle?) {
+        if (hasChatController() && chatProvider.accountData.restoreState.restoreRequest) chatProvider.restore() else createChat()
     }
 
     protected open fun createChat() {
@@ -191,8 +196,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
             menuItem.isEnabled = enable
         }
     }
-
-    protected fun hasChatController(): Boolean = chatProvider.hasChatController()
 
     override fun onUrlLinkSelected(url: String) {
         toast(this, "got link: $url")

@@ -1,13 +1,9 @@
 package com.common.topicsbase
 
-import androidx.lifecycle.ViewModel
-import com.common.utils.chat.AccountProvider
-import com.common.utils.loginForms.RestoreState
-import com.nanorep.nanoengine.Account
-
+/*
 class SamplesViewModel : ViewModel() {
 
-    val accountProvider = AccountHolder()
+    val accountProvider = FormViewModel.AccountHolder()
 
     companion object {
 
@@ -22,11 +18,5 @@ class SamplesViewModel : ViewModel() {
         }
     }
 
-    inner class AccountHolder: AccountProvider {
-        override var account: Account? = null
 
-        override var extraData: Map<String, Any?>? = null
-
-        override var restoreState = RestoreState()
-    }
-}
+}*/

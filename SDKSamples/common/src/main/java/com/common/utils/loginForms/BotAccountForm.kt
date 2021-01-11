@@ -21,7 +21,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
 import kotlinx.android.synthetic.main.bot_account_form.*
 import kotlinx.android.synthetic.main.bot_context_view.view.*
-import nanorep.com.common.R
+import com.sdk.common.R
 import kotlin.math.max
 
 class BotAccountForm : AccountForm(),
@@ -34,7 +34,7 @@ class BotAccountForm : AccountForm(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        dataController.extraParams?.let { extraParams->
+        formViewModel.extraParams?.let { extraParams->
             extraParams.forEach{
                 when (it) {
                     Welcome -> bot_welcome_layout.visibility = View.VISIBLE
@@ -79,7 +79,7 @@ class BotAccountForm : AccountForm(),
 
         initializeContextView()
 
-        val account: BotAccount = dataController.getAccount(context) as BotAccount
+        val account: BotAccount = formViewModel.getAccount(context) as BotAccount
 
         bot_account_name_edit_text.setText( account.account ?: "" )
         bot_knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )

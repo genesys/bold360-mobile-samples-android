@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.common.utils.loginForms.accountUtils.ChatType
+import com.sdk.common.R
 import kotlinx.android.synthetic.main.restore_form.*
-import nanorep.com.common.R
 
-class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onTypeSelected: (chatType: String, restoreRequest: Boolean) -> Unit) : Fragment() {
+class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onTypeSelected: (chatType: String) -> Unit) : Fragment() {
+
+    private val formViewModel: FormViewModel by activityViewModels()
 
     @ChatType
     private val selectedChatType: String
@@ -32,7 +35,18 @@ class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onT
         }
 
         start_chat.setOnClickListener {
-            onTypeSelected(selectedChatType, restore_switch.isChecked)
+
+            formViewModel.chatType = selectedChatType
+            formViewModel.restoreRequest = restore_switch.isChecked
+
+            if (selectedChatType == ChatType.None) {
+
+                formViewModel.extraData =
+                    mapOf<String, Any>(SharedDataHandler.ChatType_key to ChatType.None)
+                formViewModel.onSubmit(null)
+
+            } else onTypeSelected(selectedChatType)
+
         }
 
         current_radio.setOnCheckedChangeListener { _, isChecked ->
@@ -49,7 +63,7 @@ class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onT
     companion object {
         const val TAG = "RestoreForm"
 
-        fun newInstance(enableRestoreFields: Boolean = false, onTypeSelected: (chatType: String, restoreRequest: Boolean) -> Unit): AccountTypeSelectionForm {
+        fun newInstance(enableRestoreFields: Boolean = false, onTypeSelected: (chatType: String) -> Unit): AccountTypeSelectionForm {
             return AccountTypeSelectionForm(enableRestoreFields, onTypeSelected)
         }
     }

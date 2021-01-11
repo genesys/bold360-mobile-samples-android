@@ -22,7 +22,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.common.topicsbase.SampleActivity
+import com.common.utils.loginForms.accountUtils.ChatType
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -51,18 +53,30 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
         BoldLiveUploader()
     }
 
+    override val onChatLoaded: (fragment: Fragment) -> Unit
+        get() = { /* We don't present the chat fragment at this Sample*/ }
+
+    override val containerId: Int
+        get() = R.id.upload_view
+
     private var boldChat: BoldChat? = null
+
+    override val chatType: String
+        get() = ChatType.Live
+
+    override fun startChat(savedInstanceState: Bundle?) {
+        topic_title.text = topicTitle
+
+        createChat()
+    }
+
+    override val extraFormsParams = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_no_ui)
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
-
-        topic_title.text = topicTitle
-
-        createChat()
-
     }
 
     private fun createChat() {
@@ -206,6 +220,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
             progressBar = (LayoutInflater.from(context).inflate(R.layout.upload_progress, container, false) as? ProgressBar)?.apply {
                 val progressDrawable: Drawable = progressDrawable.mutate()
+
                 progressDrawable.setColorFilter(
                     Color.BLUE,
                     PorterDuff.Mode.SRC_IN

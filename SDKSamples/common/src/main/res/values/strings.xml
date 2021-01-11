@@ -19,6 +19,7 @@
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
     <string name="full_demo">Full Demo</string>
     <string name="custom_form">Custom Bold chat form</string>
+    <string name="custom_upload">"Custom upload on live chat"</string>
     <string name="custom_form_departments_title">Available departments: \n\n</string>
     <string name="custom_form_departments_details">Name: %1$s ,Status: %2$s, Code to Input: %3$s</string>
     <string name="custom_UI">Customizing the chat UI</string>

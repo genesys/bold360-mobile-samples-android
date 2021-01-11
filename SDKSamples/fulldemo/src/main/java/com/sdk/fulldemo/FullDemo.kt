@@ -23,9 +23,7 @@ import com.common.chatComponents.customProviders.CustomFormProvider
 import com.common.chatComponents.customProviders.CustomTTSAlterProvider
 import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.topicsbase.SamplesViewModel
-import com.common.topicsbase.SingletonSamplesViewModelFactory
-import com.common.utils.live.getPickerIntent
+import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
 import com.common.utils.loginForms.accountUtils.ExtraParams
 import com.integration.core.FileUploadInfo
@@ -44,16 +42,15 @@ import com.nanorep.sdkcore.model.SystemStatement
 import com.nanorep.sdkcore.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import nanorep.com.common.R
+import com.sdk.common.R
 
 open class FullDemo : RestorationContinuity() {
 
-    private var singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
+//    private var singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
 
     override val extraFormsParams = super.extraFormsParams.apply {
         add(ExtraParams.UsingContext)
         add(ExtraParams.Welcome)
-        add(ExtraParams.NonSample)
     }
 
     private var uploadFile: MenuItem? = null
@@ -350,7 +347,7 @@ open class FullDemo : RestorationContinuity() {
     }
 
     private fun startPickerActivity() {
-        getPickerIntent{
+        createPickerIntent{
             try {
                 startActivityForResult(
                     Intent.createChooser(intent, "Select files to upload"),
@@ -437,7 +434,7 @@ open class FullDemo : RestorationContinuity() {
 
     // Clears the used view holder
     override fun onDestroy() {
-        singletonSamplesViewModelFactory.clear()
+//        singletonSamplesViewModelFactory.clear()
         super.onDestroy()
     }
 

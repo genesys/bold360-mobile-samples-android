@@ -3,7 +3,7 @@ package com.common.utils.loginForms
 import com.common.utils.loginForms.SharedDataHandler.Companion.ChatType_key
 import com.common.utils.loginForms.accountUtils.ChatType
 import kotlinx.android.synthetic.main.live_account_form.*
-import nanorep.com.common.R
+import com.sdk.common.R
 
 open class LiveAccountForm : AccountForm() {
 

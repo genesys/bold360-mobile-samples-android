@@ -16,7 +16,8 @@ import android.util.Log
 import androidx.loader.content.CursorLoader
 import java.net.URISyntaxException
 
-fun Activity.getPickerIntent(onIntentReady: (fileChooserIntent: Intent) -> Unit) {
+fun Activity.createPickerIntent(onIntentReady: (fileChooserIntent: Intent) -> Unit) {
+
     if (isFinishing) {
         Log.w("FilePicker", "request for file picker display is discarded")
         return

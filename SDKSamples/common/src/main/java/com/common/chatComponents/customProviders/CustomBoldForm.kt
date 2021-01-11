@@ -29,7 +29,7 @@ import com.nanorep.sdkcore.utils.TextTagHandler
 import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
 import kotlinx.android.synthetic.main.custom_live_forms_layout.*
-import nanorep.com.common.R
+import com.sdk.common.R
 
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms

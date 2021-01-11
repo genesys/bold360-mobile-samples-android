@@ -7,7 +7,7 @@ import com.common.utils.loginForms.accountUtils.ExtraParams
 import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import kotlinx.android.synthetic.main.async_account_form.*
-import nanorep.com.common.R
+import com.sdk.common.R
 
 class AsyncAccountForm : LiveAccountForm() {
 
@@ -16,7 +16,7 @@ class AsyncAccountForm : LiveAccountForm() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        dataController.extraParams?.let {
+        formViewModel.extraParams?.let {
             if (it.contains(ExtraParams.EnableRestore)) { restore_switch.visibility = View.VISIBLE }
             if (it.contains(ExtraParams.AsyncExtraData)) { async_extra_data.visibility = View.VISIBLE }
         }
@@ -26,7 +26,7 @@ class AsyncAccountForm : LiveAccountForm() {
 
     override fun fillFields() {
 
-        val account = dataController.getAccount(context) as AsyncAccount
+        val account = formViewModel.getAccount(context) as AsyncAccount
 
         async_api_key_edit_text.setText( account.apiKey )
         async_email_edit_text.setText( account.info.userInfo.email )
@@ -74,7 +74,7 @@ class AsyncAccountForm : LiveAccountForm() {
 
         accountMap[SharedDataHandler.ChatType_key] = ChatType.Async
 
-        dataController.restoreRequest = restore_switch.isChecked
+        formViewModel.restoreRequest = restore_switch.isChecked
 
         return accountMap
     }

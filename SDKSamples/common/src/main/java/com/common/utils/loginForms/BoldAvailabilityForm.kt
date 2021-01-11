@@ -25,7 +25,7 @@ import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.snack
 import kotlinx.android.synthetic.main.bold_availability.*
 import kotlinx.android.synthetic.main.bold_availability.view.*
-import nanorep.com.common.R
+import com.sdk.common.R
 
 class CheckAvailabilityViewModel : ViewModel() {
 
