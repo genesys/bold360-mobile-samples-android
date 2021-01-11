@@ -2,8 +2,8 @@ package com.common.topicsbase
 
 import android.view.Menu
 import android.view.MenuItem
-import com.common.utils.history.HistoryRepository
-import com.common.utils.history.RoomHistoryProvider
+import com.common.chatComponents.history.HistoryRepository
+import com.common.chatComponents.history.RoomHistoryProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount

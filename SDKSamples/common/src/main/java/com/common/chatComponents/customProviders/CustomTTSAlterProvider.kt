@@ -1,4 +1,4 @@
-package com.common.utils.customProviders
+package com.common.chatComponents.customProviders
 
 import com.nanorep.convesationui.bot.CarouselReadoutMessage
 import com.nanorep.convesationui.structure.components.ReadRequest

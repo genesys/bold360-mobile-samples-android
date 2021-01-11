@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_with_bot_history),
                 ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24),
                 ChatType.Bot,
-                listOf(UsingHistory)
+//                listOf(UsingHistory)
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
@@ -99,17 +99,6 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24),
                 ChatType.Bot
             ), SampleTopic(
-                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
-                getString(R.string.async_chat_with_an_agent),
-                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
-                ChatType.Async
-            ), SampleTopic(
-                "com.sdk.sample.action.ASYNC_CONTINUITY",
-                getString(R.string.async_chat_continuity),
-                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
-                ChatType.Async,
-                listOf(AsyncExtraData, UsingHistory)
-            ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
                 ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24),
@@ -131,6 +120,17 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24),
                 ChatType.Live
             ), SampleTopic(
+                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
+                getString(R.string.async_chat_with_an_agent),
+                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
+                ChatType.Async
+            ), SampleTopic(
+                "com.sdk.sample.action.ASYNC_CONTINUITY",
+                getString(R.string.async_chat_continuity),
+                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24),
+                ChatType.Async,
+                listOf(AsyncExtraData)
+            ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI",
                 getString(R.string.bold_upload_without_ui),
                 ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24),
@@ -140,13 +140,6 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.chat_restore),
                 ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24),
                 ChatType.None,
-                listOf(UsingHistory)
-            ), SampleTopic(
-                "com.sdk.sample.action.FULL_DEMO_SAMPLE",
-                getString(R.string.full_demo),
-                ContextCompat.getDrawable(this, R.drawable.sample_image),
-                ChatType.None,
-                listOf(AsyncExtraData, UsingHistory, UsingContext, Welcome)
             )
         )
         singletonSamplesViewModelFactory =  SingletonSamplesViewModelFactory(

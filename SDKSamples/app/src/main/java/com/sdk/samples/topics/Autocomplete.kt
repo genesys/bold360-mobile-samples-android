@@ -8,7 +8,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.common.topicsbase.SampleActivity
-import com.common.utils.customProviders.withId
+import com.common.chatComponents.customProviders.withId
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment

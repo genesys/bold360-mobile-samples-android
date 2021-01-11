@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
+import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.customProviders.ContinuityAccountHandler
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId

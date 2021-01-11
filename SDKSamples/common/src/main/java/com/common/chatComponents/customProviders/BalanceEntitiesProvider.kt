@@ -1,4 +1,4 @@
-package com.common.utils.customProviders
+package com.common.chatComponents.customProviders
 
 import com.nanorep.nanoengine.Entity
 import com.nanorep.nanoengine.NRConversationMissingEntities

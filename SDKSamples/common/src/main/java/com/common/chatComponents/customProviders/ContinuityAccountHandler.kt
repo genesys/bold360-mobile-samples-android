@@ -1,4 +1,4 @@
-package com.common.utils.customProviders
+package com.common.chatComponents.customProviders
 
 import android.util.Log
 import com.integration.core.LastReceivedMessageId
@@ -12,7 +12,8 @@ import com.nanorep.sdkcore.utils.Completion
 
 
 /**
- * An account provider that supports chat continuity
+ * AccountSessionListener implementation.
+ * An account provider that supports chat continuity.
  */
 class ContinuityAccountHandler : AccountSessionListener {
 

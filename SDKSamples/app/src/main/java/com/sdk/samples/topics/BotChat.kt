@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
 import com.common.topicsbase.BasicChat
-import com.common.utils.customProviders.withId
+import com.common.chatComponents.customProviders.withId
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.toast

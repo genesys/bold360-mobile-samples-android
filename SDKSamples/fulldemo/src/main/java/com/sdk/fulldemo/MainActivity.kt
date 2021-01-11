@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
 
-        AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf(AsyncExtraData, UsingHistory, UsingContext, Welcome, NonSample)) { account, restoreState, extraData ->
+        AccountFormController(demoContainer.id, supportFragmentManager.weakRef()).updateChatType(ChatType.None, listOf(AsyncExtraData, UsingContext, Welcome, NonSample)) { account, restoreState, extraData ->
 
             ViewModelProvider(this, singletonSamplesViewModelFactory).get(SamplesViewModel::class.java).apply {
                 accountProvider.apply {
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             demoLoading.visibility = View.VISIBLE
             demoContainer.visibility = View.GONE
 
-            startActivity(Intent(this, FullDemo::class.java).putExtra("title", "Full Demo"))
+            startActivity(Intent(this, FullDemo::class.java))
             overridePendingTransition(R.anim.right_in, R.anim.left_out)
 
         }

@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
-import com.common.utils.customProviders.SimpleAccountProvider
-import com.common.utils.customProviders.withId
+import com.common.chatComponents.customProviders.SimpleAccountProvider
+import com.common.chatComponents.customProviders.withId
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_deptCode_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_fName_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_lName_key

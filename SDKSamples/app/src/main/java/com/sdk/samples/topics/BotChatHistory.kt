@@ -3,8 +3,8 @@ package com.sdk.samples.topics
 import android.os.Bundle
 import android.util.Log
 import com.common.topicsbase.History
-import com.common.utils.customProviders.withId
-import com.common.utils.history.HistoryMigrationProvider
+import com.common.chatComponents.customProviders.withId
+import com.common.chatComponents.history.HistoryMigrationProvider
 import com.nanorep.convesationui.utils.HistoryMigration.Companion.start
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount

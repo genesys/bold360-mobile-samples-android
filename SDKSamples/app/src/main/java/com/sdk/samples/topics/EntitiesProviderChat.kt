@@ -1,6 +1,6 @@
 package com.sdk.samples.topics
 
-import com.common.utils.customProviders.BalanceEntitiesProvider
+import com.common.chatComponents.customProviders.BalanceEntitiesProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount

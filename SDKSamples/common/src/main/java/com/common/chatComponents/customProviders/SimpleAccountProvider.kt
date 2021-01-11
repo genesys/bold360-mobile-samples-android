@@ -1,4 +1,4 @@
-package com.common.utils.customProviders
+package com.common.chatComponents.customProviders
 
 import android.content.Context
 import android.content.SharedPreferences

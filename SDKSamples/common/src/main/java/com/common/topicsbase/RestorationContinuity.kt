@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_basic.*
 
 abstract class RestorationContinuity : History() {
 
-    protected open val extraFormsParams = mutableListOf(AsyncExtraData, UsingHistory)
+    protected open val extraFormsParams = mutableListOf(AsyncExtraData)
 
     protected open val chatType: String // Needed for reloading the relevant forms
     get() = ChatType.None
@@ -83,6 +83,8 @@ abstract class RestorationContinuity : History() {
                 removeChatFragment()
                 supportFragmentManager.executePendingTransactions()
             }
+
+            supportFragmentManager.fragments.size == 1 && extraFormsParams.contains(NonSample) -> finish()
 
             else -> {
                 supportFragmentManager.popBackStackImmediate()

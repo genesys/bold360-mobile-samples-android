@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.common.utils.live.getPickerIntent
 import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo
 import com.integration.core.StateEvent
@@ -132,7 +133,7 @@ class CustomFileUpload : BoldChatAvailability() {
         }
 
         if (nonGranted.isEmpty()) {
-            FilePicker(this).openFilePicker()
+            startPickerActivity()
         } else {
             ActivityCompat.requestPermissions(this,
                 nonGranted.toTypedArray(),
@@ -154,7 +155,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 }
 
                 if (notGranted.isEmpty()) {
-                    FilePicker(this).openFilePicker()
+                    startPickerActivity()
                 } else {
                     toast(this, "Not granted permissions: $notGranted", Toast.LENGTH_LONG)
                 }
@@ -214,6 +215,20 @@ class CustomFileUpload : BoldChatAvailability() {
     }
     //</editor-fold>
 
+    private fun startPickerActivity() {
+        getPickerIntent{
+            try {
+                ActivityCompat.startActivityForResult(
+                    this,
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_UPLOAD_REQUEST_CODE, null
+                )
+            } catch (e: ActivityNotFoundException) {
+                toast(baseContext, getString(R.string.FileChooserError), Toast.LENGTH_LONG)
+            }
+        }
+    }
+
     //<editor-fold desc="Custom upload: step 6: listen to upload results">
     // when upload is done by the SDK the results are passed to the upload callback
     private fun onUploadResults(results: UploadResult) {
@@ -227,40 +242,7 @@ class CustomFileUpload : BoldChatAvailability() {
         }
     }
 
-    class FilePicker(private val activity: Activity) {
-        fun openFilePicker() {
-            if (activity.isFinishing) {
-                Log.w(TAG, "request for file picker display is discarded")
-                return
-            }
-
-            val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                Intent(Intent.ACTION_GET_CONTENT)
-
-            } else {
-                Intent(Intent.ACTION_OPEN_DOCUMENT)
-
-            } .apply {
-                type = "*/*"
-                addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            }
-
-            try {
-                ActivityCompat.startActivityForResult(
-                    activity,
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_UPLOAD_REQUEST_CODE, null
-                )
-            } catch (e: ActivityNotFoundException) {
-                toast(activity, activity.getString(R.string.FileChooserError), Toast.LENGTH_LONG)
-            }
-        }
-    }
-
-    override fun onSampleStop() {
-
-    }
+    override fun onSampleStop() {}
 
     companion object {
         const val TAG = "CustomUploadSample"

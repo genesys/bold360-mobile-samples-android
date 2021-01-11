@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.common.chatComponents.history.HistoryRepository
 import com.common.topicsbase.SamplesViewModel
-import com.common.utils.history.HistoryRepository
 import com.common.utils.loginForms.SharedDataHandler
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.nanorep.convesationui.structure.controller.ChatController

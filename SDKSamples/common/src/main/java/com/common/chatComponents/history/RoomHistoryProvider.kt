@@ -1,4 +1,4 @@
-package com.common.utils.history
+package com.common.chatComponents.history
 
 import android.content.Context
 import android.util.Log

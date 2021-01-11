@@ -1,4 +1,4 @@
-package com.common.utils
+package com.common.chatComponents.customProviders
 
 import android.content.Context
 import android.graphics.Color

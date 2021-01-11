@@ -1,8 +1,10 @@
 package com.common.utils.live
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -10,8 +12,30 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import androidx.loader.content.CursorLoader
 import java.net.URISyntaxException
+
+fun Activity.getPickerIntent(onIntentReady: (fileChooserIntent: Intent) -> Unit) {
+    if (isFinishing) {
+        Log.w("FilePicker", "request for file picker display is discarded")
+        return
+    }
+
+    val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        Intent(Intent.ACTION_GET_CONTENT)
+
+    } else {
+        Intent(Intent.ACTION_OPEN_DOCUMENT)
+
+    } .apply {
+        type = "*/*"
+        addCategory(Intent.CATEGORY_OPENABLE)
+        putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+    }
+
+    onIntentReady(Intent.createChooser(intent, "Select a File to Upload"))
+}
 
 /**
  * Created by Aki on 1/7/2017.
@@ -188,7 +212,7 @@ object RealPathUtil {
                     path.append(split[1])
                     return path.toString()
                 } else {
-var path:String?  = null
+                    var path:String?  = null
                     if (Build.VERSION.SDK_INT > 20) {
                         //getExternalMediaDirs() added in API 21
                         val extenal = context.externalMediaDirs
