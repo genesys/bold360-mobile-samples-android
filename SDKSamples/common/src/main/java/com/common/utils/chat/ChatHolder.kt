@@ -5,8 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.common.chatComponents.history.HistoryRepository
-import com.common.utils.loginForms.SharedDataHandler
-import com.common.utils.loginForms.accountUtils.ChatType
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
@@ -17,7 +15,7 @@ import java.lang.ref.WeakReference
 
 class ChatHolder(wContext: WeakReference<Context>?, override var onChatLoaded: ((Fragment) -> Unit)?) : ChatProvider {
 
-    override lateinit var accountData: AccountProvider
+    override lateinit var loginData: LoginData
 
     private var context: Context? = wContext?.get()
 
@@ -56,22 +54,20 @@ class ChatHolder(wContext: WeakReference<Context>?, override var onChatLoaded: (
 
         controller?.takeIf { !it.wasDestructed }?.run {
 
-            val chatType = accountData.extraData?.get(SharedDataHandler.ChatType_key) as String
-
-            val continueLast = chatType == ChatType.None || accountData.account == null
+            val continueLast = loginData.account == null
 
             when {
                 continueLast && hasOpenChats() && isActive -> restoreChat()
 
-                accountData.restoreState.restorable -> restoreChat(
-                    account = accountData.prepareAccount(
+                loginData.restoreState.restorable -> restoreChat(
+                    account = loginData.prepareAccount(
                         getSecuredInfo()
                     )
                 )
 
                 else -> {
                     context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT)}
-                    startChat(accountInfo = accountData.prepareAccount(getSecuredInfo()))
+                    startChat(accountInfo = loginData.prepareAccount(getSecuredInfo()))
                 }
             }
 
@@ -89,7 +85,8 @@ class ChatHolder(wContext: WeakReference<Context>?, override var onChatLoaded: (
             historyProvider?.let { chatElementListener(it) }
         }
 
-        accountData.prepareAccount(getSecuredInfo())?.let { account ->
+        loginData.prepareAccount(getSecuredInfo())?.let { account ->
+
             builder?.build(account, chatLoadedListener)?.also {
                 controller = it
             }

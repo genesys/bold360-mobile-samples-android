@@ -56,11 +56,12 @@ internal fun AccountMap.equalsTo(other: AccountMap): Boolean {
         return true
 }
 
-internal fun Account?.orDefault(@ChatType chatType: String): Account {
+internal fun Account?.orDefault(@ChatType chatType: String): Account? {
         return this ?: when (chatType) {
                 ChatType.Live -> Accounts.defaultBoldAccount
                 ChatType.Async -> Accounts.defaultAsyncAccount
-                else -> Accounts.defaultBotAccount
+                ChatType.Bot -> Accounts.defaultBotAccount
+                else -> null
         }
 }
 

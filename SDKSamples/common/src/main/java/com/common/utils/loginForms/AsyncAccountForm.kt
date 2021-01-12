@@ -6,17 +6,20 @@ import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.ExtraParams
 import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
-import kotlinx.android.synthetic.main.async_account_form.*
 import com.sdk.common.R
+import kotlinx.android.synthetic.main.async_account_form.*
 
 class AsyncAccountForm : LiveAccountForm() {
 
     override val formLayoutRes: Int
         get() = R.layout.async_account_form
 
+    override val chatType: String
+        get() = ChatType.Async
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        formViewModel.extraParams?.let {
+        loginFormViewModel.extraParams?.let {
             if (it.contains(ExtraParams.EnableRestore)) { restore_switch.visibility = View.VISIBLE }
             if (it.contains(ExtraParams.AsyncExtraData)) { async_extra_data.visibility = View.VISIBLE }
         }
@@ -26,7 +29,7 @@ class AsyncAccountForm : LiveAccountForm() {
 
     override fun fillFields() {
 
-        val account = formViewModel.getAccount(context) as AsyncAccount
+        val account = loginFormViewModel.getAccount(context) as AsyncAccount
 
         async_api_key_edit_text.setText( account.apiKey )
         async_email_edit_text.setText( account.info.userInfo.email )
@@ -72,9 +75,7 @@ class AsyncAccountForm : LiveAccountForm() {
             accountMap[AsyncSharedDataHandler.Phone_Number_key] = it.toString()
         }
 
-        accountMap[SharedDataHandler.ChatType_key] = ChatType.Async
-
-        formViewModel.restoreRequest = restore_switch.isChecked
+        loginFormViewModel.restoreRequest = restore_switch.isChecked
 
         return accountMap
     }

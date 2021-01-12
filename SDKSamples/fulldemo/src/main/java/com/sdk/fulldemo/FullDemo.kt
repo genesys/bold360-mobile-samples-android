@@ -19,7 +19,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.chatComponents.NotificationsReceiver
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
-import com.common.chatComponents.customProviders.CustomFormProvider
 import com.common.chatComponents.customProviders.CustomTTSAlterProvider
 import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
@@ -34,15 +33,18 @@ import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
-import com.nanorep.convesationui.structure.controller.FormProvider
 import com.nanorep.nanoengine.model.configuration.*
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.SystemStatement
-import com.nanorep.sdkcore.utils.*
+import com.nanorep.sdkcore.utils.ErrorException
+import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.Notifications
+import com.nanorep.sdkcore.utils.toast
+import com.sdk.common.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import com.sdk.common.R
+import java.util.*
 
 open class FullDemo : RestorationContinuity() {
 
@@ -62,7 +64,6 @@ open class FullDemo : RestorationContinuity() {
     private var accountProvider: ContinuityAccountHandler? = null
     private var handoverHandler: HandoverHandler? = null
     private var ttsAlterProvider: TTSReadAlterProvider? = null
-    private var formProvider: FormProvider? = null
 
     private var entitiesProvider: EntitiesProvider? = null
 
@@ -72,9 +73,6 @@ open class FullDemo : RestorationContinuity() {
 
         // Configuring a custom TTS alter provider :
         ttsAlterProvider = CustomTTSAlterProvider()
-
-        // Configuring a custom form provider :
-        formProvider = CustomFormProvider(this.weakRef())
 
         // Configuring a custom handover handler :
         handoverHandler = CustomHandoverHandler(baseContext)
@@ -102,7 +100,6 @@ open class FullDemo : RestorationContinuity() {
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.apply {
             accountProvider?.let { accountProvider(it) }
-            formProvider?.let { formProvider(it) }
             handoverHandler?.let { chatHandoverHandler(it) }
             entitiesProvider?.let { entitiesProvider(it) }
             ttsAlterProvider?.let { ttsReadAlterProvider(it) }

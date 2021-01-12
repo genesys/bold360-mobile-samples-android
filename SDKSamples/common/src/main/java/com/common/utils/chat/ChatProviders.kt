@@ -8,8 +8,11 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 
-interface AccountProvider {
+interface LoginData {
 
+    /**
+     * The Account (Bot/Bold/Async)
+     */
     val account: Account?
 
     /**
@@ -34,10 +37,13 @@ interface AccountProvider {
 interface ChatProvider {
 
     /**
-     * Holds the current account details
+     * Holds the chat's login data
      */
-    var accountData: AccountProvider
+    var loginData: LoginData
 
+    /**
+     * Returns encrypted info to be added to the Live account (if there is any)
+     */
     fun getSecuredInfo(): String
 
     /**

@@ -69,7 +69,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     override fun startChat(savedInstanceState: Bundle?) {
-        if (hasChatController() && chatProvider.accountData.restoreState.restoreRequest) chatProvider.restore() else createChat()
+        if (hasChatController() && chatProvider.loginData.restoreState.restoreRequest) chatProvider.restore() else createChat()
     }
 
     protected open fun createChat() {

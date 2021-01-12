@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import com.common.utils.chat.ChatHolder
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.AccountFormPresenter
-import com.common.utils.loginForms.FormViewModel
+import com.common.utils.loginForms.LoginFormViewModel
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
@@ -30,31 +30,30 @@ abstract class SampleActivity  : AppCompatActivity() {
 
     private lateinit var accountFormController: AccountFormController
 
-    private val formViewModel: FormViewModel by viewModels()
+    private val loginFormViewModel: LoginFormViewModel by viewModels()
 
     abstract val onChatLoaded: (fragment: Fragment) -> Unit
 
-    protected open fun getAccount(): Account? = formViewModel.getAccount(baseContext)
+    protected open fun getAccount(): Account? = loginFormViewModel.getAccount(baseContext)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         topicTitle = intent.getStringExtra("title") ?: ""
 
-        val formViewModel: FormViewModel by viewModels()
+        val loginFormViewModel: LoginFormViewModel by viewModels()
 
         chatProvider = ChatHolder(baseContext.weakRef(), onChatLoaded)
 
         accountFormController = AccountFormController(containerId, supportFragmentManager.weakRef())
 
-        formViewModel.chatType = chatType
-        formViewModel.extraParams = extraFormsParams
+        loginFormViewModel.extraParams = extraFormsParams
 
         accountFormController.updateChatType(chatType, extraFormsParams)
 
-        formViewModel.accountData.observe(this, { accountData ->
+        loginFormViewModel.loginData.observe(this, { accountData ->
 
-            chatProvider.accountData = accountData
+            chatProvider.loginData = accountData
 
             supportFragmentManager
                 .popBackStack(AccountFormPresenter.LOGIN_FORM, FragmentManager.POP_BACK_STACK_INCLUSIVE)

@@ -10,7 +10,6 @@ import com.common.utils.updateSecurityProvider
  */
 class MainActivity : AppCompatActivity() {
 
-//    private lateinit var singletonSamplesViewModelFactory: SingletonSamplesViewModelFactory
     private var retryProviderInstall = true
 
     override fun onCreate(savedInstanceState: Bundle?) {

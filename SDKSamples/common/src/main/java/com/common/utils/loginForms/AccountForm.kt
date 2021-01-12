@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.toAsyncAccount
 import com.common.utils.loginForms.accountUtils.toBotAccount
@@ -17,11 +15,6 @@ import com.sdk.common.R
 
 
 interface AccountFormDelegate {
-
-    /**
-     * Controls the data flow from the form and to it
-     */
-    val formViewModel: DataController
 
     /**
      * Takes the fields data from the shared properties
@@ -40,11 +33,12 @@ interface AccountFormDelegate {
     fun presentError(editText: EditText, message: String?)
 }
 
-abstract class AccountForm : Fragment(), AccountFormDelegate {
-
-    override val formViewModel: FormViewModel by activityViewModels()
+abstract class AccountForm : LoginForm(), AccountFormDelegate {
 
     abstract val formLayoutRes: Int
+
+    @ChatType
+    abstract val chatType: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,22 +51,17 @@ abstract class AccountForm : Fragment(), AccountFormDelegate {
     private fun validateAndUpdate (): Account? {
 
         return validateFormData()?.let { accountData ->
-            val chatType = accountData[SharedDataHandler.ChatType_key] as String
-
-            formViewModel.chatType = chatType
-
             when (chatType) {
                 ChatType.Async -> accountData.toAsyncAccount()
                 ChatType.Live -> accountData.toLiveAccount()
                 else -> accountData.toBotAccount()
             }?.also { account ->
                 val extraData = accountData.filter {
-                    it.key == SharedDataHandler.ChatType_key ||
                             it.key == BotSharedDataHandler.preChat_deptCode_key ||
                             it.key == BotSharedDataHandler.preChat_lName_key ||
                             it.key == BotSharedDataHandler.preChat_fName_key
                 }
-                context?.let { formViewModel.updateAccount(context, account, extraData) }
+                loginFormViewModel.updateAccount(context, account, extraData)
             }
         }
     }
@@ -84,10 +73,12 @@ abstract class AccountForm : Fragment(), AccountFormDelegate {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        loginFormViewModel.chatType = chatType
+
         view.findViewById<Button>(R.id.start_chat).apply {
             setOnClickListener {
                 validateAndUpdate()?.run {
-                    formViewModel.onSubmit(this)
+                    loginFormViewModel.onStartChat(this)
                 }
             }
         }

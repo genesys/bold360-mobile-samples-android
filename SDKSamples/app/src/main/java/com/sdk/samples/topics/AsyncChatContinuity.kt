@@ -50,7 +50,7 @@ class AsyncChatContinuity : RestorationContinuity() {
      * Continues the last chat with this account (if available)
      */
     private fun continueLast(account: AsyncAccount) {
-        account.takeIf { chatProvider.accountData.restoreState.restorable }?.apply {
+        account.takeIf { chatProvider.loginData.restoreState.restorable }?.apply {
             info.let {
                 it.SenderId = accountHandler.senderId.toLongOrNull()
                 it.LastReceivedMessageId = accountHandler.lastReceivedMessageId

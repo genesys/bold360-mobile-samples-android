@@ -19,9 +19,9 @@ import com.common.utils.loginForms.accountUtils.ExtraParams.*
 import com.common.utils.loginForms.accountUtils.isEmpty
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
+import com.sdk.common.R
 import kotlinx.android.synthetic.main.bot_account_form.*
 import kotlinx.android.synthetic.main.bot_context_view.view.*
-import com.sdk.common.R
 import kotlin.math.max
 
 class BotAccountForm : AccountForm(),
@@ -30,11 +30,14 @@ class BotAccountForm : AccountForm(),
     override val formLayoutRes: Int
         get() = R.layout.bot_account_form
 
+    override val chatType: String
+        get() = ChatType.Bot
+
     private lateinit var contextHandler: ContextHandler
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        formViewModel.extraParams?.let { extraParams->
+        loginFormViewModel.extraParams?.let { extraParams->
             extraParams.forEach{
                 when (it) {
                     Welcome -> bot_welcome_layout.visibility = View.VISIBLE
@@ -79,7 +82,7 @@ class BotAccountForm : AccountForm(),
 
         initializeContextView()
 
-        val account: BotAccount = formViewModel.getAccount(context) as BotAccount
+        val account: BotAccount = loginFormViewModel.getAccount(context) as BotAccount
 
         bot_account_name_edit_text.setText( account.account ?: "" )
         bot_knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
@@ -126,7 +129,6 @@ class BotAccountForm : AccountForm(),
             return null
         }
 
-        accountMap[SharedDataHandler.ChatType_key] = ChatType.Bot
         accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString() ?: ""
         accountMap[Server_key] = bot_server_edit_text.text?.toString() ?: ""
         accountMap[Context_key] =  contextHandler.getContext()

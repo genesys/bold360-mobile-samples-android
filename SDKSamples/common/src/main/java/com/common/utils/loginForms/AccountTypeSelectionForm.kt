@@ -5,19 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.restore_form.*
 
-class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onTypeSelected: (chatType: String) -> Unit) : Fragment() {
-
-    private val formViewModel: FormViewModel by activityViewModels()
+class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onTypeSelected: (chatType: String) -> Unit) : LoginForm() {
 
     @ChatType
     private val selectedChatType: String
-        get() = getCheckedRadio()?.tag?.toString() ?: ChatType.Bot
+        get() = getCheckedRadio()?.tag?.toString() ?: ChatType.None
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +21,11 @@ class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onT
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.restore_form, container, false)
+    }
+
+    override fun onResume() {
+        loginFormViewModel.chatType = ChatType.None
+        super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,16 +37,13 @@ class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onT
 
         start_chat.setOnClickListener {
 
-            formViewModel.chatType = selectedChatType
-            formViewModel.restoreRequest = restore_switch.isChecked
+            loginFormViewModel.restoreRequest = restore_switch.isChecked
 
             if (selectedChatType == ChatType.None) {
-
-                formViewModel.extraData =
-                    mapOf<String, Any>(SharedDataHandler.ChatType_key to ChatType.None)
-                formViewModel.onSubmit(null)
-
-            } else onTypeSelected(selectedChatType)
+                loginFormViewModel.onStartChat(null)
+            } else {
+                onTypeSelected(selectedChatType)
+            }
 
         }
 

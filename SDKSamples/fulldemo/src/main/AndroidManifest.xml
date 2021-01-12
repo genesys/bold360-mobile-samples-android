@@ -18,20 +18,13 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity" android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".FullDemo"
                 android:configChanges="orientation|screenSize|locale|layoutDirection"
                 android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="com.sdk.fulldemo.action.FULL_DEMO_APP" />
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
