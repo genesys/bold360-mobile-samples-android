@@ -5,8 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.AsyncExtraData
-import com.common.utils.loginForms.accountUtils.ExtraParams.EnableRestore
+import com.common.utils.loginForms.accountUtils.FormsParams.AsyncExtraData
+import com.common.utils.loginForms.accountUtils.FormsParams.EnableRestore
 import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
@@ -28,7 +28,7 @@ abstract class RestorationContinuity : History() {
         val accountFormController = AccountFormController(R.id.basic_chat_view, supportFragmentManager.weakRef())
 
         if (hasChatController()) {
-            formsParams = formsParams or EnableRestore
+            addFormsParam(EnableRestore)
         }
 
         accountFormController.updateChatType(chatType)

@@ -5,7 +5,7 @@ import com.common.chatComponents.customProviders.withId
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_deptCode_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_fName_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.preChat_lName_key
-import com.common.utils.loginForms.accountUtils.ExtraParams
+import com.common.utils.loginForms.accountUtils.FormsParams
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
@@ -15,7 +15,7 @@ import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 
 class PrechatExtraData : BotChat() {
 
-    override var formsParams = ExtraParams.PrechatExtraData
+    override var formsParams = FormsParams.PrechatExtraData
 
     override fun getAccount(): Account {
 

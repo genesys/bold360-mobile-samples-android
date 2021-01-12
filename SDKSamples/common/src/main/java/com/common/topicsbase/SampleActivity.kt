@@ -10,6 +10,7 @@ import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.AccountFormPresenter
 import com.common.utils.loginForms.LoginFormViewModel
 import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.FormsParams
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.weakRef
@@ -20,7 +21,13 @@ abstract class SampleActivity  : AppCompatActivity() {
     @ChatType
     abstract val chatType: String
     abstract val containerId: Int
-    open var formsParams: Int = 0
+
+    open var formsParams: Int
+    set(value) {
+        loginFormViewModel.formsParams = value
+    }
+    get() = loginFormViewModel.formsParams
+
 
     abstract fun startChat(savedInstanceState: Bundle? = null)
 
@@ -71,6 +78,10 @@ abstract class SampleActivity  : AppCompatActivity() {
     override fun onStop() {
         onSampleStop()
         super.onStop()
+    }
+
+    fun addFormsParam(@FormsParams param: Int) {
+        loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
     }
 
     protected open fun onSampleStop() {

@@ -15,7 +15,7 @@ import com.common.utils.loginForms.BotSharedDataHandler.Companion.Context_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.Kb_key
 import com.common.utils.loginForms.BotSharedDataHandler.Companion.Server_key
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.*
+import com.common.utils.loginForms.accountUtils.FormsParams.*
 import com.common.utils.loginForms.accountUtils.isEmpty
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px

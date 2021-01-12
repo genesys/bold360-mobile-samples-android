@@ -3,7 +3,7 @@ package com.common.utils.loginForms
 import android.os.Bundle
 import android.view.View
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams
+import com.common.utils.loginForms.accountUtils.FormsParams
 import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.sdk.common.R
@@ -20,8 +20,8 @@ class AsyncAccountForm : LiveAccountForm() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         loginFormViewModel.formsParams.let {
-            if (hasFormParam(ExtraParams.EnableRestore)) { restore_switch.visibility = View.VISIBLE }
-            if (hasFormParam(ExtraParams.AsyncExtraData)) { async_extra_data.visibility = View.VISIBLE }
+            if (hasFormParam(FormsParams.EnableRestore)) { restore_switch.visibility = View.VISIBLE }
+            if (hasFormParam(FormsParams.AsyncExtraData)) { async_extra_data.visibility = View.VISIBLE }
         }
 
         super.onViewCreated(view, savedInstanceState)

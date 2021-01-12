@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.EnableRestore
+import com.common.utils.loginForms.accountUtils.FormsParams.EnableRestore
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.restore_form.*
 

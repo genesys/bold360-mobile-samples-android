@@ -24,7 +24,7 @@ import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
 import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
-import com.common.utils.loginForms.accountUtils.ExtraParams
+import com.common.utils.loginForms.accountUtils.FormsParams
 import com.integration.core.FileUploadInfo
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
@@ -48,7 +48,7 @@ import java.util.*
 
 open class FullDemo : RestorationContinuity() {
 
-    override var formsParams = super.formsParams or ExtraParams.UsingContext or ExtraParams.Welcome
+    override var formsParams = super.formsParams or FormsParams.UsingContext or FormsParams.Welcome
 
     private var uploadFile: MenuItem? = null
 
