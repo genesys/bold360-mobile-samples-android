@@ -36,8 +36,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     override val chatType: String
         get() = ChatType.Bot
 
-    override val extraFormsParams = mutableListOf<String>()
-
     override val onChatLoaded: (fragment: Fragment) -> Unit
     get() = { fragment ->
 

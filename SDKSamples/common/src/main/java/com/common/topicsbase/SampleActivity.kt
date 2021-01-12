@@ -20,7 +20,7 @@ abstract class SampleActivity  : AppCompatActivity() {
     @ChatType
     abstract val chatType: String
     abstract val containerId: Int
-    abstract val extraFormsParams: MutableList<String>
+    open var formsParams: Int = 0
 
     abstract fun startChat(savedInstanceState: Bundle? = null)
 
@@ -47,16 +47,19 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         accountFormController = AccountFormController(containerId, supportFragmentManager.weakRef())
 
-        loginFormViewModel.extraParams = extraFormsParams
+        loginFormViewModel.formsParams = formsParams
 
-        accountFormController.updateChatType(chatType, extraFormsParams)
+        accountFormController.updateChatType(chatType)
 
         loginFormViewModel.loginData.observe(this, { accountData ->
 
             chatProvider.loginData = accountData
 
             supportFragmentManager
-                .popBackStack(AccountFormPresenter.LOGIN_FORM, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                .popBackStack(
+                    AccountFormPresenter.LOGIN_FORM,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
 
             startChat(savedInstanceState)
 

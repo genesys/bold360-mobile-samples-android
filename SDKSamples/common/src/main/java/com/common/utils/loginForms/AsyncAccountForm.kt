@@ -19,9 +19,9 @@ class AsyncAccountForm : LiveAccountForm() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        loginFormViewModel.extraParams?.let {
-            if (it.contains(ExtraParams.EnableRestore)) { restore_switch.visibility = View.VISIBLE }
-            if (it.contains(ExtraParams.AsyncExtraData)) { async_extra_data.visibility = View.VISIBLE }
+        loginFormViewModel.formsParams.let {
+            if (hasFormParam(ExtraParams.EnableRestore)) { restore_switch.visibility = View.VISIBLE }
+            if (hasFormParam(ExtraParams.AsyncExtraData)) { async_extra_data.visibility = View.VISIBLE }
         }
 
         super.onViewCreated(view, savedInstanceState)

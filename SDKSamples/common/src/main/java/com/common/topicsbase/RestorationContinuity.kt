@@ -14,7 +14,7 @@ import com.sdk.common.R
 
 abstract class RestorationContinuity : History() {
 
-    override val extraFormsParams = mutableListOf(AsyncExtraData)
+    override var formsParams = AsyncExtraData
 
     override val chatType: String
         get() = ChatType.None
@@ -28,10 +28,10 @@ abstract class RestorationContinuity : History() {
         val accountFormController = AccountFormController(R.id.basic_chat_view, supportFragmentManager.weakRef())
 
         if (hasChatController()) {
-            extraFormsParams.add(EnableRestore)
+            formsParams = formsParams or EnableRestore
         }
 
-        accountFormController.updateChatType(chatType, extraFormsParams)
+        accountFormController.updateChatType(chatType)
     }
 
     override fun startChat(savedInstanceState: Bundle?) {

@@ -15,7 +15,7 @@ import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 
 class PrechatExtraData : BotChat() {
 
-    override val extraFormsParams = mutableListOf(ExtraParams.PrechatExtraData)
+    override var formsParams = ExtraParams.PrechatExtraData
 
     override fun getAccount(): Account {
 

@@ -70,8 +70,6 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
         createChat()
     }
 
-    override val extraFormsParams = mutableListOf<String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_no_ui)

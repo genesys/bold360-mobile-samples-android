@@ -3,7 +3,6 @@ package com.common.utils.loginForms
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.ExtraParams.EnableRestore
 import java.lang.ref.WeakReference
 
 /**
@@ -13,10 +12,7 @@ import java.lang.ref.WeakReference
 class RestoreState(val restoreRequest: Boolean = false, var restorable: Boolean = false)
 
 interface FormController {
-    fun updateChatType(
-        chatType: String,
-        extraParams: List<String>,
-    )
+    fun updateChatType(chatType: String)
 }
 
 class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>):
@@ -28,26 +24,21 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
     override fun updateChatType(
         chatType: String,
-        extraParams: List<String>,
     ) {
         getFragmentManager()?.let { fm ->
-            accountFormPresenter.extraParams = extraParams
             accountFormPresenter.presentForm(fm, chatType)
         }
     }
 }
 
 interface FormPresenter {
-    val containerRes: Int
 
-    var extraParams: List<String>
+    val containerRes: Int
 
     fun presentForm(fragmentManager: FragmentManager, chatType: String)
 }
 
 class AccountFormPresenter(override val containerRes: Int): FormPresenter {
-
-    override lateinit var extraParams: List<String>
 
     override fun presentForm(fragmentManager: FragmentManager, chatType: String) {
 
@@ -69,7 +60,7 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
     }
 
     private fun presentRestoreForm(fragmentManager: FragmentManager) {
-        val fragment = AccountTypeSelectionForm.newInstance(extraParams.contains(EnableRestore)) { chatType ->
+        val fragment = AccountTypeSelectionForm.newInstance { chatType ->
             presentAccountForm(fragmentManager, chatType)
         }
 

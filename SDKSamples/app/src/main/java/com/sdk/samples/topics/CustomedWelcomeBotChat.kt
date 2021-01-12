@@ -7,7 +7,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {
 
-    override val extraFormsParams = mutableListOf(ExtraParams.Welcome)
+    override var formsParams = ExtraParams.Welcome
 
     override fun getAccount(): Account {
         return (super.getAccount() as BotAccount).withId(this).apply {

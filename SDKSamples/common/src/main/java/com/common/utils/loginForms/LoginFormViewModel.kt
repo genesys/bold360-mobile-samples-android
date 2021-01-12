@@ -17,7 +17,7 @@ class LoginFormViewModel : ViewModel(), DataController {
     override var restoreRequest: Boolean = false
     override var extraData: Map<String, Any?>? = null
 
-    override var extraParams: List<String>? = null
+    override var formsParams = 0
 
     override var chatType: String = ChatType.None
         set(value) {

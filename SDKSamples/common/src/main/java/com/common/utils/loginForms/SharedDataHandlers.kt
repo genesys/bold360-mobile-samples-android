@@ -36,7 +36,7 @@ interface DataController : RestoreStateProvider {
     /**
      * Contains the wanted extra params of the account
      */
-    var extraParams: List<String>?
+    var formsParams: Int
 
     /**
      * Gets the prev account data from the shared properties (according to the ChatType), If null it returns the default account

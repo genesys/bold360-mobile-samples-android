@@ -37,15 +37,9 @@ class BotAccountForm : AccountForm(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        loginFormViewModel.extraParams?.let { extraParams->
-            extraParams.forEach{
-                when (it) {
-                    Welcome -> bot_welcome_layout.visibility = View.VISIBLE
-                    UsingContext -> bot_context.visibility = View.VISIBLE
-                    PrechatExtraData -> bot_prechat_data.visibility = View.VISIBLE
-                }
-            }
-        }
+        if (hasFormParam(Welcome)) bot_welcome_layout.visibility = View.VISIBLE
+        if (hasFormParam(UsingContext)) bot_context.visibility = View.VISIBLE
+        if (hasFormParam(PrechatExtraData))bot_prechat_data.visibility = View.VISIBLE
 
         super.onViewCreated(view, savedInstanceState)
     }

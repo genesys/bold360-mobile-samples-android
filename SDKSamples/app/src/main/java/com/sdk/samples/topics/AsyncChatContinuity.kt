@@ -36,9 +36,6 @@ class AsyncChatContinuity : RestorationContinuity() {
 
     private val accountHandler = ContinuityAccountHandler()
 
-    override val extraFormsParams: MutableList<String>
-        get() = super.extraFormsParams
-
     override val chatType: String
         get() = ChatType.Async
 

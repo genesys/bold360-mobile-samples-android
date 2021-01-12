@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.accountUtils.ExtraParams.EnableRestore
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.restore_form.*
 
-class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onTypeSelected: (chatType: String) -> Unit) : LoginForm() {
+class AccountTypeSelectionForm(val onTypeSelected: (chatType: String) -> Unit) : LoginForm() {
 
     @ChatType
     private val selectedChatType: String
@@ -30,7 +31,7 @@ class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onT
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        if (enableRestoreFields) {
+        if (hasFormParam(EnableRestore)) {
             restore_switch.visibility = View.VISIBLE
             current_radio.visibility = View.VISIBLE
         }
@@ -61,8 +62,8 @@ class AccountTypeSelectionForm(private val enableRestoreFields: Boolean, val onT
     companion object {
         const val TAG = "RestoreForm"
 
-        fun newInstance(enableRestoreFields: Boolean = false, onTypeSelected: (chatType: String) -> Unit): AccountTypeSelectionForm {
-            return AccountTypeSelectionForm(enableRestoreFields, onTypeSelected)
+        fun newInstance(onTypeSelected: (chatType: String) -> Unit): AccountTypeSelectionForm {
+            return AccountTypeSelectionForm(onTypeSelected)
         }
     }
 }

@@ -73,8 +73,6 @@ class Autocomplete : SampleActivity() {
         }
     }
 
-    override val extraFormsParams = mutableListOf<String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_activity)

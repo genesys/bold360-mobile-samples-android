@@ -48,12 +48,7 @@ import java.util.*
 
 open class FullDemo : RestorationContinuity() {
 
-//    private var singletonSamplesViewModelFactory = SingletonSamplesViewModelFactory( SamplesViewModel.getInstance() )
-
-    override val extraFormsParams = super.extraFormsParams.apply {
-        add(ExtraParams.UsingContext)
-        add(ExtraParams.Welcome)
-    }
+    override var formsParams = super.formsParams or ExtraParams.UsingContext or ExtraParams.Welcome
 
     private var uploadFile: MenuItem? = null
 

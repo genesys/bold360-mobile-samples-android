@@ -6,7 +6,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 
 class ContextSupportChat : BotChat() {
 
-    override val extraFormsParams = mutableListOf(ExtraParams.UsingContext)
+    override var formsParams = ExtraParams.UsingContext
 
     override fun getAccount(): Account {
         return (super.getAccount() as BotAccount).apply {
