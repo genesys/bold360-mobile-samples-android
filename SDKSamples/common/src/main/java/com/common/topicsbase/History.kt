@@ -37,7 +37,7 @@ abstract class History : BasicChat() {
     @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
 
-        chatProvider.updateHistoryRepo( HistoryRepository( RoomHistoryProvider(this, getAccount()?.getGroupId(), 8) ) )
+        updateHistoryRepo( HistoryRepository( RoomHistoryProvider(this, getAccount()?.getGroupId(), 8) ) )
 
         enableMenu(historyMenu, true)
 
@@ -49,7 +49,7 @@ abstract class History : BasicChat() {
 
         when (item.itemId) {
             R.id.clear_history -> {
-                chatProvider.clearHistory()
+                clearHistory()
                 return true
             }
         }

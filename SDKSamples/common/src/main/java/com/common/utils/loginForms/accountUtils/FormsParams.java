@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface FormsParams {
 
     int Welcome = 0x12;
-    int PrechatExtraData = 0x21;
+    int PrechatExtraData = 0x16;
     int AsyncExtraData = 0x22;
     int EnableRestore = 0x23;
     int UsingContext = 0x24;

@@ -37,7 +37,7 @@ abstract class RestorationContinuity : History() {
     override fun startChat(savedInstanceState: Bundle?) {
 
         getAccount()?.getGroupId()?.let {
-            chatProvider.updateHistoryRepo(targetId = it)
+            updateHistoryRepo(targetId = it)
         }
 
         super.startChat(savedInstanceState)

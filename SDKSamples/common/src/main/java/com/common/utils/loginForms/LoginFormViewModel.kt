@@ -3,7 +3,6 @@ package com.common.utils.loginForms
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.common.utils.chat.LoginData
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.isRestorable
 import com.common.utils.loginForms.accountUtils.orDefault

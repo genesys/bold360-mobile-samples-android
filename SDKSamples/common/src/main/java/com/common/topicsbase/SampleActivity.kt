@@ -1,47 +1,189 @@
 package com.common.topicsbase
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.common.utils.chat.ChatHolder
+import com.common.chatComponents.history.HistoryRepository
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.AccountFormPresenter
+import com.common.utils.loginForms.LoginData
 import com.common.utils.loginForms.LoginFormViewModel
 import com.common.utils.loginForms.accountUtils.ChatType
 import com.common.utils.loginForms.accountUtils.FormsParams
 import com.nanorep.convesationui.structure.controller.ChatController
+import com.nanorep.convesationui.structure.controller.ChatLoadResponse
+import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
+import com.nanorep.sdkcore.utils.SystemUtil
+import com.nanorep.sdkcore.utils.runMain
+import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.common.R
 
 abstract class SampleActivity  : AppCompatActivity() {
 
+//  <editor-fold desc=">>>>> Chat handling <<<<<" >
+
+    /**
+     * Being invoked when the chat fragment had been fetched and ready to be presented
+     */
+    abstract val onChatLoaded: ((fragment: Fragment) -> Unit)?
+
     @ChatType
     abstract val chatType: String
-    abstract val containerId: Int
 
-    open var formsParams: Int
-    set(value) {
-        loginFormViewModel.formsParams = value
+    protected lateinit var chatController: ChatController
+
+    /**
+     * Returns encrypted info to be added to the Live account (if there is any)
+     */
+    private fun getSecuredInfo(): String {
+        return "some PGP encrypted key string [${SystemUtil.generateTimestamp()}]"
     }
-    get() = loginFormViewModel.formsParams
+
+    /**
+     * Restores the chat for the current account ( if has ChatController )
+     */
+    fun restore() {
+
+        if (hasChatController()) {
+
+            chatController.run {
+                val continueLast = loginData.account == null
+
+                when {
+                    continueLast && hasOpenChats() && isActive -> restoreChat()
+
+                    loginData.restoreState.restorable -> restoreChat(
+                        account = loginData.prepareAccount(
+                            getSecuredInfo()
+                        )
+                    )
+
+                    else -> {
+                        context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT) }
+                        startChat(accountInfo = loginData.prepareAccount(getSecuredInfo()))
+                    }
+                }
+            }
+
+        } else {
+            Log.e(
+                "ChatHolder",
+                "Failed to restore chat, hasChatController() must be checked first"
+            )
+        }
+    }
+
+    /**
+     * Creates the chat chatController and starts the chat
+     * @param chatBuilder (optional) injection of a custom ChatController.Builder
+     * @return true if the chatController had been created properly, false otherwise
+     * When ready the chat fragment would be passed by 'onChatLoaded' invocation
+     */
+    fun create(chatBuilder: ChatController.Builder? = null): Boolean {
+
+        val chatLoadedListener: ChatLoadedListener = object : ChatLoadedListener {
+
+            override fun onComplete(result: ChatLoadResponse) {
+                result.error?.takeIf { baseContext != null }?.run {
+                    toast(baseContext!!, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                } ?: runMain {
+                    result.fragment?.let {
+                        onChatLoaded?.invoke(it)
+                    }
+                }
+            }
+        }
+
+        val builder = (chatBuilder ?: baseContext?.let { ChatController.Builder(it) })?.apply {
+            historyProvider?.let { chatElementListener(it) }
+        }
+
+        loginData.prepareAccount(getSecuredInfo())?.let { account ->
+
+            builder?.build(account, chatLoadedListener)?.also {
+                chatController = it
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * Clears the chat and release its resources
+     */
+    private fun destructChat() {
+        if (hasChatController()) {
+            chatController.let {
+                it.terminateChat()
+                it.destruct()
+            }
+        }
+    }
+
+    lateinit var loginData: LoginData
+
+    private var historyProvider: HistoryRepository? = null
 
 
+    // History handling
+
+    /**
+     * Clears the history and frees its resources
+     */
+    fun clearHistory() {
+        historyProvider?.clear()
+    }
+
+    /**
+     * Updates the History provider
+     */
+    fun updateHistoryRepo(historyRepository: HistoryRepository? = null, targetId: String? = null) {
+        historyRepository?.let { historyProvider = historyRepository }
+        targetId?.let { historyProvider?.targetId = targetId }
+    }
+
+
+    /**
+     * @return true if the chat chatController exists and had not been destructed
+     */
+    fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
+
+//  </editor-fold>
+
+//  <editor-fold desc=">>>>> Login forms handling <<<<<" >
+
+    /**
+     * Called after the LoginData had been updated from the ChatForm
+     */
     abstract fun startChat(savedInstanceState: Bundle? = null)
 
-    protected lateinit var chatProvider: ChatHolder
-    protected lateinit var chatController: ChatController
-    protected lateinit var topicTitle: String
+    open var formsParams: Int
+        set(value) {
+            loginFormViewModel.formsParams = value
+        }
+        get() = loginFormViewModel.formsParams
+
 
     private lateinit var accountFormController: AccountFormController
 
     private val loginFormViewModel: LoginFormViewModel by viewModels()
 
-    abstract val onChatLoaded: (fragment: Fragment) -> Unit
+    fun addFormsParam(@FormsParams param: Int) {
+        loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
+    }
 
     protected open fun getAccount(): Account? = loginFormViewModel.getAccount(baseContext)
+
+//  </editor-fold>
+
+    protected lateinit var topicTitle: String
+    abstract val containerId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,17 +192,15 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         val loginFormViewModel: LoginFormViewModel by viewModels()
 
-        chatProvider = ChatHolder(baseContext.weakRef(), onChatLoaded)
-
         accountFormController = AccountFormController(containerId, supportFragmentManager.weakRef())
 
         loginFormViewModel.formsParams = formsParams
 
         accountFormController.updateChatType(chatType)
 
-        loginFormViewModel.loginData.observe(this, { accountData ->
+        loginFormViewModel.loginData.observe(this, { loginData ->
 
-            chatProvider.loginData = accountData
+            this.loginData = loginData
 
             supportFragmentManager
                 .popBackStack(
@@ -73,20 +213,7 @@ abstract class SampleActivity  : AppCompatActivity() {
         })
     }
 
-    protected fun hasChatController() = chatProvider.hasChatController()
-
-    override fun onStop() {
-        onSampleStop()
-        super.onStop()
-    }
-
-    fun addFormsParam(@FormsParams param: Int) {
-        loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
-    }
-
-    protected open fun onSampleStop() {
-        if (isFinishing) { chatProvider.destruct() }
-    }
+//  <editor-fold desc=">>>>> Base Activity actions <<<<<" >
 
     override fun onBackPressed() {
 
@@ -107,4 +234,16 @@ abstract class SampleActivity  : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
+
+    override fun onStop() {
+        onSampleStop()
+        super.onStop()
+    }
+
+    protected open fun onSampleStop() {
+        if (isFinishing) { destructChat() }
+    }
+
+//  </editor-fold>
+
 }

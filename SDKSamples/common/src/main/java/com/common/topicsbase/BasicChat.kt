@@ -67,16 +67,11 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     override fun startChat(savedInstanceState: Bundle?) {
-        if (hasChatController() && chatProvider.loginData.restoreState.restoreRequest) chatProvider.restore() else createChat()
+        if (hasChatController() && loginData.restoreState.restoreRequest) restore() else createChat()
     }
 
     protected open fun createChat() {
-        chatProvider.create(getChatBuilder())?.let {
-            chatController = it
-        } ?: kotlin.run {
-            toast(baseContext, "Could not initiate Chat", Toast.LENGTH_SHORT)
-            finishIfLast()
-        }
+        create(getChatBuilder())
     }
 
     protected open fun getChatBuilder(): ChatController.Builder? {
