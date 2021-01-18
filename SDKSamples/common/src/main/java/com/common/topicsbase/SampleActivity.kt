@@ -11,13 +11,15 @@ import com.common.chatComponents.history.HistoryRepository
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.AccountFormPresenter
 import com.common.utils.loginForms.LoginData
-import com.common.utils.loginForms.LoginFormViewModel
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.common.utils.loginForms.accountUtils.FormsParams
+import com.common.utils.loginForms.dynamicFormPOC.LoginFormViewModel
+import com.google.gson.Gson
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
+import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
@@ -32,9 +34,6 @@ abstract class SampleActivity  : AppCompatActivity() {
      * Being invoked when the chat fragment had been fetched and ready to be presented
      */
     abstract val onChatLoaded: ((fragment: Fragment) -> Unit)?
-
-    @ChatType
-    abstract val chatType: String
 
     protected lateinit var chatController: ChatController
 
@@ -163,12 +162,20 @@ abstract class SampleActivity  : AppCompatActivity() {
      */
     abstract fun startChat(savedInstanceState: Bundle? = null)
 
+    @ChatType
+    open var chatType: String
+        set(value) {
+            loginFormViewModel.chatType = value
+        }
+        get() =loginFormViewModel.chatType
+
     open var formsParams: Int
         set(value) {
             loginFormViewModel.formsParams = value
         }
         get() = loginFormViewModel.formsParams
 
+    protected open val formFields: String = ""
 
     private lateinit var accountFormController: AccountFormController
 
@@ -178,7 +185,8 @@ abstract class SampleActivity  : AppCompatActivity() {
         loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
     }
 
-    protected open fun getAccount(): Account? = loginFormViewModel.getAccount(baseContext)
+    protected open fun getAccount(): Account? =
+        Gson().fromJson(loginFormViewModel.getJsonAccount(baseContext), Account::class.java)
 
 //  </editor-fold>
 
@@ -195,8 +203,9 @@ abstract class SampleActivity  : AppCompatActivity() {
         accountFormController = AccountFormController(containerId, supportFragmentManager.weakRef())
 
         loginFormViewModel.formsParams = formsParams
+        loginFormViewModel.setFormFields(formFields)
 
-        accountFormController.updateChatType(chatType)
+        accountFormController.login<BotAccount>()
 
         loginFormViewModel.loginData.observe(this, { loginData ->
 

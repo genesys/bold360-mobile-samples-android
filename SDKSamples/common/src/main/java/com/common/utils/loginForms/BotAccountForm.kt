@@ -2,157 +2,145 @@ package com.common.utils.loginForms
 
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import com.common.utils.loginForms.BotSharedDataHandler.Companion.Account_key
-import com.common.utils.loginForms.BotSharedDataHandler.Companion.ApiKey_key
-import com.common.utils.loginForms.BotSharedDataHandler.Companion.Context_key
-import com.common.utils.loginForms.BotSharedDataHandler.Companion.Kb_key
-import com.common.utils.loginForms.BotSharedDataHandler.Companion.Server_key
-import com.common.utils.loginForms.accountUtils.ChatType
-import com.common.utils.loginForms.accountUtils.FormsParams.*
-import com.common.utils.loginForms.accountUtils.isEmpty
-import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.bot_account_form.*
 import kotlinx.android.synthetic.main.bot_context_view.view.*
 import kotlin.math.max
 
-class BotAccountForm : AccountForm(),
-    ContextAdapter {
-
-    override val formLayoutRes: Int
-        get() = R.layout.bot_account_form
-
-    override val chatType: String
-        get() = ChatType.Bot
-
-    private lateinit var contextHandler: ContextHandler
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        if (hasFormParam(Welcome)) bot_welcome_layout.visibility = View.VISIBLE
-        if (hasFormParam(UsingContext)) bot_context.visibility = View.VISIBLE
-        if (hasFormParam(PrechatExtraData))bot_prechat_data.visibility = View.VISIBLE
-
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    private fun initializeContextView() {
-
-        bot_context.scroller = scroller
-
-        contextHandler = ContextHandler(bot_context, this@BotAccountForm).apply {
-            onDelete = { _ ->
-                if (bot_context.childCount == 1) {
-                    bot_context_title.visibility = View.GONE
-                }
-            }
-        }
-
-        add_context.setOnClickListener {
-            try {
-                val lastContext = contextHandler.container.getLast()
-                if (lastContext == null || !lastContext.isEmpty()) {
-                    if (lastContext == null) {
-                        bot_context_title.visibility = View.VISIBLE
-                    }
-
-                    contextHandler.addContext()
-                }
-            } catch (ast: AssertionError) {
-                Log.w("AccountForm", "got assertion error")
-            }
-        }
-    }
-
-    override fun fillFields() {
-
-        initializeContextView()
-
-        val account: BotAccount = loginFormViewModel.getAccount(context) as BotAccount
-
-        bot_account_name_edit_text.setText( account.account ?: "" )
-        bot_knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
-        bot_api_key_edit_text.setText( account.apiKey )
-        bot_server_edit_text.setText( account.domain ?: "" )
-
-        bot_context.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int,
-                                        oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
-                scroller.scrollTo(0, 0)
-                bot_context.removeOnLayoutChangeListener(this)
-            }
-        })
-
-        (account.contexts as? Set<String>)?.run {
-            val contextPairs = this.map { contextString ->
-                val seq = contextString.split(":", "key= ", " value= ")
-                seq[0] to Pair(seq[2], seq.last())
-            }
-                .sortedBy { k -> k.first }
-                .map { t -> t.second }
-
-            bot_context_title.visibility = if (contextPairs.isEmpty()) View.GONE else View.VISIBLE
-
-            contextHandler.setContexts(contextPairs)
-        }
-    }
-
-    override fun validateFormData(): Map<String, Any?>? {
-
-        val accountMap = mutableMapOf<String, Any?>()
-
-        bot_account_name_edit_text.text?.takeUnless { it.isEmpty() }?.let {
-            accountMap[Account_key] = it.toString()
-        } ?: kotlin.run {
-            presentError(bot_account_name_edit_text, context?.getString(R.string.error_account_name))
-            return null
-        }
-
-        bot_knowledgebase_edit_text.text?.takeUnless { it.isEmpty() }?.let {
-            accountMap[Kb_key] = it.toString()
-        } ?: kotlin.run {
-            presentError(bot_knowledgebase_edit_text, context?.getString(R.string.error_kb))
-            return null
-        }
-
-        accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString() ?: ""
-        accountMap[Server_key] = bot_server_edit_text.text?.toString() ?: ""
-        accountMap[Context_key] =  contextHandler.getContext()
-
-        bot_welcome_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.Welcome_key] = it }
-        bot_prechat_dept_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_deptCode_key] = it }
-        bot_prechat_fName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_fName_key] = it }
-        bot_prechat_lName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_lName_key] = it }
-
-        return accountMap
-    }
-
-
-    companion object {
-        fun newInstance(): BotAccountForm {
-            return BotAccountForm()
-        }
-    }
-
-    override fun createContextView(botContext: Pair<String, String>?, onDelete: ((ContextViewHolder) -> Unit)?): View? {
-        return context?.run {
-            ContextViewLinear(this).apply {
-                this.onDelete = onDelete
-                botContext?.run {
-                    this@apply.setBotContext(botContext)
-                }
-            }
-        }
-    }
-}
+//class BotAccountForm : AccountForm(),
+//    ContextAdapter {
+//
+//    override val formLayoutRes: Int
+//        get() = R.layout.bot_account_form
+//
+//    override val chatType: String
+//        get() = ChatType.Bot
+//
+//    private lateinit var contextHandler: ContextHandler
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//
+//        if (hasFormParam(Welcome)) bot_welcome_layout.visibility = View.VISIBLE
+//        if (hasFormParam(UsingContext)) bot_context.visibility = View.VISIBLE
+//        if (hasFormParam(PrechatExtraData))bot_prechat_data.visibility = View.VISIBLE
+//
+//        super.onViewCreated(view, savedInstanceState)
+//    }
+//
+//    private fun initializeContextView() {
+//
+//        bot_context.scroller = scroller
+//
+//        contextHandler = ContextHandler(bot_context, this@BotAccountForm).apply {
+//            onDelete = { _ ->
+//                if (bot_context.childCount == 1) {
+//                    bot_context_title.visibility = View.GONE
+//                }
+//            }
+//        }
+//
+//        add_context.setOnClickListener {
+//            try {
+//                val lastContext = contextHandler.container.getLast()
+//                if (lastContext == null || !lastContext.isEmpty()) {
+//                    if (lastContext == null) {
+//                        bot_context_title.visibility = View.VISIBLE
+//                    }
+//
+//                    contextHandler.addContext()
+//                }
+//            } catch (ast: AssertionError) {
+//                Log.w("AccountForm", "got assertion error")
+//            }
+//        }
+//    }
+//
+//    override fun fillFields() {
+//
+//        initializeContextView()
+//
+//        val account: BotAccount = loginFormViewModel.getAccount(context) as BotAccount
+//
+//        bot_account_name_edit_text.setText( account.account ?: "" )
+//        bot_knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
+//        bot_api_key_edit_text.setText( account.apiKey )
+//        bot_server_edit_text.setText( account.domain ?: "" )
+//
+//        bot_context.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+//            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int,
+//                                        oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+//                scroller.scrollTo(0, 0)
+//                bot_context.removeOnLayoutChangeListener(this)
+//            }
+//        })
+//
+//        (account.contexts as? Set<String>)?.run {
+//            val contextPairs = this.map { contextString ->
+//                val seq = contextString.split(":", "key= ", " value= ")
+//                seq[0] to Pair(seq[2], seq.last())
+//            }
+//                .sortedBy { k -> k.first }
+//                .map { t -> t.second }
+//
+//            bot_context_title.visibility = if (contextPairs.isEmpty()) View.GONE else View.VISIBLE
+//
+//            contextHandler.setContexts(contextPairs)
+//        }
+//    }
+//
+//    override fun validateFormData(): Map<String, Any?>? {
+//
+//        val accountMap = mutableMapOf<String, Any?>()
+//
+//        bot_account_name_edit_text.text?.takeUnless { it.isEmpty() }?.let {
+//            accountMap[Account_key] = it.toString()
+//        } ?: kotlin.run {
+//            presentError(bot_account_name_edit_text, context?.getString(R.string.error_account_name))
+//            return null
+//        }
+//
+//        bot_knowledgebase_edit_text.text?.takeUnless { it.isEmpty() }?.let {
+//            accountMap[Kb_key] = it.toString()
+//        } ?: kotlin.run {
+//            presentError(bot_knowledgebase_edit_text, context?.getString(R.string.error_kb))
+//            return null
+//        }
+//
+//        accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString() ?: ""
+//        accountMap[Server_key] = bot_server_edit_text.text?.toString() ?: ""
+//        accountMap[Context_key] =  contextHandler.getContext()
+//
+//        bot_welcome_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.Welcome_key] = it }
+//        bot_prechat_dept_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_deptCode_key] = it }
+//        bot_prechat_fName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_fName_key] = it }
+//        bot_prechat_lName_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.preChat_lName_key] = it }
+//
+//        return accountMap
+//    }
+//
+//
+//    companion object {
+//        fun newInstance(): BotAccountForm {
+//            return BotAccountForm()
+//        }
+//    }
+//
+//    override fun createContextView(botContext: Pair<String, String>?, onDelete: ((ContextViewHolder) -> Unit)?): View? {
+//        return context?.run {
+//            ContextViewLinear(this).apply {
+//                this.onDelete = onDelete
+//                botContext?.run {
+//                    this@apply.setBotContext(botContext)
+//                }
+//            }
+//        }
+//    }
+//}
 ///////////////////////////////////////////////////
 
 class ContextViewLinear @JvmOverloads constructor(

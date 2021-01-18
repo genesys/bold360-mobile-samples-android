@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
@@ -28,8 +28,7 @@ import kotlinx.android.synthetic.main.autocomplete_activity.topic_title
 
 class Autocomplete : SampleActivity() {
 
-    override val chatType: String
-        get() = ChatType.Bot
+    override var chatType = ChatType.Bot
 
     override val containerId: Int
         get() = R.id.autocomplete_view

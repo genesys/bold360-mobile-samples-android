@@ -1,4 +1,4 @@
-package com.common.utils.loginForms.accountUtils;
+package com.common.utils.loginForms.dynamicFormPOC.defs;
 
 import androidx.annotation.StringDef;
 

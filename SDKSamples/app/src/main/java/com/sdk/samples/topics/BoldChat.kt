@@ -1,11 +1,10 @@
 package com.sdk.samples.topics
 
 import com.common.topicsbase.BasicChat
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 
 open class BoldChat : BasicChat() {
 
-    override val chatType: String
-        get() = ChatType.Live
+    override var chatType = ChatType.Live
 
 }

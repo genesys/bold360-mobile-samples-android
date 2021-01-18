@@ -2,7 +2,8 @@ package com.common.utils.loginForms
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
+import com.nanorep.nanoengine.Account
 import java.lang.ref.WeakReference
 
 /**
@@ -18,15 +19,21 @@ interface FormController {
 class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>):
     FormController {
 
-    private val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
+    val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
-    private val accountFormPresenter = AccountFormPresenter(containerRes)
+    val accountFormPresenter = AccountFormPresenter(containerRes)
 
     override fun updateChatType(
         chatType: String,
     ) {
         getFragmentManager()?.let { fm ->
             accountFormPresenter.presentForm(fm, chatType)
+        }
+    }
+
+    inline fun <reified T: Account>login() {
+        getFragmentManager()?.let { fm ->
+            accountFormPresenter._presentForm(T::class.java, fm)
         }
     }
 }
@@ -48,15 +55,19 @@ class AccountFormPresenter(override val containerRes: Int): FormPresenter {
         }
     }
 
+    fun <T: Account>_presentForm(c: Class<T>, fragmentManager: FragmentManager) {
+        startFormTransaction(fragmentManager, DynamicAccountForm.newInstance(), AccountForm.TAG)
+    }
+
     private fun presentAccountForm(
         fragmentManager: FragmentManager,
         chatType: String
     ) {
-        startFormTransaction(
+       /* startFormTransaction(
             fragmentManager,
             AccountForm.newInstance(chatType),
             AccountForm.TAG
-        )
+        )*/
     }
 
     private fun presentRestoreForm(fragmentManager: FragmentManager) {

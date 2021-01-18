@@ -24,7 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.common.topicsbase.SampleActivity
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -61,8 +61,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     private var boldChat: BoldChat? = null
 
-    override val chatType: String
-        get() = ChatType.Live
+    override var chatType = ChatType.Live
 
     override fun startChat(savedInstanceState: Bundle?) {
         topic_title.text = topicTitle

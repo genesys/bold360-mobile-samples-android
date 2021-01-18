@@ -2,8 +2,6 @@ package com.common.topicsbase
 
 import android.view.Menu
 import android.view.MenuItem
-import com.common.chatComponents.history.HistoryRepository
-import com.common.chatComponents.history.RoomHistoryProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
@@ -37,7 +35,7 @@ abstract class History : BasicChat() {
     @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
 
-        updateHistoryRepo( HistoryRepository( RoomHistoryProvider(this, getAccount()?.getGroupId(), 8) ) )
+//        updateHistoryRepo( HistoryRepository( RoomHistoryProvider(this, getAccount()?.getGroupId(), 8) ) )
 
         enableMenu(historyMenu, true)
 

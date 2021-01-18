@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.common.utils.loginForms.AccountFormController
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.common.utils.loginForms.accountUtils.FormsParams.AsyncExtraData
 import com.common.utils.loginForms.accountUtils.FormsParams.EnableRestore
 import com.nanorep.sdkcore.utils.getCurrent
@@ -16,8 +16,7 @@ abstract class RestorationContinuity : History() {
 
     override var formsParams = AsyncExtraData
 
-    override val chatType: String
-        get() = ChatType.None
+    override var chatType = ChatType.None
 
     /**
      * Reloads the login forms according to the ChatType

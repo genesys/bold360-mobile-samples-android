@@ -10,7 +10,7 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
@@ -32,9 +32,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     override val containerId: Int
         get() = R.id.basic_chat_view
-
-    override val chatType: String
-        get() = ChatType.Bot
 
     override val onChatLoaded: (fragment: Fragment) -> Unit
     get() = { fragment ->
@@ -61,6 +58,8 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic)
+
+        chatType = ChatType.Bot
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
         topic_title.text = topicTitle

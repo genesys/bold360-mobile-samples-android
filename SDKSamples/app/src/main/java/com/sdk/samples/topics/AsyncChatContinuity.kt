@@ -2,7 +2,7 @@ package com.sdk.samples.topics
 
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.loginForms.accountUtils.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.integration.core.applicationId
@@ -36,8 +36,7 @@ class AsyncChatContinuity : RestorationContinuity() {
 
     private val accountHandler = ContinuityAccountHandler()
 
-    override val chatType: String
-        get() = ChatType.Async
+    override var chatType = ChatType.Async
 
     override fun getAccount(): Account? {
         return super.getAccount()?.apply { continueLast(this as AsyncAccount) }

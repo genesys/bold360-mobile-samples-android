@@ -1,16 +1,6 @@
 package com.common.utils.loginForms.accountUtils
 
-import com.common.utils.loginForms.Accounts
-import com.common.utils.loginForms.AsyncSharedDataHandler
-import com.common.utils.loginForms.BotSharedDataHandler
-import com.common.utils.loginForms.LiveSharedDataHandler
-import com.integration.async.core.UserInfo
-import com.integration.core.applicationId
-import com.integration.core.userInfo
-import com.nanorep.convesationui.async.AsyncAccount
-import com.nanorep.convesationui.bold.model.BoldAccount
-import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
+/*
 
 @Override
 internal fun BotAccount.map(): Map<String, Any?> =
@@ -18,7 +8,7 @@ internal fun BotAccount.map(): Map<String, Any?> =
                 BotSharedDataHandler.Account_key to (account ?: ""),
                 BotSharedDataHandler.Kb_key to (knowledgeBase ?: ""),
                 BotSharedDataHandler.Server_key to (domain ?: ""),
-                BotSharedDataHandler.ApiKey_key to apiKey,
+                Access_key to apiKey,
                 BotSharedDataHandler.Welcome_key to welcomeMessage,
                 BotSharedDataHandler.Context_key to (contexts?.takeIf { it.isNotEmpty() }?.map { entry ->
                     "key= ${entry.key} value= ${entry.value}"
@@ -121,4 +111,4 @@ internal fun BotAccount.botRestorable(savedAccount: BotAccount?): Boolean = save
 
 internal fun BoldAccount.liveRestorable(savedAccount: BoldAccount?): Boolean {
         return (this.apiKey == savedAccount?.apiKey)
-}
+}*/
