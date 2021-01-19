@@ -25,6 +25,7 @@ import com.common.topicsbase.RestorationContinuity
 import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
 import com.common.utils.loginForms.accountUtils.FormsParams
+import com.common.utils.loginForms.dynamicFormPOC.toBotAccount
 import com.integration.core.FileUploadInfo
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
@@ -33,6 +34,7 @@ import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.*
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
@@ -49,6 +51,13 @@ import java.util.*
 open class FullDemo : RestorationContinuity() {
 
     override var formsParams = super.formsParams or FormsParams.UsingContext or FormsParams.Welcome
+
+    override val account: Account
+        get() = accountData.toBotAccount()
+
+    /*override fun getAccount_old(): Account {
+        return account
+    }*/
 
     private var uploadFile: MenuItem? = null
 

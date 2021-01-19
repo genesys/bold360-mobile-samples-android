@@ -11,6 +11,9 @@ import com.nanorep.sdkcore.utils.toast
 
 open class BotChat : BasicChat() {
 
+    override val account: Account
+        get() = accountData.toBotAccount().withId(this)
+
     override fun validateData(): Boolean {
 
         accountData.entrySet().forEachIndexed { index, field ->
@@ -29,7 +32,7 @@ open class BotChat : BasicChat() {
     override val formFields: JsonArray
         get() = FormDataFactory.createForm(ChatType.Bot)
 
-    override fun getAccount(): Account = accountData.toBotAccount().withId(this)
+//    override fun getAccount_old(): Account = accountData.toBotAccount().withId(this)
 
     override fun onUploadFileRequest() {
         toast(this@BotChat, "The file upload action is not available for this sample.")

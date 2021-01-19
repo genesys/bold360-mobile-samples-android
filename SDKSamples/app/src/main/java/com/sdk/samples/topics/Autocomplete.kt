@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
 import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.toBotAccount
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.LinkedArticleHandler
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.ArticleResponse
@@ -27,6 +29,13 @@ import kotlinx.android.synthetic.main.autocomplete_activity.*
 import kotlinx.android.synthetic.main.autocomplete_activity.topic_title
 
 class Autocomplete : SampleActivity() {
+
+    override val account: Account
+        get() = accountData.toBotAccount()
+
+  /*  override fun getAccount_old(): Account {
+        return account
+    }*/
 
     override var chatType = ChatType.Bot
 
@@ -45,7 +54,7 @@ class Autocomplete : SampleActivity() {
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = (super.getAccount() as BotAccount).withId(this)
+            botViewModel.botChat.account = (account as BotAccount).withId(this)
         }
 
         botViewModel.onError.observe(this, Observer { error ->

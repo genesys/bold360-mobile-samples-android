@@ -23,7 +23,7 @@ open class BoldChatAvailability : BoldChat() {
     private fun loadAvailabilityCheck() {
 
         availabilityViewModel.apply {
-            account = getAccount() as BoldAccount
+            account = getAccount_old() as BoldAccount
 
             observeResults(this@BoldChatAvailability,
                 Observer { results ->

@@ -156,7 +156,7 @@ abstract class SampleActivity  : AppCompatActivity() {
     fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
 
     private fun prepareAccount(securedInfo: String): Account {
-        return getAccount().apply {
+        return getAccount_old().apply {
             if (this is BoldAccount) info.securedInfo = securedInfo
         }
     }
@@ -183,7 +183,7 @@ abstract class SampleActivity  : AppCompatActivity() {
         }
         get() = loginFormViewModel.formsParams
 
-//    /*abstract val*/ open lateinit var account: Account?
+    abstract val account: Account
 
     val accountData: JsonObject by lazy {
         loginFormViewModel.getJsonAccount(baseContext)
@@ -206,7 +206,9 @@ abstract class SampleActivity  : AppCompatActivity() {
         loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
     }
 
-    abstract fun getAccount(): Account // -> would be changed to account property
+    fun getAccount_old(): Account{
+        return account
+    } // -> would be changed to account property
 
 //  </editor-fold>
 

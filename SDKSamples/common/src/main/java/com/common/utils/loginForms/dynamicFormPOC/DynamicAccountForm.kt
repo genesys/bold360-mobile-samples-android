@@ -49,19 +49,21 @@ class DynamicAccountForm : Fragment() {
 
         formFields?.children()?.forEachIndexed { index, view ->
 
-            val (name: String, value: String) = (
+            loginFormViewModel.formFields[index].getString("key")?.let {
 
-                    loginFormViewModel.formFields[index].asJsonObject.get("name").asString to
+                val (name: String, value: String) = (
 
-                            when (view) {
-                                is EditText -> view.text
-                                else -> ""
-                            }.toString()
+                        it to
 
-            )
+                                when (view) {
+                                    is EditText -> view.text
+                                    else -> ""
+                                }.toString()
 
-            loginFormViewModel.accountData.addProperty(name, value)
+                        )
 
+                loginFormViewModel.accountData.addProperty(name, value)
+            }
         }
     }
 
@@ -80,9 +82,9 @@ class DynamicAccountForm : Fragment() {
                             FieldTypes.TextInput -> EditText(context)
                             else -> TextView(context)
                         }.apply {
-                            hint = currentField.get("hint").asString
-                            currentField.addProperty("value", jsonAccount.get(currentField.get("name").asString)?.asString ?: "")
-                            text = currentField.get("value").asString
+                            hint = currentField.getString("hint")
+                            currentField.addProperty("value", jsonAccount.getString(currentField.getString("key") ?: "") ?: "")
+                            text = currentField.getString("value")
                         }
                     )
                 }

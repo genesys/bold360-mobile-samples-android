@@ -46,8 +46,8 @@ import java.io.ByteArrayOutputStream
 
 class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
-    private val account: BoldAccount
-    get() = ( getAccount() as BoldAccount ).apply { skipPrechat() }
+    override val account: BoldAccount
+    get() = ( getAccount_old() as BoldAccount ).apply { skipPrechat() }
 
     private val uploader by lazy {
         BoldLiveUploader()
@@ -62,6 +62,10 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
     private var boldChat: BoldChat? = null
 
     override var chatType = ChatType.Live
+
+   /* override fun getAccount_old(): Account {
+        return account
+    }*/
 
     override fun startChat(savedInstanceState: Bundle?) {
         topic_title.text = topicTitle

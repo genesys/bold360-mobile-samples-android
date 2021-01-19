@@ -7,11 +7,16 @@ import com.nanorep.nanoengine.bot.BotAccount
 
 open class EntitiesProviderChat : BotChat() {
 
-    override fun getAccount(): Account {
-        return (super.getAccount() as BotAccount).apply {
+    override val account: Account
+        get() = (super.account as BotAccount).apply {
             entities = arrayOf("USER_ACCOUNTS")
         }
-    }
+
+    /*override fun getAccount_old(): Account {
+        return (super.getAccount_old() as BotAccount).apply {
+            entities = arrayOf("USER_ACCOUNTS")
+        }
+    }*/
 
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.entitiesProvider( BalanceEntitiesProvider() )

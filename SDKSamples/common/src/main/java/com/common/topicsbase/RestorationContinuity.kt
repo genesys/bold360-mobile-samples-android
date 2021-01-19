@@ -7,12 +7,17 @@ import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.accountUtils.FormsParams.AsyncExtraData
 import com.common.utils.loginForms.accountUtils.FormsParams.EnableRestore
 import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.toBotAccount
+import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.common.R
 
 abstract class RestorationContinuity : History() {
+
+    override val account: Account
+        get() = accountData.toBotAccount()
 
     override var formsParams = AsyncExtraData
 
@@ -22,7 +27,7 @@ abstract class RestorationContinuity : History() {
         get() = { chatType ->
 
             when (chatType) {
-                ChatType.None -> getAccount()
+                ChatType.None -> getAccount_old()
             }
 
         }
@@ -44,7 +49,7 @@ abstract class RestorationContinuity : History() {
 
     override fun startChat(savedInstanceState: Bundle?) {
 
-        getAccount()?.getGroupId()?.let {
+        getAccount_old()?.getGroupId()?.let {
             updateHistoryRepo(targetId = it)
         }
 

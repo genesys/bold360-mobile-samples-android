@@ -49,7 +49,7 @@ object AccountFieldFactory{
     fun createTextInput(name: String, value: String, label: String, hint: String) : JsonObject {
         return JsonObject().apply {
             addProperty("type", TextInput)
-            addProperty("name", name)
+            addProperty("key", name)
             addProperty("value", value)
             addProperty("label", label)
             addProperty("hint", hint)
