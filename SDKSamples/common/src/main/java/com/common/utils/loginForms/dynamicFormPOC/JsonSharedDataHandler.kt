@@ -1,6 +1,7 @@
 package com.common.utils.loginForms.dynamicFormPOC
 
 import android.content.Context
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
@@ -26,21 +27,22 @@ class JsonSharedDataHandler {
         const val user_id_key = "userIdKey"
     }
 
-    fun getAccount(context: Context, accountId: String? = null): JsonObject? {
+    fun getSavedAccount(context: Context, @ChatType chatType: String? = null): JsonObject? {
         val shared = context.getSharedPreferences("accounts", 0)
-        return shared.getString(accountId, null)?.let { Gson().fromJson(it, JsonObject::class.java) }
+        return shared.getString(chatType, null)
+            ?.let { Gson().fromJson(it, JsonObject::class.java) }
     }
 
-    fun saveAccount(context: Context, accountData: JsonObject, accountId: String) {
+    fun saveAccount(context: Context, accountData: JsonObject, @ChatType chatType: String) {
 
         val shared = context.getSharedPreferences("accounts", 0)
         val editor = shared.edit()
-        editor.putString(accountId, accountData.toString())
+        editor.putString(chatType, accountData.toNeededInfo(chatType).toString())
         editor.apply()
     }
 
-    fun isRestorable(context: Context, accountId: String?): Boolean {
-        return accountId?.let { getAccount(context, it) }?.let { true } ?: false
+    fun isRestorable(context: Context, @ChatType chatType: String?): Boolean {
+        return chatType?.let { getSavedAccount(context, it) }?.let { true } ?: false
     }
 
 }

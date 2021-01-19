@@ -6,7 +6,7 @@ class CheckAvailability : SampleActivity() {
     private var chipUncheckedIcon: Drawable? = null
 
     val account: BoldAccount
-    get() = getAccount() as BoldAccount
+    get() = getAccountOld() as BoldAccount
 
     override val containerId: Int
         get() =

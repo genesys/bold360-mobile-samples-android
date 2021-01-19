@@ -11,15 +11,17 @@ import com.common.chatComponents.history.HistoryRepository
 import com.common.utils.loginForms.AccountFormController
 import com.common.utils.loginForms.AccountFormPresenter
 import com.common.utils.loginForms.LoginData
-import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.common.utils.loginForms.accountUtils.FormsParams
 import com.common.utils.loginForms.dynamicFormPOC.LoginFormViewModel
-import com.google.gson.Gson
+import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.integration.core.securedInfo
+import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
@@ -58,14 +60,14 @@ abstract class SampleActivity  : AppCompatActivity() {
                     continueLast && hasOpenChats() && isActive -> restoreChat()
 
                     loginData.restoreState.restorable -> restoreChat(
-                        account = loginData.prepareAccount(
+                        account = prepareAccount(
                             getSecuredInfo()
                         )
                     )
 
                     else -> {
                         context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT) }
-                        startChat(accountInfo = loginData.prepareAccount(getSecuredInfo()))
+                        startChat(accountInfo = prepareAccount(getSecuredInfo()))
                     }
                 }
             }
@@ -103,7 +105,7 @@ abstract class SampleActivity  : AppCompatActivity() {
             historyProvider?.let { chatElementListener(it) }
         }
 
-        loginData.prepareAccount(getSecuredInfo())?.let { account ->
+        prepareAccount(getSecuredInfo()).let { account ->
 
             builder?.build(account, chatLoadedListener)?.also {
                 chatController = it
@@ -153,6 +155,12 @@ abstract class SampleActivity  : AppCompatActivity() {
      */
     fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
 
+    private fun prepareAccount(securedInfo: String): Account {
+        return getAccount().apply {
+            if (this is BoldAccount) info.securedInfo = securedInfo
+        }
+    }
+
 //  </editor-fold>
 
 //  <editor-fold desc=">>>>> Login forms handling <<<<<" >
@@ -175,7 +183,20 @@ abstract class SampleActivity  : AppCompatActivity() {
         }
         get() = loginFormViewModel.formsParams
 
-    protected open val formFields: String = ""
+//    /*abstract val*/ open lateinit var account: Account?
+
+    val accountData: JsonObject by lazy {
+        loginFormViewModel.getJsonAccount(baseContext)
+    }
+
+    open fun validateData(): Boolean = true
+
+    protected val onInvalidAccount: (index: Int, message: String) -> Unit = { index,  message ->  accountFormController.presentError(index, message) }
+
+    open val onChatTypeChanged: ((chatType: String) ->  Unit)?
+        get() = null
+
+    protected open val formFields: JsonArray = JsonArray()
 
     private lateinit var accountFormController: AccountFormController
 
@@ -185,8 +206,7 @@ abstract class SampleActivity  : AppCompatActivity() {
         loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
     }
 
-    protected open fun getAccount(): Account? =
-        Gson().fromJson(loginFormViewModel.getJsonAccount(baseContext), Account::class.java)
+    abstract fun getAccount(): Account // -> would be changed to account property
 
 //  </editor-fold>
 
@@ -203,21 +223,27 @@ abstract class SampleActivity  : AppCompatActivity() {
         accountFormController = AccountFormController(containerId, supportFragmentManager.weakRef())
 
         loginFormViewModel.formsParams = formsParams
-        loginFormViewModel.setFormFields(formFields)
+        loginFormViewModel.formFields = formFields
 
-        accountFormController.login<BotAccount>()
+        accountFormController.login(onChatTypeChanged)
 
         loginFormViewModel.loginData.observe(this, { loginData ->
 
             this.loginData = loginData
 
-            supportFragmentManager
-                .popBackStack(
-                    AccountFormPresenter.LOGIN_FORM,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
+            if ( validateData() ) {
 
-            startChat(savedInstanceState)
+                loginFormViewModel.saveAccount(this)
+
+                supportFragmentManager
+                    .popBackStack(
+                        AccountFormPresenter.LOGIN_FORM,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
+
+                startChat(savedInstanceState)
+
+            }
 
         })
     }

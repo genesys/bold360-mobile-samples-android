@@ -11,8 +11,7 @@ import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
 
-
-internal fun JsonObject.toBotAccount(): BotAccount {
+fun JsonObject.toBotAccount(): BotAccount {
     return BotAccount(
         get(JsonSharedDataHandler.Access_key)?.asString ?: "",
         get(JsonSharedDataHandler.Account_key)?.asString,
@@ -29,14 +28,12 @@ internal fun JsonObject.toBotAccount(): BotAccount {
 
 }
 
-internal fun JsonObject.toLiveAccount(): BoldAccount? {
-    return get(JsonSharedDataHandler.Access_key)?.asString?.let { BoldAccount(it) }
+fun JsonObject.toLiveAccount(): BoldAccount {
+    return BoldAccount(get(JsonSharedDataHandler.Access_key)?.asString ?: "")
 }
 
-internal fun JsonObject.toAsyncAccount(): AsyncAccount? {
-    val accessKey = get(JsonSharedDataHandler.Access_key)?.asString
-    return accessKey?.let {
-        AsyncAccount(it, get(JsonSharedDataHandler.App_id_Key)?.asString ?: "").apply {
+fun JsonObject.toAsyncAccount(): AsyncAccount {
+    return AsyncAccount(get(JsonSharedDataHandler.Access_key)?.asString ?: "", get(JsonSharedDataHandler.App_id_Key)?.asString ?: "").apply {
             val userId = this@toAsyncAccount.get(JsonSharedDataHandler.user_id_key)?.asString ?: ""
             info.userInfo =
                 (userId.takeIf { userId.isNotEmpty() }?.let { UserInfo(userId) }
@@ -56,7 +53,6 @@ internal fun JsonObject.toAsyncAccount(): AsyncAccount? {
                         this@toAsyncAccount.get(JsonSharedDataHandler.Country_Abbrev_key)?.asString
                             ?: ""
                 }
-        }
     }
 }
 
@@ -68,7 +64,7 @@ fun JsonObject.getGroupId(): String {
     }"
 }
 
-internal fun JsonObject?.orDefault(@ChatType chatType: String): JsonObject? {
+internal fun JsonObject?.orDefault(@ChatType chatType: String): JsonObject {
     return this ?: Gson().fromJson(
         when (chatType) {
             ChatType.Live -> Gson().toJson(Accounts.defaultBoldAccount)
@@ -159,11 +155,6 @@ internal fun JsonObject.toNeededBotInfo(): JsonObject {
             fullInfo.get(JsonSharedDataHandler.Access_key)?.asString?.let {
                 addProperty(
                     JsonSharedDataHandler.Access_key, it
-                )
-            }
-            fullInfo.get(JsonSharedDataHandler.Server_key)?.asString?.let {
-                addProperty(
-                    JsonSharedDataHandler.Server_key, it
                 )
             }
             fullInfo.get(JsonSharedDataHandler.Server_key)?.asString?.let {

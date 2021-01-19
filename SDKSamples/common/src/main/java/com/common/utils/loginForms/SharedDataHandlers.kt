@@ -23,7 +23,7 @@ interface DataController : RestoreStateProvider {
     /**
      * Extra data relates the account
      */
-    var extraData: Map<String, Any?>?
+    var extraData: MutableMap<String, Any?>?
 
     /**
      * true is the user pressed on the restore button
@@ -43,7 +43,7 @@ interface DataController : RestoreStateProvider {
     /**
      * If changed, updates the shared properties to include the updated account details
      */
-    fun updateGenericAccount(context: Context?, accountData: JsonObject, extraData: Map<String, Any?>?)
+    fun saveAccount(context: Context?)
 }
 
 ///**

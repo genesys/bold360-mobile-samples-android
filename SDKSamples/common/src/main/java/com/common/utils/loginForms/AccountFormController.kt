@@ -2,8 +2,7 @@ package com.common.utils.loginForms
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
-import com.nanorep.nanoengine.Account
+import com.common.utils.loginForms.dynamicFormPOC.DynamicAccountForm
 import java.lang.ref.WeakReference
 
 /**
@@ -12,29 +11,30 @@ import java.lang.ref.WeakReference
 */
 class RestoreState(val restoreRequest: Boolean = false, var restorable: Boolean = false)
 
-interface FormController {
-    fun updateChatType(chatType: String)
+interface Validator {
+    fun presentError(index: Int, message: String)
 }
 
-class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>):
-    FormController {
+interface FormController: Validator {
+    fun login(onChatTypeChanged: ((chatType: String) ->  Unit)? = null)
+}
 
-    val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
+class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>): FormController {
 
-    val accountFormPresenter = AccountFormPresenter(containerRes)
+        val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
-    override fun updateChatType(
-        chatType: String,
-    ) {
-        getFragmentManager()?.let { fm ->
-            accountFormPresenter.presentForm(fm, chatType)
+        private val accountFormPresenter = AccountFormPresenter(containerRes)
+
+        override fun login(
+            onChatTypeChanged: ((chatType: String) ->  Unit)?,
+        ) {
+            getFragmentManager()?.let { fm ->
+                accountFormPresenter.presentForm(fm, onChatTypeChanged)
+            }
         }
-    }
 
-    inline fun <reified T: Account>login() {
-        getFragmentManager()?.let { fm ->
-            accountFormPresenter._presentForm(T::class.java, fm)
-        }
+    override fun presentError(index: Int, message: String) {
+        accountFormPresenter.onValidationFailed(index, message)
     }
 }
 
@@ -42,37 +42,33 @@ interface FormPresenter {
 
     val containerRes: Int
 
-    fun presentForm(fragmentManager: FragmentManager, chatType: String)
+    fun onValidationFailed(index: Int, message: String)
+
+    fun presentForm(fragmentManager: FragmentManager, onChatTypeChanged: ((chatType: String) ->  Unit)?)
 }
 
 class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
-    override fun presentForm(fragmentManager: FragmentManager, chatType: String) {
+    private var validationFailed: ((index: Int, message: String) -> Unit)? = null
 
-        when (chatType) {
-            ChatType.None -> presentRestoreForm(fragmentManager)
-            else -> presentAccountForm(fragmentManager, chatType)
-        }
+    override fun presentForm(fragmentManager: FragmentManager, onChatTypeChanged: ((chatType: String) ->  Unit)?) {
+        onChatTypeChanged?.let { presentRestoreForm(fragmentManager, it) } ?: presentAccountForm(fragmentManager)
     }
 
-    fun <T: Account>_presentForm(c: Class<T>, fragmentManager: FragmentManager) {
-        startFormTransaction(fragmentManager, DynamicAccountForm.newInstance(), AccountForm.TAG)
+    private fun presentAccountForm(fragmentManager: FragmentManager) {
+        startFormTransaction(fragmentManager, DynamicAccountForm.newInstance().also {
+            validationFailed = it.validationFailed
+        }, AccountForm.TAG)
     }
 
-    private fun presentAccountForm(
-        fragmentManager: FragmentManager,
-        chatType: String
-    ) {
-       /* startFormTransaction(
-            fragmentManager,
-            AccountForm.newInstance(chatType),
-            AccountForm.TAG
-        )*/
+    override fun onValidationFailed(index: Int, message: String) {
+        validationFailed?.invoke(index, message)
     }
 
-    private fun presentRestoreForm(fragmentManager: FragmentManager) {
+    private fun presentRestoreForm(fragmentManager: FragmentManager, onChatTypeChanged: ((chatType: String) ->  Unit)) {
         val fragment = AccountTypeSelectionForm.newInstance { chatType ->
-            presentAccountForm(fragmentManager, chatType)
+            onChatTypeChanged.invoke(chatType)
+            presentAccountForm(fragmentManager)
         }
 
         startFormTransaction(

@@ -9,16 +9,21 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.common.utils.loginForms.dynamicFormPOC.defs.FieldTypes
-import com.google.gson.JsonObject
-import com.nanorep.nanoengine.Account
+import com.nanorep.sdkcore.utils.children
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.account_form.*
 
-class DynamicAccountForm/*<T : Account>(private val c: Class<T>)*/ : Fragment() {
+class DynamicAccountForm : Fragment() {
 
     private val loginFormViewModel: LoginFormViewModel by activityViewModels()
+
+    var validationFailed: ((index: Int, message: String) -> Unit) = { index, message ->
+        (formFields?.children()?.get(index) as? EditText)?.apply {
+            this.requestFocus()
+            error = message
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,79 +33,65 @@ class DynamicAccountForm/*<T : Account>(private val c: Class<T>)*/ : Fragment() 
         return inflater.inflate(R.layout.account_form, container, false)
     }
 
-    private fun updateExtraData(accountData: JsonObject): MutableMap<String, Any?>? {
-
-        var extraData: MutableMap<String, Any?>? = null
-
-        accountData.entrySet().filter {
-            it.key == JsonSharedDataHandler.preChat_deptCode_key ||
-                    it.key == JsonSharedDataHandler.preChat_lName_key ||
-                    it.key == JsonSharedDataHandler.preChat_fName_key
-        }.map {
-            if (extraData == null) extraData = mutableMapOf()
-            extraData!!.put(it.key, it.value)
-        }
-
-        return extraData
-    }
-
-    private fun validateAndUpdate (): Account? {
-
-        return validateFormData()?.let { accountData ->
-            when (loginFormViewModel.chatType) {
-                ChatType.Bot -> accountData.toBotAccount()
-                ChatType.Async -> accountData.toAsyncAccount()
-                else -> accountData.toLiveAccount()
-            }?.also {
-                loginFormViewModel.updateGenericAccount(
-                    context, accountData, updateExtraData(accountData)
-                )
-            }
-        }
-    }
-
-    private fun validateFormData(): JsonObject? {
-        return loginFormViewModel.getJsonAccount(context)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         fillFields()
 
         view.findViewById<Button>(R.id.start_chat).apply {
             setOnClickListener {
-                validateAndUpdate()?.run {
-                    loginFormViewModel.onStartChat(this)
-                }
+                collaborateData()
+                loginFormViewModel.onAccountUpdated()
             }
+        }
+    }
+
+    private fun collaborateData() {
+
+        formFields?.children()?.forEachIndexed { index, view ->
+
+            val (name: String, value: String) = (
+
+                    loginFormViewModel.formFields[index].asJsonObject.get("name").asString to
+
+                            when (view) {
+                                is EditText -> view.text
+                                else -> ""
+                            }.toString()
+
+            )
+
+            loginFormViewModel.accountData.addProperty(name, value)
+
         }
     }
 
     private fun fillFields() {
 
-        loginFormViewModel.getFormFields().forEach {
+        loginFormViewModel.formFields.forEach {
 
-            val currentField = it.asJsonObject
+            it.asJsonObject.let { currentField ->
 
-            formFields?.apply {
+                formFields?.apply {
 
-                addView(
-                    when (currentField.get("type").asInt) {
-                        FieldTypes.TextInput -> EditText(context)
-                        else -> TextView(context)
-                    }.apply {
-                        hint = currentField.get("hint").asString
-                        text = (loginFormViewModel.getJsonAccount(context)?.get(currentField.get("name").asString)?.asString ?: "")
-                    }
-                )
+                    addView(
+                        when (currentField.get("type").asInt) {
+                            FieldTypes.TextInput -> EditText(context)
+                            else -> TextView(context)
+                        }.apply {
+                            hint = currentField.get("hint").asString
+                            currentField.addProperty("value", loginFormViewModel.getJsonAccount(context).get(currentField.get("name").asString)?.asString ?: "")
+                            text = currentField.get("value").asString
+                        }
+                    )
+                }
             }
         }
     }
 
     companion object {
 
-        fun /*<T : Account>*/ newInstance(/*c: Class<T>*/): DynamicAccountForm/*<T>*/ {
-            return DynamicAccountForm(/*c*/)
+        fun newInstance(): DynamicAccountForm {
+            return DynamicAccountForm()
         }
     }
 }
