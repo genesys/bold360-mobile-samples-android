@@ -15,7 +15,7 @@ abstract class History : BasicChat() {
     companion object {
 
         fun Account.getGroupId(): String? {
-            return apiKey.takeUnless { it.isBlank() } ?: (this as? BotAccount)?.let { "${it.account ?: ""}#${it.knowledgeBase}" }
+            return apiKey.takeUnless { it.isBlank() } ?: (this as? BotAccount)?.let { "${it.account.orEmpty()}#${it.knowledgeBase}" }
         }
     }
 

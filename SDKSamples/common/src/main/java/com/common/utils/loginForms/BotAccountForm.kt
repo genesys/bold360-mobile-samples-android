@@ -66,10 +66,10 @@ import kotlin.math.max
 //
 //        val account: BotAccount = loginFormViewModel.getAccount(context) as BotAccount
 //
-//        bot_account_name_edit_text.setText( account.account ?: "" )
-//        bot_knowledgebase_edit_text.setText( account.knowledgeBase ?: "" )
+//        bot_account_name_edit_text.setText( account.account.orEmpty() )
+//        bot_knowledgebase_edit_text.setText( account.knowledgeBase.orEmpty() )
 //        bot_api_key_edit_text.setText( account.apiKey )
-//        bot_server_edit_text.setText( account.domain ?: "" )
+//        bot_server_edit_text.setText( account.domain.orEmpty() )
 //
 //        bot_context.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
 //            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int,
@@ -111,8 +111,8 @@ import kotlin.math.max
 //            return null
 //        }
 //
-//        accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString() ?: ""
-//        accountMap[Server_key] = bot_server_edit_text.text?.toString() ?: ""
+//        accountMap[ApiKey_key] = bot_api_key_edit_text.text?.toString().orEmpty()
+//        accountMap[Server_key] = bot_server_edit_text.text?.toString().orEmpty()
 //        accountMap[Context_key] =  contextHandler.getContext()
 //
 //        bot_welcome_edit_text.text?.takeUnless { it.isEmpty() }?.let { accountMap[BotSharedDataHandler.Welcome_key] = it }

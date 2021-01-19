@@ -5,9 +5,9 @@ package com.common.utils.loginForms.accountUtils
 @Override
 internal fun BotAccount.map(): Map<String, Any?> =
         mapOf(
-                BotSharedDataHandler.Account_key to (account ?: ""),
-                BotSharedDataHandler.Kb_key to (knowledgeBase ?: ""),
-                BotSharedDataHandler.Server_key to (domain ?: ""),
+                BotSharedDataHandler.Account_key to (account.orEmpty()),
+                BotSharedDataHandler.Kb_key to (knowledgeBase.orEmpty()),
+                BotSharedDataHandler.Server_key to (domain.orEmpty()),
                 Access_key to apiKey,
                 BotSharedDataHandler.Welcome_key to welcomeMessage,
                 BotSharedDataHandler.Context_key to (contexts?.takeIf { it.isNotEmpty() }?.map { entry ->
@@ -87,15 +87,15 @@ internal fun AccountMap.toLiveAccount(): BoldAccount? {
 internal fun AccountMap.toAsyncAccount(): AsyncAccount? {
         val accessKey = this[AsyncSharedDataHandler.Access_key] as? String
         return accessKey?.let {
-                AsyncAccount(it, this[AsyncSharedDataHandler.App_id_Key] as? String ?: "").apply {
-                        val userId = this@toAsyncAccount[AsyncSharedDataHandler.user_id_key] as? String ?: ""
+                AsyncAccount(it, this[AsyncSharedDataHandler.App_id_Key] as? String.orEmpty()).apply {
+                        val userId = this@toAsyncAccount[AsyncSharedDataHandler.user_id_key] as? String.orEmpty()
                         info.userInfo =
                                 (userId.takeIf { userId.isNotEmpty() }?.let { UserInfo(userId) } ?: UserInfo()).apply {
-                                        email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as? String ?: ""
-                                        phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as? String ?: ""
-                                        firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as? String ?: ""
-                                        lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as? String ?: ""
-                                        countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as? String ?: ""
+                                        email = this@toAsyncAccount[AsyncSharedDataHandler.Email_key] as? String.orEmpty()
+                                        phoneNumber = this@toAsyncAccount[AsyncSharedDataHandler.Phone_Number_key] as? String.orEmpty()
+                                        firstName = this@toAsyncAccount[AsyncSharedDataHandler.First_Name_key] as? String.orEmpty()
+                                        lastName = this@toAsyncAccount[AsyncSharedDataHandler.Last_Name_key] as? String.orEmpty()
+                                        countryAbbrev = this@toAsyncAccount[AsyncSharedDataHandler.Country_Abbrev_key] as? String.orEmpty()
                                 }
                 }
         }

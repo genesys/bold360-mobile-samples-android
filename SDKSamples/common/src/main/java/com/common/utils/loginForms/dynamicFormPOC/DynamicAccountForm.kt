@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.common.utils.loginForms.dynamicFormPOC.defs.FieldProps
 import com.common.utils.loginForms.dynamicFormPOC.defs.FieldTypes
 import com.nanorep.sdkcore.utils.children
 import com.sdk.common.R
@@ -49,18 +50,14 @@ class DynamicAccountForm : Fragment() {
 
         formFields?.children()?.forEachIndexed { index, view ->
 
-            loginFormViewModel.formFields[index].getString("key")?.let {
+            loginFormViewModel.formFields[index].asJsonObject.getString(FieldProps.Key)?.let {
 
                 val (name: String, value: String) = (
 
-                        it to
-
-                                when (view) {
-                                    is EditText -> view.text
-                                    else -> ""
-                                }.toString()
-
-                        )
+                        it to when (view) {
+                            is EditText -> view.text.toString()
+                            else -> ""
+                        })
 
                 loginFormViewModel.accountData.addProperty(name, value)
             }
@@ -78,13 +75,19 @@ class DynamicAccountForm : Fragment() {
                 formFields?.apply {
 
                     addView(
-                        when (currentField.get("type").asInt) {
+
+                        when (currentField.getString(FieldProps.Type)) {
                             FieldTypes.TextInput -> EditText(context)
                             else -> TextView(context)
+
                         }.apply {
-                            hint = currentField.getString("hint")
-                            currentField.addProperty("value", jsonAccount.getString(currentField.getString("key") ?: "") ?: "")
-                            text = currentField.getString("value")
+
+                            hint = currentField.getString(FieldProps.Hint)
+                            (jsonAccount.getString(currentField.getString(FieldProps.Key)))?.let { value ->
+                                currentField.addProperty(FieldProps.Value, value)
+                                text = value
+                            }
+
                         }
                     )
                 }

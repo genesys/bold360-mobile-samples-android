@@ -3,7 +3,6 @@ package com.common.utils.loginForms.dynamicFormPOC
 import com.common.utils.loginForms.*
 import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.integration.async.core.UserInfo
@@ -14,7 +13,7 @@ import com.nanorep.nanoengine.bot.BotAccount
 
 fun JsonObject.toBotAccount(): BotAccount {
     return BotAccount(
-        getString(JsonSharedDataHandler.Access_key) ?: "",
+        getString(JsonSharedDataHandler.Access_key).orEmpty(),
         getString(JsonSharedDataHandler.Account_key),
         getString(JsonSharedDataHandler.Kb_key),
         getString(JsonSharedDataHandler.Server_key),
@@ -29,31 +28,24 @@ fun JsonObject.toBotAccount(): BotAccount {
 }
 
 fun JsonObject.toLiveAccount(): BoldAccount {
-    return BoldAccount(getString(JsonSharedDataHandler.Access_key) ?: "")
+    return BoldAccount(getString(JsonSharedDataHandler.Access_key).orEmpty())
 }
 
 fun JsonObject.toAsyncAccount(): AsyncAccount {
-    return AsyncAccount(getString(JsonSharedDataHandler.Access_key) ?: "", getString(JsonSharedDataHandler.App_id_Key) ?: "").apply {
-            val userId = this@toAsyncAccount.getString(JsonSharedDataHandler.user_id_key) ?: ""
+    return AsyncAccount(getString(JsonSharedDataHandler.Access_key).orEmpty(), getString(JsonSharedDataHandler.App_id_Key).orEmpty()).apply {
             info.userInfo =
-                (userId.takeIf { userId.isNotEmpty() }?.let { UserInfo(userId) }
-                    ?: UserInfo()).apply {
-                    email =
-                        this@toAsyncAccount.getString(JsonSharedDataHandler.Email_key) ?: ""
-                    phoneNumber =
-                        this@toAsyncAccount.getString(JsonSharedDataHandler.Phone_Number_key) ?: ""
-                    firstName =
-                        this@toAsyncAccount.getString(JsonSharedDataHandler.First_Name_key) ?: ""
-                    lastName =
-                        this@toAsyncAccount.getString(JsonSharedDataHandler.Last_Name_key) ?: ""
-                    countryAbbrev =
-                        this@toAsyncAccount.getString(JsonSharedDataHandler.Country_Abbrev_key) ?: ""
+                (this@toAsyncAccount.getString(JsonSharedDataHandler.user_id_key)?.takeIf { it.isNotEmpty() }?.let { UserInfo(it) } ?: UserInfo()).apply {
+                    this@toAsyncAccount.getString(JsonSharedDataHandler.Email_key)?.let { email = it }
+                    this@toAsyncAccount.getString(JsonSharedDataHandler.Phone_Number_key)?.let { phoneNumber = it }
+                    this@toAsyncAccount.getString(JsonSharedDataHandler.First_Name_key)?.let { firstName = it }
+                    this@toAsyncAccount.getString(JsonSharedDataHandler.Last_Name_key)?.let { lastName = it }
+                    this@toAsyncAccount.getString(JsonSharedDataHandler.Country_Abbrev_key)?.let { countryAbbrev = it }
                 }
     }
 }
 
 fun JsonObject.getGroupId(): String {
-    return "${getString(JsonSharedDataHandler.Account_key) ?: ""}#${getString(JsonSharedDataHandler.Kb_key)}#${
+    return "${getString(JsonSharedDataHandler.Account_key).orEmpty()}#${getString(JsonSharedDataHandler.Kb_key)}#${
         get(
             JsonSharedDataHandler.Access_key
         )
@@ -127,12 +119,10 @@ internal fun JsonObject.toNeededAsyncInfo(): JsonObject {
 
 internal fun JsonObject.toNeededLiveInfo(): JsonObject {
     return JsonObject().apply {
-        this@toNeededLiveInfo.let { fullInfo ->
-            addProperty(
-                JsonSharedDataHandler.Access_key,
-                fullInfo.getString(JsonSharedDataHandler.Access_key)
-            )
-        }
+        addProperty(
+            JsonSharedDataHandler.Access_key,
+            this@toNeededLiveInfo.getString(JsonSharedDataHandler.Access_key)
+        )
 
     }
 }
@@ -172,10 +162,6 @@ internal fun JsonObject.toNeededBotInfo(): JsonObject {
     }
 }
 
-fun JsonObject.getString(key: String): String? {
-    return get(key).asString
-}
-
-fun JsonElement.getString(key: String): String? {
-    return asJsonObject?.getString(key)
+fun JsonObject.getString(key: String?): String? {
+    return key?.let { get(it).asString }
 }

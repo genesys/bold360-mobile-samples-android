@@ -63,7 +63,7 @@ class ContinuityAccountHandler : AccountSessionListener {
             Log.d("AccountSessionListener", "onConfigUpdate: got to update $updateKey with $updatedValue")
             when (updateKey) {
                 SessionInfoConfigKeys.LastReceivedMessageId -> lastReceivedMessageId =
-                    (updatedValue as? String) ?: ""
+                    (updatedValue as? String).orEmpty()
             }
         } catch (e: Exception) {
             e.printStackTrace()

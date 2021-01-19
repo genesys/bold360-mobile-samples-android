@@ -66,7 +66,7 @@ class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProv
                 observeLanguageChanges(this@run, Observer { languageChange ->
                     val language = languageChange?.first
 
-                    Log.i("CustomForm", "Prechat: Language change detected: [${language ?: ""}]")
+                    Log.i("CustomForm", "Prechat: Language change detected: [${language.orEmpty()}]")
 
                     language?.run {
                         formListener?.onLanguageRequest(

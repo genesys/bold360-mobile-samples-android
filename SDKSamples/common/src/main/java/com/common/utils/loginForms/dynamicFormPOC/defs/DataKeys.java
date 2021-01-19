@@ -6,12 +6,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({FieldKeys.Name, FieldKeys.KB, FieldKeys.Server, FieldKeys.AccessKey})
+@StringDef({DataKeys.Name, DataKeys.KB, DataKeys.Server, DataKeys.Accesskey})
 
-public @interface FieldKeys {
-
-    String Name = "accountName";
+public @interface DataKeys {
+    String Name = "account";
     String KB = "kb";
-    String Server = "server";
-    String AccessKey = "apiKey";
+    String Server = "domain";
+    String Accesskey = "accessKey";
 }

@@ -66,7 +66,7 @@ abstract class AccountForm : LoginForm(), AccountFormDelegate {
 
     override fun presentError(editText: EditText, message: String?) {
         editText.requestFocus()
-        editText.error = message ?: ""
+        editText.error = message.orEmpty()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

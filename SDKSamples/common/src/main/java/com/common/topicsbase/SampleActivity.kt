@@ -218,7 +218,7 @@ abstract class SampleActivity  : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        topicTitle = intent.getStringExtra("title") ?: ""
+        topicTitle = intent.getStringExtra("title").orEmpty()
 
         val loginFormViewModel: LoginFormViewModel by viewModels()
 

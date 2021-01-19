@@ -203,14 +203,14 @@ class CustomBoldForm : Fragment() {
 
         //-> sets the value of the department editText, with the previously filled value or `defaultOption` if available.
         var depValue = fieldData.value
-                ?: fieldData.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value ?: ""
+                ?: fieldData.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value.orEmpty()
         fieldView.text = SpannableStringBuilder(depValue)
         fieldsContainer.addView(fieldView)
 
         //-> Adds the departments options as description below the edit field.
         fieldData.options?.run {
             val deptOptionsSB = StringBuilder().append(
-                    context?.resources?.getString(R.string.custom_form_departments_title) ?: "")
+                    context?.resources?.getString(R.string.custom_form_departments_title).orEmpty())
 
             forEach {
 

@@ -2,6 +2,8 @@ package com.common.utils.loginForms.dynamicFormPOC
 
 import com.common.utils.loginForms.dynamicFormPOC.AccountFieldFactory.createTextInput
 import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
+import com.common.utils.loginForms.dynamicFormPOC.defs.DataKeys
+import com.common.utils.loginForms.dynamicFormPOC.defs.FieldProps
 import com.common.utils.loginForms.dynamicFormPOC.defs.FieldTypes.TextInput
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -19,10 +21,10 @@ object FormDataFactory {
 
     private fun createBotForm() : JsonArray {
         return JsonArray().apply {
-            add(createTextInput("account", "", "Account name", "Account name"))
-            add(createTextInput("kb", "", "Knowledge Base", "Knowledge Base"))
-            add(createTextInput("apiKey", "", "Api Key", "Api Key"))
-            add(createTextInput("domain", "", "Server", "Server"))
+            add(createTextInput(DataKeys.Name, "", "Account name", "Account name"))
+            add(createTextInput(DataKeys.KB, "", "Knowledge Base", "Knowledge Base"))
+            add(createTextInput(DataKeys.Accesskey, "", "Api Key", "Api Key"))
+            add(createTextInput(DataKeys.Server, "", "Server", "Server"))
         }
     }
 
@@ -33,26 +35,17 @@ object FormDataFactory {
     private fun createLiveForm() : JsonArray {
         return JsonArray()
     }
-/*
-
-    "[{\"type\":2,\"name\":\"account\",\"value\":\"\",\"label\":\"Account name\",\"hint\":\"Account name\"}," +
-    "{\"type\":2,\"name\":\"kb\",\"value\":\"\",\"label\":\"Knowledge Base\",\"hint\":\"Account name\"}," +
-    "{\"type\":2,\"name\":\"apiKey\",\"value\":\"\",\"label\":\"Api Key\",\"hint\":\"Account name\"}," +
-    "{\"type\":2,\"name\":\"domain\",\"value\":\"\",\"label\":\"Server\",\"hint\":\"Account name\"}]"
-
-*/
-
 }
 
 object AccountFieldFactory{
 
     fun createTextInput(name: String, value: String, label: String, hint: String) : JsonObject {
         return JsonObject().apply {
-            addProperty("type", TextInput)
-            addProperty("key", name)
-            addProperty("value", value)
-            addProperty("label", label)
-            addProperty("hint", hint)
+            addProperty(FieldProps.Type, TextInput)
+            addProperty(FieldProps.Key, name)
+            addProperty(FieldProps.Value, value)
+            addProperty(FieldProps.Label, label)
+            addProperty(FieldProps.Hint, hint)
         }
     }
 
