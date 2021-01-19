@@ -67,6 +67,8 @@ class DynamicAccountForm : Fragment() {
 
     private fun fillFields() {
 
+        val jsonAccount = loginFormViewModel.getJsonAccount(context)
+
         loginFormViewModel.formFields.forEach {
 
             it.asJsonObject.let { currentField ->
@@ -79,7 +81,7 @@ class DynamicAccountForm : Fragment() {
                             else -> TextView(context)
                         }.apply {
                             hint = currentField.get("hint").asString
-                            currentField.addProperty("value", loginFormViewModel.getJsonAccount(context).get(currentField.get("name").asString)?.asString ?: "")
+                            currentField.addProperty("value", jsonAccount.get(currentField.get("name").asString)?.asString ?: "")
                             text = currentField.get("value").asString
                         }
                     )
