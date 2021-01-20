@@ -14,4 +14,5 @@ public @interface FieldProps {
     String Value  = "value";
     String Label  = "label";
     String Hint  = "hint";
+    String Required  = "required";
 }

@@ -14,19 +14,22 @@ open class BotChat : BasicChat() {
     override val account: Account
         get() = accountData.toBotAccount().withId(this)
 
-    override fun validateData(): Boolean {
+    override val chatType: String
+        get() = ChatType.Bot
+
+    override fun validateAccountData(): Boolean {
 
         accountData.entrySet().forEachIndexed { index, field ->
 
             when (field.key) {
                 "account" -> if (field.value?.asString.isNullOrEmpty()) kotlin.run {
-                    presentError.invoke(index, "Account name cannot be empty...")
+                    presentError(index, "Account name cannot be empty...")
                     return false
                 }
             }
         }
 
-        return super.validateData()
+        return true
     }
 
     override val formFieldsData: JsonArray

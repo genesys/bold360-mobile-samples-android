@@ -165,11 +165,11 @@ abstract class SampleActivity  : AppCompatActivity() {
      */
     private lateinit var accountController: AccountFormController
 
-    private fun updateLoginData(loginData: LoginData) {
+    open fun updateLoginData(loginData: LoginData) {
         loginData.account?.let { accountData = it }
-        loginData.extraData?.let { extraData = it }
-        restoreRequest = loginData.restoreRequest
     }
+
+    var accountData: JsonObject = JsonObject()
 
     private val loginFormViewModel: LoginFormViewModel by viewModels()
 
@@ -186,16 +186,12 @@ abstract class SampleActivity  : AppCompatActivity() {
 
     abstract val account: Account?
 
-    var accountData: JsonObject = JsonObject()
-    var restoreRequest: Boolean = false
-    var extraData: JsonObject = JsonObject()
-
-    /**
+  /*  *//**
      * Account data validation
-     */
-    open fun validateData(): Boolean = true
+     *//*
+    open fun validateAccountData(): Boolean = true
     protected val presentError: (fieldIndex: Int, message: String) -> Unit = { index, message ->  accountController.presentError(index, message) }
-
+*/
     protected open val onChatTypeChanged: ((chatType: String) ->  Unit)?
         get() = null
 
@@ -213,28 +209,25 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         accountController = AccountFormController(containerId, supportFragmentManager.weakRef(), JsonSharedDataHandler())
 
-        loginFormViewModel.formFields = formFieldsData
-        loginFormViewModel.accountData = accountController.getSavedAccount(baseContext, chatType) as JsonObject
+//        1. Move the irrelevant fields to the child samples
+//        2. LoginFormViewModel.formFields.applyValues(accountController.getSavedAccount(baseContext, chatType) as JsonObject)
+//        3. Add validation to the formFields before loginData update
 
-        accountController.login(onChatTypeChanged)
+        accountController.presentForms(onChatTypeChanged)
 
         loginFormViewModel.loginData.observe(this, { loginData ->
 
             updateLoginData(loginData)
 
-            if ( validateData() ) {
+            accountController.saveAccount(baseContext, accountData, chatType)
 
-                accountController.saveAccount(baseContext, accountData, chatType)
+            supportFragmentManager
+                .popBackStack(
+                    AccountFormPresenter.LOGIN_FORM,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
 
-                supportFragmentManager
-                    .popBackStack(
-                        AccountFormPresenter.LOGIN_FORM,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE
-                    )
-
-                startChat(savedInstanceState)
-
-            }
+            startChat(savedInstanceState)
 
         })
     }

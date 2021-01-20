@@ -25,6 +25,8 @@ object FormDataFactory {
             add(createTextInput(DataKeys.KB, "", "Knowledge Base", "Knowledge Base"))
             add(createTextInput(DataKeys.Accesskey, "", "Api Key", "Api Key"))
             add(createTextInput(DataKeys.Server, "", "Server", "Server"))
+            add(createTextInput(DataKeys.Server, "", "Server", "Server"))
+            add(createTextInput(DataKeys.Server, "", "Server", "Server"))
         }
     }
 
@@ -46,6 +48,7 @@ object AccountFieldFactory{
             addProperty(FieldProps.Value, value)
             addProperty(FieldProps.Label, label)
             addProperty(FieldProps.Hint, hint)
+            addProperty(FieldProps.Required, hint)
         }
     }
 

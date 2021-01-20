@@ -32,7 +32,7 @@ internal object Accounts {
         get() = fameBoldAccount
 
     val defaultBotAccount: BotAccount
-        get() = testBotAccount
+        get() = formalBotAccount
 
     val defaultAsyncAccount = AsyncAccount(
         "2300000001700000000:2279533687831071375:MlVOftOF/UFUUqPPSbMSDAnQjITxOrQW:gamma",

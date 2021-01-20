@@ -11,7 +11,7 @@ interface Validator {
 }
 
 interface FormController: Validator {
-    fun login(onChatTypeChanged: ((chatType: String) ->  Unit)? = null)
+    fun presentForms(onChatTypeChanged: ((chatType: String) ->  Unit)? = null)
 }
 
 class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>, sharedDataHandler: SharedDataHandler):
@@ -19,15 +19,15 @@ class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<F
 
     val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
-        private val accountFormPresenter = AccountFormPresenter(containerRes)
+    private val accountFormPresenter = AccountFormPresenter(containerRes)
 
-        override fun login(
-            onChatTypeChanged: ((chatType: String) ->  Unit)?,
-        ) {
-            getFragmentManager()?.let { fm ->
-                accountFormPresenter.presentForm(fm, onChatTypeChanged)
-            }
+    override fun presentForms(
+        onChatTypeChanged: ((chatType: String) ->  Unit)?,
+    ) {
+        getFragmentManager()?.let { fm ->
+            accountFormPresenter.presentForm(fm, onChatTypeChanged)
         }
+    }
 
     override fun presentError(index: Int, message: String) {
         accountFormPresenter.onValidationFailed(index, message)
