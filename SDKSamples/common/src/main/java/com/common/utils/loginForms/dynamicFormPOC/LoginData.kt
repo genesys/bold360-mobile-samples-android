@@ -1,4 +1,4 @@
-package com.common.utils.loginForms
+package com.common.utils.loginForms.dynamicFormPOC
 
 import com.google.gson.JsonObject
 
@@ -12,11 +12,11 @@ interface LoginData {
     /**
      * Extra Account parameters to be submitted for the sample
      */
-    val extraData: Map<String, Any?>?
+    val extraData: JsonObject?
 
     /**
      * The RestoreState of the account
      */
-    val restoreState: RestoreState
+    val restoreRequest: Boolean
 
 }

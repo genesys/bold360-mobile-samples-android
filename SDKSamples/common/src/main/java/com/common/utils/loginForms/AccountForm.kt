@@ -71,8 +71,6 @@ abstract class AccountForm : LoginForm(), AccountFormDelegate {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        loginFormViewModel.chatType = chatType
-
         view.findViewById<Button>(R.id.start_chat).apply {
             setOnClickListener {
                 validateAndUpdate()?.run {

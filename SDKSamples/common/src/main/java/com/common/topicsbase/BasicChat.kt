@@ -10,6 +10,7 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import com.common.utils.loginForms.dynamicFormPOC.SampleActivity
 import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -26,6 +27,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BasicChat : SampleActivity(), ChatEventListener {
+
+    override val chatType: String
+        get() = ChatType.Bot
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
@@ -56,17 +60,16 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basic)
-
-        chatType = ChatType.Bot
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
         topic_title.text = topicTitle
     }
 
     override fun startChat(savedInstanceState: Bundle?) {
-        if (hasChatController() && loginData.restoreState.restoreRequest) restore() else createChat()
+        if (hasChatController() && restoreRequest) restore() else createChat()
     }
 
     protected open fun createChat() {

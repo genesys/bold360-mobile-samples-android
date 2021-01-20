@@ -66,7 +66,7 @@ class DynamicAccountForm : Fragment() {
 
     private fun fillFields() {
 
-        val jsonAccount = loginFormViewModel.getJsonAccount(context)
+        val jsonAccount = loginFormViewModel.accountData
 
         loginFormViewModel.formFields.forEach {
 

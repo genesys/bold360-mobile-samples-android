@@ -1,4 +1,5 @@
 package com.sdk.samples.topics
+/*
 
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.topicsbase.RestorationContinuity
@@ -13,6 +14,7 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+*/
 /*
 Async continuity is enabled by:
 
@@ -26,13 +28,16 @@ Async continuity is enabled by:
 
 -----------------------------------------------
 missed messages = messages that were sent from the agent to the user while the user was off.
-*/
+*//*
+
 
 private const val ASYNC_TAG = "async"
 
+*/
 /**
  * Enables restore and reconnect of last async chat.
- */
+ *//*
+
 class AsyncChatContinuity : RestorationContinuity() {
 
     override val account: Account
@@ -41,14 +46,18 @@ class AsyncChatContinuity : RestorationContinuity() {
     private val accountHandler = ContinuityAccountHandler()
 
     override var chatType = ChatType.Async
+*/
 /*
     override fun getAccount_old(): Account {
         return account.apply { continueLast(this as AsyncAccount) }
-    }*/
+    }*//*
 
-    /**
+
+    */
+/**
      * Continues the last chat with this account (if available)
-     */
+     *//*
+
     private fun continueLast(account: AsyncAccount) {
         account.takeIf { loginData.restoreState.restorable }?.apply {
             info.let {
@@ -58,9 +67,11 @@ class AsyncChatContinuity : RestorationContinuity() {
         }
     }
 
-    /**
+    */
+/**
      * Configure the accountProvider in order to receive account related updates, and be able to restore chats.
-     */
+     *//*
+
     @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.accountProvider(accountHandler)
@@ -70,4 +81,4 @@ class AsyncChatContinuity : RestorationContinuity() {
         return "Account: [apiKey:$apiKey],[applicationId:${info.applicationId}],[userId:${info.userInfo.userId}]," +
                 " [senderId:${info.SenderId}],[lastMessage:${info.LastReceivedMessageId}]"
     }
-}
+}*/

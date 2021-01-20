@@ -41,71 +41,72 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.BOT_CHAT",
                 getString(R.string.chat_with_bot),
                 ContextCompat.getDrawable(this, R.drawable.outline_android_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.HISTORY",
-                getString(R.string.chat_with_bot_history),
-                ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.WELCOME_BOT_CHAT",
-                getString(R.string.bot_chat_with_welcome),
-                ContextCompat.getDrawable(this, R.drawable.outline_message_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.VOICE_TO_VOICE",
-                getString(R.string.bot_chat_with_voc_to_voc),
-                ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.CONTEXT_SUPPORT",
-                getString(R.string.bot_context_support),
-                ContextCompat.getDrawable(this, R.drawable.context_support_24dp)
-            ), SampleTopic(
-                "com.sdk.sample.action.ENTITIES",
-                getString(R.string.bot_chat_with_entities),
-                ContextCompat.getDrawable(this, R.drawable.entities_24)
-            ),SampleTopic(
-                "com.sdk.sample.action.HANDOVER",
-                getString(R.string.bot_chat_with_handover),
-                ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.CUSTOM_UI",
-                getString(R.string.custom_UI),
-                ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.AUTOCOMPLETE",
-                getString(R.string.standalone_autocomplete),
-                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
-                getString(R.string.bot_to_bold_with_prechat),
-                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
-                getString(R.string.chat_with_bold),
-                ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.CUSTOM_FORM",
-                getString(R.string.custom_form),
-                ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
-                getString(R.string.custom_upload),
-                ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI",
-                getString(R.string.bold_upload_without_ui),
-                ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
-                getString(R.string.async_chat_with_an_agent),
-                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.ASYNC_CONTINUITY",
-                getString(R.string.async_chat_continuity),
-                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
-            ), SampleTopic(
-                "com.sdk.sample.action.RESTORE",
-                getString(R.string.chat_restore),
-                ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24)
             )
+//           ,SampleTopic(
+//                "com.sdk.sample.action.HISTORY",
+//                getString(R.string.chat_with_bot_history),
+//                ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.WELCOME_BOT_CHAT",
+//                getString(R.string.bot_chat_with_welcome),
+//                ContextCompat.getDrawable(this, R.drawable.outline_message_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.VOICE_TO_VOICE",
+//                getString(R.string.bot_chat_with_voc_to_voc),
+//                ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.CONTEXT_SUPPORT",
+//                getString(R.string.bot_context_support),
+//                ContextCompat.getDrawable(this, R.drawable.context_support_24dp)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.ENTITIES",
+//                getString(R.string.bot_chat_with_entities),
+//                ContextCompat.getDrawable(this, R.drawable.entities_24)
+//            ),SampleTopic(
+//                "com.sdk.sample.action.HANDOVER",
+//                getString(R.string.bot_chat_with_handover),
+//                ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.CUSTOM_UI",
+//                getString(R.string.custom_UI),
+//                ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.AUTOCOMPLETE",
+//                getString(R.string.standalone_autocomplete),
+//                ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
+//                getString(R.string.bot_to_bold_with_prechat),
+//                ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
+//                getString(R.string.chat_with_bold),
+//                ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.CUSTOM_FORM",
+//                getString(R.string.custom_form),
+//                ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
+//                getString(R.string.custom_upload),
+//                ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI",
+//                getString(R.string.bold_upload_without_ui),
+//                ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.BOLD_ASYNC_CHAT",
+//                getString(R.string.async_chat_with_an_agent),
+//                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.ASYNC_CONTINUITY",
+//                getString(R.string.async_chat_continuity),
+//                ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
+//            ), SampleTopic(
+//                "com.sdk.sample.action.RESTORE",
+//                getString(R.string.chat_restore),
+//                ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24)
+//            )
         )
 
         topics_recycler.layoutManager = LinearLayoutManager(this)

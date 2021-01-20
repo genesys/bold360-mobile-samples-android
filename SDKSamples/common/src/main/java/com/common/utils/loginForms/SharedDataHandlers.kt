@@ -1,8 +1,6 @@
 package com.common.utils.loginForms
 
-import android.content.Context
 import com.common.utils.loginForms.accountUtils.*
-import com.google.gson.JsonObject
 
 interface RestoreStateProvider {
 
@@ -16,34 +14,6 @@ interface RestoreStateProvider {
      * @param isRestore is true if the user requested to restore the chat
      */
     var restoreRequest: Boolean
-}
-
-interface DataController : RestoreStateProvider {
-
-    /**
-     * Extra data relates the account
-     */
-    var extraData: MutableMap<String, Any?>?
-
-    /**
-     * true is the user pressed on the restore button
-     */
-    var chatType: String
-
-    /**
-     * Contains the wanted extra params of the account
-     */
-    var formsParams: Int
-
-    /**
-     * Gets the prev account data from the shared properties (according to the ChatType), If null it returns the default account
-     */
-    fun getJsonAccount(context: Context? = null): JsonObject?
-
-    /**
-     * If changed, updates the shared properties to include the updated account details
-     */
-    fun saveAccount(context: Context?)
 }
 
 ///**

@@ -1,15 +1,10 @@
-package com.common.utils.loginForms
+package com.common.utils.loginForms.dynamicFormPOC
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.common.utils.loginForms.dynamicFormPOC.DynamicAccountForm
+import com.common.utils.loginForms.AccountForm
+import com.common.utils.loginForms.AccountTypeSelectionForm
 import java.lang.ref.WeakReference
-
-/**
- * @param restoreRequest is true if the user requested to restore the chat
- * @param restorable is true if the restoration is possible for the account
-*/
-class RestoreState(val restoreRequest: Boolean = false, var restorable: Boolean = false)
 
 interface Validator {
     fun presentError(index: Int, message: String)
@@ -19,9 +14,10 @@ interface FormController: Validator {
     fun login(onChatTypeChanged: ((chatType: String) ->  Unit)? = null)
 }
 
-class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>): FormController {
+class AccountFormController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>, sharedDataHandler: SharedDataHandler):
+    FormController, SharedDataHandler by sharedDataHandler {
 
-        val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
+    val getFragmentManager: () -> FragmentManager? = { wFragmentManager.get() }
 
         private val accountFormPresenter = AccountFormPresenter(containerRes)
 

@@ -24,11 +24,6 @@ class AccountTypeSelectionForm(val onTypeSelected: (chatType: String) -> Unit) :
         return inflater.inflate(R.layout.restore_form, container, false)
     }
 
-    override fun onResume() {
-        loginFormViewModel.chatType = ChatType.None
-        super.onResume()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if (hasFormParam(EnableRestore)) {
@@ -41,7 +36,7 @@ class AccountTypeSelectionForm(val onTypeSelected: (chatType: String) -> Unit) :
             loginFormViewModel.restoreRequest = restore_switch.isChecked
 
             if (selectedChatType == ChatType.None) {
-                loginFormViewModel.onAccountUpdated(null)
+                loginFormViewModel.onAccountUpdated()
             } else {
                 onTypeSelected(selectedChatType)
             }

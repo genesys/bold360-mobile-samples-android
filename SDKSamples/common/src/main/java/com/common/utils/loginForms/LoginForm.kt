@@ -8,6 +8,6 @@ abstract class LoginForm : Fragment() {
     protected val loginFormViewModel: LoginFormViewModel by activityViewModels()
 
     open fun hasFormParam(flag: Int): Boolean {
-        return loginFormViewModel.formsParams and flag == flag
+        return false//loginFormViewModel.formsParams and flag == flag
     }
 }

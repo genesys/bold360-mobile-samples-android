@@ -5,7 +5,7 @@ import android.widget.FrameLayout
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.common.topicsbase.SampleActivity
+import com.common.utils.loginForms.dynamicFormPOC.SampleActivity
 import com.integration.bold.boldchat.core.FormData
 import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form

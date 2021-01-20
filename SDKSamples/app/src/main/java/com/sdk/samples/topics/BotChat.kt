@@ -20,7 +20,7 @@ open class BotChat : BasicChat() {
 
             when (field.key) {
                 "account" -> if (field.value?.asString.isNullOrEmpty()) kotlin.run {
-                    onInvalidAccount.invoke(index, "Account name cannot be empty...")
+                    presentError.invoke(index, "Account name cannot be empty...")
                     return false
                 }
             }
@@ -29,7 +29,7 @@ open class BotChat : BasicChat() {
         return super.validateData()
     }
 
-    override val formFields: JsonArray
+    override val formFieldsData: JsonArray
         get() = FormDataFactory.createForm(ChatType.Bot)
 
 //    override fun getAccount_old(): Account = accountData.toBotAccount().withId(this)

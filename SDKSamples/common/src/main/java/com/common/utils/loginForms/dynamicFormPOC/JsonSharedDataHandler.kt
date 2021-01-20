@@ -5,7 +5,22 @@ import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
-class JsonSharedDataHandler {
+interface SharedDataHandler {
+
+    /**
+     * Gets the prev account data from the shared properties, If null it returns the default account
+     */
+    fun getSavedAccount(context: Context, @ChatType chatType: String): Any?
+
+    /**
+     * If changed, updates the shared properties to include the updated account details
+     */
+    fun saveAccount(context: Context, accountData: Any?, @ChatType chatType: String)
+
+    /**
+     * Checks if the account is restorable
+     */
+    fun isRestorable(context: Context, @ChatType chatType: String): Boolean
 
     companion object {
         const val Access_key = "accessKey"
@@ -26,23 +41,31 @@ class JsonSharedDataHandler {
         const val Phone_Number_key = "phoneNumber"
         const val user_id_key = "userIdKey"
     }
+}
 
-    fun getSavedAccount(context: Context, @ChatType chatType: String? = null): JsonObject? {
-        val shared = context.getSharedPreferences("accounts", 0)
-        return shared.getString(chatType, null)
-            ?.let { Gson().fromJson(it, JsonObject::class.java) }
+class JsonSharedDataHandler: SharedDataHandler {
+
+    private fun getSaved(context: Context, @ChatType chatType: String) : JsonObject? {
+        return context.getSharedPreferences("accounts", 0).getString(chatType, null)?.let { Gson().fromJson(it, JsonObject::class.java) }
     }
 
-    fun saveAccount(context: Context, accountData: JsonObject, @ChatType chatType: String) {
-
-        val shared = context.getSharedPreferences("accounts", 0)
-        val editor = shared.edit()
-        editor.putString(chatType, accountData.toNeededInfo(chatType).toString())
-        editor.apply()
+    override fun getSavedAccount(context: Context, @ChatType chatType: String): JsonObject {
+        return getSaved(context, chatType).orDefault(chatType)
     }
 
-    fun isRestorable(context: Context, @ChatType chatType: String?): Boolean {
-        return chatType?.let { getSavedAccount(context, it) }?.let { true } ?: false
+    override fun saveAccount(context: Context, accountData: Any?, @ChatType chatType: String) {
+
+        context.getSharedPreferences("accounts", 0).let { shared ->
+            val editor = shared.edit()
+            editor.putString(
+                chatType,
+                (accountData as? JsonObject)?.toNeededInfo(chatType).toString()
+            )
+            editor.apply()
+        }
     }
 
+    override fun isRestorable(context: Context, @ChatType chatType: String): Boolean {
+        return chatType == ChatType.None || getSaved(context, chatType) != null
+    }
 }

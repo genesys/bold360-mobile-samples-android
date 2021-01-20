@@ -1,4 +1,4 @@
-package com.common.topicsbase
+package com.common.utils.loginForms.dynamicFormPOC
 
 import android.os.Bundle
 import android.util.Log
@@ -8,11 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.common.chatComponents.history.HistoryRepository
-import com.common.utils.loginForms.AccountFormController
-import com.common.utils.loginForms.AccountFormPresenter
-import com.common.utils.loginForms.LoginData
-import com.common.utils.loginForms.accountUtils.FormsParams
-import com.common.utils.loginForms.dynamicFormPOC.LoginFormViewModel
 import com.common.utils.loginForms.dynamicFormPOC.defs.ChatType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -30,13 +25,15 @@ import com.sdk.common.R
 
 abstract class SampleActivity  : AppCompatActivity() {
 
+    protected lateinit var topicTitle: String
+    abstract val containerId: Int
+
 //  <editor-fold desc=">>>>> Chat handling <<<<<" >
 
     /**
      * Being invoked when the chat fragment had been fetched and ready to be presented
      */
     abstract val onChatLoaded: ((fragment: Fragment) -> Unit)?
-
     protected lateinit var chatController: ChatController
 
     /**
@@ -54,12 +51,11 @@ abstract class SampleActivity  : AppCompatActivity() {
         if (hasChatController()) {
 
             chatController.run {
-                val continueLast = loginData.account == null
 
                 when {
-                    continueLast && hasOpenChats() && isActive -> restoreChat()
+                    account == null && hasOpenChats() && isActive -> restoreChat()
 
-                    loginData.restoreState.restorable -> restoreChat(
+                    accountController.isRestorable(baseContext, chatType) -> restoreChat(
                         account = prepareAccount(
                             getSecuredInfo()
                         )
@@ -105,7 +101,7 @@ abstract class SampleActivity  : AppCompatActivity() {
             historyProvider?.let { chatElementListener(it) }
         }
 
-        prepareAccount(getSecuredInfo()).let { account ->
+        prepareAccount(getSecuredInfo())?.let { account ->
 
             builder?.build(account, chatLoadedListener)?.also {
                 chatController = it
@@ -127,12 +123,10 @@ abstract class SampleActivity  : AppCompatActivity() {
         }
     }
 
-    lateinit var loginData: LoginData
-
     private var historyProvider: HistoryRepository? = null
 
 
-    // History handling
+    //  <editor-fold desc=">>>>> History handling <<<<<" >
 
     /**
      * Clears the history and frees its resources
@@ -149,14 +143,15 @@ abstract class SampleActivity  : AppCompatActivity() {
         targetId?.let { historyProvider?.targetId = targetId }
     }
 
+    //  </editor-fold>
 
     /**
      * @return true if the chat chatController exists and had not been destructed
      */
     fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
 
-    private fun prepareAccount(securedInfo: String): Account {
-        return getAccount_old().apply {
+    private fun prepareAccount(securedInfo: String): Account? {
+        return account?.apply {
             if (this is BoldAccount) info.securedInfo = securedInfo
         }
     }
@@ -166,54 +161,48 @@ abstract class SampleActivity  : AppCompatActivity() {
 //  <editor-fold desc=">>>>> Login forms handling <<<<<" >
 
     /**
+     * Controls the Forms presentation
+     */
+    private lateinit var accountController: AccountFormController
+
+    private fun updateLoginData(loginData: LoginData) {
+        loginData.account?.let { accountData = it }
+        loginData.extraData?.let { extraData = it }
+        restoreRequest = loginData.restoreRequest
+    }
+
+    private val loginFormViewModel: LoginFormViewModel by viewModels()
+
+    /**
      * Called after the LoginData had been updated from the ChatForm
      */
     abstract fun startChat(savedInstanceState: Bundle? = null)
 
+    /**
+     * Is being used as account saving key
+     */
     @ChatType
-    open var chatType: String
-        set(value) {
-            loginFormViewModel.chatType = value
-        }
-        get() =loginFormViewModel.chatType
+    abstract val chatType: String
 
-    open var formsParams: Int
-        set(value) {
-            loginFormViewModel.formsParams = value
-        }
-        get() = loginFormViewModel.formsParams
+    abstract val account: Account?
 
-    abstract val account: Account
+    var accountData: JsonObject = JsonObject()
+    var restoreRequest: Boolean = false
+    var extraData: JsonObject = JsonObject()
 
-    val accountData: JsonObject by lazy {
-        loginFormViewModel.getJsonAccount(baseContext)
-    }
-
+    /**
+     * Account data validation
+     */
     open fun validateData(): Boolean = true
+    protected val presentError: (fieldIndex: Int, message: String) -> Unit = { index, message ->  accountController.presentError(index, message) }
 
-    protected val onInvalidAccount: (index: Int, message: String) -> Unit = { index,  message ->  accountFormController.presentError(index, message) }
-
-    open val onChatTypeChanged: ((chatType: String) ->  Unit)?
+    protected open val onChatTypeChanged: ((chatType: String) ->  Unit)?
         get() = null
 
-    protected open val formFields: JsonArray = JsonArray()
+    protected open val formFieldsData: JsonArray = JsonArray()
 
-    private lateinit var accountFormController: AccountFormController
-
-    private val loginFormViewModel: LoginFormViewModel by viewModels()
-
-    fun addFormsParam(@FormsParams param: Int) {
-        loginFormViewModel.formsParams = loginFormViewModel.formsParams or param
-    }
-
-    fun getAccount_old(): Account{
-        return account
-    } // -> would be changed to account property
 
 //  </editor-fold>
-
-    protected lateinit var topicTitle: String
-    abstract val containerId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,20 +211,20 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         val loginFormViewModel: LoginFormViewModel by viewModels()
 
-        accountFormController = AccountFormController(containerId, supportFragmentManager.weakRef())
+        accountController = AccountFormController(containerId, supportFragmentManager.weakRef(), JsonSharedDataHandler())
 
-        loginFormViewModel.formsParams = formsParams
-        loginFormViewModel.formFields = formFields
+        loginFormViewModel.formFields = formFieldsData
+        loginFormViewModel.accountData = accountController.getSavedAccount(baseContext, chatType) as JsonObject
 
-        accountFormController.login(onChatTypeChanged)
+        accountController.login(onChatTypeChanged)
 
         loginFormViewModel.loginData.observe(this, { loginData ->
 
-            this.loginData = loginData
+            updateLoginData(loginData)
 
             if ( validateData() ) {
 
-                loginFormViewModel.saveAccount(this)
+                accountController.saveAccount(baseContext, accountData, chatType)
 
                 supportFragmentManager
                     .popBackStack(
