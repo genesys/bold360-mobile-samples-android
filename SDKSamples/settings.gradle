@@ -1,1 +1,3 @@
+include ':fulldemo'
+include ':common'
 include ':app'

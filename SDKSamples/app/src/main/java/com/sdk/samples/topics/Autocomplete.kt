@@ -5,33 +5,56 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.common.chatComponents.customProviders.withId
+import com.common.topicsbase.SampleActivity
+import com.common.utils.forms.FormDataFactory
+import com.common.utils.forms.defs.ChatType
+import com.common.utils.forms.toBotAccount
+import com.google.gson.JsonArray
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.LinkedArticleHandler
+import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.ArticleResponse
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
+import kotlinx.android.synthetic.main.activity_upload_no_ui.*
 import kotlinx.android.synthetic.main.autocomplete_activity.*
 
-class Autocomplete : AppCompatActivity() {
+class Autocomplete : SampleActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.autocomplete_activity)
+    override val formFieldsData: JsonArray
+        get() = FormDataFactory.createForm(ChatType.Bot)
+
+    override val account: Account
+        get() = accountData.toBotAccount()
+
+    override val chatType: String
+    get() = ChatType.Bot
+
+    override val containerId: Int
+        get() = R.id.autocomplete_view
+
+    override fun destructChat() {}
+
+    override fun startChat(savedInstanceState: Bundle?) {
+
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
 
         article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = Accounts.defaultBotAccount
+            botViewModel.botChat.account = (account as BotAccount).withId(this)
         }
 
         botViewModel.onError.observe(this, Observer { error ->
@@ -52,10 +75,16 @@ class Autocomplete : AppCompatActivity() {
             supportFragmentManager.beginTransaction().apply {
                 supportFragmentManager.findFragmentByTag("autocompleteFrag")?.run { this@apply.attach(this) }?.commit()
                     ?: run {
-                        add(R.id.root_layout, BotAutocompleteFragment(), "autocompleteFrag").commit()
+                        add(R.id.autocomplete_view, BotAutocompleteFragment(), "autocompleteFrag").commit()
                     }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.autocomplete_activity)
+        findViewById<TextView>(R.id.topic_title).text = topicTitle
     }
 
     private fun onError(error: NRError) {

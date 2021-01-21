@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.BOT_CHAT",
                 getString(R.string.chat_with_bot),
                 ContextCompat.getDrawable(this, R.drawable.outline_android_black_24)
-            ), SampleTopic(
+            )
+            /*, SampleTopic(
                 "com.sdk.sample.action.HISTORY",
                 getString(R.string.chat_with_bot_history),
                 ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
@@ -99,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
-            )
+            )*/
         )
 
         topics_recycler.layoutManager = LinearLayoutManager(this)

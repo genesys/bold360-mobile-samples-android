@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="10dp"
+        android:layout_gravity="center">
+
+    <LinearLayout
+            android:id="@+id/launchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:text="@string/create_restore_chat_instruction"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:textSize="@dimen/topic_titles_text" />
+
+        <RadioGroup
+                android:id="@+id/chat_action_group"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="28dp"
+                android:gravity="top|left"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                tools:ignore="RtlHardcoded">
+
+            <RadioButton
+                    android:id="@+id/bot_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:tag="bot"
+                    android:textSize="@dimen/topic_titles_text"
+                    android:text="Bot chat" />
+
+            <RadioButton
+                    android:id="@+id/bold_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="live"
+                    android:textSize="@dimen/topic_titles_text"
+                    android:text="Bold chat" />
+
+            <RadioButton
+                    android:id="@+id/async_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="async"
+                    android:textSize="@dimen/topic_titles_text"
+                    android:text="Async chat" />
+
+            <RadioButton
+                    android:id="@+id/current_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="none"
+                    android:textSize="@dimen/topic_titles_text"
+                    android:visibility="gone"
+                    android:text="Continue last" />
+
+        </RadioGroup>
+
+        <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/restore_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="14dp"
+                android:textSize="@dimen/topic_titles_text"
+                android:checked="true"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="@string/restore_if_available" />
+
+        <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/history_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="14dp"
+                android:textSize="@dimen/topic_titles_text"
+                android:checked="false"
+                android:gravity="center"
+                android:text="@string/history_support"
+                android:visibility="gone" />
+
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/start_chat"
+            style="@style/submit_view"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/start_chat"
+            android:text="@string/start_chat" />
+
+</FrameLayout>
+
