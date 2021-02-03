@@ -1,11 +1,13 @@
 package com.sdk.samples.topics
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.integration.core.Empty
 import com.integration.core.StateEvent
-import com.integration.core.securedInfo
+import com.integration.core.UnavailableEvent
+import com.integration.core.UnavailableReason
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
@@ -53,7 +55,7 @@ open class BoldChatAvailability : BoldChat() {
     }
 
     protected open fun prepareAccount(account: BoldAccount) {
-        account.skipPrechat()
+        //account.skipPrechat() //Uncomment to start chat immediately without displaying prechat form to the user.
 
         /*//>>> uncomment to enable passing preconfigured encrypted info, that enables chat creation,
                 if your account demands it.
@@ -70,10 +72,14 @@ open class BoldChatAvailability : BoldChat() {
         super.onChatStateChanged(stateEvent)
 
         when (stateEvent.state) {
-            StateEvent.Idle, StateEvent.Unavailable -> {
-                removeChatFragment()
+            StateEvent.Idle -> removeChatFragment()
 
-                //-> trigger the observer that was assigned to this viewModel to trogger
+            StateEvent.Unavailable -> {
+                val unavailableEvent = stateEvent as? UnavailableEvent
+                takeIf { unavailableEvent?.isFollowedByForm != true }?.removeChatFragment()
+
+                Log.d("boldChat", stateEvent.state +", reason: ${unavailableEvent?.unavailableReason?:UnavailableReason.Unknown}")
+                //-> trigger the observer that was assigned to this viewModel to trigger
                 //  refresh of chat availability status.
                 availabilityViewModel.refresh(Event(Empty))
             }
@@ -84,6 +90,9 @@ open class BoldChatAvailability : BoldChat() {
         return super.getBuilder().apply {
             this.chatUIProvider(ChatUIProvider(this@BoldChatAvailability).apply {
                 chatInputUIProvider.uiConfig.showUpload = false
+
+                // uncomment the following to hide the "cancel" option on the queuebar:
+                // queueCmpUIProvider.queueUIConfig.enableCancel = false
             })
         }
     }
