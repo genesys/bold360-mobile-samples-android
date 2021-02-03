@@ -50,7 +50,7 @@
     <androidx.constraintlayout.widget.Barrier
             android:id="@+id/guide2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="1dp"
             android:orientation="horizontal"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="departments_layout" />
@@ -70,31 +70,40 @@
             app:layout_constraintEnd_toEndOf="@id/show_departments"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide2"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
             android:layout_marginLeft="5dp" />
 
     <com.google.android.material.chip.Chip
-            android:id="@+id/availability_status"
-            style="@style/Widget.MaterialComponents.Chip.Entry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="@dimen/chip_top_gap"
-            android:layout_marginBottom="5dp"
-            android:checkable="false"
-            android:minHeight="44dp"
-            android:padding="@dimen/chip_inner_padding"
-            android:text="@string/chat_with_agent"
-            android:textSize="@dimen/buttons_text"
-            app:chipBackgroundColor="@color/chip_state"
-            app:closeIconEnabled="true"
-            app:iconStartPadding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide2"
-            app:layout_constraintVertical_bias="0"
-            app:layout_goneMarginTop="@dimen/chip_top_gap"
-            android:layout_marginLeft="5dp" />
+        android:id="@+id/availability_status"
+        style="@style/Widget.MaterialComponents.Chip.Entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="@dimen/chip_top_gap"
+        android:layout_marginBottom="5dp"
+        android:checkable="false"
+        android:minHeight="44dp"
 
+        android:padding="@dimen/chip_inner_padding"
+        android:text="@string/chat_with_agent"
+        android:textSize="@dimen/buttons_text"
+        app:chipBackgroundColor="@color/chip_state"
+        app:closeIconEnabled="true"
+        app:iconStartPadding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instruction"
+        app:layout_goneMarginTop="@dimen/chip_top_gap" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/guide3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="availability_status"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

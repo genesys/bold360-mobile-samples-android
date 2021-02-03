@@ -17,11 +17,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.bold.ui.*
-import com.nanorep.convesationui.bold.ui.ChatForm.Companion.LanguageFieldKey
 import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
@@ -140,11 +140,11 @@ class CustomForm : Fragment() {
                 when (fieldData.type) {
                     FormFieldType.Select -> {
                         when (fieldData.key) {
-                            "department" -> handleDeptView(form_fields_container, fieldData,
+                            FieldKey.DepartmentKey -> handleDeptView(form_fields_container, fieldData,
                                     createEditViewView(fieldData).apply {
                                         tag = index
                                     })
-                            LanguageFieldKey -> handleLanguageView(context!!, index, form_fields_container,
+                            FieldKey.LanguageKey -> handleLanguageView(context!!, index, form_fields_container,
                                     fieldData, FormConfiguration(context))
                         }
                     }
@@ -163,7 +163,7 @@ class CustomForm : Fragment() {
     private val selectionListener = object : SelectionListener {
         override fun onSelectedOption(selectionSpec: SelectionSpec) {
             when (selectionSpec.fieldKey) {
-                LanguageFieldKey -> handleLanguageSelection(selectionSpec)
+                FieldKey.LanguageKey -> handleLanguageSelection(selectionSpec)
             }
         }
     }

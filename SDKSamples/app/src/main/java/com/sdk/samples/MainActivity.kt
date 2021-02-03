@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.VOICE_TO_VOICE",
                 getString(R.string.bot_chat_with_voc_to_voc),
                 ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24)
-            ), /*SampleTopic(
+            ), SampleTopic(
                 "com.sdk.sample.action.ENTITIES",
                 getString(R.string.bot_chat_with_entities),
                 ContextCompat.getDrawable(this, R.drawable.entities_24)
-            ),*/SampleTopic(
+            ), SampleTopic(
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
