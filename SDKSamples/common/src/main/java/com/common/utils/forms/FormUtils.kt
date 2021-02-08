@@ -134,3 +134,6 @@ fun JsonArray.applyValues(accountObject: JsonObject): JsonArray {
     }
 }
 
+fun Pair<String, String>.isEmpty() : Boolean{
+    return first.isEmpty() || second.isEmpty()
+}

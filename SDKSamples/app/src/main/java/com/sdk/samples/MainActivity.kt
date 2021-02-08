@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.bot_chat_with_voc_to_voc),
                 ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24)
             )
+            ,SampleTopic(
+                "com.sdk.sample.action.CONTEXT_SUPPORT",
+                getString(R.string.bot_context_support),
+                ContextCompat.getDrawable(this, R.drawable.context_support_24dp)
+            )
             , SampleTopic(
                 "com.sdk.sample.action.ENTITIES",
                 getString(R.string.bot_chat_with_entities),

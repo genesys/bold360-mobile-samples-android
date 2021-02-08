@@ -2,6 +2,7 @@ package com.common.utils.forms
 
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Telephony
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,8 +21,8 @@ import com.common.topicsbase.LoginFormViewModel
 import com.common.utils.forms.defs.FieldProps
 import com.common.utils.forms.defs.FieldTypes
 import com.common.utils.forms.defs.FormType
+import com.common.utils.forms.fields.ContextBlock
 import com.nanorep.sdkcore.utils.children
-import com.nanorep.sdkcore.utils.dp
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.account_form.*
 import kotlinx.android.synthetic.main.context_view.view.*
@@ -121,6 +122,8 @@ class ChatForm : Fragment() {
 
                                 is SwitchCompat -> view.isChecked.toString()
 
+                                is ContextBlock -> view.contextHandler.getContext().toString() -> Add Context Validation + submission
+
                                 else -> return@run
 
                             }.toString())
@@ -185,13 +188,15 @@ class ChatForm : Fragment() {
                         formFields?.addView(AppCompatEditText(context).apply {
                             setText(currentField.getString(FieldProps.Value) ?: "")
                             hint = currentField.getString(FieldProps.Hint) ?: ""
-                            layoutParams = (ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT) as ViewGroup.MarginLayoutParams).apply {
-                                bottomMargin = 8.dp
-                                topMargin = 8.dp
-                            }
                         })
                     }
-                    
+
+                    FieldTypes.ContextView -> context?.let { context ->
+                        formFields?.addView(
+                            ContextBlock(context).apply { initContextBlock(formFields, view?.findViewById(R.id.scroller)) }
+                        )
+                    }
+
                     else -> formType = currentField.get("FormType").asString
                 }
             }
