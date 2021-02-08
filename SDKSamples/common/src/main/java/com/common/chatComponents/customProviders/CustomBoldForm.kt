@@ -16,20 +16,21 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
+import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.bold.ui.*
-import com.nanorep.convesationui.bold.ui.ChatForm.Companion.LanguageFieldKey
 import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.TextTagHandler
 import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
-import kotlinx.android.synthetic.main.custom_live_forms_layout.*
 import com.sdk.common.R
+import kotlinx.android.synthetic.main.custom_live_forms_layout.*
 
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
@@ -46,9 +47,7 @@ class CustomBoldForm : Fragment() {
     }
 
     //-> fetch ViewModel instance to get the form arguments (as provided on [BoldCustomChatForm])
-    private val formViewModel by lazy {
-        ViewModelProvider(activity!!).get(ChatFormViewModel::class.java)
-    }
+    val formViewModel: ChatFormViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.custom_live_forms_layout, container, false)
@@ -120,13 +119,13 @@ class CustomBoldForm : Fragment() {
     }
 
     private fun appendFormFields() {
-        formViewModel.data?.let {
+        formViewModel.data?.let { data ->
 
-            it.fields?.takeIf { context != null }?.forEachIndexed { index, fieldData ->
+            data.fields?.takeIf { context != null }?.forEachIndexed { index, fieldData ->
 
                 // Update with branded text
-                it.strings[fieldData.labelBrandingKey]?.run { fieldData.label = this }
-                it.strings[fieldData.errorBrandingKey]?.run { fieldData.validationError = this }
+                data.strings[fieldData.labelBrandingKey]?.run { fieldData.label = this }
+                data.strings[fieldData.errorBrandingKey]?.run { fieldData.validationError = this }
 
                 fun createEditViewView(fieldData: FormField): EditText {
                     return EditText(context).apply {
@@ -144,7 +143,7 @@ class CustomBoldForm : Fragment() {
                                     createEditViewView(fieldData).apply {
                                         tag = index
                                     })
-                            LanguageFieldKey -> handleLanguageView(context!!, index, form_fields_container,
+                            FieldKey.LanguageKey -> handleLanguageView(requireContext(), index, form_fields_container,
                                     fieldData, FormConfiguration(context))
                         }
                     }
@@ -163,7 +162,7 @@ class CustomBoldForm : Fragment() {
     private val selectionListener = object : SelectionListener {
         override fun onSelectedOption(selectionSpec: SelectionSpec) {
             when (selectionSpec.fieldKey) {
-                LanguageFieldKey -> handleLanguageSelection(selectionSpec)
+                FieldKey.LanguageKey -> handleLanguageSelection(selectionSpec)
             }
         }
     }

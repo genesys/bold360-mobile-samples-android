@@ -1,8 +1,8 @@
 package com.common.utils.forms
 
 import com.common.utils.forms.defs.ChatType
+import com.common.utils.forms.defs.DataKeys.*
 import com.common.utils.forms.defs.FieldProps
-import com.common.utils.loginForms.*
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -16,46 +16,40 @@ import kotlinx.android.synthetic.main.account_form.*
 
 fun JsonObject.toBotAccount(): BotAccount {
     return BotAccount(
-        getString(SharedDataHandler.Access_key).orEmpty(),
-        getString(SharedDataHandler.Account_key),
-        getString(SharedDataHandler.Kb_key),
-        getString(SharedDataHandler.Server_key)
+        getString(Accesskey).orEmpty(),
+        getString(AccountName),
+        getString(KB),
+        getString(Server)
     ).apply {
 
-        get(SharedDataHandler.Context_key)?.asJsonObject?.let {
+        getAsJsonObject(Context)?.let {
             Gson().fromJson(it, object : TypeToken<Map<String, String>>() {}.type.javaClass)
         }
 
-        getString(SharedDataHandler.Welcome_key)?.takeUnless { it.isEmpty() }?.let { welcomeMessage = it }
+        getString(Welcome)?.takeUnless { it.isEmpty() }?.let { welcomeMessage = it }
     }
 
 }
 
 fun JsonObject.toLiveAccount(): BoldAccount {
-    return BoldAccount(getString(SharedDataHandler.Access_key).orEmpty())
+    return BoldAccount(getString(Accesskey).orEmpty())
 }
 
 fun JsonObject.toAsyncAccount(): AsyncAccount {
-    return AsyncAccount(getString(SharedDataHandler.Access_key).orEmpty(), getString(
-        SharedDataHandler.App_id_Key
-    ).orEmpty()).apply {
-            info.userInfo =
-                (this@toAsyncAccount.getString(SharedDataHandler.user_id_key)?.takeIf { it.isNotEmpty() }?.let { UserInfo(it) } ?: UserInfo()).apply {
-                    this@toAsyncAccount.getString(SharedDataHandler.Email_key)?.let { email = it }
-                    this@toAsyncAccount.getString(SharedDataHandler.Phone_Number_key)?.let { phoneNumber = it }
-                    this@toAsyncAccount.getString(SharedDataHandler.First_Name_key)?.let { firstName = it }
-                    this@toAsyncAccount.getString(SharedDataHandler.Last_Name_key)?.let { lastName = it }
-                    this@toAsyncAccount.getString(SharedDataHandler.Country_Abbrev_key)?.let { countryAbbrev = it }
-                }
-    }
-}
 
-fun JsonObject.getGroupId(): String {
-    return "${getString(SharedDataHandler.Account_key).orEmpty()}#${getString(SharedDataHandler.Kb_key)}#${
-        get(
-            SharedDataHandler.Access_key
-        )
-    }"
+    val infoJson = getAsJsonObject(Info)
+    return AsyncAccount(getString(Accesskey).orEmpty(), infoJson?.getString(AppId).orEmpty()).apply {
+        info.userInfo =
+            (infoJson?.getString(UserId)?.takeIf { it.isNotEmpty() }?.let { UserInfo(it) } ?: UserInfo()).apply {
+                infoJson?.let { infoJson ->
+                    infoJson.getString(Email)?.let { email = it }
+                    infoJson.getString(PhoneNumber)?.let { phoneNumber = it }
+                    infoJson.getString(FirstName)?.let { firstName = it }
+                    infoJson.getString(LastName)?.let { lastName = it }
+                    infoJson.getString(CountryAbbrev)?.let { countryAbbrev = it }
+                }
+            }
+    }
 }
 
 internal fun JsonObject?.orDefault(@ChatType chatType: String): JsonObject {
@@ -79,44 +73,22 @@ internal fun JsonObject.toNeededInfo(@ChatType chatType: String): JsonObject {
 internal fun JsonObject.toNeededAsyncInfo(): JsonObject {
     return JsonObject().apply {
         this@toNeededAsyncInfo.let { fullInfo ->
-            addProperty(
-                SharedDataHandler.Access_key,
-                fullInfo.getString(SharedDataHandler.Access_key)
-            )
-            fullInfo.getString(SharedDataHandler.App_id_Key)?.let {
-                addProperty(
-                    SharedDataHandler.App_id_Key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.user_id_key)?.let {
-                addProperty(
-                    SharedDataHandler.user_id_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.Email_key)?.let {
-                addProperty(
-                    SharedDataHandler.Email_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.Phone_Number_key)?.let {
-                addProperty(
-                    SharedDataHandler.Phone_Number_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.First_Name_key)?.let {
-                addProperty(
-                    SharedDataHandler.First_Name_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.Last_Name_key)?.let {
-                addProperty(
-                    SharedDataHandler.Last_Name_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.Country_Abbrev_key)?.let {
-                addProperty(
-                    SharedDataHandler.user_id_key, it
-                )
+
+            fullInfo.copySimpleProp(Accesskey, this)
+
+            fullInfo.getAsJsonObject(Info).let { info ->
+                info.copySimpleProp(UserId, this)
+
+                info.getAsJsonObject("configurations").copySimpleProp(AppId, this)
+
+                info.getAsJsonObject("extraData")?.let { extraData ->
+                    extraData.copySimpleProp(Email, this)
+                    extraData.copySimpleProp(PhoneNumber, this)
+                    extraData.copySimpleProp(FirstName, this)
+                    extraData.copySimpleProp(LastName, this)
+                    extraData.copySimpleProp(LastName, this)
+                    extraData.copySimpleProp(CountryAbbrev, this)
+                }
             }
         }
 
@@ -125,47 +97,26 @@ internal fun JsonObject.toNeededAsyncInfo(): JsonObject {
 
 internal fun JsonObject.toNeededLiveInfo(): JsonObject {
     return JsonObject().apply {
-        addProperty(
-            SharedDataHandler.Access_key,
-            this@toNeededLiveInfo.getString(SharedDataHandler.Access_key)
-        )
-
+        this@toNeededLiveInfo.copySimpleProp(Accesskey, this)
     }
 }
 
 internal fun JsonObject.toNeededBotInfo(): JsonObject {
     return JsonObject().apply {
         this@toNeededBotInfo.let { fullInfo ->
-            addProperty(
-                SharedDataHandler.Account_key,
-                fullInfo.getString(SharedDataHandler.Account_key)
-            )
-            addProperty(
-                SharedDataHandler.Kb_key,
-                fullInfo.getString(SharedDataHandler.Kb_key)
-            )
-            fullInfo.getString(SharedDataHandler.Access_key)?.let {
-                addProperty(
-                    SharedDataHandler.Access_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.Server_key)?.let {
-                addProperty(
-                    SharedDataHandler.Server_key, it
-                )
-            }
-            fullInfo.get(SharedDataHandler.Context_key)?.asJsonObject?.let {
-                add(
-                    SharedDataHandler.Context_key, it
-                )
-            }
-            fullInfo.getString(SharedDataHandler.Welcome_key)?.let {
-                addProperty(
-                    SharedDataHandler.Welcome_key, it
-                )
-            }
+            fullInfo.copySimpleProp(AccountName, this)
+            fullInfo.copySimpleProp(KB, this)
+            fullInfo.copySimpleProp(Accesskey, this)
+            fullInfo.copySimpleProp(Server, this)
+            fullInfo.copySimpleProp(Context, this)
+            fullInfo.copySimpleProp(Welcome, this)
+            fullInfo.getAsJsonObject(Context)?.let { add(Context, it) }
         }
     }
+}
+
+fun JsonObject.copySimpleProp(key: String?, other: JsonObject) {
+    getString(key)?.let { other.addProperty(key, it) }
 }
 
 fun JsonObject.getString(key: String?): String? {
@@ -182,3 +133,4 @@ fun JsonArray.applyValues(accountObject: JsonObject): JsonArray {
         }
     }
 }
+

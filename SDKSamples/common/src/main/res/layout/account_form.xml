@@ -13,14 +13,21 @@
         android:focusableInTouchMode="true"
         android:padding="10dp">
 
+    <ScrollView
+            android:id="@+id/scroller"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:padding="8dp"
-            android:layout_weight="1"
             android:id="@+id/formFields"
             />
+
+    </ScrollView>
 
     <Button
             android:id="@+id/start_chat"

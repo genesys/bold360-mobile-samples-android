@@ -1,10 +1,14 @@
 package com.common.topicsbase
 
+import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.common.chatComponents.history.HistoryMigrationProvider
 import com.common.chatComponents.history.HistoryRepository
 import com.common.chatComponents.history.RoomHistoryProvider
 import com.nanorep.convesationui.structure.controller.ChatController
+import com.nanorep.convesationui.utils.HistoryMigration
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.bot.BotAccount
 import com.sdk.common.R
@@ -69,6 +73,17 @@ abstract class History : BasicChat() {
         }
 
         return false
+    }
+
+    override fun startChat(savedInstanceState: Bundle?) {
+
+        HistoryMigration.start(HistoryMigrationProvider(this) {
+            runOnUiThread {
+                Log.d("BotChatHistory", "Migration completed. starting chat...")
+                super.startChat(savedInstanceState)
+            }
+        })
+
     }
 
 }

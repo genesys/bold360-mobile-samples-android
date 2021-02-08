@@ -3,30 +3,50 @@ package com.common.topicsbase
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import com.common.utils.forms.FormFieldFactory
 import com.common.utils.forms.LoginData
 import com.common.utils.forms.defs.ChatType
+import com.common.utils.forms.defs.DataKeys
+import com.integration.core.securedInfo
+import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
+import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
-
 
 abstract class RestorationContinuity : History() {
 
+    @ChatType
+    override var chatType = ChatType.None
+
     var restoreRequest = false
 
-    override val account: Account?
-        get() = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        loginFormViewModel.chatType.observe(this, Observer<String> { chatType ->
+            runMain {
+                if (chatType == ChatType.ContinueLast) {
+                    restore()
+                } else {
+                    this.chatType = chatType
+                    presentForms()
+                }
+            }
+        })
+        super.onCreate(savedInstanceState)
+    }
 
     override fun updateLoginData(loginData: LoginData) {
         super.updateLoginData(loginData)
         this.restoreRequest = loginData.restoreRequest
     }
 
-    override val chatType = ChatType.None
-
-    fun addRestorationFields() {
-        formFieldsData.apply {
-//            add() ....
+    private fun addRestorationFields() {
+        extraDataFields = {
+            listOf(
+                FormFieldFactory.ChatTypeOption(ChatType.ContinueLast),
+                FormFieldFactory.SwitchField(DataKeys.Restore)
+            )
         }
     }
 
@@ -34,15 +54,21 @@ abstract class RestorationContinuity : History() {
      * Reloads the login forms according to the ChatType
      */
     private fun reloadForms() {
+
         supportFragmentManager.fragments.clear()
         Log.i("RestoreSample", "ChatController hadn't been destructed")
+
+        chatType = ChatType.None
 
         if (hasChatController()) {
             addRestorationFields()
         }
 
-        accountController.presentForms()
+        presentForms()
+        extraDataFields = { listOf() }
+
     }
+
 
     override fun startChat(savedInstanceState: Bundle?) {
 
@@ -60,6 +86,11 @@ abstract class RestorationContinuity : History() {
         }
     }
 
+    override fun prepareAccount(): Account? {
+        return (account as? BoldAccount)?.apply { info.securedInfo = getSecuredInfo() } ?: account
+    }
+
+
     /**
      * Restores the chat for the current account ( if has ChatController )
      */
@@ -73,14 +104,12 @@ abstract class RestorationContinuity : History() {
                     account == null && hasOpenChats() && isActive -> restoreChat()
 
                     accountController.isRestorable(baseContext, chatType) -> restoreChat(
-                        account = prepareAccount(
-                            getSecuredInfo()
-                        )
+                        account = prepareAccount()
                     )
 
                     else -> {
                         context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT) }
-                        startChat(accountInfo = prepareAccount(getSecuredInfo()))
+                        startChat(accountInfo = prepareAccount())
                     }
                 }
             }

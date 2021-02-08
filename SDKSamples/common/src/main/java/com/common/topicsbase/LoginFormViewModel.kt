@@ -1,16 +1,19 @@
 package com.common.topicsbase
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.common.utils.forms.LoginData
-import com.common.utils.forms.defs.ChatType
 import com.google.gson.*
 
 class LoginFormViewModel : ViewModel() {
 
-    val loginData: MutableLiveData<LoginData> = MutableLiveData()
+    private var _loginData: MutableLiveData<LoginData> = MutableLiveData()
+    val loginData: LiveData<LoginData> = _loginData
 
-    var formFields = JsonArray()
+    var chatType: MutableLiveData<String> = MutableLiveData()
+
+    var formData = JsonArray()
 
     var accountData: JsonObject = JsonObject()
 
@@ -19,11 +22,9 @@ class LoginFormViewModel : ViewModel() {
      */
     var restoreRequest: Boolean = false
 
-    var chatType: String = ChatType.None
+    fun onAccountData() {
 
-    fun onAccountUpdated() {
-
-        loginData.value = LoginData (
+        _loginData.value = LoginData (
 
             this@LoginFormViewModel.accountData,
 

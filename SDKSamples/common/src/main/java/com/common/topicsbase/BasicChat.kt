@@ -10,20 +10,14 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
-import com.common.utils.forms.defs.ChatType
 import com.integration.core.StateEvent
-import com.integration.core.securedInfo
-import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
-import com.nanorep.sdkcore.utils.NRError
-import com.nanorep.sdkcore.utils.hideKeyboard
-import com.nanorep.sdkcore.utils.runMain
-import com.nanorep.sdkcore.utils.toast
+import com.nanorep.sdkcore.utils.*
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.activity_basic.*
 import kotlinx.android.synthetic.main.activity_basic.view.*
@@ -33,15 +27,11 @@ import kotlinx.coroutines.launch
 
 abstract class BasicChat : SampleActivity(), ChatEventListener {
 
-    override val chatType: String
-        get() = ChatType.Bot
-
     private var endMenu: MenuItem? = null
-    private var destructMenu: MenuItem? = null
+    protected var destructMenu: MenuItem? = null
 
     override val containerId: Int
         get() = R.id.basic_chat_view
-
 
     /**
      * Creates the chat chatController and starts the chat
@@ -64,7 +54,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
             }
         }
 
-        prepareAccount(getSecuredInfo())?.let { account ->
+        prepareAccount()?.let { account ->
 
             (chatBuilder ?: ChatController.Builder(baseContext) ).build(account, chatLoadedListener).also {
                 chatController = it
@@ -79,17 +69,19 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
      */
     fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
 
-    protected fun prepareAccount(securedInfo: String): Account? {
-        return account?.apply {
-            if (this is BoldAccount) info.securedInfo = securedInfo
-        }
-    }
-
+    protected open fun prepareAccount(): Account? = account
 
     /**
      * Being invoked when the chat fragment had been fetched and ready to be presented
      */
     protected lateinit var chatController: ChatController
+
+    /**
+     * Returns encrypted info to be added to the Live account (if there is any)
+     */
+    protected fun getSecuredInfo(): String {
+        return "some PGP encrypted key string [${SystemUtil.generateTimestamp()}]"
+    }
 
     open val onChatLoaded: (fragment: Fragment) -> Unit
     get() = { fragment ->
@@ -123,7 +115,8 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     override fun startChat(savedInstanceState: Bundle?) {
-       /* if (hasChatController() && restoreRequest) restore() else */createChat()
+            createChat()
+       /* if (hasChatController() && restoreRequest) restore() else */
     }
 
     protected open fun createChat() {

@@ -1,13 +1,13 @@
-//package com.sdk.samples.topics
-//
-//class ContextSupportChat : BotChat() {
-///*
-//    override fun getAccount(): Account {
-//        return (super.getAccount() as BotAccount).apply {
-//            contexts = mapOf(
-//                "ContextKey1" to "ContextValue1",
-//                "ContextKey2" to "ContextValue2"
-//            )
-//        }
-//    }*/
-//}
+package com.sdk.samples.topics
+
+import com.common.utils.forms.FormFieldFactory
+
+class ContextSupportChat : BotChat() {
+
+    override var extraDataFields: () -> List<FormFieldFactory.FormField> = {
+        listOf(
+            FormFieldFactory.ContextBlock()
+        )
+    }
+
+}

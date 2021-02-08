@@ -6,10 +6,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({ChatType.Live, ChatType.Bot, ChatType.Async, ChatType.None})
+@StringDef({ChatType.Live, ChatType.Bot, ChatType.Async, ChatType.None, ChatType.ContinueLast})
 public @interface ChatType {
-    String Live = "live";
-    String Async = "async";
-    String Bot = "bot";
+    String Live = "Live Chat";
+    String Async = "Async Chat";
+    String Bot = "Bot Chat";
+    String ContinueLast = "Continue Last";
     String None = "none";
 }

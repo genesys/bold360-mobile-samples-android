@@ -6,24 +6,21 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
-import com.common.utils.forms.FormDataFactory
 import com.common.utils.forms.defs.ChatType
-import com.common.utils.forms.toBotAccount
-import com.google.gson.JsonArray
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
-import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.LinkedArticleHandler
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.ArticleResponse
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.activity_upload_no_ui.*
@@ -31,41 +28,22 @@ import kotlinx.android.synthetic.main.autocomplete_activity.*
 
 class Autocomplete : SampleActivity() {
 
-    override val formFieldsData: JsonArray
-        get() = FormDataFactory.createForm(ChatType.Bot)
-
-    override val account: Account
-        get() = accountData.toBotAccount()
-
-    override val chatType: String
-    get() = ChatType.Bot
+    override var chatType: String = ChatType.Bot
 
     override val containerId: Int
-        get() = R.id.autocomplete_view
+        get() = R.id.autocomplete_container
 
     override fun destructChat() {}
 
     override fun startChat(savedInstanceState: Bundle?) {
-
         setSupportActionBar(findViewById(R.id.sample_toolbar))
 
-        article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
+        val botViewModel: BotCompletionViewModel by viewModels()
 
-        val botViewModel = ViewModelProvider(this).get(BotCompletionViewModel::class.java);
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
             botViewModel.botChat.account = (account as BotAccount).withId(this)
         }
-
-        botViewModel.onError.observe(this, Observer { error ->
-            toast(this@Autocomplete, error.toString(), background = ColorDrawable(Color.RED))
-        })
-
-        botViewModel.onSelection.observe(this, Observer { selection ->
-            selection?.getArticle?.invoke(selection.articleId) { result ->
-                result.error?.run { onError(this) } ?: result.data?.run { onArticle(this@run) }
-            }
-        })
 
         botViewModel.uiConfig = AutocompleteViewUIConfig(this).apply {
             inputStyleConfig = StyleConfig(16, Color.BLACK, Typeface.SERIF)
@@ -79,6 +57,16 @@ class Autocomplete : SampleActivity() {
                     }
             }
         }
+
+        botViewModel.onError.observe(this, Observer { error ->
+            toast(this@Autocomplete, error.toString(), background = ColorDrawable(Color.RED))
+        })
+
+        botViewModel.onSelection.observe(this, Observer { selection ->
+            selection?.getArticle?.invoke(selection.articleId) { result ->
+                result.error?.run { onError(this) } ?: result.data?.run { onArticle(this@run) }
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,6 +88,7 @@ class Autocomplete : SampleActivity() {
         html = LinkedArticleHandler.updateLinkedArticles(html)
         article_view.loadData(html, "text/html", "UTF-8")
         article_root.visibility = View.VISIBLE
+        hideKeyboard(article_root)
     }
 
 }

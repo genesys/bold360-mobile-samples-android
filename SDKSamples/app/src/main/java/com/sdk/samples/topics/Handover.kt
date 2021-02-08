@@ -1,18 +1,11 @@
-//package com.sdk.samples.topics
-//
-//open class Handover : BotChat() {
-//
-///*    override fun getAccount(): Account {
-//        return Accounts.defaultBotAccount
-//    }
-//
-//    override fun getBuilder(): ChatController.Builder {
-//
-//        val settings = createChatSettings()
-//
-//        return ChatController.Builder(this)
-//            .chatEventListener(this)
-//            .conversationSettings(settings)
-//            .chatHandoverHandler(CustomHandoverHandler(this))
-//    }*/
-//}
+package com.sdk.samples.topics
+
+import com.common.chatComponents.handover.CustomHandoverHandler
+import com.nanorep.convesationui.structure.controller.ChatController
+
+open class Handover : BotChat() {
+
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.chatHandoverHandler( CustomHandoverHandler(this) )
+    }
+}

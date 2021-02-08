@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import java.lang.ref.WeakReference
 
 interface FormController {
-    fun presentForms(onChatTypeChanged: ((chatType: String) ->  Unit)? = null)
+    fun presentForms(/*isChatSelection: Boolean = false, onChatTypeChanged: ((chatType: String) ->  Unit)? = null*/)
 }
 
 class AccountController(containerRes: Int, wFragmentManager: WeakReference<FragmentManager>, sharedDataHandler: SharedDataHandler):
@@ -15,11 +15,9 @@ class AccountController(containerRes: Int, wFragmentManager: WeakReference<Fragm
 
     private val accountFormPresenter = AccountFormPresenter(containerRes)
 
-    override fun presentForms(
-        onChatTypeChanged: ((chatType: String) ->  Unit)?
-    ) {
+    override fun presentForms() {
         getFragmentManager()?.let { fm ->
-            accountFormPresenter.presentForm(fm, onChatTypeChanged)
+            accountFormPresenter.presentForm(fm)
         }
     }
 }
@@ -28,30 +26,13 @@ interface FormPresenter {
 
     val containerRes: Int
 
-    fun presentForm(fragmentManager: FragmentManager, onChatTypeChanged: ((chatType: String) ->  Unit)?)
+    fun presentForm(fragmentManager: FragmentManager)
 }
 
 class AccountFormPresenter(override val containerRes: Int): FormPresenter {
 
-    override fun presentForm(fragmentManager: FragmentManager, onChatTypeChanged: ((chatType: String) ->  Unit)?) {
-        onChatTypeChanged?.let { presentRestoreForm(fragmentManager, it) } ?: presentAccountForm(fragmentManager)
-    }
-
-    private fun presentAccountForm(fragmentManager: FragmentManager) {
-        startFormTransaction(fragmentManager, AccountForm.newInstance().also {}, AccountForm.TAG)
-    }
-
-    private fun presentRestoreForm(fragmentManager: FragmentManager, onChatTypeChanged: ((chatType: String) ->  Unit)) {
-        val fragment = AccountTypeSelectionForm.newInstance { chatType ->
-            onChatTypeChanged.invoke(chatType)
-            presentAccountForm(fragmentManager)
-        }
-
-        startFormTransaction(
-            fragmentManager,
-            fragment,
-            AccountTypeSelectionForm.TAG
-        )
+    override fun presentForm(fragmentManager: FragmentManager) {
+        startFormTransaction(fragmentManager, ChatForm.newInstance(), ChatForm.TAG)
     }
 
     private fun startFormTransaction(fragmentManager: FragmentManager, fragment: Fragment, tag: String) {

@@ -12,10 +12,10 @@ class BalanceEntitiesProvider : EntitiesProvider {
 
     private val random = Random()
 
-    override fun provide(entities: ArrayList<String>, callback: Completion<ArrayList<Entity>>) {
+    override fun provide(info: ArrayList<String>, callback: Completion<ArrayList<Entity>>) {
         val missingEntities = NRConversationMissingEntities()
 
-        for (missingEntity in entities) {
+        for (missingEntity in info) {
                missingEntities.addEntity(createEntity(missingEntity))
         }
 

@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.common.utils.forms.*
+import com.common.utils.forms.FormDataFactory.addFormField
 import com.common.utils.forms.defs.ChatType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account
-import com.nanorep.sdkcore.utils.SystemUtil
+import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.common.R
 
@@ -21,20 +22,10 @@ abstract class SampleActivity  : AppCompatActivity() {
 
 //  <editor-fold desc=">>>>> Chat handling <<<<<" >
 
-    /**
-     * Returns encrypted info to be added to the Live account (if there is any)
-     */
-    protected fun getSecuredInfo(): String {
-        return "some PGP encrypted key string [${SystemUtil.generateTimestamp()}]"
-    }
-
 //  </editor-fold>
 
 //  <editor-fold desc=">>>>> Login forms handling <<<<<" >
 
-    /**
-     * Controls the Forms presentation
-     */
     lateinit var accountController: AccountController
 
     open fun updateLoginData(loginData: LoginData) {
@@ -42,8 +33,17 @@ abstract class SampleActivity  : AppCompatActivity() {
     }
 
     var accountData: JsonObject = JsonObject()
+    set(value) {
+        field = value
+        account = when (chatType) {
+            ChatType.Live -> field.toLiveAccount()
+            ChatType.Async -> field.toAsyncAccount()
+            ChatType.Bot -> field.toBotAccount()
+            else -> null
+        }
+    }
 
-    private val loginFormViewModel: LoginFormViewModel by viewModels()
+    val loginFormViewModel: LoginFormViewModel by viewModels()
 
     /**
      * Called after the LoginData had been updated from the ChatForm
@@ -54,20 +54,14 @@ abstract class SampleActivity  : AppCompatActivity() {
      * Is being used as account saving key
      */
     @ChatType
-    abstract val chatType: String
+    abstract var chatType: String
 
-    abstract val account: Account?
+    protected var account: Account? = null
 
-  /*  *//**
-     * Account data validation
-     *//*
-    open fun validateAccountData(): Boolean = true
-    protected val presentError: (fieldIndex: Int, message: String) -> Unit = { index, message ->  accountController.presentError(index, message) }
-*/
-    lateinit var onChatTypeChanged: ((chatType: String) ->  Account)
+    private val formFieldsData: JsonArray
+    get() = FormDataFactory.createForm(chatType)
 
-    protected open val formFieldsData: JsonArray = JsonArray()
-
+    open var extraDataFields: (() -> List<FormFieldFactory.FormField>) = { listOf() }
 
 //  </editor-fold>
 
@@ -80,26 +74,32 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         accountController = AccountController(containerId, supportFragmentManager.weakRef(), JsonSharedDataHandler())
 
-        loginFormViewModel.formFields = formFieldsData.applyValues(accountController.getSavedAccount(baseContext, chatType) as JsonObject)
-//        3. Add validation to the formFields before loginData update
-
-        accountController.presentForms()
+        presentForms()
 
         loginFormViewModel.loginData.observe(this, Observer<LoginData> { loginData->
 
-            updateLoginData(loginData)
+            runMain {
 
-            accountController.saveAccount(baseContext, accountData, chatType)
+                updateLoginData(loginData)
 
-            supportFragmentManager
-                .popBackStack(
-                    AccountFormPresenter.LOGIN_FORM,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
+                accountController.saveAccount(baseContext, accountData, chatType)
 
-            startChat(savedInstanceState)
+                supportFragmentManager
+                    .popBackStack(
+                        AccountFormPresenter.LOGIN_FORM,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
 
+                startChat(savedInstanceState)
+            }
         })
+    }
+
+    protected fun presentForms() {
+        formFieldsData.apply { extraDataFields().forEach { addFormField(it) } }.let {
+            loginFormViewModel.formData = it.applyValues( accountController.getSavedAccount(baseContext, chatType) as JsonObject )
+        }
+        accountController.presentForms()
     }
 
 //  <editor-fold desc=">>>>> Base Activity actions <<<<<" >

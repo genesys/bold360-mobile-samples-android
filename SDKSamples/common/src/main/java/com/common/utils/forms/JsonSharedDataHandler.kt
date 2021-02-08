@@ -21,26 +21,6 @@ interface SharedDataHandler {
      * Checks if the account is restorable
      */
     fun isRestorable(context: Context, @ChatType chatType: String): Boolean
-
-    companion object {
-        const val Access_key = "accessKey"
-        const val Account_key = "account"
-        const val Kb_key = "kb"
-        const val Server_key = "domain"
-        const val Context_key = "contextKey"
-        const val Welcome_key = "welcomeKey"
-        const val ApiKey_key = "apiKey"
-        const val preChat_fName_key = "preFname"
-        const val preChat_lName_key = "preLname"
-        const val preChat_deptCode_key = "preDeptCode"
-        const val App_id_Key = "appIdKey"
-        const val First_Name_key = "firstName"
-        const val Last_Name_key = "lastName"
-        const val Country_Abbrev_key = "countryAbbrev"
-        const val Email_key = "email"
-        const val Phone_Number_key = "phoneNumber"
-        const val user_id_key = "userIdKey"
-    }
 }
 
 class JsonSharedDataHandler: SharedDataHandler {
@@ -59,7 +39,7 @@ class JsonSharedDataHandler: SharedDataHandler {
             val editor = shared.edit()
             editor.putString(
                 chatType,
-                (accountData as? JsonObject)?.toNeededInfo(chatType).toString()
+                (accountData as? JsonObject).toString()
             )
             editor.apply()
         }
