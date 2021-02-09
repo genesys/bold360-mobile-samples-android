@@ -3,7 +3,7 @@ package com.common.topicsbase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.common.utils.ChatForm.LoginData
+import com.common.utils.chat_form.LoginData
 import com.google.gson.*
 
 class LoginFormViewModel : ViewModel() {

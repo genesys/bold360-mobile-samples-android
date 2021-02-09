@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
 import com.common.topicsbase.History
-import com.common.utils.ChatForm.defs.ChatType
+import com.common.utils.chat_form.defs.ChatType
 
 open class BoldChatAsync : History() {
 

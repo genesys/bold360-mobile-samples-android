@@ -1,4 +1,4 @@
-package com.common.utils.ChatForm
+package com.common.utils.chat_form
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

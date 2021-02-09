@@ -9,6 +9,7 @@ import com.integration.core.UnavailableEvent
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.sdk.samples.R
@@ -29,16 +30,16 @@ open class BoldChatAvailability : BoldChat() {
                                 account.addExtraData(SessionInfoKeys.Department to results.departmentId)
                             }
 
-                            prepareAccount(account)
-
                             createChat()
                         }
                     }
                 })
         }
 
+        availabilityViewModel.account = account as BoldAccount
+
         supportFragmentManager.beginTransaction()
-            .add(R.id.basic_chat_view, BoldAvailability.newInstance(), AvailabilityTag)
+            .add(R.id.basic_chat_view, BoldAvailability(), AvailabilityTag)
             .addToBackStack(AvailabilityTag)
             .commit()
     }
@@ -47,15 +48,18 @@ open class BoldChatAvailability : BoldChat() {
         loadAvailabilityCheck()
     }
 
-    protected open fun prepareAccount(account: BoldAccount) {
-        //account.skipPrechat() //Uncomment to start chat immediately without displaying prechat form to the user.
+    override fun prepareAccount(): Account {
 
-        /*//>>> uncomment to enable passing preconfigured encrypted info, that enables chat creation,
-                if your account demands it.
-                Replace current text with your Secured string.
+        return (super.prepareAccount() as BoldAccount).apply {
+            //skipPrechat() //Uncomment to start chat immediately without displaying prechat form to the user.
 
-           account.info.securedInfo = "this is an encrypted content. Don't read"
-        */
+            /*//>>> uncomment to enable passing preconfigured encrypted info, that enables chat creation,
+                    if your account demands it.
+                    Replace current text with your Secured string.
+
+               info.securedInfo = "this is an encrypted content. Don't read"
+            */
+        }
     }
 
    override fun onChatStateChanged(stateEvent: StateEvent) {

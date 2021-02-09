@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
 import com.common.topicsbase.BasicChat
-import com.common.utils.ChatForm.defs.ChatType
+import com.common.utils.chat_form.defs.ChatType
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account

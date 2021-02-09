@@ -1,7 +1,7 @@
 package com.sdk.samples.topics
 
-import com.common.utils.ChatForm.FormFieldFactory
-import com.common.utils.ChatForm.defs.DataKeys
+import com.common.utils.chat_form.FormFieldFactory
+import com.common.utils.chat_form.defs.DataKeys
 import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {

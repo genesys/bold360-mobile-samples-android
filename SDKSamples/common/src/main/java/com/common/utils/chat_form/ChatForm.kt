@@ -1,4 +1,4 @@
-package com.common.utils.ChatForm
+package com.common.utils.chat_form
 
 import android.graphics.Color
 import android.os.Bundle
@@ -17,9 +17,9 @@ import androidx.core.view.ViewCompat.generateViewId
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.common.topicsbase.LoginFormViewModel
-import com.common.utils.ChatForm.defs.FieldProps
-import com.common.utils.ChatForm.defs.FieldTypes
-import com.common.utils.ChatForm.defs.FormType
+import com.common.utils.chat_form.defs.FieldProps
+import com.common.utils.chat_form.defs.FieldTypes
+import com.common.utils.chat_form.defs.FormType
 import com.google.gson.Gson
 import com.nanorep.sdkcore.utils.children
 import com.sdk.common.R

@@ -1,4 +1,4 @@
-package com.common.utils.ChatForm
+package com.common.utils.chat_form
 
 import android.content.Context
 import android.graphics.Color
