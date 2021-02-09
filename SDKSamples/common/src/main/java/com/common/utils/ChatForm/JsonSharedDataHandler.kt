@@ -1,7 +1,7 @@
-package com.common.utils.forms
+package com.common.utils.ChatForm
 
 import android.content.Context
-import com.common.utils.forms.defs.ChatType
+import com.common.utils.ChatForm.defs.ChatType
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 

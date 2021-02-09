@@ -4,27 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.common.utils.forms.FormFieldFactory
-import com.common.utils.forms.LoginData
-import com.common.utils.forms.defs.ChatType
-import com.common.utils.forms.defs.DataKeys
+import com.common.utils.ChatForm.FormFieldFactory
+import com.common.utils.ChatForm.defs.ChatType
+import com.common.utils.ChatForm.defs.DataKeys
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 abstract class RestorationContinuity : History() {
 
     @ChatType
     override var chatType = ChatType.None
 
-    var restoreRequest = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         loginFormViewModel.chatType.observe(this, Observer<String> { chatType ->
             runMain {
+
                 if (chatType == ChatType.ContinueLast) {
                     restore()
                 } else {
@@ -34,11 +33,6 @@ abstract class RestorationContinuity : History() {
             }
         })
         super.onCreate(savedInstanceState)
-    }
-
-    override fun updateLoginData(loginData: LoginData) {
-        super.updateLoginData(loginData)
-        this.restoreRequest = loginData.restoreRequest
     }
 
     private fun addRestorationFields() {
@@ -70,11 +64,12 @@ abstract class RestorationContinuity : History() {
     }
 
 
+    @ExperimentalCoroutinesApi
     override fun startChat(savedInstanceState: Bundle?) {
 
         updateHistoryRepo(targetId = account?.getGroupId())
 
-        if (restoreRequest && hasChatController()) restore() else createChat()
+        if (loginFormViewModel.restoreRequest && hasChatController()) restore() else createChat()
 
     }
 

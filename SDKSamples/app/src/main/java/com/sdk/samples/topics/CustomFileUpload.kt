@@ -241,8 +241,6 @@ class CustomFileUpload : BoldChatAvailability() {
         }
     }
 
-    override fun onSampleStop() {}
-
     companion object {
         const val TAG = "CustomUploadSample"
 

@@ -48,7 +48,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
                     toast(baseContext!!, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
                 } ?: runMain {
                     result.fragment?.let {
-                        onChatLoaded?.invoke(it)
+                        onChatLoaded.invoke(it)
                     }
                 }
             }
@@ -67,7 +67,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     /**
      * @return true if the chat chatController exists and had not been destructed
      */
-    fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
+    protected fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
 
     protected open fun prepareAccount(): Account? = account
 
@@ -229,7 +229,12 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         return false
     }
 
-    override fun destructChat() {
+    override fun onStop() {
+        if (isFinishing) { destructChat() }
+        super.onStop()
+    }
+
+    private fun destructChat() {
         if (hasChatController()) {
             chatController.let {
                 it.terminateChat()

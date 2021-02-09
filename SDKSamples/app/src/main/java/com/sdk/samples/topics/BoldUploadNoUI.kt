@@ -24,7 +24,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.common.topicsbase.SampleActivity
-import com.common.utils.forms.defs.ChatType
+import com.common.utils.ChatForm.defs.ChatType
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -46,10 +46,10 @@ import java.io.ByteArrayOutputStream
 
 class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
+    override var chatType: String = ChatType.Live
+
     override val containerId: Int
         get() = R.id.upload_view
-
-    override var chatType: String = ChatType.Live
 
     private val uploader by lazy {
         BoldLiveUploader()
@@ -68,10 +68,6 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     override fun startChat(savedInstanceState: Bundle?) {
         createChat()
-    }
-
-    override fun destructChat() {
-        boldChat = null
     }
 
     private fun createChat() {

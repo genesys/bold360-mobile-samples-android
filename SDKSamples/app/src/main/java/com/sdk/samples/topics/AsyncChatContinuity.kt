@@ -2,9 +2,9 @@ package com.sdk.samples.topics
 
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.forms.FormFieldFactory
-import com.common.utils.forms.defs.ChatType
-import com.common.utils.forms.defs.DataKeys
+import com.common.utils.ChatForm.FormFieldFactory
+import com.common.utils.ChatForm.defs.ChatType
+import com.common.utils.ChatForm.defs.DataKeys
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.integration.core.applicationId
@@ -35,9 +35,9 @@ missed messages = messages that were sent from the agent to the user while the u
 
 class AsyncChatContinuity : RestorationContinuity() {
 
-    private val accountHandler = ContinuityAccountHandler()
-
     override var chatType: String = ChatType.Async
+
+    private val accountHandler = ContinuityAccountHandler()
 
     override var extraDataFields: () -> List<FormFieldFactory.FormField> = { listOf(
                 FormFieldFactory.TextInputField(DataKeys.AppId, "", "Application ID", false),

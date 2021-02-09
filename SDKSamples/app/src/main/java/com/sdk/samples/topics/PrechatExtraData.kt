@@ -1,8 +1,8 @@
 package com.sdk.samples.topics
 
 import com.common.chatComponents.customProviders.SimpleAccountProvider
-import com.common.utils.forms.FormFieldFactory
-import com.common.utils.forms.defs.DataKeys
+import com.common.utils.ChatForm.FormFieldFactory
+import com.common.utils.ChatForm.defs.DataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.AccountInfo
@@ -23,11 +23,11 @@ class PrechatExtraData : BotChat() {
         return super.getChatBuilder()?.accountProvider( accountProvider )
     }
 
-    val accountProvider = object : SimpleAccountProvider() {
+    private val accountProvider = object : SimpleAccountProvider() {
 
-        var BOLD_DEPARTMENT = accountData[DataKeys.preChat_deptCode] ?: "2278985919139590636"
-        var DemoFirstName = accountData[DataKeys.preChat_fName] ?: "Bold"
-        var DemoLastName = accountData[DataKeys.LastName] ?: "360"
+        var BOLD_DEPARTMENT = getDataByKey(DataKeys.preChat_deptCode) ?: "2278985919139590636"
+        var DemoFirstName = getDataByKey(DataKeys.preChat_fName) ?: "Bold"
+        var DemoLastName = getDataByKey(DataKeys.LastName) ?: "360"
 
         override fun addAccount(account: AccountInfo) {
             (account as? BoldAccount)?.apply {

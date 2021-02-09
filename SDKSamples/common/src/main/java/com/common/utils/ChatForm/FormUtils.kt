@@ -1,8 +1,8 @@
-package com.common.utils.forms
+package com.common.utils.ChatForm
 
-import com.common.utils.forms.defs.ChatType
-import com.common.utils.forms.defs.DataKeys.*
-import com.common.utils.forms.defs.FieldProps
+import com.common.utils.ChatForm.defs.ChatType
+import com.common.utils.ChatForm.defs.DataKeys.*
+import com.common.utils.ChatForm.defs.FieldProps
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

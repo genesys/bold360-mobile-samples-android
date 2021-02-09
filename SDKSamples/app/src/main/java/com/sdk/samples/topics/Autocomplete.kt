@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
-import com.common.utils.forms.defs.ChatType
+import com.common.utils.ChatForm.defs.ChatType
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
@@ -32,8 +32,6 @@ class Autocomplete : SampleActivity() {
 
     override val containerId: Int
         get() = R.id.autocomplete_container
-
-    override fun destructChat() {}
 
     override fun startChat(savedInstanceState: Bundle?) {
         setSupportActionBar(findViewById(R.id.sample_toolbar))

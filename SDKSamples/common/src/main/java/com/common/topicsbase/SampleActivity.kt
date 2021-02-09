@@ -5,9 +5,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import com.common.utils.forms.*
-import com.common.utils.forms.FormDataFactory.addFormField
-import com.common.utils.forms.defs.ChatType
+import com.common.utils.ChatForm.*
+import com.common.utils.ChatForm.FormDataFactory.addFormField
+import com.common.utils.ChatForm.defs.ChatType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account
@@ -20,19 +20,13 @@ abstract class SampleActivity  : AppCompatActivity() {
     protected lateinit var topicTitle: String
     abstract val containerId: Int
 
-//  <editor-fold desc=">>>>> Chat handling <<<<<" >
+//  <editor-fold desc=">>>>> Chat forms and account data handling <<<<<" >
 
-//  </editor-fold>
-
-//  <editor-fold desc=">>>>> Login forms handling <<<<<" >
+    val loginFormViewModel: LoginFormViewModel by viewModels()
 
     lateinit var accountController: AccountController
 
-    open fun updateLoginData(loginData: LoginData) {
-        loginData.account?.let { accountData = it }
-    }
-
-    var accountData: JsonObject = JsonObject()
+    private var accountData: JsonObject = JsonObject()
     set(value) {
         field = value
         account = when (chatType) {
@@ -43,16 +37,19 @@ abstract class SampleActivity  : AppCompatActivity() {
         }
     }
 
-    val loginFormViewModel: LoginFormViewModel by viewModels()
+    private fun updateLoginData(loginData: LoginData) {
+        loginData.account?.let { accountData = it }
+    }
+
+    protected fun getDataByKey(key: String): String? {
+        return accountData.getString(key)
+    }
 
     /**
      * Called after the LoginData had been updated from the ChatForm
      */
     abstract fun startChat(savedInstanceState: Bundle? = null)
 
-    /**
-     * Is being used as account saving key
-     */
     @ChatType
     abstract var chatType: String
 
@@ -122,21 +119,6 @@ abstract class SampleActivity  : AppCompatActivity() {
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.left_in, R.anim.right_out)
-    }
-
-    override fun onStop() {
-        onSampleStop()
-        super.onStop()
-    }
-
-
-    /**
-     * Clears the chat and release its resources
-     */
-    abstract fun destructChat()
-
-    protected open fun onSampleStop() {
-        if (isFinishing) { destructChat() }
     }
 
 //  </editor-fold>

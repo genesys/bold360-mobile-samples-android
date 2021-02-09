@@ -3,7 +3,7 @@ package com.common.topicsbase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.common.utils.forms.LoginData
+import com.common.utils.ChatForm.LoginData
 import com.google.gson.*
 
 class LoginFormViewModel : ViewModel() {
@@ -24,11 +24,11 @@ class LoginFormViewModel : ViewModel() {
 
     fun onAccountData() {
 
-        _loginData.value = LoginData (
+        _loginData.postValue( LoginData (
 
             this@LoginFormViewModel.accountData,
 
             this@LoginFormViewModel.restoreRequest
-        )
+        ))
     }
 }

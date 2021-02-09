@@ -1,9 +1,9 @@
-package com.common.utils.forms
+package com.common.utils.ChatForm
 
-import com.common.utils.forms.defs.ChatType
-import com.common.utils.forms.defs.DataKeys.*
-import com.common.utils.forms.defs.FieldTypes
-import com.common.utils.forms.defs.FormType
+import com.common.utils.ChatForm.defs.ChatType
+import com.common.utils.ChatForm.defs.DataKeys.*
+import com.common.utils.ChatForm.defs.FieldTypes
+import com.common.utils.ChatForm.defs.FormType
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -83,8 +83,8 @@ object FormFieldFactory {
     open class SwitchField(key: String, checked: Boolean = false)
         : FormField(FieldTypes.Switch, key, checked.toString())
 
-    class ContextBlock(key: String = FieldTypes.ContextView, value: String = "")
-        : FormField(FieldTypes.ContextView, key, value)
+    class ContextBlock(key: String = Context, value: String = "")
+        : FormField(FieldTypes.ContextBlock, key, value)
 
     class TextField(value: String)
         : FormField(FieldTypes.Title, FieldTypes.Title, value)

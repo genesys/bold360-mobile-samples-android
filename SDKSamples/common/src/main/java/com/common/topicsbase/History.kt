@@ -75,6 +75,7 @@ abstract class History : BasicChat() {
         return false
     }
 
+    @ExperimentalCoroutinesApi
     override fun startChat(savedInstanceState: Bundle?) {
 
         HistoryMigration.start(HistoryMigrationProvider(this) {

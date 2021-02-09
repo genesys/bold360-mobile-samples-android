@@ -1,4 +1,4 @@
-package com.common.utils.forms
+package com.common.utils.ChatForm
 
 import com.google.gson.JsonObject
 
