@@ -39,7 +39,7 @@ open class BoldChatAvailability : BoldChat() {
         availabilityViewModel.account = account as BoldAccount
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.basic_chat_view, BoldAvailability(), AvailabilityTag)
+            .add(R.id.basic_chat_view, BoldAvailability.newInstance(), AvailabilityTag)
             .addToBackStack(AvailabilityTag)
             .commit()
     }

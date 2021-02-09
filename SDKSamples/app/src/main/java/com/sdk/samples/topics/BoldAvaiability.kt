@@ -56,6 +56,10 @@ class CheckAvailabilityViewModel : ViewModel() {
 
 class BoldAvailability : Fragment() {
 
+    companion object {
+        fun newInstance() = BoldAvailability()
+    }
+
     private val viewModel: CheckAvailabilityViewModel? by lazy {
         activity?.let { ViewModelProvider(it).get(CheckAvailabilityViewModel::class.java) }
     }
@@ -208,8 +212,8 @@ class BoldAvailability : Fragment() {
     private fun resetChip() {
         Log.e("availability_fragment", "Reset availability state")
 
-        availability_status?.performCloseIconClick()
-        /*availability_status.apply {
+        availability_status.performCloseIconClick()
+       /* availability_status.apply {
             isSelected = false
             chipIcon = null
             text = getString(R.string.chat_with_agent)
