@@ -11,7 +11,6 @@ import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
-import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -22,15 +21,14 @@ abstract class RestorationContinuity : History() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         loginFormViewModel.chatType.observe(this, Observer<String> { chatType ->
-            runMain {
 
-                if (chatType == ChatType.ContinueLast) {
-                    restore()
-                } else {
-                    this.chatType = chatType
-                    presentForms()
-                }
+            if (chatType == ChatType.ContinueLast) {
+                restore()
+            } else {
+                this.chatType = chatType
+                presentForms()
             }
+
         })
         super.onCreate(savedInstanceState)
     }

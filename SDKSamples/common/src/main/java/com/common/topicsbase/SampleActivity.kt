@@ -11,7 +11,6 @@ import com.common.utils.ChatForm.defs.ChatType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account
-import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.common.R
 
@@ -45,11 +44,6 @@ abstract class SampleActivity  : AppCompatActivity() {
         return accountData.getString(key)
     }
 
-    /**
-     * Called after the LoginData had been updated from the ChatForm
-     */
-    abstract fun startChat(savedInstanceState: Bundle? = null)
-
     @ChatType
     abstract var chatType: String
 
@@ -60,6 +54,17 @@ abstract class SampleActivity  : AppCompatActivity() {
 
     open var extraDataFields: (() -> List<FormFieldFactory.FormField>) = { listOf() }
 
+    /**
+     * Called after the LoginData had been updated from the ChatForm
+     */
+    abstract fun startChat(savedInstanceState: Bundle? = null)
+
+    protected fun presentForms() {
+        formFieldsData.apply { extraDataFields().forEach { addFormField(it) } }.let {
+            loginFormViewModel.formData = it.applyValues( accountController.getSavedAccount(baseContext, chatType) as JsonObject )
+        }
+        accountController.presentForms()
+    }
 //  </editor-fold>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,30 +78,21 @@ abstract class SampleActivity  : AppCompatActivity() {
 
         presentForms()
 
-        loginFormViewModel.loginData.observe(this, Observer<LoginData> { loginData->
+        loginFormViewModel.loginData.observe(this, Observer<LoginData> { loginData ->
 
-            runMain {
+            updateLoginData(loginData)
 
-                updateLoginData(loginData)
+            accountController.saveAccount(baseContext, accountData, chatType)
 
-                accountController.saveAccount(baseContext, accountData, chatType)
+            supportFragmentManager
+                .popBackStack(
+                    AccountFormPresenter.LOGIN_FORM,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
 
-                supportFragmentManager
-                    .popBackStack(
-                        AccountFormPresenter.LOGIN_FORM,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE
-                    )
+            startChat(savedInstanceState)
 
-                startChat(savedInstanceState)
-            }
         })
-    }
-
-    protected fun presentForms() {
-        formFieldsData.apply { extraDataFields().forEach { addFormField(it) } }.let {
-            loginFormViewModel.formData = it.applyValues( accountController.getSavedAccount(baseContext, chatType) as JsonObject )
-        }
-        accountController.presentForms()
     }
 
 //  <editor-fold desc=">>>>> Base Activity actions <<<<<" >
