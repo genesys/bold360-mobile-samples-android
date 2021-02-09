@@ -6,7 +6,6 @@ import com.common.utils.forms.defs.FieldProps
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
 import com.integration.async.core.UserInfo
 import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
@@ -22,8 +21,8 @@ fun JsonObject.toBotAccount(): BotAccount {
         getString(Server)
     ).apply {
 
-        getAsJsonObject(Context)?.let {
-            Gson().fromJson(it, object : TypeToken<Map<String, String>>() {}.type.javaClass)
+        getString(Context)?.let {
+            contexts = Gson().fromJson<Map<String, String>>(it, Map::class.java)
         }
 
         getString(Welcome)?.takeUnless { it.isEmpty() }?.let { welcomeMessage = it }
@@ -108,9 +107,6 @@ internal fun JsonObject.toNeededBotInfo(): JsonObject {
             fullInfo.copySimpleProp(KB, this)
             fullInfo.copySimpleProp(Accesskey, this)
             fullInfo.copySimpleProp(Server, this)
-            fullInfo.copySimpleProp(Context, this)
-            fullInfo.copySimpleProp(Welcome, this)
-            fullInfo.getAsJsonObject(Context)?.let { add(Context, it) }
         }
     }
 }

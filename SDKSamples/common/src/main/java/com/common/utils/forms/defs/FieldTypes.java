@@ -13,5 +13,5 @@ public @interface FieldTypes {
     String TextInput  = "textInput";
     String RadioOption  = "radioOption";
     String Switch = "switch";
-    String ContextView = "contextBlock";
+    String ContextView = "context";
 }

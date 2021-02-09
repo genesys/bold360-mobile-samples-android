@@ -2,7 +2,6 @@ package com.common.utils.forms
 
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.Telephony
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +21,7 @@ import com.common.utils.forms.defs.FieldProps
 import com.common.utils.forms.defs.FieldTypes
 import com.common.utils.forms.defs.FormType
 import com.common.utils.forms.fields.ContextBlock
+import com.google.gson.Gson
 import com.nanorep.sdkcore.utils.children
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.account_form.*
@@ -109,24 +109,24 @@ class ChatForm : Fragment() {
         formFields?.children()?.forEachIndexed { index, view ->
 
             loginFormViewModel.formData[index+1]?.asJsonObject?.let { fieldData ->
-
+0
                 fieldData.getString( FieldProps.Key )?.run {
 
                     val value = (
 
                             when (view) {
 
-                                is EditText -> view.text
+                                is EditText -> view.text.toString()
 
-                                is RadioGroup -> formFields?.findViewById<RadioButton>(view.checkedRadioButtonId)?.text?.toString()
+                                is RadioGroup -> formFields?.findViewById<RadioButton>(view.checkedRadioButtonId)?.text.toString()
 
                                 is SwitchCompat -> view.isChecked.toString()
 
-                                is ContextBlock -> view.contextHandler.getContext().toString() -> Add Context Validation + submission
+                                is ContextBlock -> Gson().toJson(view.contextHandler.getContext())?.toString()
 
                                 else -> return@run
 
-                            }.toString())
+                            })
 
                     val isRequired = fieldData.get(FieldProps.Required)?.asBoolean ?: false
                     val validator = fieldData.getString(FieldProps.Validator)?.toPattern()
@@ -192,9 +192,7 @@ class ChatForm : Fragment() {
                     }
 
                     FieldTypes.ContextView -> context?.let { context ->
-                        formFields?.addView(
-                            ContextBlock(context).apply { initContextBlock(formFields, view?.findViewById(R.id.scroller)) }
-                        )
+                        formFields?.addView(ContextBlock(context).apply { initContextBlock(view?.findViewById(R.id.scroller)) })
                     }
 
                     else -> formType = currentField.get("FormType").asString
@@ -208,7 +206,7 @@ class ChatForm : Fragment() {
                     addView(radio)
                 }
             }.also { group ->
-                formFields?.addView(group)
+                formFields?.addView(group,0)
                 radioOptions.clear()
             }
         }

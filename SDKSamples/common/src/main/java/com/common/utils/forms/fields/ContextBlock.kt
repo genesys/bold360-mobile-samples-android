@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.AppCompatTextView
@@ -17,49 +16,51 @@ import com.sdk.common.R
 import kotlinx.android.synthetic.main.context_view.view.*
 
 class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : FrameLayout(context, attrs, defStyle), ContextAdapter {
+    : LinearLayout(context, attrs, defStyle), ContextAdapter {
 
     lateinit var contextHandler: ContextHandler
     private lateinit var title: AppCompatTextView
     private lateinit var contextView: LinearContext
 
     init {
-        layoutParams = LinearLayout.LayoutParams(
+
+        layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+
+        orientation = VERTICAL
     }
 
-    fun initContextBlock(container: ViewGroup, scroller: ScrollView?) {
+    fun initContextBlock(scroller: ScrollView?) {
 
-        initTitle(container)
+        initTitle()
 
-        initContextContainer(container, scroller)
+        initContextContainer(this, scroller)
 
         contextHandler = ContextHandler(contextView, this).apply {
             onDelete = { _ ->
-                if (childCount == 0) { title.visibility = View.GONE }
+                if (childCount == 2) { title.visibility = View.GONE }
             }
         }
     }
 
-    private fun initTitle(container: ViewGroup) {
+    private fun initTitle() {
 
         title = AppCompatTextView(context).apply {
             text = "Bot Contexts:"
             textSize = 20f
             visibility = View.GONE
             setTextColor(Color.BLUE)
-            setPadding(8, 14, 8, 14)
-            layoutParams = ViewGroup.LayoutParams(
+            gravity = Gravity.CENTER
+            layoutParams = LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
                 gravity = Gravity.CENTER
             }
         }
-        container.addView(title)
-
+        addView(title)
     }
 
     private fun initContextContainer(container: ViewGroup, scroller: ScrollView?) {

@@ -72,6 +72,8 @@ class Autocomplete : SampleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_activity)
+        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
+
         findViewById<TextView>(R.id.topic_title).text = topicTitle
     }
 
