@@ -14,7 +14,7 @@ import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.common.R
 
-abstract class SampleActivity  : AppCompatActivity() {
+abstract class SampleActivity : AppCompatActivity() {
 
     protected lateinit var topicTitle: String
     abstract val containerId: Int

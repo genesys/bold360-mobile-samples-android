@@ -121,11 +121,15 @@ fun JsonObject.getString(key: String?): String? {
 
 fun JsonArray.applyValues(accountObject: JsonObject): JsonArray {
     return this.onEach {
-        (it.asJsonObject).let { fieldObject ->
-            val key = fieldObject.getString(FieldProps.Key) //-> Gets the key of the specific field data
-            accountObject.getString(key)?.let { value -> // -> Gets the value of the same key from the account data
-                fieldObject.addProperty(FieldProps.Value, value)
+        try {
+            (it.asJsonObject).let { fieldObject ->
+                val key = fieldObject.getString(FieldProps.Key) //-> Gets the key of the specific field data
+                accountObject.getString(key)?.let { value -> // -> Gets the value of the same key from the account data
+                    fieldObject.addProperty(FieldProps.Value, value)
+                }
             }
+        } catch (e: IllegalStateException) {
+
         }
     }
 }

@@ -2,13 +2,14 @@ package com.sdk.samples.topics
 
 import com.common.utils.chat_form.FormFieldFactory
 import com.common.utils.chat_form.defs.DataKeys
+import com.common.utils.chat_form.defs.FormType
 import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {
 
     override var extraDataFields: () -> List<FormFieldFactory.FormField> = {
         listOf(
-            FormFieldFactory.TextInputField(DataKeys.Welcome, "", "Welcome message id", false)
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.Welcome, "", "Welcome message id", false)
         )
     }
 

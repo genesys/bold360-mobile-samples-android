@@ -3,6 +3,7 @@ package com.sdk.samples.topics
 import com.common.chatComponents.customProviders.SimpleAccountProvider
 import com.common.utils.chat_form.FormFieldFactory
 import com.common.utils.chat_form.defs.DataKeys
+import com.common.utils.chat_form.defs.FormType
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.AccountInfo
@@ -13,9 +14,9 @@ class PrechatExtraData : BotChat() {
 
     override var extraDataFields: () -> List<FormFieldFactory.FormField> = {
         listOf(
-            FormFieldFactory.TextInputField(DataKeys.preChat_fName, "", "First Name", false),
-            FormFieldFactory.TextInputField(DataKeys.LastName, "", "Last Name", false),
-            FormFieldFactory.TextInputField(DataKeys.preChat_deptCode, "", "Department code", false)
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.preChat_fName, "", "First Name", false),
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.LastName, "", "Last Name", false),
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.preChat_deptCode, "", "Department code", false)
         )
     }
 
@@ -25,9 +26,9 @@ class PrechatExtraData : BotChat() {
 
     private val accountProvider = object : SimpleAccountProvider() {
 
-        var BOLD_DEPARTMENT = getDataByKey(DataKeys.preChat_deptCode) ?: "2278985919139590636"
-        var DemoFirstName = getDataByKey(DataKeys.preChat_fName) ?: "Bold"
-        var DemoLastName = getDataByKey(DataKeys.LastName) ?: "360"
+        val BOLD_DEPARTMENT = getDataByKey(DataKeys.preChat_deptCode) ?: "2278985919139590636"
+        val DemoFirstName = getDataByKey(DataKeys.preChat_fName) ?: "Bold"
+        val DemoLastName = getDataByKey(DataKeys.LastName) ?: "360"
 
         override fun addAccount(account: AccountInfo) {
             (account as? BoldAccount)?.apply {

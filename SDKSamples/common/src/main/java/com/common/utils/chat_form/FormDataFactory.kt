@@ -24,8 +24,8 @@ object FormDataFactory {
 
     private fun createRestorationForm() : JsonArray {
         return JsonArray().apply {
-            add(JsonObject().apply { addProperty("FormType", FormType.Restoration) })
-            addFormField(FormFieldFactory.TextField("Choose the Account type"))
+            add(FormType.Restoration)
+            addFormField(FormFieldFactory.TextField(FormType.Restoration, "Choose the Account type"))
             addFormField(FormFieldFactory.ChatTypeOption(ChatType.Bot, true))
             addFormField(FormFieldFactory.ChatTypeOption(ChatType.Live))
             addFormField(FormFieldFactory.ChatTypeOption(ChatType.Async))
@@ -34,28 +34,28 @@ object FormDataFactory {
 
     private fun createBotForm(): JsonArray {
         return JsonArray().apply {
-            add(JsonObject().apply { addProperty("FormType", FormType.Account) })
-            addFormField(FormFieldFactory.TextField("Account Details"))
-            addFormField(FormFieldFactory.TextInputField(AccountName, "", "Account name", true))
-            addFormField(FormFieldFactory.TextInputField(KB, "", "Knowledge Base", true))
-            addFormField(FormFieldFactory.TextInputField(Accesskey, "", "Api Key", false))
-            addFormField(FormFieldFactory.TextInputField(Server, "", "Server", false))
+            add(FormType.Account)
+            addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
+            addFormField(FormFieldFactory.TextInputField(FormType.Account, AccountName, "", "Account name", true))
+            addFormField(FormFieldFactory.TextInputField(FormType.Account, KB, "", "Knowledge Base", true))
+            addFormField(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Api Key", false))
+            addFormField(FormFieldFactory.TextInputField(FormType.Account, Server, "", "Server", false))
         }
     }
 
     private fun createAsyncForm(): JsonArray {
         return JsonArray().apply {
-            add(JsonObject().apply { addProperty("FormType", FormType.Account) })
-            addFormField(FormFieldFactory.TextField("Account Details"))
-            add(FormFieldFactory.TextInputField(Accesskey, "", "Access key", false).toJson())
+            add(FormType.Account)
+            addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
+            add(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Access key", false).toJson())
         }
     }
 
     private fun createLiveForm(): JsonArray {
         return JsonArray().apply {
-            add(JsonObject().apply { addProperty("FormType", FormType.Account) })
-            addFormField(FormFieldFactory.TextField("Account Details"))
-            add(FormFieldFactory.TextInputField(Accesskey, "", "Access key", false).toJson())
+            add(FormType.Account)
+            addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
+            add(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Access key", false).toJson())
         }
     }
 
@@ -66,7 +66,7 @@ object FormDataFactory {
 
 object FormFieldFactory {
 
-    open class FormField (@FieldTypes val type: String, val key: String, val value: String ) {
+    open class FormField ( @FormType val formType: String, @FieldTypes val type: String, val key: String, val value: String ) {
 
         fun toJson(): JsonObject {
             return JsonParser.parseString(Gson().toJson(this)).asJsonObject
@@ -74,32 +74,32 @@ object FormFieldFactory {
 
     }
 
-    open class OptionField( text: String, checked: Boolean = false )
-        : FormField(FieldTypes.RadioOption, text, checked.toString())
+    open class OptionField( @FormType formType: String, text: String, checked: Boolean = false )
+        : FormField(formType, FieldTypes.RadioOption, text, checked.toString())
 
-    class ChatTypeOption(@ChatType text: String, checked: Boolean = false )
-        : OptionField(text, checked)
+    class ChatTypeOption( @ChatType text: String, checked: Boolean = false )
+        : OptionField(FormType.Restoration, text, checked)
 
-    open class SwitchField(key: String, checked: Boolean = false)
-        : FormField(FieldTypes.Switch, key, checked.toString())
+    open class SwitchField( @FormType formType: String, key: String, checked: Boolean = false)
+        : FormField(FormType.Restoration, FieldTypes.Switch, key, checked.toString())
 
-    class ContextBlock(key: String = Context, value: String = "")
-        : FormField(FieldTypes.ContextBlock, key, value)
+    class ContextBlock( key: String = Context, value: String = "")
+        : FormField(FormType.Account, FieldTypes.ContextBlock, key, value)
 
-    class TextField(value: String)
-        : FormField(FieldTypes.Title, FieldTypes.Title, value)
+    class TextField( @FormType formType: String, value: String)
+        : FormField(formType, FieldTypes.Title, FieldTypes.Title, value)
 
-    open class TextInputField(key: String, value: String,  val hint: String,  val required: Boolean)
-        : FormField(FieldTypes.TextInput, key, value)
+    open class TextInputField( @FormType formType: String, key: String, value: String, val hint: String, val required: Boolean)
+        : FormField(formType, FieldTypes.TextInput, key, value)
 
-    open class PatternInputField(key: String, value: String, hint: String, required: Boolean,  val validator: String)
-        : TextInputField(key, value, hint, required)
+    open class PatternInputField( @FormType formType: String, key: String, value: String, hint: String, required: Boolean,  val validator: String)
+        : TextInputField(formType, key, value, hint, required)
 
-    class EmailInputField( key: String, value: String, hint: String, required: Boolean )
-        : FormFieldFactory.PatternInputField(key, value, hint, required, android.util.Patterns.EMAIL_ADDRESS.toString() )
+    class EmailInputField( @FormType formType: String, key: String, value: String, hint: String, required: Boolean )
+        : FormFieldFactory.PatternInputField(formType, key, value, hint, required, android.util.Patterns.EMAIL_ADDRESS.toString() )
 
-    class PhoneInputField( key: String, value: String, hint: String, required: Boolean)
-        : FormFieldFactory.PatternInputField(key, value, hint, required, android.util.Patterns.PHONE.toString() )
+    class PhoneInputField( @FormType formType: String, key: String, value: String, hint: String, required: Boolean)
+        : FormFieldFactory.PatternInputField(formType, key, value, hint, required, android.util.Patterns.PHONE.toString() )
 
 
 }

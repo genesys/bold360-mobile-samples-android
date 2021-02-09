@@ -5,6 +5,7 @@ import com.common.topicsbase.RestorationContinuity
 import com.common.utils.chat_form.FormFieldFactory
 import com.common.utils.chat_form.defs.ChatType
 import com.common.utils.chat_form.defs.DataKeys
+import com.common.utils.chat_form.defs.FormType
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.integration.core.applicationId
@@ -40,11 +41,11 @@ class AsyncChatContinuity : RestorationContinuity() {
     private val accountHandler = ContinuityAccountHandler()
 
     override var extraDataFields: () -> List<FormFieldFactory.FormField> = { listOf(
-                FormFieldFactory.TextInputField(DataKeys.AppId, "", "Application ID", false),
-                FormFieldFactory.TextInputField(DataKeys.UserId, "", "UserId", false),
-                FormFieldFactory.EmailInputField(DataKeys.Email, "", "Email", false),
-                FormFieldFactory.TextInputField(DataKeys.FirstName, "", "First Name", false),
-                FormFieldFactory.TextInputField(DataKeys.LastName, "", "Last Name", false))
+                FormFieldFactory.TextInputField(FormType.Account, DataKeys.AppId, "", "Application ID", false),
+                FormFieldFactory.TextInputField(FormType.Account, DataKeys.UserId, "", "UserId", false),
+                FormFieldFactory.EmailInputField(FormType.Account, DataKeys.Email, "", "Email", false),
+                FormFieldFactory.TextInputField(FormType.Account, DataKeys.FirstName, "", "First Name", false),
+                FormFieldFactory.TextInputField(FormType.Account, DataKeys.LastName, "", "Last Name", false))
         }
 
     /**

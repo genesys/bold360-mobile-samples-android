@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 abstract class BasicChat : SampleActivity(), ChatEventListener {
 
-    private var endMenu: MenuItem? = null
+    protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
     override val containerId: Int
@@ -234,7 +234,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         super.onStop()
     }
 
-    private fun destructChat() {
+    protected open fun destructChat() {
         if (hasChatController()) {
             chatController.let {
                 it.terminateChat()

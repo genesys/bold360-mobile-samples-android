@@ -1,7 +1,6 @@
 package com.common.chatComponents.customProviders
 
 import android.util.Log
-import android.widget.FrameLayout
 import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -90,13 +89,9 @@ class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProv
                 })
             }
 
-            val fragment = CustomBoldForm.create()
-
-            val p = window.decorView.findViewById<FrameLayout>(android.R.id.content)
-
             supportFragmentManager
                 .beginTransaction()
-                .add(p.id, fragment, CUSTOM_FORM_TAG)
+                .add(containerId, BoldCustomForm.create(), CUSTOM_FORM_TAG)
                 .addToBackStack(CUSTOM_FORM_TAG)
                 .commit()
         }

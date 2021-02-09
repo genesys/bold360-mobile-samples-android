@@ -10,5 +10,4 @@ class ContextSupportChat : BotChat() {
             FormFieldFactory.ContextBlock()
         )
     }
-
 }

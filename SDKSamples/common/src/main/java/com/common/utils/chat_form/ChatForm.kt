@@ -56,9 +56,13 @@ class ChatForm : Fragment() {
 
         val radioOptions = mutableListOf<RadioButton>()
 
+        formType = loginFormViewModel.formData.remove(0).asString
+
         loginFormViewModel.formData.forEach {
 
             it.asJsonObject?.let { currentField ->
+
+                if ( currentField.getString(FieldProps.FormType) != formType ) return@let
 
                 when (currentField.getString(FieldProps.Type)) {
 
@@ -104,10 +108,10 @@ class ChatForm : Fragment() {
                     }
 
                     FieldTypes.ContextBlock -> context?.let { context ->
-                        formFields?.addView(ContextBlock(context).apply { initContextBlock(view?.findViewById(R.id.scroller)) })
+                        formFields?.addView( ContextBlock(context).apply { initContextBlock(view?.findViewById(R.id.scroller)) } )
                     }
 
-                    else -> formType = currentField.get("FormType").asString
+                    else -> return@let
                 }
             }
         }
@@ -154,7 +158,7 @@ class ChatForm : Fragment() {
 
         formFields?.children()?.forEachIndexed { index, view ->
 
-            loginFormViewModel.formData[ index + 1 ]?.asJsonObject?.let { fieldData -> //-> "+ 1" since the first index contains the form type
+            loginFormViewModel.formData[index]?.asJsonObject?.let { fieldData ->
 
                 fieldData.getString( FieldProps.Key )?.run {
 

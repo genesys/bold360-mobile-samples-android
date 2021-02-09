@@ -68,6 +68,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     override fun startChat(savedInstanceState: Bundle?) {
         createChat()
+
     }
 
     private fun createChat() {

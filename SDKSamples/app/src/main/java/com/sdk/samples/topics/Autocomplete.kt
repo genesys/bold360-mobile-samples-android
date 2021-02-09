@@ -35,6 +35,7 @@ class Autocomplete : SampleActivity() {
 
     override fun startChat(savedInstanceState: Bundle?) {
         setSupportActionBar(findViewById(R.id.sample_toolbar))
+        article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel: BotCompletionViewModel by viewModels()
 

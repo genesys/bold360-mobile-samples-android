@@ -9,6 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 @StringDef({FieldProps.Type, FieldProps.Key, FieldProps.Value, FieldProps.Label, FieldProps.Hint})
 
 public @interface FieldProps {
+
+    String FormType = "formType";
     String Type  = "type";
     String Key = "key";
     String Value  = "value";

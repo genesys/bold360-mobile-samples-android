@@ -16,7 +16,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
@@ -35,19 +34,21 @@ import kotlinx.android.synthetic.main.custom_live_forms_layout.*
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
  */
-class CustomBoldForm : Fragment() {
+class BoldCustomForm : Fragment() {
 
     private var isSubmitted = false
 
     companion object {
         @JvmStatic
         fun create(): Fragment {
-            return CustomBoldForm()
+            return BoldCustomForm()
         }
     }
 
     //-> fetch ViewModel instance to get the form arguments (as provided on [BoldCustomChatForm])
-    val formViewModel: ChatFormViewModel by viewModels()
+    private val formViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(ChatFormViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.custom_live_forms_layout, container, false)
@@ -62,7 +63,7 @@ class CustomBoldForm : Fragment() {
         initSubmitButton()
 
         //-> Sets an observer to FormData changes
-        formViewModel.observeFormData(this, Observer { data ->
+        formViewModel.observeFormData(viewLifecycleOwner, Observer { data ->
             Log.i("ChatForm", "Got form data update")
             data?.let {
                 // Save current user filled data into the FormData, before we remove the views.
@@ -119,13 +120,13 @@ class CustomBoldForm : Fragment() {
     }
 
     private fun appendFormFields() {
-        formViewModel.data?.let { data ->
+        formViewModel.data?.let {
 
-            data.fields?.takeIf { context != null }?.forEachIndexed { index, fieldData ->
+            it.fields?.takeIf { context != null }?.forEachIndexed { index, fieldData ->
 
                 // Update with branded text
-                data.strings[fieldData.labelBrandingKey]?.run { fieldData.label = this }
-                data.strings[fieldData.errorBrandingKey]?.run { fieldData.validationError = this }
+                it.strings[fieldData.labelBrandingKey]?.run { fieldData.label = this }
+                it.strings[fieldData.errorBrandingKey]?.run { fieldData.validationError = this }
 
                 fun createEditViewView(fieldData: FormField): EditText {
                     return EditText(context).apply {
@@ -139,7 +140,7 @@ class CustomBoldForm : Fragment() {
                 when (fieldData.type) {
                     FormFieldType.Select -> {
                         when (fieldData.key) {
-                            "department" -> handleDeptView(form_fields_container, fieldData,
+                            FieldKey.DepartmentKey -> handleDeptView(form_fields_container, fieldData,
                                     createEditViewView(fieldData).apply {
                                         tag = index
                                     })
@@ -171,7 +172,7 @@ class CustomBoldForm : Fragment() {
             formField: FormField, formConfiguration: FormConfiguration) {
 
         fieldsContainer.addView(SelectionView(context, formField, formConfiguration).apply {
-            selectionChangeListener = this@CustomBoldForm.selectionListener
+            selectionChangeListener = this@BoldCustomForm.selectionListener
             this.tag = index
         }, index)
     }
@@ -202,14 +203,14 @@ class CustomBoldForm : Fragment() {
 
         //-> sets the value of the department editText, with the previously filled value or `defaultOption` if available.
         var depValue = fieldData.value
-                ?: fieldData.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value.orEmpty()
+                ?: fieldData.defaultOption?.takeIf { it.isDefaultValue && it.isAvailable }?.value ?: ""
         fieldView.text = SpannableStringBuilder(depValue)
         fieldsContainer.addView(fieldView)
 
         //-> Adds the departments options as description below the edit field.
         fieldData.options?.run {
             val deptOptionsSB = StringBuilder().append(
-                    context?.resources?.getString(R.string.custom_form_departments_title).orEmpty())
+                    context?.resources?.getString(R.string.custom_form_departments_title) ?: "")
 
             forEach {
 

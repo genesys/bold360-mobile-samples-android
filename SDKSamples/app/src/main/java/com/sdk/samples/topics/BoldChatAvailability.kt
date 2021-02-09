@@ -1,11 +1,13 @@
 package com.sdk.samples.topics
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.integration.core.Empty
 import com.integration.core.StateEvent
 import com.integration.core.UnavailableEvent
+import com.integration.core.UnavailableReason
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
@@ -44,12 +46,7 @@ open class BoldChatAvailability : BoldChat() {
             .commit()
     }
 
-    override fun startChat(savedInstanceState: Bundle?) {
-        loadAvailabilityCheck()
-    }
-
     override fun prepareAccount(): Account {
-
         return (super.prepareAccount() as BoldAccount).apply {
             //skipPrechat() //Uncomment to start chat immediately without displaying prechat form to the user.
 
@@ -62,12 +59,21 @@ open class BoldChatAvailability : BoldChat() {
         }
     }
 
-   override fun onChatStateChanged(stateEvent: StateEvent) {
+    override fun startChat(savedInstanceState: Bundle?) {
+        loadAvailabilityCheck()
+    }
+
+    override fun onChatStateChanged(stateEvent: StateEvent) {
         super.onChatStateChanged(stateEvent)
+
         when (stateEvent.state) {
             StateEvent.Idle -> removeChatFragment()
+
             StateEvent.Unavailable -> {
-                takeIf { ((stateEvent as? UnavailableEvent)?.isFollowedByForm) != true }?.removeChatFragment()
+                val unavailableEvent = stateEvent as? UnavailableEvent
+                takeIf { unavailableEvent?.isFollowedByForm != true }?.removeChatFragment()
+
+                Log.d("boldChat", stateEvent.state +", reason: ${unavailableEvent?.unavailableReason?:UnavailableReason.Unknown}")
                 //-> trigger the observer that was assigned to this viewModel to trigger
                 //  refresh of chat availability status.
                 availabilityViewModel.refresh(Event(Empty))
@@ -79,6 +85,9 @@ open class BoldChatAvailability : BoldChat() {
         return super.getChatBuilder()?.apply {
             chatUIProvider(ChatUIProvider(this@BoldChatAvailability).apply {
                 chatInputUIProvider.uiConfig.showUpload = false
+
+                // uncomment the following to hide the "cancel" option on the queuebar:
+                // queueCmpUIProvider.queueUIConfig.enableCancel = false
             })
         }
     }

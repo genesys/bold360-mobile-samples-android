@@ -28,7 +28,6 @@ import com.sdk.samples.R
 import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.*
 import java.util.*
 
-
 const val override = "override"
 const val configure = "configure"
 
@@ -47,6 +46,7 @@ open class CustomizedUI : BotChat() {
                 )
             )
     }
+
 }
 
 private class UIProviderFactory {

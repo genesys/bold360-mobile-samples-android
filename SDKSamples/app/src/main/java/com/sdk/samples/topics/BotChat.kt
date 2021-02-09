@@ -11,4 +11,5 @@ open class BotChat : BasicChat() {
     override fun onUploadFileRequest() {
         toast(this@BotChat, "The file upload action is not available for this sample.")
     }
+
 }
