@@ -14,49 +14,44 @@ object FormDataFactory {
     fun createForm(@ChatType chatType: String): JsonArray {
 
         return when (chatType) {
-            ChatType.Live -> createLiveForm()
-            ChatType.Async -> createAsyncForm()
-            ChatType.Bot -> createBotForm()
-            ChatType.None -> createRestorationForm()
-            else -> JsonArray()
+            ChatType.Live -> liveForm
+            ChatType.Async -> asyncForm
+            ChatType.Bot -> botForm
+            else -> restorationForm
         }
     }
 
-    private fun createRestorationForm() : JsonArray {
-        return JsonArray().apply {
-            add(FormType.Restoration)
-            addFormField(FormFieldFactory.TextField(FormType.Restoration, "Choose the Account type"))
-            addFormField(FormFieldFactory.ChatTypeOption(ChatType.Bot, true))
-            addFormField(FormFieldFactory.ChatTypeOption(ChatType.Live))
-            addFormField(FormFieldFactory.ChatTypeOption(ChatType.Async))
-        }
+    private val restorationForm: JsonArray
+    get() = JsonArray().apply {
+        add(FormType.Restoration)
+        addFormField(FormFieldFactory.TextField(FormType.Restoration, "Choose the Account type"))
+        addFormField(FormFieldFactory.ChatTypeOption(ChatType.Bot, true))
+        addFormField(FormFieldFactory.ChatTypeOption(ChatType.Live))
+        addFormField(FormFieldFactory.ChatTypeOption(ChatType.Async))
     }
 
-    private fun createBotForm(): JsonArray {
-        return JsonArray().apply {
-            add(FormType.Account)
-            addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
-            addFormField(FormFieldFactory.TextInputField(FormType.Account, AccountName, "", "Account name", true))
-            addFormField(FormFieldFactory.TextInputField(FormType.Account, KB, "", "Knowledge Base", true))
-            addFormField(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Api Key", false))
-            addFormField(FormFieldFactory.TextInputField(FormType.Account, Server, "", "Server", false))
-        }
+    private val accountForm: JsonArray
+    get() =  JsonArray().apply {
+        add(FormType.Account)
+        addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
     }
 
-    private fun createAsyncForm(): JsonArray {
-        return JsonArray().apply {
-            add(FormType.Account)
-            addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
-            add(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Access key", false).toJson())
-        }
+    private val botForm: JsonArray
+    get() = accountForm.apply {
+        addFormField(FormFieldFactory.TextInputField(FormType.Account, AccountName, "", "Account name", true))
+        addFormField(FormFieldFactory.TextInputField(FormType.Account, KB, "", "Knowledge Base", true))
+        addFormField(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Api Key", false))
+        addFormField(FormFieldFactory.TextInputField(FormType.Account, Server, "", "Server", false))
     }
 
-    private fun createLiveForm(): JsonArray {
-        return JsonArray().apply {
-            add(FormType.Account)
-            addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
-            add(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Access key", false).toJson())
-        }
+    private val liveForm: JsonArray
+    get() = accountForm.apply {
+        add(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Access key", false).toJson())
+    }
+
+    private val asyncForm: JsonArray
+    get() = liveForm.apply {
+        addFormField(FormFieldFactory.TextInputField(FormType.Account, AppId, "", "Application ID", true))
     }
 
     fun JsonArray.addFormField(formField: FormFieldFactory.FormField) {

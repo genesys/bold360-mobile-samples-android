@@ -41,7 +41,6 @@ class AsyncChatContinuity : RestorationContinuity() {
     private val accountHandler = ContinuityAccountHandler()
 
     override var extraDataFields: () -> List<FormFieldFactory.FormField> = { listOf(
-                FormFieldFactory.TextInputField(FormType.Account, DataKeys.AppId, "", "Application ID", false),
                 FormFieldFactory.TextInputField(FormType.Account, DataKeys.UserId, "", "UserId", false),
                 FormFieldFactory.EmailInputField(FormType.Account, DataKeys.Email, "", "Email", false),
                 FormFieldFactory.TextInputField(FormType.Account, DataKeys.FirstName, "", "First Name", false),
