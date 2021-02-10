@@ -32,7 +32,9 @@ fun Activity.createPickerIntent(onIntentReady: (fileChooserIntent: Intent) -> Un
     } .apply {
         type = "*/*"
         addCategory(Intent.CATEGORY_OPENABLE)
-        putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
     }
 
     onIntentReady(Intent.createChooser(intent, "Select a File to Upload"))
@@ -111,7 +113,7 @@ object PathUtil {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    fun isExternalStorageDocument(uri: Uri): Boolean {
+    private fun isExternalStorageDocument(uri: Uri): Boolean {
         return "com.android.externalstorage.documents" == uri.authority
     }
 
@@ -119,7 +121,7 @@ object PathUtil {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    fun isDownloadsDocument(uri: Uri): Boolean {
+    private fun isDownloadsDocument(uri: Uri): Boolean {
         return "com.android.providers.downloads.documents" == uri.authority
     }
 
@@ -127,7 +129,7 @@ object PathUtil {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    fun isMediaDocument(uri: Uri): Boolean {
+    private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
     }
 }

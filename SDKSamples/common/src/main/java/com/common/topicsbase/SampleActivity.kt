@@ -5,9 +5,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import com.common.utils.chat_form.*
-import com.common.utils.chat_form.FormDataFactory.addFormField
-import com.common.utils.chat_form.defs.ChatType
+import com.common.utils.chatForm.*
+import com.common.utils.chatForm.FormDataFactory.addFormField
+import com.common.utils.chatForm.defs.ChatType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account

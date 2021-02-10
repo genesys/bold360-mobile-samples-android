@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.common.utils.chat_form.LinearContext
+<com.common.utils.chatForm.LinearContext
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/bot_context"
         android:layout_width="match_parent"
@@ -20,5 +20,5 @@
             android:layout_marginTop="8dp"
             android:text="@string/add_context" />
 
-</com.common.utils.chat_form.LinearContext>
+</com.common.utils.chatForm.LinearContext>
 

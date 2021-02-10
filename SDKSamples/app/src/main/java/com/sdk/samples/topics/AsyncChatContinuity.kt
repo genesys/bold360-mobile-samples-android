@@ -2,10 +2,10 @@ package com.sdk.samples.topics
 
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.chat_form.FormFieldFactory
-import com.common.utils.chat_form.defs.ChatType
-import com.common.utils.chat_form.defs.DataKeys
-import com.common.utils.chat_form.defs.FormType
+import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.chatForm.defs.DataKeys
+import com.common.utils.chatForm.defs.FormType
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.integration.core.applicationId

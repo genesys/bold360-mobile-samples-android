@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
-import com.common.utils.chat_form.defs.ChatType
+import com.common.utils.chatForm.defs.ChatType
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment

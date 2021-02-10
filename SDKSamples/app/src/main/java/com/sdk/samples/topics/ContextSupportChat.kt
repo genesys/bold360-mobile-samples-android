@@ -1,6 +1,6 @@
 package com.sdk.samples.topics
 
-import com.common.utils.chat_form.FormFieldFactory
+import com.common.utils.chatForm.FormFieldFactory
 
 class ContextSupportChat : BotChat() {
 

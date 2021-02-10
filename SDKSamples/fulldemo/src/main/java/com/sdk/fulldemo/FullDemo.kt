@@ -22,9 +22,9 @@ import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.chatComponents.customProviders.CustomTTSAlterProvider
 import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.chat_form.FormFieldFactory
-import com.common.utils.chat_form.defs.DataKeys
-import com.common.utils.chat_form.defs.FormType
+import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.defs.DataKeys
+import com.common.utils.chatForm.defs.FormType
 import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo

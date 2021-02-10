@@ -1,4 +1,4 @@
-package com.common.utils.chat_form.defs;
+package com.common.utils.chatForm.defs;
 
 import androidx.annotation.StringDef;
 

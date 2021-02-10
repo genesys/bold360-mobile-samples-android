@@ -24,7 +24,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.common.topicsbase.SampleActivity
-import com.common.utils.chat_form.defs.ChatType
+import com.common.utils.chatForm.defs.ChatType
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData

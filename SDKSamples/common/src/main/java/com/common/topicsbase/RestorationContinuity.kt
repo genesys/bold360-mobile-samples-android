@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.common.utils.chat_form.FormFieldFactory
-import com.common.utils.chat_form.defs.ChatType
-import com.common.utils.chat_form.defs.DataKeys
-import com.common.utils.chat_form.defs.FormType
+import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.chatForm.defs.DataKeys
+import com.common.utils.chatForm.defs.FormType
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account

@@ -1,4 +1,4 @@
-package com.common.utils.chat_form
+package com.common.utils.chatForm
 
 import com.integration.async.core.UserInfo
 import com.integration.core.userInfo

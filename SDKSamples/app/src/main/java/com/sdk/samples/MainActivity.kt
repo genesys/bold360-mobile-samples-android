@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 "com.sdk.sample.action.BOT_CHAT",
                 getString(R.string.chat_with_bot),
                 ContextCompat.getDrawable(this, R.drawable.outline_android_black_24)
-            
+
             ), SampleTopic(
                 "com.sdk.sample.action.HISTORY",
                 getString(R.string.chat_with_bot_history),
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.bot_chat_with_voc_to_voc),
                 ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24)
 
-            ),SampleTopic(
+            ), SampleTopic(
                 "com.sdk.sample.action.CONTEXT_SUPPORT",
                 getString(R.string.bot_context_support),
                 ContextCompat.getDrawable(this, R.drawable.context_support_24dp)
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.bot_chat_with_entities),
                 ContextCompat.getDrawable(this, R.drawable.entities_24)
 
-            ),SampleTopic(
+            ), SampleTopic(
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-class TopicsAdapter(var topics: ArrayList<SampleTopic>, val gotoTopic: (topic: SampleTopic) -> Unit) :
+class TopicsAdapter(var topics: ArrayList<SampleTopic>, private val gotoTopic: (topic: SampleTopic) -> Unit) :
     RecyclerView.Adapter<TopicViewHolder>() {
 
     init {
