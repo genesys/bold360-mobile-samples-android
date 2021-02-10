@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
@@ -39,29 +38,48 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
      * @return true if the chatController had been created properly, false otherwise
      * When ready the chat fragment would be passed by 'onChatLoaded' invocation
      */
-    fun create(chatBuilder: ChatController.Builder? = null): Boolean {
+    private fun create(chatBuilder: ChatController.Builder? = null) {
 
         val chatLoadedListener: ChatLoadedListener = object : ChatLoadedListener {
 
             override fun onComplete(result: ChatLoadResponse) {
-                result.error?.takeIf { baseContext != null }?.run {
-                    toast(baseContext!!, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                result.error?.run {
+
+                    toast(baseContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+
                 } ?: runMain {
-                    result.fragment?.let {
-                        onChatLoaded.invoke(it)
+
+                    result.fragment?.let { chatFragment ->
+                        if (!isFinishing && !supportFragmentManager.isStateSaved) {
+
+                            basic_loading.visibility = View.GONE
+
+                            hideKeyboard(window.decorView)
+
+                            supportFragmentManager.beginTransaction()
+                                .add(
+                                    basic_chat_view.id,
+                                    chatFragment,
+                                    topicTitle
+                                )
+                                .addToBackStack(ChatTag)
+                                .commit()
+                        } else {
+                            finish()
+                        }
                     }
+
                 }
             }
         }
 
         prepareAccount()?.let { account ->
 
-            (chatBuilder ?: ChatController.Builder(baseContext) ).build(account, chatLoadedListener).also {
-                chatController = it
-                return true
-            }
+            (chatBuilder ?: ChatController.Builder(baseContext))
+                .build(account, chatLoadedListener).also {
+                    chatController = it
+                }
         }
-        return false
     }
 
     /**
@@ -69,6 +87,9 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
      */
     protected fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
 
+    /**
+     * Enables the sample to modify the account before creating the chat
+     */
     protected open fun prepareAccount(): Account? = account
 
     /**
@@ -83,28 +104,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         return "some PGP encrypted key string [${SystemUtil.generateTimestamp()}]"
     }
 
-    open val onChatLoaded: (fragment: Fragment) -> Unit
-    get() = { fragment ->
-
-        if (!isFinishing && !supportFragmentManager.isStateSaved) {
-
-            basic_loading.visibility = View.GONE
-
-            hideKeyboard(window.decorView)
-
-            supportFragmentManager.beginTransaction()
-                .add(
-                    basic_chat_view.id,
-                    fragment,
-                    topicTitle
-                )
-                .addToBackStack(ChatTag)
-                .commit()
-        } else {
-            finish()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -115,8 +114,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     override fun startChat(savedInstanceState: Bundle?) {
-            createChat()
-       /* if (hasChatController() && restoreRequest) restore() else */
+        createChat()
     }
 
     protected open fun createChat() {
@@ -136,8 +134,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
          */
         }
     }
-
-    protected open fun onChatLoaded() {}
 
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
@@ -234,7 +230,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         super.onStop()
     }
 
-    protected open fun destructChat() {
+    private fun destructChat() {
         if (hasChatController()) {
             chatController.let {
                 it.terminateChat()
@@ -243,7 +239,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         }
     }
 
-    protected open fun enableMenu(@Nullable menuItem: MenuItem?, enable: Boolean) {
+    protected fun enableMenu(@Nullable menuItem: MenuItem?, enable: Boolean) {
         if (menuItem != null) {
             menuItem.isEnabled = enable
         }

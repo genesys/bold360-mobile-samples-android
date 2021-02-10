@@ -115,10 +115,6 @@ open class FullDemo : RestorationContinuity() {
         super.onChatUIDetached()
     }
 
-    override fun destructChat() {
-        chatController.destruct()
-    }
-
     /**
      *   A Broadcast which triggers Interruption to the chat.
      *   This is used to stop the voice recognition/readout during phone actions
@@ -401,21 +397,8 @@ open class FullDemo : RestorationContinuity() {
         findViewById<TextView>(com.sdk.fulldemo.R.id.topic_title).visibility = View.GONE
     }
 
-    private fun clearAllResources() {
-        try {
-            chatController.run {
-                unsubscribeNotifications(notificationsReceiver)
-                terminateChat()
-            }
-
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-
-    }
-
     override fun onStop() {
-        if (isFinishing) { clearAllResources() }
+        if (isFinishing && hasChatController()) { chatController.unsubscribeNotifications(notificationsReceiver) }
         super.onStop()
     }
 
