@@ -1,6 +1,7 @@
 package com.common.utils.chatForm
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,17 +50,24 @@ class ChatForm : Fragment() {
 
         sampleFormViewModel.formData.value?.forEach {
 
-            it.asJsonObject?.let { currentField ->
+            try {
+                it.asJsonObject.let { currentField ->
 
-                if (currentField.getString(FieldProps.FormType) != formType) return@let
+                    if (currentField.getString(FieldProps.FormType) != formType) return@let
 
-                FieldViewFactory.createFieldView(currentField, requireContext())?.apply {
-                    (this as? ContextBlock)?.apply { initContextBlock(view?.findViewById(R.id.scroller)) }
+                    FieldViewFactory.createFieldView(currentField, requireContext())?.apply {
+                        (this as? ContextBlock)?.apply { initContextBlock(view?.findViewById(R.id.scroller)) }
 
-                }?.let { fieldView ->
-                    formFields?.addView(fieldView)
+                    }?.let { fieldView ->
+                        formFields?.addView(fieldView)
+                    }
                 }
+
+            } catch ( exception : IllegalStateException) {
+                // being thrown by the "asJsonObject" casting
+                Log.w(TAG, exception.message ?: "Unable to parse field")
             }
+
         }
 
         FieldViewFactory.clear()
