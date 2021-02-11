@@ -1,24 +1,15 @@
 package com.common.utils.chatForm
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
-import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.ViewCompat.generateViewId
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.common.topicsbase.LoginFormViewModel
+import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
-import com.common.utils.chatForm.defs.FieldTypes
 import com.common.utils.chatForm.defs.FormType
 import com.google.gson.Gson
 import com.nanorep.sdkcore.utils.children
@@ -31,7 +22,7 @@ class ChatForm : Fragment() {
 
     private lateinit var formType: String
 
-    private val loginFormViewModel: LoginFormViewModel by activityViewModels()
+    private val sampleFormViewModel: SampleFormViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,79 +45,24 @@ class ChatForm : Fragment() {
 
     private fun createForm() {
 
-        val radioOptions = mutableListOf<RadioButton>()
+        formType = sampleFormViewModel.getFormType()
 
-        formType = loginFormViewModel.formData.remove(0).asString
-
-        loginFormViewModel.formData.forEach {
+        sampleFormViewModel.formData.value?.forEach {
 
             it.asJsonObject?.let { currentField ->
 
-                if ( currentField.getString(FieldProps.FormType) != formType ) return@let
+                if (currentField.getString(FieldProps.FormType) != formType) return@let
 
-                when (currentField.getString(FieldProps.Type)) {
+                FieldViewFactory.createFieldView(currentField, requireContext())?.apply {
+                    (this as? ContextBlock)?.apply { initContextBlock(view?.findViewById(R.id.scroller)) }
 
-                    FieldTypes.Title -> {
-                        formFields?.addView(AppCompatTextView(context).apply {
-                            text = currentField.getString(FieldProps.Value) ?: ""
-                            textSize = 22f
-                            setTextColor(Color.BLUE)
-                            setPadding(8, 14, 8, 14)
-                            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
-                                gravity = Gravity.CENTER
-                            }
-                        })
-                    }
-
-                    FieldTypes.RadioOption -> {
-                        radioOptions.add(AppCompatRadioButton(context).apply {
-                            isChecked = currentField.getString(FieldProps.Value) == "true"
-                            currentField.getString(FieldProps.Key)?.let { checkable ->
-                                textSize = 16f
-                                text = checkable
-                                id = generateViewId()
-                            }
-                        })
-                    }
-
-                    FieldTypes.Switch -> {
-                        formFields?.addView(SwitchCompat(context).apply {
-                            isChecked = currentField.getString(FieldProps.Value) == "true"
-                            currentField.getString(FieldProps.Key)?.let { checkable ->
-                                textSize = 16f
-                                text = checkable
-                                id = generateViewId()
-                            }
-                        })
-                    }
-
-                    FieldTypes.TextInput -> {
-                        formFields?.addView(AppCompatEditText(context).apply {
-                            setText(currentField.getString(FieldProps.Value) ?: "")
-                            hint = currentField.getString(FieldProps.Hint) ?: ""
-                        })
-                    }
-
-                    FieldTypes.ContextBlock -> context?.let { context ->
-                        formFields?.addView( ContextBlock(context).apply { initContextBlock(view?.findViewById(R.id.scroller)) } )
-                    }
-
-                    else -> return@let
+                }?.let { fieldView ->
+                    formFields?.addView(fieldView)
                 }
             }
         }
 
-        radioOptions.takeIf { radioOptions.isNotEmpty() }?.let { options ->
-            RadioGroup(context).apply {
-                options.forEach { radio ->
-                    addView(radio)
-                }
-            }.also { group ->
-                formFields?.addView(group)
-                radioOptions.clear()
-            }
-        }
-
+        FieldViewFactory.clear()
     }
 
     private fun collaborateData() = when (formType) {
@@ -144,11 +80,11 @@ class ChatForm : Fragment() {
 
                 is RadioGroup -> {
                     formFields?.findViewById<RadioButton>(view.checkedRadioButtonId)?.text?.toString()?.let { chatType ->
-                        loginFormViewModel.chatType.postValue(chatType)
+                        sampleFormViewModel.updateChatType(chatType)
                     }
                 }
 
-                is SwitchCompat -> loginFormViewModel.restoreRequest = view.isChecked
+                is SwitchCompat -> sampleFormViewModel.restoreRequest = view.isChecked
 
             }
         }
@@ -158,9 +94,9 @@ class ChatForm : Fragment() {
 
         formFields?.children()?.forEachIndexed { index, view ->
 
-            loginFormViewModel.formData[index]?.asJsonObject?.let { fieldData ->
+            sampleFormViewModel.getFormField(index)?.run {
 
-                fieldData.getString( FieldProps.Key )?.run {
+                getString( FieldProps.Key )?.let { key ->
 
                     val value = (
 
@@ -174,20 +110,20 @@ class ChatForm : Fragment() {
 
                                 is ContextBlock -> Gson().toJson(view.contextHandler.getContext())
 
-                                else -> return@run
+                                else -> return@let
 
                             }.toString())
 
-                    val isRequired = fieldData.get(FieldProps.Required)?.asBoolean ?: false
-                    val validator = fieldData.getString(FieldProps.Validator)?.toPattern()
+                    val isRequired = get(FieldProps.Required)?.asBoolean ?: false
+                    val validator = getString(FieldProps.Validator)?.toPattern()
                     if (!isValid(index, value, isRequired, validator)) return
 
-                    loginFormViewModel.accountData.addProperty(this, value)
+                    sampleFormViewModel.addAccountProperty(key, value)
                 }
             }
         }
 
-        loginFormViewModel.onAccountData()
+        sampleFormViewModel.onAccountData()
     }
 
     private fun isValid(index: Int, value: String?, required: Boolean, validator: Pattern?): Boolean {

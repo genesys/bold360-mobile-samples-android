@@ -40,10 +40,10 @@ class CustomFileUpload : BoldChatAvailability() {
 
     private lateinit var imageButton: ImageButton
 
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
         initUploadButton()
 
-        super.startChat(savedInstanceState)
+        super.startSample(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

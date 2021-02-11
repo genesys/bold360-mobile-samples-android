@@ -28,7 +28,7 @@ open class CustomUIChat : AppCompatActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
 
@@ -53,7 +53,7 @@ open class CustomUIChat : AppCompatActivity() {
                     putExtra("type", customUIOption)
                 }.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
 
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
             }
         }
     }

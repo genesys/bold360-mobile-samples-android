@@ -40,18 +40,21 @@ class AsyncChatContinuity : RestorationContinuity() {
 
     private val accountHandler = ContinuityAccountHandler()
 
-    override var extraDataFields: () -> List<FormFieldFactory.FormField> = { listOf(
-                FormFieldFactory.TextInputField(FormType.Account, DataKeys.UserId, "", "UserId", false),
-                FormFieldFactory.EmailInputField(FormType.Account, DataKeys.Email, "", "Email", false),
-                FormFieldFactory.TextInputField(FormType.Account, DataKeys.FirstName, "", "First Name", false),
-                FormFieldFactory.TextInputField(FormType.Account, DataKeys.LastName, "", "Last Name", false))
-        }
+    override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
+    get() = {
+        listOf(
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.UserId, "", "UserId", false),
+            FormFieldFactory.EmailInputField(FormType.Account, DataKeys.Email, "", "Email", false),
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.FirstName, "", "First Name", false),
+            FormFieldFactory.TextInputField(FormType.Account, DataKeys.LastName, "", "Last Name", false)
+        )
+    }
 
     /**
      * Continues the last chat with this account (if available)
      */
     private fun continueLast(account: AsyncAccount) {
-        account.takeIf { accountController.isRestorable(baseContext, ChatType.Async) }?.apply {
+        account.takeIf { sampleFormViewModel.isRestorable() }?.apply {
             info.let {
                 it.SenderId = accountHandler.senderId.toLongOrNull()
                 it.LastReceivedMessageId = accountHandler.lastReceivedMessageId

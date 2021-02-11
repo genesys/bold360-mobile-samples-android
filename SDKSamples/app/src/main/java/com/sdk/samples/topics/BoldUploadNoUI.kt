@@ -66,7 +66,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
         topic_title.text = intent.getStringExtra("title")
     }
 
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
         createChat()
 
     }
@@ -205,7 +205,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
     override fun finish() {
         super.finish()
 
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
     internal class ProgressController(private val container: ViewGroup){

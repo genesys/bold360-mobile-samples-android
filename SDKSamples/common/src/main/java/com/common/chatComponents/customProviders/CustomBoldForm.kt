@@ -133,7 +133,7 @@ class BoldCustomForm : Fragment() {
                         hint = fieldData.label
                         id = ViewCompat.generateViewId()
                         tag = index
-                        fieldData.value?.let { setText(it) }
+                        fieldData.value?.let { text -> setText(text) }
                     }
                 }
 

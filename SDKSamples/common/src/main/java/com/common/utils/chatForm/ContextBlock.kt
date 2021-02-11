@@ -53,6 +53,8 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
         orientation = VERTICAL
     }
 
+    lateinit var text: String
+
     fun initContextBlock(scroller: ScrollView?) {
 
         initTitle()
@@ -174,7 +176,7 @@ class ContextViewLinear @JvmOverloads constructor(
 
 ///////////////////////////////////////////////////
 
-class ContextHandler(var container: ContextContainer, val contextsAdapter: ContextAdapter) {
+class ContextHandler(var container: ContextContainer, private val contextsAdapter: ContextAdapter) {
 
     var onDelete: ((ContextViewHolder) -> Unit)? = {
         container.removeContext(it)
@@ -244,7 +246,7 @@ class LinearContext @JvmOverloads constructor(
         removeViews(0, childCount - 1)
     }
 
-    override fun getContextList(): Map<String, String>? {
+    override fun getContextList(): Map<String, String> {
         return (0 until childCount - 1).map { idx ->
             val entry = (getChildAt(idx) as? ContextViewHolder)?.getBotContext() ?: Pair("", "")
             entry.first to entry.second

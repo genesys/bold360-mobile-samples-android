@@ -5,13 +5,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import com.common.utils.chatForm.*
-import com.common.utils.chatForm.FormDataFactory.addFormField
+import com.common.utils.chatForm.ChatForm
+import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.LoginData
 import com.common.utils.chatForm.defs.ChatType
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account
-import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.common.R
 
 abstract class SampleActivity : AppCompatActivity() {
@@ -21,50 +19,39 @@ abstract class SampleActivity : AppCompatActivity() {
 
 //  <editor-fold desc=">>>>> Chat forms and account data handling <<<<<" >
 
-    val loginFormViewModel: LoginFormViewModel by viewModels()
+    val sampleFormViewModel: SampleFormViewModel by viewModels()
 
-    lateinit var accountController: AccountController
-
-    private var accountData: JsonObject = JsonObject()
-    set(value) {
-        field = value
-        account = when (chatType) {
-            ChatType.Live -> field.toLiveAccount()
-            ChatType.Async -> field.toAsyncAccount()
-            ChatType.Bot -> field.toBotAccount()
-            else -> null
-        }
-    }
-
-    private fun updateLoginData(loginData: LoginData) {
-        loginData.account?.let { accountData = it }
-    }
+    val account: Account?
+    get() = sampleFormViewModel.account
 
     protected fun getDataByKey(key: String): String? {
-        return accountData.getString(key)
+        return sampleFormViewModel.getAccountDataByKey(key)
     }
 
     @ChatType
     abstract var chatType: String
 
-    protected var account: Account? = null
-
-    private val formFieldsData: JsonArray
-    get() = FormDataFactory.createForm(chatType)
-
-    open var extraDataFields: (() -> List<FormFieldFactory.FormField>) = { listOf() }
-
     /**
      * Called after the LoginData had been updated from the ChatForm
      */
-    abstract fun startChat(savedInstanceState: Bundle? = null)
+    abstract fun startSample(savedInstanceState: Bundle? = null)
 
-    protected fun presentForms() {
-        formFieldsData.apply { extraDataFields().forEach { addFormField(it) } }.let {
-            loginFormViewModel.formData = it.applyValues( accountController.getSavedAccount(baseContext, chatType) as JsonObject )
+    open val extraDataFields: (() -> List<FormFieldFactory.FormField>)? = null
+
+    protected fun presentSampleForm() {
+
+        sampleFormViewModel.updateFormData(extraDataFields?.invoke())
+
+        if (!supportFragmentManager.isStateSaved) {
+
+            supportFragmentManager.beginTransaction()
+                .add(containerId, ChatForm.newInstance(), "ChatForm")
+                .addToBackStack("ChatForm")
+                .commit()
         }
-        accountController.presentForms()
+
     }
+
 //  </editor-fold>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,25 +59,21 @@ abstract class SampleActivity : AppCompatActivity() {
 
         topicTitle = intent.getStringExtra("title").orEmpty()
 
-        val loginFormViewModel: LoginFormViewModel by viewModels()
+        val sampleFormViewModel: SampleFormViewModel by viewModels()
 
-        accountController = AccountController(containerId, supportFragmentManager.weakRef(), JsonSharedDataHandler())
+        sampleFormViewModel.updateChatType(chatType)
 
-        presentForms()
+        presentSampleForm()
 
-        loginFormViewModel.loginData.observe(this, Observer<LoginData> { loginData ->
-
-            updateLoginData(loginData)
-
-            accountController.saveAccount(baseContext, accountData, chatType)
+        sampleFormViewModel.sampleData.observe(this, Observer<LoginData> {
 
             supportFragmentManager
                 .popBackStack(
-                    AccountFormPresenter.LOGIN_FORM,
+                    "ChatForm",
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
 
-            startChat(savedInstanceState)
+            startSample(savedInstanceState)
 
         })
     }

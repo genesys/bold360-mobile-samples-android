@@ -30,9 +30,8 @@ class CustomHandoverHandler(context: Context) : HandoverHandler(context) {
         when (name) {
 
             UserAction -> if (event is UserEvent) {
-                val userEvent = event
-                if (userEvent.action == UserEvent.ActionLink) {
-                    passEvent(userEvent)
+                if (event.action == UserEvent.ActionLink) {
+                    passEvent(event)
                 }
             }
 

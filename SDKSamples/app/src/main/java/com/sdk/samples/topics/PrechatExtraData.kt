@@ -12,7 +12,8 @@ import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 
 class PrechatExtraData : BotChat() {
 
-    override var extraDataFields: () -> List<FormFieldFactory.FormField> = {
+    override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
+    get() = {
         listOf(
             FormFieldFactory.TextInputField(FormType.Account, DataKeys.preChat_fName, "", "First Name", false),
             FormFieldFactory.TextInputField(FormType.Account, DataKeys.LastName, "", "Last Name", false),

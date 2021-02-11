@@ -59,7 +59,7 @@ open class BoldChatAvailability : BoldChat() {
         }
     }
 
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
         loadAvailabilityCheck()
     }
 

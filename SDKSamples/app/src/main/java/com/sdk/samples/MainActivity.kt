@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
 
             topics_recycler.adapter = TopicsAdapter(topics) { topic ->
                 startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
 
             }
             

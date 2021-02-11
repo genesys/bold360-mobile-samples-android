@@ -135,23 +135,16 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
         }
     }
 
+    /**
+     * Clears the target history from the database (on a I/O thread)
+     * If the target is null, it clears all the history
+     */
     override fun clear() {
 
         coroutineScope.launch(Dispatchers.IO) {
             targetId?.run {
                 historyDao.delete(this)
-            }
-                ?: HistoryRoomDB.getInstance(context).clearAllTables()
-        }
-    }
-
-    /**
-     * Clears all the history from the database (on a I/O thread)
-     */
-    fun clearAll() {
-
-        coroutineScope.launch {
-            HistoryRoomDB.getInstance(context).clearAllTables()
+            } ?: HistoryRoomDB.getInstance(context).clearAllTables()
         }
     }
 
@@ -163,7 +156,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     }
 
     override suspend fun count(): Int {
-        val result = coroutineScope.async<Int> { targetId?.let { historyDao.count(it) } ?: 0 }
+        val result = coroutineScope.async { targetId?.let { historyDao.count(it) } ?: 0 }
         return result.await()
     }
 
@@ -216,7 +209,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
 }
 
 @ExperimentalCoroutinesApi
-class HistoryMigrationProvider(context: Context, var onDone:(()->Unit)? = null) : RoomHistoryProvider(context), ElementMigration {
+class HistoryMigrationProvider(context: Context, private var onDone:(()->Unit)? = null) : RoomHistoryProvider(context), ElementMigration {
 
     init {
         pageSize = 20
@@ -253,7 +246,7 @@ class HistoryMigrationProvider(context: Context, var onDone:(()->Unit)? = null) 
     }
 
     override suspend fun count(): Int {
-        val result = coroutineScope.async<Int> { historyDao.count() }
+        val result = coroutineScope.async { historyDao.count() }
         return result.await()
     }
 

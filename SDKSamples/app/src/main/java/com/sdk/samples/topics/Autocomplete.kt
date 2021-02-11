@@ -33,7 +33,7 @@ class Autocomplete : SampleActivity() {
     override val containerId: Int
         get() = R.id.autocomplete_container
 
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
         setSupportActionBar(findViewById(R.id.sample_toolbar))
         article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
 

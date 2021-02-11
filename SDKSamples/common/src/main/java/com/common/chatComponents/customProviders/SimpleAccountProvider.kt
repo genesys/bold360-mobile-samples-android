@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference
 
 open class SimpleAccountProvider : AccountInfoProvider {
 
-    var accounts: MutableMap<String, AccountInfo> = mutableMapOf()
+    private var accounts: MutableMap<String, AccountInfo> = mutableMapOf()
 
     override fun update(account: AccountInfo) {
         accounts[account.getApiKey()]?.getInfo()?.update(account.getInfo())

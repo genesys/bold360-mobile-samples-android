@@ -76,12 +76,12 @@ abstract class History : BasicChat() {
     }
 
     @ExperimentalCoroutinesApi
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
 
         HistoryMigration.start(HistoryMigrationProvider(this) {
             runOnUiThread {
                 Log.d("BotChatHistory", "Migration completed. starting chat...")
-                super.startChat(savedInstanceState)
+                super.startSample(savedInstanceState)
             }
         })
 

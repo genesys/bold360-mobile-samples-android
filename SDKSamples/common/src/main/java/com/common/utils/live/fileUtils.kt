@@ -140,18 +140,20 @@ object PathUtil {
 object RealPathUtil {
 
     fun getRealPath(context: Context, fileUri: Uri): String? {
-        val realPath: String?
-        if (Build.VERSION.SDK_INT < 11) {
-            // SDK < 11
-            realPath = getRealPathFromUriBelowAPI11(context, fileUri)
-        } else if (Build.VERSION.SDK_INT < 19) {
-            // SDK >= 11 && SDK < 19
-            realPath = getRealPathFromUriAPI11to18(context, fileUri)
-        } else {
-            // SDK > 19 (Android 4.4) and up
-            realPath = getRealPathFromUriAPI19(context, fileUri)
+        return when {
+            Build.VERSION.SDK_INT < 11 -> {
+                // SDK < 11
+                getRealPathFromUriBelowAPI11(context, fileUri)
+            }
+            Build.VERSION.SDK_INT < 19 -> {
+                // SDK >= 11 && SDK < 19
+                getRealPathFromUriAPI11to18(context, fileUri)
+            }
+            else -> {
+                // SDK > 19 (Android 4.4) and up
+                getRealPathFromUriAPI19(context, fileUri)
+            }
         }
-        return realPath
     }
 
 

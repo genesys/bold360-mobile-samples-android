@@ -13,7 +13,10 @@ object Accounts {
         get() = BoldAccount("2300000001700000000:2278936004449775473:sHkdAhpSpMO/cnqzemsYUuf2iFOyPUYV") // Mobile
 
     private val fameBoldAccount: BoldAccount
-        get() = BoldAccount("2300000001700000000:2279548743171682758:/zBPGZf1erxQ1schkxUVq64M2OSUR/Wz:gamma") // Fame
+        get() = BoldAccount("2300000001700000000:2279148490312878292:grCCPGyzmyITEocnaE+owvjtbasV16eV") // Fame
+
+    val defaultBoldAccount: BoldAccount
+        get() = fameBoldAccount
 
     private val formalBotAccount: BotAccount
         get() = BotAccount(
@@ -27,9 +30,6 @@ object Accounts {
         get() = BotAccount(
             "", "nanorep",
             "English", "mobilestaging")
-
-    val defaultBoldAccount: BoldAccount
-        get() = fameBoldAccount
 
     val defaultBotAccount: BotAccount
         get() = testBotAccount

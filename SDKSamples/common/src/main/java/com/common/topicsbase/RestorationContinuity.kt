@@ -8,6 +8,7 @@ import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.chatForm.defs.FormType
+import com.integration.core.StateEvent
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
@@ -21,27 +22,28 @@ abstract class RestorationContinuity : History() {
     override var chatType = ChatType.None
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        loginFormViewModel.chatType.observe(this, Observer<String> { chatType ->
 
-            if (chatType == ChatType.ContinueLast) {
-                restore()
-            } else {
-                this.chatType = chatType
-                presentForms()
+        sampleFormViewModel.chatType.observe(this, Observer<String> { chatType ->
+
+            when (chatType) {
+                ChatType.None -> {}
+                ChatType.ContinueLast -> restore()
+                else -> presentSampleForm()
             }
-
         })
+
         super.onCreate(savedInstanceState)
     }
 
-    private fun addRestorationFields() {
-        extraDataFields = {
-           listOf(
-                FormFieldFactory.ChatTypeOption(ChatType.ContinueLast),
-                FormFieldFactory.SwitchField(FormType.Restoration, DataKeys.Restore)
-            )
+    override val extraDataFields: (() -> List<FormFieldFactory.FormField>)?
+    get() = takeIf { hasChatController() }?.let { // -> Means that there are chats to be restored/continued
+        { listOf(
+            FormFieldFactory.ChatTypeOption(ChatType.ContinueLast),
+            FormFieldFactory.SwitchField(FormType.Restoration, DataKeys.Restore))
         }
     }
+
+
 
     /**
      * Reloads the login forms according to the ChatType
@@ -51,24 +53,21 @@ abstract class RestorationContinuity : History() {
         supportFragmentManager.fragments.clear()
         Log.i("RestoreSample", "ChatController hadn't been destructed")
 
-        chatType = ChatType.None
+        enableMenu(destructMenu, hasChatController() && !chatController.wasDestructed)
 
-        if (hasChatController()) {
-            addRestorationFields()
-        }
+        sampleFormViewModel.reset()
 
-        presentForms()
-        extraDataFields = { listOf() }
+        presentSampleForm()
 
     }
 
 
     @ExperimentalCoroutinesApi
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
 
         updateHistoryRepo(targetId = account?.getGroupId())
 
-        if (loginFormViewModel.restoreRequest && hasChatController()) restore() else createChat()
+        if (sampleFormViewModel.restoreRequest && hasChatController()) restore() else createChat()
 
     }
 
@@ -81,11 +80,16 @@ abstract class RestorationContinuity : History() {
     }
 
     override fun prepareAccount(): Account? {
-        return (account as? BoldAccount)?.apply { info.securedInfo = getSecuredInfo() } ?: account
+        return ( account as? BoldAccount )?.apply { info.securedInfo = getSecuredInfo() } ?: account
+    }
+
+    override fun onChatStateChanged(stateEvent: StateEvent) {
+        super.onChatStateChanged(stateEvent)
+        if (stateEvent.state == StateEvent.Ended) removeChatFragment()
     }
 
 
-    /**
+        /**
      * Restores the chat for the current account ( if has ChatController )
      */
     private fun restore() {
@@ -97,9 +101,7 @@ abstract class RestorationContinuity : History() {
                 when {
                     account == null && hasOpenChats() && isActive -> restoreChat()
 
-                    accountController.isRestorable(baseContext, chatType) -> restoreChat(
-                        account = prepareAccount()
-                    )
+                    sampleFormViewModel.isRestorable() -> restoreChat( account = prepareAccount() )
 
                     else -> {
                         context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT) }

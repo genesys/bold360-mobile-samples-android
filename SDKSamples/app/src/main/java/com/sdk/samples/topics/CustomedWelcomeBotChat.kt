@@ -7,7 +7,8 @@ import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {
 
-    override var extraDataFields: () -> List<FormFieldFactory.FormField> = {
+    override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
+    get() = {
         listOf(
             FormFieldFactory.TextInputField(FormType.Account, DataKeys.Welcome, "", "Welcome message id", false)
         )

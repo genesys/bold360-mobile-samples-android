@@ -298,7 +298,7 @@ class DepartmentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         radio.isChecked = isSelected
 
-        radio.setOnClickListener { _ ->
+        radio.setOnClickListener {
             onSelection(adapterPosition)
         }
     }

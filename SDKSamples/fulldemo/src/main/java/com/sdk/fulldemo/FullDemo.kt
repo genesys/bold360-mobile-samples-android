@@ -50,8 +50,8 @@ import java.util.*
 
 open class FullDemo : RestorationContinuity() {
 
-    override var extraDataFields: () -> List<FormFieldFactory.FormField> = {
-
+    override val extraDataFields: (() -> List<FormFieldFactory.FormField>)?
+    get() = {
         listOf(
             FormFieldFactory.TextInputField(FormType.Account, DataKeys.Welcome, "", "Welcome message id", false),
             FormFieldFactory.ContextBlock()
@@ -380,8 +380,8 @@ open class FullDemo : RestorationContinuity() {
 
         when (item.itemId) {
             R.id.upload_file -> {
-                uploadFileRequest();
-                return true;
+                uploadFileRequest()
+                return true
             }
         }
 
@@ -414,12 +414,6 @@ open class FullDemo : RestorationContinuity() {
 
     // Avoids sample finish animation:
     override fun overridePendingTransition(enterAnim: Int, exitAnim: Int) {}
-
-    // Clears the used view holder
-    override fun onDestroy() {
-//        singletonSamplesViewModelFactory.clear()
-        super.onDestroy()
-    }
 
 
 //  </editor-fold>

@@ -13,8 +13,7 @@ import java.io.File
 
 @FileType
 fun Uri.fileType(context: Context?): String {
-    val type = context?.contentResolver?.getType(this)
-    return when (type) {
+    return when (context?.contentResolver?.getType(this)) {
         "image/jpeg", "image/png" -> FileType.Picture
 
         "application/vnd.android.package-archive",
@@ -26,7 +25,8 @@ fun Uri.fileType(context: Context?): String {
 }
 
 @Throws(ErrorException::class)
-fun Uri.toFileUploadInfo(context: Context?, fileSizeLimit: Int): FileUploadInfo? =
+fun Uri.toFileUploadInfo(context: Context?, fileSizeLimit: Int): FileUploadInfo =
+
     FileUploadInfo().apply {
 
         filePath = context?.let {

@@ -85,7 +85,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     /**
      * @return true if the chat chatController exists and had not been destructed
      */
-    protected fun hasChatController(): Boolean = ::chatController.isInitialized && !chatController.wasDestructed
+    protected fun hasChatController(): Boolean { return ::chatController.isInitialized && chatController.hasOpenChats() }
 
     /**
      * Enables the sample to modify the account before creating the chat
@@ -113,7 +113,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
         topic_title.text = topicTitle
     }
 
-    override fun startChat(savedInstanceState: Bundle?) {
+    override fun startSample(savedInstanceState: Bundle?) {
         createChat()
     }
 
@@ -232,16 +232,15 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     private fun destructChat() {
         if (hasChatController()) {
-            chatController.let {
-                it.terminateChat()
-                it.destruct()
-            }
+            chatController.terminateChat()
+            chatController.destruct()
         }
     }
 
     protected fun enableMenu(@Nullable menuItem: MenuItem?, enable: Boolean) {
         if (menuItem != null) {
             menuItem.isEnabled = enable
+            if (enable && !menuItem.isVisible) menuItem.isVisible = true
         }
     }
 
