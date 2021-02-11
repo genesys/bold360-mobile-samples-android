@@ -51,16 +51,15 @@ class ChatForm : Fragment() {
         sampleFormViewModel.formData.value?.forEach {
 
             try {
-                it.asJsonObject.let { currentField ->
+                it.asJsonObject.takeIf { formField -> formField.getString(FieldProps.FormType) == formType }?.let { formField ->
 
-                    if (currentField.getString(FieldProps.FormType) != formType) return@let
+                        FieldViewFactory.createFieldView(formField, requireContext())?.apply {
+                            (this as? ContextBlock)?.apply { initContextBlock(view?.findViewById(R.id.scroller)) }
 
-                    FieldViewFactory.createFieldView(currentField, requireContext())?.apply {
-                        (this as? ContextBlock)?.apply { initContextBlock(view?.findViewById(R.id.scroller)) }
+                        }?.let { formFieldView ->
+                            formFields?.addView(formFieldView)
+                        }
 
-                    }?.let { fieldView ->
-                        formFields?.addView(fieldView)
-                    }
                 }
 
             } catch ( exception : IllegalStateException) {
