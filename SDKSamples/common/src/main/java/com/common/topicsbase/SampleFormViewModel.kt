@@ -1,6 +1,7 @@
 package com.common.topicsbase
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -57,7 +58,13 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun getFormField(index: Int): JsonObject? {
-        return _formData.value?.takeIf { it.size() > 0 }?.get(index)?.asJsonObject
+        return try {
+            _formData.value?.takeIf { it.size() > 0 }?.get(index)?.asJsonObject
+        } catch ( exception : IllegalStateException) {
+            // being thrown by the "asJsonObject" casting
+            Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+            null
+        }
     }
 
     fun updateChatType(@ChatType chatType: String) {

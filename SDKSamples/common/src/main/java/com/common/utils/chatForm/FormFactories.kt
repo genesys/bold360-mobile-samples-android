@@ -103,8 +103,15 @@ object FormFieldFactory {
 
     open class FormField (@ChatType val formType: String, @FieldType val type: String, val key: String, val value: String ) {
 
-        fun toJson(): JsonObject = JsonParser.parseString(Gson().toJson(this)).asJsonObject
-
+        fun toJson(): JsonObject {
+            return try {
+                JsonParser.parseString(Gson().toJson(this)).asJsonObject
+            } catch (exception: IllegalStateException) {
+                // being thrown by the "asJsonObject" casting
+                Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+                JsonObject()
+            }
+        }
     }
 
     open class Option( @ChatType formType: String, key: String, text: String)
