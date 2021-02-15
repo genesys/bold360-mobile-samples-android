@@ -1,21 +1,28 @@
 package com.common.utils.chatForm
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.dp
@@ -202,6 +209,56 @@ class FormFieldsContainer @JvmOverloads constructor(context: Context?, attrs: At
             else -> null
         }?.let { view -> this.formFields.addView(
             view.apply { id = ViewCompat.generateViewId() })
+        }
+    }
+
+
+    private object FieldViewFactory {
+
+        fun titleView(value: String?, context: Context): TextView =
+            AppCompatTextView(context).apply {
+                text = value ?: ""
+                textSize = 22f
+                setTextColor(Color.BLUE)
+                setPadding(8, 14, 8, 14)
+                layoutParams =
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        gravity = Gravity.CENTER
+                    }
+            }
+
+        fun inputView(value: String?, hint: String?, context: Context): EditText =
+
+            AppCompatEditText(context).apply {
+                setText(value ?: "")
+                this.hint = hint ?: ""
+            }
+
+        fun switchView(value: String?, key: String?, context: Context): SwitchCompat =
+
+            SwitchCompat(context).apply {
+                isChecked = value == "true"
+                textSize = 16f
+                text = key ?: ""
+            }
+
+        fun optionsView(options: JsonArray, context: Context): RadioGroup {
+
+            return RadioGroup(context).apply {
+                options.forEach {
+                    addView(
+                        AppCompatRadioButton(context).apply {
+                            text  = it.asJsonObject.getString(FieldProps.Value)
+                            textSize = 16f
+                            id = ViewCompat.generateViewId()
+                        }
+                    )
+                }
+                (children.first() as RadioButton).isChecked = true
+            }
         }
     }
 }
