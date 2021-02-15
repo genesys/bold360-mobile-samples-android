@@ -103,9 +103,7 @@ object FormFieldFactory {
 
     open class FormField (@ChatType val formType: String, @FieldType val type: String, val key: String, val value: String ) {
 
-        open fun toJson(): JsonObject {
-            return JsonParser.parseString(Gson().toJson(this)).asJsonObject
-        }
+        fun toJson(): JsonObject = JsonParser.parseString(Gson().toJson(this)).asJsonObject
 
     }
 
@@ -113,12 +111,7 @@ object FormFieldFactory {
         : FormField( formType, FieldType.Option, key, text)
 
     class OptionsField(@ChatType formType: String, key: String, private val options: List<Option>)
-        : FormField( formType, FieldType.Options, key, options.toString()) {
-
-        override fun toJson(): JsonObject {
-            return JsonParser.parseString(Gson().toJson(this)).asJsonObject
-        }
-    }
+        : FormField( formType, FieldType.Options, key, options.toString())
 
     open class SwitchField( @ChatType formType: String, text: String, checked: Boolean = false)
         : FormField( formType, FieldType.Switch, text, checked.toString())
