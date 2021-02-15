@@ -76,10 +76,6 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
             .applyValues(getSavedAccount() as? JsonObject)
     }
 
-    fun reset() {
-        updateChatType(ChatType.ChatSelection)
-    }
-
     fun getAccountDataByKey(key: String): String? {
         return accountData?.getString(key)
     }

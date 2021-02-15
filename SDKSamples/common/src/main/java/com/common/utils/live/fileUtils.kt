@@ -50,8 +50,8 @@ object PathUtil {
      */
     @SuppressLint("NewApi")
     @Throws(URISyntaxException::class, NumberFormatException::class)
-    fun getPath(context: Context, uri: Uri): String? {
-        var uri = uri
+    fun getPath(context: Context, pathUri: Uri): String? {
+        var uri = pathUri
         val needToCheckUri = Build.VERSION.SDK_INT >= 19
         var selection: String? = null
         var selectionArgs: Array<String>? = null
@@ -141,14 +141,12 @@ object RealPathUtil {
 
     fun getRealPath(context: Context, fileUri: Uri): String? {
         return when {
-            Build.VERSION.SDK_INT < 11 -> {
-                // SDK < 11
-                getRealPathFromUriBelowAPI11(context, fileUri)
-            }
+
             Build.VERSION.SDK_INT < 19 -> {
                 // SDK >= 11 && SDK < 19
                 getRealPathFromUriAPI11to18(context, fileUri)
             }
+
             else -> {
                 // SDK > 19 (Android 4.4) and up
                 getRealPathFromUriAPI19(context, fileUri)
@@ -158,32 +156,17 @@ object RealPathUtil {
 
 
     private fun getRealPathFromUriAPI11to18(context: Context, contentUri: Uri): String? {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
         var result: String? = null
 
-        val cursorLoader = CursorLoader(context, contentUri, proj, null, null, null)
+        val cursorLoader = CursorLoader(context, contentUri, projection, null, null, null)
         val cursor = cursorLoader.loadInBackground()
 
-        if (cursor != null) {
+        cursor?.let {
             val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             cursor.moveToFirst()
             result = cursor.getString(columnIndex)
             cursor.close()
-        }
-        return result
-    }
-
-    private fun getRealPathFromUriBelowAPI11(context: Context, contentUri: Uri): String {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = context.contentResolver.query(contentUri, proj, null, null, null)
-        val columnIndex: Int
-        var result = ""
-        if (cursor != null) {
-            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            result = cursor.getString(columnIndex)
-            cursor.close()
-            return result
         }
         return result
     }
@@ -220,9 +203,9 @@ object RealPathUtil {
                     var path:String?  = null
                     if (Build.VERSION.SDK_INT > 20) {
                         //getExternalMediaDirs() added in API 21
-                        val extenal = context.externalMediaDirs
-                        if (extenal.size > 1) {
-                            path = extenal[1].absolutePath
+                        val external = context.externalMediaDirs
+                        if (external.size > 1) {
+                            path = external[1].absolutePath
                             path = path.substring(0, path.indexOf("Android")) + split[1]
                         }
                     }else{
@@ -255,12 +238,16 @@ object RealPathUtil {
                 val type = split[0]
 
                 var contentUri: Uri? = null
-                if ("image" == type) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else if ("video" == type) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else if ("audio" == type) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                when (type) {
+                    "image" -> {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    }
+                    "video" -> {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    }
+                    "audio" -> {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                    }
                 }
 
                 val selection = "_id=?"

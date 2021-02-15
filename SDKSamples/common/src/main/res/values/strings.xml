@@ -69,5 +69,6 @@
     <string name="email_hint">Email</string>
     <string name="phone_hint">Phone number</string>
     <string name="bold_parameters_title">Bold extra data</string>
+    <string name="bot_context_title">Bot Contexts:</string>
 
 </resources>

@@ -68,7 +68,6 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     override fun startSample(savedInstanceState: Bundle?) {
         createChat()
-
     }
 
     private fun createChat() {
@@ -200,12 +199,6 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
                 Log.e(TAG, "null response")
             }
         }
-    }
-
-    override fun finish() {
-        super.finish()
-
-        overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
     internal class ProgressController(private val container: ViewGroup){

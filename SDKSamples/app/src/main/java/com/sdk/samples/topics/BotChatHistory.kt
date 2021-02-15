@@ -9,6 +9,6 @@ open class BotChatHistory : History() {
     override var chatType: String = ChatType.Bot
 
     override fun onUploadFileRequest() {
-        toast(this@BotChatHistory, "The file upload action is not available for this sample.")
+        toast(baseContext, "The file upload action is not available for this sample.")
     }
 }

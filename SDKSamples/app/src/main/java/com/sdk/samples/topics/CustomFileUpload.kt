@@ -33,7 +33,7 @@ import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 
 /**
- * Demonstrate how to provide a costumed upload trigger, and do a full
+ * Demonstrates how to provide a costumed upload trigger, and do a full
  * upload flow to a live agent.
  */
 class CustomFileUpload : BoldChatAvailability() {
@@ -69,7 +69,7 @@ class CustomFileUpload : BoldChatAvailability() {
             ).apply {
                 val margin = 3.px
                 setMargins(margin, margin, margin, margin)
-                gravity = Gravity.RIGHT
+                gravity = Gravity.END
             })
     }
     //</editor-fold>
@@ -177,7 +177,7 @@ class CustomFileUpload : BoldChatAvailability() {
     private fun addChosen(uri: Uri, chosenUploadsTarget: ArrayList<FileUploadInfo>) {
         val fileSizeLimit = 1024 * 1024 * 37
         try {
-            uri.toFileUploadInfo(this, fileSizeLimit)?.let { chosenUploadsTarget.add(it) }
+            uri.toFileUploadInfo(this, fileSizeLimit).let { chosenUploadsTarget.add(it) }
 
         } catch (ex: ErrorException) {
             if (NRError.IllegalStateError == ex.error.reason) {

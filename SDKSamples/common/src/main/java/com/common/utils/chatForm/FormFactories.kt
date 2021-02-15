@@ -117,7 +117,7 @@ object FormFieldFactory {
     open class Option( @ChatType formType: String, key: String, text: String)
         : FormField( formType, FieldType.Option, key, text)
 
-    class OptionsField(@ChatType formType: String, key: String, private val options: List<Option>)
+    class OptionsField(@ChatType formType: String, key: String, options: List<Option>)
         : FormField( formType, FieldType.Options, key, options.toString())
 
     open class SwitchField( @ChatType formType: String, text: String, checked: Boolean = false)

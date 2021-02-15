@@ -69,25 +69,29 @@ fun Uri.toFileUploadInfo(context: Context?, fileSizeLimit: Int): FileUploadInfo 
 
                 type = this@toFileUploadInfo.fileType(this)
 
-                content = File(filePath).takeIf {
-                    if (it.length() > fileSizeLimit) {
+                filePath?.let { filePath ->
+
+                    content = File(filePath).takeIf {
+                        if (it.length() > fileSizeLimit) {
+                            throw ErrorException(
+                                NRError(
+                                    errorCode = NRError.UploadError,
+                                    reason = NRError.SizeExceedsLimitError,
+                                    description = this.getString(R.string.upload_failure_size_exceeds_limit)
+                                )
+                            )
+                        }
+                        it.canRead()
+                    }?.readBytes() ?: run {
                         throw ErrorException(
                             NRError(
-                                errorCode = NRError.UploadError,
-                                reason = NRError.SizeExceedsLimitError,
-                                description = this.getString(R.string.upload_failure_size_exceeds_limit)
+                                NRError.UploadError,
+                                NRError.IllegalStateError,
+                                "can't read file"
                             )
                         )
                     }
-                    it.canRead()
-                }?.readBytes() ?: run {
-                    throw ErrorException(
-                        NRError(
-                            NRError.UploadError,
-                            NRError.IllegalStateError,
-                            "can't read file"
-                        )
-                    )
+
                 }
             }
 

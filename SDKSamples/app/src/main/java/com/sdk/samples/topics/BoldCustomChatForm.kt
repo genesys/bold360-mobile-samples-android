@@ -6,7 +6,7 @@ import com.nanorep.sdkcore.utils.weakRef
 
 class BoldCustomChatForm : BoldChatAvailability() {
 
-    private val formProvider = CustomFormProvider(this.weakRef())
+    private val formProvider = CustomFormProvider(this)
 
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.formProvider(formProvider)

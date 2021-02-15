@@ -29,9 +29,9 @@ interface SampleRepository {
 
 }
 
-class JsonSampleRepository(val context: Context): SampleRepository {
+class JsonSampleRepository( context: Context ): SampleRepository {
 
-    val wContext: WeakReference<Context> = context.weakRef()
+    private val wContext: WeakReference<Context> = context.weakRef()
 
     private fun getSaved( @ChatType chatType: String) : JsonObject? {
         return wContext.get()?.getSharedPreferences("accounts", 0)?.getString(chatType, null)

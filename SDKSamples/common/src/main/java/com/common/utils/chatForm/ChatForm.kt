@@ -34,8 +34,6 @@ import java.util.regex.Pattern
 
 class ChatForm : Fragment() {
 
-    private lateinit var formType: String
-
     private val sampleFormViewModel: SampleFormViewModel by activityViewModels()
 
     override fun onCreateView(

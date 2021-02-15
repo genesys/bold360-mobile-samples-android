@@ -9,7 +9,7 @@ open class BotChat : BasicChat() {
     override var chatType: String = ChatType.Bot
 
     override fun onUploadFileRequest() {
-        toast(this@BotChat, "The file upload action is not available for this sample.")
+        toast(baseContext, "The file upload action is not available for this sample.")
     }
 
 }

@@ -13,11 +13,11 @@ import com.integration.core.annotations.FormType
 import com.nanorep.convesationui.bold.ui.ChatFormViewModel
 import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.controller.FormProvider
-import java.lang.ref.WeakReference
+import com.nanorep.sdkcore.utils.weakRef
 
-class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProvider {
+class CustomFormProvider(sampleActivity: SampleActivity) : FormProvider {
 
-    private val activity = weakActivity.get()
+    private val wActivity = sampleActivity.weakRef()
 
     // prevent the lose of inner references, when being used within the submitForm observer.
     private var formListener: FormListener? = null
@@ -42,7 +42,7 @@ class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProv
            We're using the [com.nanorep.convesationui.bold.ui.ChatFormViewModel] provided by the SDK,
            since it fits our needs.
          */
-        activity?.run {
+        wActivity.get()?.run {
 
             ViewModelProvider(this).get(ChatFormViewModel::class.java).apply {
                 //-> sets the form data (fields, branding) on the ViewModel for the CustomForm fragment to use

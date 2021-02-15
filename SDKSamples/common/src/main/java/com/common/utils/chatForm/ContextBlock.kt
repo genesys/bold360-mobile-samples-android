@@ -71,7 +71,7 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
     private fun initTitle() {
 
         title = AppCompatTextView(context).apply {
-            text = "Bot Contexts:"
+            text = context.getString(R.string.bot_context_title)
             textSize = 20f
             visibility = View.GONE
             setTextColor(Color.BLUE)
@@ -192,13 +192,6 @@ class ContextHandler(var container: ContextContainer, private val contextsAdapte
     fun addContext(botContext: Pair<String, String>? = null) {
         contextsAdapter.createContextView(botContext, onDelete)?.run {
             container.addContextView(this)
-        }
-    }
-
-    fun setContexts(contextPairs: List<Pair<String, String>>) {
-        container.clear()
-        contextPairs.forEach { pair ->
-            addContext(pair)
         }
     }
 

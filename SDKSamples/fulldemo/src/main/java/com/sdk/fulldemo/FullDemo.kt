@@ -169,7 +169,7 @@ open class FullDemo : RestorationContinuity() {
     override fun onChatStateChanged(stateEvent: StateEvent) {
 
         Log.d(
-            FULL_DEMO_Sample_TAG,
+            FULL_DEMO_TAG,
             "onChatStateChanged: state " + stateEvent.state + ", scope = " + stateEvent.scope
         )
 
@@ -186,7 +186,7 @@ open class FullDemo : RestorationContinuity() {
 
             StateEvent.InQueue -> {
                 (stateEvent as? InQueueEvent)?.position?.run {
-                    Log.i(FULL_DEMO_Sample_TAG, "user is waiting in queue event: user position = $this")
+                    Log.i(FULL_DEMO_TAG, "user is waiting in queue event: user position = $this")
                 }
             }
 
@@ -209,7 +209,7 @@ open class FullDemo : RestorationContinuity() {
     override fun onUrlLinkSelected(url: String) {
         // sample code for handling given link
         try {
-            Log.d(FULL_DEMO_Sample_TAG, ">> got url link selection: [$url]")
+            Log.d(FULL_DEMO_TAG, ">> got url link selection: [$url]")
 
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 if (isFileUrl(url)) {
@@ -229,7 +229,7 @@ open class FullDemo : RestorationContinuity() {
             startActivity(intent)
 
         } catch (e: Exception) {
-            Log.w(FULL_DEMO_Sample_TAG, ">> Failed to activate link on default app: " + e.message)
+            Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
             toast(
                 this,
                 ">> got url: [$url]",
@@ -331,7 +331,7 @@ open class FullDemo : RestorationContinuity() {
 
         for (uploadInfo in chosenUploadsTarget) {
             chatController.uploadFile(uploadInfo) { uploadResult ->
-                Log.i(FULL_DEMO_Sample_TAG, "got Upload results: $uploadResult")
+                Log.i(FULL_DEMO_TAG, "got Upload results: $uploadResult")
 
                 uploadResult.error?.run {
                     if (NRError.Canceled != reason) {
@@ -408,7 +408,7 @@ open class FullDemo : RestorationContinuity() {
         if (requestCode == FILE_UPLOAD_REQUEST_CODE) {
             resultData?.takeIf { resultCode == RESULT_OK }?.run {
                 handleFileUploads(this)
-            } ?: kotlin.run { Log.w(FULL_DEMO_Sample_TAG, "no file was selected to be uploaded") }
+            } ?: kotlin.run { Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded") }
         }
     }
 
@@ -419,8 +419,7 @@ open class FullDemo : RestorationContinuity() {
 //  </editor-fold>
 
     companion object {
-        const val FULL_DEMO_Sample_TAG = "FullDemoSample"
-        private const val CUSTOM_FORM_TAG = "CustomForm"
+        const val FULL_DEMO_TAG = "FullDemo"
         private const val FILE_UPLOAD_REQUEST_CODE = 111
     }
 }
