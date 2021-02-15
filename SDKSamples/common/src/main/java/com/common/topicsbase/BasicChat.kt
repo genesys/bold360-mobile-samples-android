@@ -85,7 +85,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     /**
      * @return true if the chat chatController exists and had not been destructed
      */
-    protected fun hasChatController(): Boolean { return ::chatController.isInitialized && chatController.hasOpenChats() }
+    protected fun hasChatController(): Boolean = ::chatController.isInitialized && chatController.hasOpenChats()
 
     /**
      * Enables the sample to modify the account before creating the chat

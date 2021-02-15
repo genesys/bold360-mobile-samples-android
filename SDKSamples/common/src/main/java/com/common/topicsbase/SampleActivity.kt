@@ -7,7 +7,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.common.utils.chatForm.ChatForm
 import com.common.utils.chatForm.FormFieldFactory
-import com.common.utils.chatForm.LoginData
+import com.common.utils.chatForm.JsonSampleRepository
+import com.common.utils.chatForm.SampleData
 import com.common.utils.chatForm.defs.ChatType
 import com.nanorep.nanoengine.Account
 import com.sdk.common.R
@@ -40,13 +41,13 @@ abstract class SampleActivity : AppCompatActivity() {
 
     protected fun presentSampleForm() {
 
-        sampleFormViewModel.updateFormData(extraDataFields?.invoke())
+        sampleFormViewModel.createFormFields(extraDataFields?.invoke())
 
         if (!supportFragmentManager.isStateSaved) {
 
             supportFragmentManager.beginTransaction()
-                .add(containerId, ChatForm.newInstance(), "ChatForm")
-                .addToBackStack("ChatForm")
+                .replace(containerId, ChatForm.newInstance(), CHAT_FORM)
+                .addToBackStack(CHAT_FORM)
                 .commit()
         }
 
@@ -63,19 +64,21 @@ abstract class SampleActivity : AppCompatActivity() {
 
         sampleFormViewModel.updateChatType(chatType)
 
-        presentSampleForm()
-
-        sampleFormViewModel.sampleData.observe(this, Observer<LoginData> {
+        sampleFormViewModel.sampleData.observe(this, Observer<SampleData> {
 
             supportFragmentManager
                 .popBackStack(
-                    "ChatForm",
+                    CHAT_FORM,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
 
             startSample(savedInstanceState)
 
         })
+
+        sampleFormViewModel.setRepository( JsonSampleRepository(applicationContext) )
+
+        presentSampleForm()
     }
 
 //  <editor-fold desc=">>>>> Base Activity actions <<<<<" >
@@ -98,6 +101,10 @@ abstract class SampleActivity : AppCompatActivity() {
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.left_in, R.anim.right_out)
+    }
+
+    companion object {
+        const val CHAT_FORM = "ChatForm"
     }
 
 //  </editor-fold>

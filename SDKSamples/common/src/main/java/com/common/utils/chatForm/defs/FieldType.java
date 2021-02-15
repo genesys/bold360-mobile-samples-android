@@ -6,12 +6,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({ FieldType.Title, FieldType.TextInput, FieldType.Switch, FieldType.ContextBlock, FieldType.RadioOption })
+@StringDef({ FieldType.Title, FieldType.TextInput, FieldType.Switch, FieldType.ContextBlock })
 
 public @interface FieldType {
     String Title  = "title";
     String TextInput  = "textInput";
-    String RadioOption  = "radioOption";
     String Switch = "switch";
+    String Options = "radioGroup";
+    String Option = "radioButton";
     String ContextBlock = "ContextBlock";
 }

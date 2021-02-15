@@ -87,6 +87,7 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
     }
 
     private fun initContextContainer(container: ViewGroup, scroller: ScrollView?) {
+
         contextView = (container.inflate(R.layout.context_view, container, false) as LinearContext).apply {
             this.scroller = scroller
             add_context.setOnClickListener {

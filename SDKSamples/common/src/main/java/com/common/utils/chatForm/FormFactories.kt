@@ -2,10 +2,11 @@ package com.common.utils.chatForm
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
@@ -13,11 +14,11 @@ import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import com.common.utils.chatForm.defs.ChatType
-import com.common.utils.chatForm.defs.DataKeys.*
+import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
-import com.common.utils.chatForm.defs.FormType
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -25,149 +26,143 @@ import com.google.gson.JsonParser
 
 object FormDataFactory {
 
-    fun createForm(
+    fun createFormFields(
         @ChatType chatType: String,
         extraFormFields: List<FormFieldFactory.FormField>? = null
     ): JsonArray {
 
-        return when (chatType) {
+        return (chatType to when(chatType) {
             ChatType.Live -> liveForm
             ChatType.Async -> asyncForm
             ChatType.Bot -> botForm
             else -> restorationForm
-
-        }.apply {
-            extraFormFields?.forEach { addFormField(it) }
+        }).let { form ->
+            extraFormFields?.filter { it.formType == form.first }?.forEach { form.second.addFormField(it) }
+            form.second
         }
     }
 
     private val restorationForm: JsonArray
     get() = JsonArray().apply {
-        add(FormType.Restoration)
-        addFormField(FormFieldFactory.TextField(FormType.Restoration, "Choose the Account type"))
-        addFormField(FormFieldFactory.ChatTypeOption(ChatType.Bot, true))
-        addFormField(FormFieldFactory.ChatTypeOption(ChatType.Live))
-        addFormField(FormFieldFactory.ChatTypeOption(ChatType.Async))
-    }
-
-    private val accountForm: JsonArray
-    get() =  JsonArray().apply {
-        add(FormType.Account)
-        addFormField(FormFieldFactory.TextField(FormType.Account, "Account Details"))
+        addFormField(FormFieldFactory.TextField(ChatType.ChatSelection, "Choose the Account type"))
+        addFormField(FormFieldFactory.OptionsField(
+            ChatType.ChatSelection, DataKeys.ChatTypeKey, listOf(
+                FormFieldFactory.Option(ChatType.ChatSelection, DataKeys.ChatTypeKey, ChatType.Bot),
+                FormFieldFactory.Option(ChatType.ChatSelection, DataKeys.ChatTypeKey, ChatType.Live),
+                FormFieldFactory.Option(ChatType.ChatSelection, DataKeys.ChatTypeKey, ChatType.Async)
+            )
+        ))
     }
 
     private val botForm: JsonArray
-    get() = accountForm.apply {
-        addFormField(FormFieldFactory.TextInputField(FormType.Account, AccountName, "", "Account name", true))
-        addFormField(FormFieldFactory.TextInputField(FormType.Account, KB, "", "Knowledge Base", true))
-        addFormField(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Api Key", false))
-        addFormField(FormFieldFactory.TextInputField(FormType.Account, Server, "", "Server", false))
+    get() = JsonArray().apply {
+        addFormField(FormFieldFactory.TextField(ChatType.Bot, "Account Details"))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.AccountName, "", "Account name", true))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.KB, "", "Knowledge Base", true))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.Accesskey, "", "Api Key", false))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.Server, "", "Server", false))
     }
 
     private val liveForm: JsonArray
-    get() = accountForm.apply {
-        add(FormFieldFactory.TextInputField(FormType.Account, Accesskey, "", "Access key", false).toJson())
+    get() =  JsonArray().apply {
+        addFormField(FormFieldFactory.TextField(ChatType.Live, "Account Details"))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Live, DataKeys.Accesskey, "", "Access key", false))
     }
 
     private val asyncForm: JsonArray
-    get() = liveForm.apply {
-        addFormField(FormFieldFactory.TextInputField(FormType.Account, AppId, "", "Application ID", true))
+    get() =  JsonArray().apply {
+        addFormField(FormFieldFactory.TextField(ChatType.Async, "Account Details"))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Async, DataKeys.Accesskey, "", "Access key", false))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Async, DataKeys.AppId, "", "Application ID", true))
     }
 
     private fun JsonArray.addFormField(formField: FormFieldFactory.FormField) {
-        this.add(formField.toJson())
+
+        try {
+
+            formField.toJson().let { jFormField ->
+
+                if (formField.type == FieldType.Option) {
+
+                    find { // -> Searching for a Options field with the same key in order to add
+
+                        it.asJsonObject.getString(FieldProps.Key) == formField.key
+                                && it.asJsonObject.getString(FieldProps.Type) == FieldType.Options
+
+                    }?.asJsonObject?.getAsJsonArray("options")?.add(jFormField)
+
+                        ?: kotlin.run { // -> If not found, it creates a new Options field with the same key and form type
+
+                            addFormField(
+                                FormFieldFactory.OptionsField( formField.formType, formField.key,
+                                    listOf(formField as FormFieldFactory.Option)
+                                )
+
+                            )
+                        }
+
+                } else {
+                    add(jFormField)
+                }
+            }
+
+        } catch ( exception : IllegalStateException) {
+            // being thrown by the "asJsonObject" casting
+            Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+        }
     }
 }
 
 object FormFieldFactory {
 
-    open class FormField ( @FormType val formType: String, @FieldType val type: String, val key: String, val value: String ) {
+    open class FormField (@ChatType val formType: String, @FieldType val type: String, val key: String, val value: String ) {
 
-        fun toJson(): JsonObject {
+        open fun toJson(): JsonObject {
             return JsonParser.parseString(Gson().toJson(this)).asJsonObject
         }
 
     }
 
-    open class OptionField( @FormType formType: String, text: String, checked: Boolean = false )
-        : FormField(formType, FieldType.RadioOption, text, checked.toString())
+    open class Option( @ChatType formType: String, key: String, text: String)
+        : FormField( formType, FieldType.Option, key, text)
 
-    class ChatTypeOption( @ChatType text: String, checked: Boolean = false )
-        : OptionField(FormType.Restoration, text, checked)
+    class OptionsField(@ChatType formType: String, key: String, private val options: List<Option>)
+        : FormField( formType, FieldType.Options, key, options.toString()) {
 
-    open class SwitchField( @FormType formType: String, key: String, checked: Boolean = false)
-        : FormField(FormType.Restoration, FieldType.Switch, key, checked.toString())
+        override fun toJson(): JsonObject {
+            return JsonParser.parseString(Gson().toJson(this)).asJsonObject
+        }
+    }
 
-    class ContextBlock( key: String = Context, value: String = "")
-        : FormField(FormType.Account, FieldType.ContextBlock, key, value)
+    open class SwitchField( @ChatType formType: String, text: String, checked: Boolean = false)
+        : FormField( formType, FieldType.Switch, text, checked.toString())
 
-    class TextField( @FormType formType: String, value: String)
+    open class RestoreSwitch( checked: Boolean = false )
+        : SwitchField( ChatType.ChatSelection, DataKeys.Restore, checked)
+
+    class ContextBlock(key: String = DataKeys.Context, value: String = "")
+        : FormField( ChatType.Bot, FieldType.ContextBlock, key, value)
+
+    class TextField( @ChatType formType: String, value: String)
         : FormField(formType, FieldType.Title, FieldType.Title, value)
 
-    open class TextInputField( @FormType formType: String, key: String, value: String, val hint: String, val required: Boolean)
+    open class TextInputField( @ChatType formType: String, key: String, value: String, val hint: String, val required: Boolean)
         : FormField(formType, FieldType.TextInput, key, value)
 
-    open class PatternInputField( @FormType formType: String, key: String, value: String, hint: String, required: Boolean,  val validator: String)
+    open class PatternInputField( @ChatType formType: String, key: String, value: String, hint: String, required: Boolean,  val validator: String)
         : TextInputField(formType, key, value, hint, required)
 
-    class EmailInputField( @FormType formType: String, key: String, value: String, hint: String, required: Boolean )
+    class EmailInputField( @ChatType formType: String, key: String, value: String, hint: String, required: Boolean )
         : FormFieldFactory.PatternInputField(formType, key, value, hint, required, android.util.Patterns.EMAIL_ADDRESS.toString() )
 
-    class PhoneInputField( @FormType formType: String, key: String, value: String, hint: String, required: Boolean)
+    class PhoneInputField( @ChatType formType: String, key: String, value: String, hint: String, required: Boolean)
         : FormFieldFactory.PatternInputField(formType, key, value, hint, required, android.util.Patterns.PHONE.toString() )
 
 }
 
-internal object FieldViewFactory {
+object FieldViewFactory {
 
-    private var radioGroup: RadioGroup? = null
-
-    fun clear() {
-        radioGroup = null
-    }
-
-    fun createFieldView(fieldData: JsonObject, context: Context): View? {
-
-        return when (fieldData.getString(FieldProps.Type)) {
-            FieldType.ContextBlock -> ContextBlock(context)
-
-            FieldType.Title -> titleView( fieldData.getString(FieldProps.Value), context )
-
-            FieldType.TextInput -> inputView( fieldData.getString(FieldProps.Value), fieldData.getString(FieldProps.Hint), context )
-
-            FieldType.Switch -> switchView( fieldData.getString(FieldProps.Value), fieldData.getString(FieldProps.Key), context )
-
-            FieldType.RadioOption -> {
-
-                val group = radioGroup ?: RadioGroup(context)
-
-                group.addView(
-
-                    AppCompatRadioButton(context).apply {
-                        isChecked = fieldData.getString(FieldProps.Value) == "true"
-                        textSize = 16f
-                        text = fieldData.getString(FieldProps.Key) ?: ""
-                        id = ViewCompat.generateViewId()
-                    }
-
-                )
-
-                if (radioGroup == null) {
-                    radioGroup = group
-                    radioGroup
-                } else {
-                    null
-                }
-            }
-
-            else -> null
-
-        }?.apply {
-            id = ViewCompat.generateViewId()
-        }
-    }
-
-    private fun titleView(value: String?, context: Context): TextView =
+    fun titleView(value: String?, context: Context): TextView =
         AppCompatTextView(context).apply {
             text = value ?: ""
             textSize = 22f
@@ -182,19 +177,35 @@ internal object FieldViewFactory {
                 }
         }
 
-    private fun inputView(value: String?, hint: String?, context: Context): EditText =
+    fun inputView(value: String?, hint: String?, context: Context): EditText =
 
         AppCompatEditText(context).apply {
             setText(value ?: "")
             this.hint = hint ?: ""
         }
 
-    private fun switchView(value: String?, key: String?, context: Context): SwitchCompat =
+    fun switchView(value: String?, key: String?, context: Context): SwitchCompat =
 
         SwitchCompat(context).apply {
             isChecked = value == "true"
             textSize = 16f
             text = key ?: ""
         }
+
+    fun optionsView(options: JsonArray, context: Context): RadioGroup {
+
+        return RadioGroup(context).apply {
+            options.forEach {
+                addView(
+                    AppCompatRadioButton(context).apply {
+                        text  = it.asJsonObject.getString(FieldProps.Value)
+                        textSize = 16f
+                        id = ViewCompat.generateViewId()
+                    }
+                )
+            }
+            (children.first() as RadioButton).isChecked = true
+        }
+    }
 }
 

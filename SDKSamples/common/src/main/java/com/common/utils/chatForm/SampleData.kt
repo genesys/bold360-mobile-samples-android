@@ -2,7 +2,7 @@ package com.common.utils.chatForm
 
 import com.google.gson.JsonObject
 
-data class LoginData (
+data class SampleData (
 
     /**
      * The Account (Bot/Bold/Async)

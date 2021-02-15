@@ -23,8 +23,8 @@ import com.common.chatComponents.customProviders.CustomTTSAlterProvider
 import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
 import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
-import com.common.utils.chatForm.defs.FormType
 import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo
@@ -52,10 +52,10 @@ open class FullDemo : RestorationContinuity() {
 
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)?
     get() = {
-        listOf(
-            FormFieldFactory.TextInputField(FormType.Account, DataKeys.Welcome, "", "Welcome message id", false),
-            FormFieldFactory.ContextBlock()
-        )
+        super.extraDataFields?.invoke()!!.toMutableList().apply {
+            add(FormFieldFactory.TextInputField( ChatType.Bot, DataKeys.Welcome, "", "Welcome message id", false ))
+            add(FormFieldFactory.ContextBlock())
+        }
     }
 
     private var uploadFile: MenuItem? = null

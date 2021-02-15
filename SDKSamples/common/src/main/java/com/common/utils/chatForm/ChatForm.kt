@@ -1,21 +1,27 @@
 package com.common.utils.chatForm
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
-import com.common.utils.chatForm.defs.FormType
+import com.common.utils.chatForm.defs.FieldType
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
+import com.nanorep.sdkcore.utils.dp
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.account_form.*
+import kotlinx.android.synthetic.main.account_form.view.*
 import kotlinx.android.synthetic.main.context_view.view.*
 import java.util.regex.Pattern
 
@@ -46,21 +52,11 @@ class ChatForm : Fragment() {
 
     private fun createForm() {
 
-        formType = sampleFormViewModel.getFormType()
-
         sampleFormViewModel.formData.value?.forEach {
 
             try {
-                it.asJsonObject.takeIf { formField -> formField.getString(FieldProps.FormType) == formType }?.let { formField ->
 
-                        FieldViewFactory.createFieldView(formField, requireContext())?.apply {
-                            (this as? ContextBlock)?.apply { initContextBlock(view?.findViewById(R.id.scroller)) }
-
-                        }?.let { formFieldView ->
-                            formFields?.addView(formFieldView)
-                        }
-
-                }
+                formFieldsContainer.addFormField(it.asJsonObject)
 
             } catch ( exception : IllegalStateException) {
                 // being thrown by the "asJsonObject" casting
@@ -69,74 +65,47 @@ class ChatForm : Fragment() {
 
         }
 
-        FieldViewFactory.clear()
     }
 
-    private fun collaborateData() = when (formType) {
+    private fun collaborateData() {
 
-        FormType.Account -> collaborateAccountData()
-        else -> collaborateRestoreData()
+        val accountData = JsonObject()
 
-    }
-
-    private fun collaborateRestoreData() {
-
-        formFields?.children()?.forEach { view ->
-
-            when (view) {
-
-                is RadioGroup -> {
-                    formFields?.findViewById<RadioButton>(view.checkedRadioButtonId)?.text?.toString()?.let { chatType ->
-                        sampleFormViewModel.updateChatType(chatType)
-                    }
-                }
-
-                is SwitchCompat -> sampleFormViewModel.restoreRequest = view.isChecked
-
-            }
-        }
-    }
-
-    private fun collaborateAccountData() {
-
-        formFields?.children()?.forEachIndexed { index, view ->
+        formFieldsContainer.getFormFields().forEachIndexed { index, view ->
 
             sampleFormViewModel.getFormField(index)?.run {
 
-                getString( FieldProps.Key )?.let { key ->
+                when (view) {
 
-                    val value = (
+                    is EditText -> getString(FieldProps.Key) to view.text.toString()
 
-                            when (view) {
+                    is RadioGroup -> getString(FieldProps.Key) to formFieldsContainer.getCheckedRadioText(view)
 
-                                is EditText -> view.text
+                    is SwitchCompat -> getString(FieldProps.Key) to view.isChecked.toString()
 
-                                is RadioGroup -> formFields?.findViewById<RadioButton>(view.checkedRadioButtonId)?.text
+                    is ContextBlock -> getString(FieldProps.Key) to Gson().toJson(view.contextHandler.getContext()).toString()
 
-                                is Switch -> view.isChecked.toString()
+                    else -> null
 
-                                is ContextBlock -> Gson().toJson(view.contextHandler.getContext())
-
-                                else -> return@let
-
-                            }.toString())
+                }?.let {
 
                     val isRequired = get(FieldProps.Required)?.asBoolean ?: false
                     val validator = getString(FieldProps.Validator)?.toPattern()
-                    if (!isValid(index, value, isRequired, validator)) return
+                    if (!isValid(index, it.second, isRequired, validator)) return
 
-                    sampleFormViewModel.addAccountProperty(key, value)
+                    accountData.addProperty(it.first, it.second)
                 }
             }
         }
 
-        sampleFormViewModel.onAccountData()
+        sampleFormViewModel.onAccountData(accountData)
+
     }
 
     private fun isValid(index: Int, value: String?, required: Boolean, validator: Pattern?): Boolean {
 
         val presentError: ((message: String) -> Unit) = { message ->
-            (formFields?.children()?.get(index) as? TextView)?.apply {
+            (formFieldsContainer.getFormFields()[index] as? TextView)?.apply {
                 this.requestFocus()
                 error = message
             }
@@ -173,3 +142,66 @@ class ChatForm : Fragment() {
     }
 }
 
+class FormFieldsContainer @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    ScrollView(context, attrs, defStyleAttr) {
+
+    private var formFields: LinearLayout
+
+    init {
+        setPadding(8.dp, 8.dp, 8.dp, 8.dp)
+
+        formFields = LinearLayout(context)
+        addView(
+            formFields.apply {
+                layoutParams = LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                orientation = LinearLayout.VERTICAL
+                id = ViewCompat.generateViewId()
+            }
+        )
+    }
+
+    fun getFormFields(): List<View> = formFields.children()
+
+    fun getCheckedRadioText(radioGroup: RadioGroup): String? {
+        return formFields.findViewById<RadioButton>(radioGroup.checkedRadioButtonId).text?.toString()
+    }
+
+    fun addFormField(fieldData: JsonObject) {
+
+        when (fieldData.getString(FieldProps.Type)) {
+
+            FieldType.Options -> FieldViewFactory.optionsView(
+                fieldData.getAsJsonArray("options"),
+                context
+            )
+
+            FieldType.ContextBlock -> ContextBlock(context).apply {
+                initContextBlock(this@FormFieldsContainer)
+            }
+
+            FieldType.Title -> FieldViewFactory.titleView(
+                fieldData.getString(FieldProps.Value),
+                context
+            )
+
+            FieldType.TextInput -> FieldViewFactory.inputView(
+                fieldData.getString(FieldProps.Value),
+                fieldData.getString(FieldProps.Hint),
+                context
+            )
+
+            FieldType.Switch -> FieldViewFactory.switchView(
+                fieldData.getString(FieldProps.Value),
+                fieldData.getString(FieldProps.Key),
+                context
+            )
+
+            else -> null
+        }?.let { view -> this.formFields.addView(
+            view.apply { id = ViewCompat.generateViewId() })
+        }
+    }
+}

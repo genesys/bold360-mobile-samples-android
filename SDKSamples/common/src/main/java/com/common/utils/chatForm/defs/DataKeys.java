@@ -8,8 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.SOURCE)
 @StringDef({DataKeys.AccountName, DataKeys.KB, DataKeys.Server, DataKeys.Accesskey,
         DataKeys.FirstName, DataKeys.LastName, DataKeys.Email, DataKeys.CountryAbbrev,
-        DataKeys.AppId, DataKeys.PhoneNumber, DataKeys.UserId, DataKeys.preChat_fName,
-        DataKeys.preChat_lName, DataKeys.preChat_deptCode, DataKeys.Restore})
+        DataKeys.AppId, DataKeys.PhoneNumber, DataKeys.UserId, DataKeys.PreChat_fName,
+        DataKeys.PreChat_lName, DataKeys.PreChat_deptCode, DataKeys.Restore})
 
 public @interface DataKeys {
     String AccountName = "account";
@@ -26,9 +26,10 @@ public @interface DataKeys {
     String AppId = "applicationId";
     String PhoneNumber = "phone_number";
     String UserId = "id";
+    String PreChat_fName = "pre_firstName";
+    String PreChat_lName = "pre_lastName";
+    String PreChat_deptCode = "pre_deptCode";
+    String ChatTypeKey = "chatType";
     String Restore = "Restore if available";
-    String preChat_fName = "pre_firstName";
-    String preChat_lName = "pre_lastName";
-    String preChat_deptCode = "pre_deptCode";
 
 }
