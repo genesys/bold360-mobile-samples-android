@@ -1,6 +1,7 @@
 package com.common.topicsbase
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -76,8 +77,14 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
 
     fun onAccountData(accountData: JsonObject) {
 
-        accountData.remove(DataKeys.ChatTypeKey)?.asString?.let { _chatType.value = it }
-        accountData.remove(DataKeys.Restore)?.asBoolean?.let { restoreRequest = it }
+        try {
+            accountData.remove(DataKeys.ChatTypeKey).asString?.let { _chatType.value = it }
+            accountData.remove(DataKeys.Restore)?.asBoolean?.let { restoreRequest = it }
+        } catch ( exception : IllegalStateException) {
+           // being thrown by the 'JsonElement' casting
+           Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+        }
+
 
         accountData.takeIf { it.size() > 0 }?.let {
             _sampleData.value =  SampleData ( accountData, restoreRequest )

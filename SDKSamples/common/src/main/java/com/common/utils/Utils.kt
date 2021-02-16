@@ -34,7 +34,7 @@ fun JsonElement.toObject(catchEmpty: Boolean = false): JsonObject? {
     return try {
         this.asJsonObject
     } catch ( exception : IllegalStateException) {
-        // being thrown by the "asJsonObject" casting
+        // being thrown by the 'JsonElement' casting
         Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
         if (catchEmpty) JsonObject() else null
     }

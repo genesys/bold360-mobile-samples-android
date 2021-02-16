@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -84,7 +85,14 @@ class ChatForm : Fragment() {
 
                 }?.let {
 
-                    val isRequired = get(FieldProps.Required)?.asBoolean ?: false
+                    val isRequired = try {
+                        get(FieldProps.Required)?.asBoolean ?: false
+                    } catch ( exception : IllegalStateException) {
+                        // being thrown by the 'JsonElement' casting
+                        Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+                        false
+                    }
+
                     val validator = getString(FieldProps.Validator)?.toPattern()
                     if (!isValid(index, it.second, isRequired, validator)) return
 

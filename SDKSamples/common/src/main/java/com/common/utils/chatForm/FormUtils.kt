@@ -1,5 +1,6 @@
 package com.common.utils.chatForm
 
+import android.util.Log
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys.*
 import com.common.utils.chatForm.defs.FieldProps
@@ -117,7 +118,13 @@ fun JsonObject.copySimpleProp(key: String?, other: JsonObject) {
 }
 
 fun JsonObject.getString(key: String?): String? {
-    return key?.let { get(it)?.asString }
+    return try {
+        key?.let { get(it)?.asString }
+    } catch ( exception : IllegalStateException) {
+        // being thrown by the 'JsonElement' casting
+        Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+        null
+    }
 }
 
 fun JsonArray.applyValues(accountObject: JsonObject?): JsonArray {
