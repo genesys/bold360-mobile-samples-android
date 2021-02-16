@@ -4,9 +4,9 @@ import android.util.Log
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys.*
 import com.common.utils.chatForm.defs.FieldProps
-import com.common.utils.toObject
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.integration.async.core.UserInfo
 import com.integration.core.userInfo
@@ -145,4 +145,14 @@ fun JsonArray.applyValues(accountObject: JsonObject?): JsonArray {
 
 fun Pair<String, String>.isEmpty() : Boolean{
     return first.isEmpty() || second.isEmpty()
+}
+
+fun JsonElement.toObject(catchEmpty: Boolean = false): JsonObject? {
+    return try {
+        this.asJsonObject
+    } catch ( exception : IllegalStateException) {
+        // being thrown by the 'JsonElement' casting
+        Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+        if (catchEmpty) JsonObject() else null
+    }
 }
