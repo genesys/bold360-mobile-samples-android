@@ -56,7 +56,7 @@ abstract class RestorationContinuity : History() {
 
             sampleFormViewModel.chatType.observe(this, Observer { chatType ->
                 when (chatType) {
-                    ChatType.ChatSelection -> {}
+                    ChatType.ChatSelection -> {} // Being handled already at the SampleActivity
                     ChatType.ContinueLast -> restore()
                     else -> presentSampleForm()
                 }
