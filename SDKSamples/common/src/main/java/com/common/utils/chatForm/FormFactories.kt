@@ -52,14 +52,14 @@ object FormDataFactory {
     private val liveForm: JsonArray
     get() =  JsonArray().apply {
         addFormField(FormFieldFactory.TextField(ChatType.Live, "Account Details"))
-        addFormField(FormFieldFactory.TextInputField(ChatType.Live, DataKeys.Accesskey, "", "Access key", false))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Live, DataKeys.Accesskey, "", "Access key", true))
     }
 
     private val asyncForm: JsonArray
     get() =  JsonArray().apply {
         addFormField(FormFieldFactory.TextField(ChatType.Async, "Account Details"))
-        addFormField(FormFieldFactory.TextInputField(ChatType.Async, DataKeys.Accesskey, "", "Access key", false))
-        addFormField(FormFieldFactory.TextInputField(ChatType.Async, DataKeys.AppId, "", "Application ID", true))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Async, DataKeys.Accesskey, "", "Access key", true))
+        addFormField(FormFieldFactory.TextInputField(ChatType.Async, DataKeys.AppId, "", "Application ID", false))
     }
 
     private fun JsonArray.addFormField(formField: FormFieldFactory.FormField) {
@@ -101,7 +101,11 @@ object FormDataFactory {
 
 object FormFieldFactory {
 
-    open class FormField (@ChatType val formType: String, @FieldType val type: String, val key: String, val value: String ) {
+    abstract class FormField (
+        @ChatType val formType: String,
+        @FieldType val type: String,
+        val key: String,
+        val value: String ) {
 
         fun toJson(): JsonObject {
             return try {
