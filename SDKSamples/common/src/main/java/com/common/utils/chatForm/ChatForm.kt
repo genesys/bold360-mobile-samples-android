@@ -21,7 +21,6 @@ import androidx.fragment.app.activityViewModels
 import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
-import com.common.utils.toObject
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

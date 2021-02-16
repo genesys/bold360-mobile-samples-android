@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import com.common.utils.chatForm.*
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
-import com.common.utils.toObject
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account

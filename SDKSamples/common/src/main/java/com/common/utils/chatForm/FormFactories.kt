@@ -4,7 +4,6 @@ import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
-import com.common.utils.toObject
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
