@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.common.topicsbase.SampleActivity
 import com.integration.bold.boldchat.core.FormData
-import com.integration.bold.boldchat.core.LanguageChangeRequest
 import com.integration.bold.boldchat.visitor.api.Form
 import com.integration.core.StateEvent
 import com.integration.core.annotations.FormType
@@ -46,7 +45,7 @@ class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProv
 
             ViewModelProvider(this).get(ChatFormViewModel::class.java).apply {
                 //-> sets the form data (fields, branding) on the ViewModel for the CustomForm fragment to use
-                onFormData(formData)
+                //onFormData(formData)
 
                 //-> sets an observer to listen to form submission results.
                 observeSubmission(this@run,
@@ -62,7 +61,7 @@ class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProv
                         }
                     })
 
-                observeLanguageChanges(this@run, Observer { languageChange ->
+                /*observeLanguageChanges(this@run, Observer { languageChange ->
                     val language = languageChange?.first
 
                     Log.i("CustomForm", "Prechat: Language change detected: [${language.orEmpty()}]")
@@ -86,7 +85,7 @@ class CustomFormProvider(weakActivity: WeakReference<SampleActivity>) : FormProv
                             )
                         }
                     }
-                })
+                })*/
             }
 
             supportFragmentManager

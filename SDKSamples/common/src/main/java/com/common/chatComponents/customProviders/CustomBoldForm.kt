@@ -14,15 +14,15 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.*
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
-import com.integration.bold.boldchat.visitor.api.FieldKey
+import androidx.lifecycle.ViewModelProvider
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.bold.ui.*
-import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
+import com.nanorep.convesationui.bold.ui.ChatFormViewModel
+import com.nanorep.convesationui.bold.ui.FormComponent
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.TextTagHandler
@@ -30,6 +30,7 @@ import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.custom_live_forms_layout.*
+import java.util.Observer
 
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
@@ -63,7 +64,7 @@ class BoldCustomForm : Fragment() {
         initSubmitButton()
 
         //-> Sets an observer to FormData changes
-        formViewModel.observeFormData(viewLifecycleOwner, Observer { data ->
+        /*formViewModel.observeFormData(viewLifecycleOwner, Observer { data ->
             Log.i("ChatForm", "Got form data update")
             data?.let {
                 // Save current user filled data into the FormData, before we remove the views.
@@ -74,7 +75,7 @@ class BoldCustomForm : Fragment() {
                 form_fields_container.removeAllViews()
                 createBrandedFields()
             }
-        })
+        })*/
     }
 
     private fun saveValues() {
@@ -98,8 +99,10 @@ class BoldCustomForm : Fragment() {
     private fun initFormTypeTitle() {
         formViewModel.data?.formType?.let { formType ->
             form_type_title.apply {
-                setStyleConfig(StyleConfig(20, ContextCompat.getColor(context, R.color.colorPrimary),
-                        Typeface.DEFAULT_BOLD))
+                setStyleConfig(
+                    StyleConfig(20, getColor(context, R.color.colorPrimary),
+                        Typeface.DEFAULT_BOLD)
+                )
                 text = formType
             }
         }
@@ -140,12 +143,13 @@ class BoldCustomForm : Fragment() {
                 when (fieldData.type) {
                     FormFieldType.Select -> {
                         when (fieldData.key) {
-                            FieldKey.DepartmentKey -> handleDeptView(form_fields_container, fieldData,
+                            "department" -> handleDeptView(form_fields_container, fieldData,
                                     createEditViewView(fieldData).apply {
                                         tag = index
                                     })
-                            FieldKey.LanguageKey -> handleLanguageView(requireContext(), index, form_fields_container,
-                                    fieldData, FormConfiguration(context))
+                            /*"language" -> handleLanguageView(requireContext(), index, form_fields_container,
+                                    fieldData, FormConfiguration(context)
+                            )*/
                         }
                     }
                     else -> {
@@ -160,10 +164,10 @@ class BoldCustomForm : Fragment() {
     /**
      * Observes language selection
      */
-    private val selectionListener = object : SelectionListener {
+    /*private val selectionListener = object : SelectionListener {
         override fun onSelectedOption(selectionSpec: SelectionSpec) {
             when (selectionSpec.fieldKey) {
-                FieldKey.LanguageKey -> handleLanguageSelection(selectionSpec)
+                "language" -> handleLanguageSelection(selectionSpec)
             }
         }
     }
@@ -188,7 +192,7 @@ class BoldCustomForm : Fragment() {
                 // in case of error, the selection will roll back to the previous selected language.
             })
         }
-    }
+    }*/
 
     /**
      * Creates a department code editable field with a description like list of available departments.
