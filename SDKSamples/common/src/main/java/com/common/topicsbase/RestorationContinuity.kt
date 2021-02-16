@@ -41,9 +41,9 @@ abstract class RestorationContinuity : History() {
         supportFragmentManager.fragments.clear()
         Log.i("RestoreSample", "ChatController hadn't been destructed")
 
-        enableMenu(destructMenu, hasChatController() && !chatController.wasDestructed)
+        sampleFormViewModel.updateChatType(chatType)
 
-        sampleFormViewModel.updateChatType(ChatType.ChatSelection)
+        enableMenu(destructMenu, hasChatController() && !chatController.wasDestructed)
 
         presentSampleForm()
 
@@ -52,14 +52,16 @@ abstract class RestorationContinuity : History() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sampleFormViewModel.chatType.observe(this, Observer<String> { chatType ->
+        if (chatType == ChatType.ChatSelection) { // -> Observes chat type changes from the ChatSelection form:
 
-            when (chatType) {
-                ChatType.ChatSelection -> {}
-                ChatType.ContinueLast -> restore()
-                else -> presentSampleForm()
-            }
-        })
+            sampleFormViewModel.chatType.observe(this, Observer { chatType ->
+                when (chatType) {
+                    ChatType.ChatSelection -> {}
+                    ChatType.ContinueLast -> restore()
+                    else -> presentSampleForm()
+                }
+            })
+        }
     }
 
     @ExperimentalCoroutinesApi
@@ -142,7 +144,6 @@ abstract class RestorationContinuity : History() {
                 supportFragmentManager.popBackStack()
                 finish()
             }
-
         }
     }
 

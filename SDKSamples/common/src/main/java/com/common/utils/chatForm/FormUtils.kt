@@ -3,6 +3,7 @@ package com.common.utils.chatForm
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys.*
 import com.common.utils.chatForm.defs.FieldProps
+import com.common.utils.toObject
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -11,7 +12,7 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
-import kotlinx.android.synthetic.main.account_form.*
+import kotlinx.android.synthetic.main.chat_form.*
 
 fun JsonObject.toBotAccount(): BotAccount {
     return BotAccount(
@@ -122,17 +123,14 @@ fun JsonObject.getString(key: String?): String? {
 fun JsonArray.applyValues(accountObject: JsonObject?): JsonArray {
     return this.apply {
         accountObject?.let { accountObject ->
-
             onEach {
-                try {
-                    it.123.let { fieldObject ->
-                        val key = fieldObject.getString(FieldProps.Key) //-> Gets the key of the specific field data
+                it.toObject()?.let { fieldObject ->
+                    val key = fieldObject.getString(FieldProps.Key) // -> Gets the key of the specific field data
 
-                        accountObject.getString(key)?.let { value -> // -> Gets the value of the same key from the account data
-                            fieldObject.addProperty(FieldProps.Value, value)
-                        }
+                    accountObject.getString(key)?.let { value ->
+                        fieldObject.addProperty(FieldProps.Value, value) // -> Gets the value of the same key from the account data
                     }
-                } catch (e: IllegalStateException) { }
+                }
             }
         }
     }

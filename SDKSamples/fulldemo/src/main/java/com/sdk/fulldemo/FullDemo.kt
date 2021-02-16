@@ -305,7 +305,7 @@ open class FullDemo : RestorationContinuity() {
 
         fun addChosen(uri: Uri) {
             try {
-                uri.toFileUploadInfo(this, fileSizeLimit)?.let { chosenUploadsTarget.add(it) }
+                uri.toFileUploadInfo(this, fileSizeLimit).let { chosenUploadsTarget.add(it) }
 
             } catch (ex: ErrorException) {
                 chatController.post(

@@ -27,8 +27,7 @@ import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.dp
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.account_form.*
-import kotlinx.android.synthetic.main.account_form.view.*
+import kotlinx.android.synthetic.main.chat_form.*
 import kotlinx.android.synthetic.main.context_view.view.*
 import java.util.regex.Pattern
 
@@ -41,7 +40,7 @@ class ChatForm : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.account_form, container, false)
+        return inflater.inflate(R.layout.chat_form, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

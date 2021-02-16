@@ -42,10 +42,10 @@ class AsyncChatContinuity : RestorationContinuity() {
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
     get() = {
         listOf(
-            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.UserId, "", "UserId", false),
-            FormFieldFactory.EmailInputField(ChatType.Bot, DataKeys.Email, "", "Email", false),
-            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.FirstName, "", "First Name", false),
-            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.LastName, "", "Last Name", false)
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.UserId, "", "UserId", false),
+            FormFieldFactory.EmailInputField(ChatType.Async, DataKeys.Email, "", "Email", false),
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.FirstName, "", "First Name", false),
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.LastName, "", "Last Name", false)
         )
     }
 
