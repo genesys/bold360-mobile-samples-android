@@ -154,13 +154,15 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val ERROR_DIALOG_REQUEST_CODE = 665
+        const val TAG = "Security-Installer"
+
 
         fun updateSecurityProvider(context: Activity) {
 
             if (Build.VERSION.SDK_INT < 21) {
                 ProviderInstaller.installIfNeededAsync(context, object : ProviderInstaller.ProviderInstallListener {
                     override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
-                        Log.e("Security-Installer", "!!! failed to install security provider updates, Checking for recoverable error...")
+                        Log.e(TAG, "!!! failed to install security provider updates, Checking for recoverable error...")
 
                         GoogleApiAvailability.getInstance().apply {
                             if (isUserResolvableError(errorCode) &&
@@ -183,11 +185,11 @@ class MainActivity : AppCompatActivity() {
                     private fun onProviderInstallerNotAvailable() {
                         val msg = "Google play services can't be installed or updated thous Messaging may not be available"
                         toast(context, msg)
-                        Log.e("Security-Installer", ">> $msg")
+                        Log.e(TAG, ">> $msg")
                     }
 
                     override fun onProviderInstalled() {
-                        Log.i("Security-Installer", ">> security provider updates installed successfully")
+                        Log.i(TAG, ">> security provider updates installed successfully")
 
                     }
                 })

@@ -1,10 +1,10 @@
 package com.common.utils.chatForm
 
-import android.util.Log
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
+import com.common.utils.toObject
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -64,37 +64,30 @@ object FormDataFactory {
 
     private fun JsonArray.addFormField(formField: FormFieldFactory.FormField) {
 
-        try {
+        formField.toJson().let { jFormField ->
 
-            formField.toJson().let { jFormField ->
+            if (formField.type == FieldType.Option) {
 
-                if (formField.type == FieldType.Option) {
+                find { // -> Searching for a Options field with the same key in order to add
 
-                    find { // -> Searching for a Options field with the same key in order to add
+                    it.toObject()?.getString(FieldProps.Key) == formField.key
+                            && it.toObject()?.getString(FieldProps.Type) == FieldType.Options
 
-                        it.asJsonObject.getString(FieldProps.Key) == formField.key
-                                && it.asJsonObject.getString(FieldProps.Type) == FieldType.Options
+                }?.toObject()?.getAsJsonArray("options")?.add(jFormField)
 
-                    }?.asJsonObject?.getAsJsonArray("options")?.add(jFormField)
+                    ?: kotlin.run { // -> If not found, it creates a new Options field with the same key and form type
 
-                        ?: kotlin.run { // -> If not found, it creates a new Options field with the same key and form type
-
-                            addFormField(
-                                FormFieldFactory.OptionsField( formField.formType, formField.key,
-                                    listOf(formField as FormFieldFactory.Option)
-                                )
-
+                        addFormField(
+                            FormFieldFactory.OptionsField( formField.formType, formField.key,
+                                listOf(formField as FormFieldFactory.Option)
                             )
-                        }
 
-                } else {
-                    add(jFormField)
-                }
+                        )
+                    }
+
+            } else {
+                add(jFormField)
             }
-
-        } catch ( exception : IllegalStateException) {
-            // being thrown by the "asJsonObject" casting
-            Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
         }
     }
 }
@@ -108,13 +101,7 @@ object FormFieldFactory {
         val value: String ) {
 
         fun toJson(): JsonObject {
-            return try {
-                JsonParser.parseString(Gson().toJson(this)).asJsonObject
-            } catch (exception: IllegalStateException) {
-                // being thrown by the "asJsonObject" casting
-                Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
-                JsonObject()
-            }
+            return JsonParser.parseString(Gson().toJson(this)).toObject(true)!!
         }
     }
 

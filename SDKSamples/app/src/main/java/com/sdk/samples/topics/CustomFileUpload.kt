@@ -97,7 +97,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 if(chatController.isEnabled(ChatFeatures.FileUpload)) {
                     imageButton.visibility = View.VISIBLE
                 } else {
-                    toast(this, getString(R.string.file_transfer_not_enabled))
+                    toast(baseContext, getString(R.string.file_transfer_not_enabled))
                 }
             }
 
@@ -155,7 +155,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 if (notGranted.isEmpty()) {
                     startPickerActivity()
                 } else {
-                    toast(this, "Not granted permissions: $notGranted", Toast.LENGTH_LONG)
+                    toast(baseContext, "Not granted permissions: $notGranted", Toast.LENGTH_LONG)
                 }
             }
         }

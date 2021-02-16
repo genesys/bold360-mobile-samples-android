@@ -65,8 +65,8 @@ class ContinuityAccountHandler : AccountSessionListener {
                 SessionInfoConfigKeys.LastReceivedMessageId -> lastReceivedMessageId =
                     (updatedValue as? String).orEmpty()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
     }
 }

@@ -125,7 +125,7 @@ fun JsonArray.applyValues(accountObject: JsonObject?): JsonArray {
 
             onEach {
                 try {
-                    it.asJsonObject.let { fieldObject ->
+                    it.123.let { fieldObject ->
                         val key = fieldObject.getString(FieldProps.Key) //-> Gets the key of the specific field data
 
                         accountObject.getString(key)?.let { value -> // -> Gets the value of the same key from the account data

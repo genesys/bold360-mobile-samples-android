@@ -19,7 +19,6 @@ import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.*
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.activity_basic.*
-import kotlinx.android.synthetic.main.activity_basic.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -145,7 +144,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
             StateEvent.ChatWindowDetached -> onChatUIDetached()
 
             StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(this@BasicChat, stateEvent.state, Toast.LENGTH_SHORT)
+                toast(baseContext, stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.Ended -> {
@@ -160,7 +159,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
 
     override fun onError(error: NRError) {
         super.onError(error)
-        lifecycleScope.launch { toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT) }
+        lifecycleScope.launch { toast(baseContext, error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -245,7 +244,7 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     }
 
     override fun onUrlLinkSelected(url: String) {
-        toast(this, "got link: $url")
+        toast(baseContext, "got link: $url")
     }
 
     companion object {

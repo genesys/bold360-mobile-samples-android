@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
+import com.common.utils.toObject
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -58,16 +58,7 @@ class ChatForm : Fragment() {
     private fun createForm() {
 
         sampleFormViewModel.formData.value?.forEach {
-
-            try {
-
-                formFieldsContainer.addFormField(it.asJsonObject)
-
-            } catch ( exception : IllegalStateException) {
-                // being thrown by the "asJsonObject" casting
-                Log.w(TAG, exception.message ?: "Unable to parse field")
-            }
-
+            formFieldsContainer.addFormField(it.toObject(true)!!)
         }
 
     }
@@ -249,7 +240,7 @@ class FormFieldsContainer @JvmOverloads constructor(context: Context?, attrs: At
                 options.forEach {
                     addView(
                         AppCompatRadioButton(context).apply {
-                            text  = it.asJsonObject.getString(FieldProps.Value)
+                            text  = it.toObject()?.getString(FieldProps.Value) ?: ""
                             textSize = 16f
                             id = ViewCompat.generateViewId()
                         }

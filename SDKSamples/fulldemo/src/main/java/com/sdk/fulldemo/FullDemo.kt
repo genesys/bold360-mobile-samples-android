@@ -231,7 +231,7 @@ open class FullDemo : RestorationContinuity() {
         } catch (e: Exception) {
             Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
             toast(
-                this,
+                baseContext,
                 ">> got url: [$url]",
                 Toast.LENGTH_SHORT,
                 background = ColorDrawable(Color.GRAY)

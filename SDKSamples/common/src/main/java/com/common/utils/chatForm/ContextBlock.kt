@@ -100,7 +100,7 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
                         contextHandler.addContext()
                     }
                 } catch (ast: AssertionError) {
-                    Log.w("AccountForm", "got assertion error")
+                    Log.w("ContextBlock", "got assertion error")
                 }
             }
             container.addView(this)

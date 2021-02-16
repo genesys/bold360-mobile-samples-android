@@ -89,7 +89,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
                 )
 
             } catch (ex: IllegalStateException) {
-                Log.e("BoldUploadNoUI", "failed to create bold session")
+                Log.e(TAG, "failed to create bold session")
                 finish()
             }
 
@@ -109,7 +109,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
         if (!isFinishing) {
             runMain {
-                toast(this, "Chat unavailable", background = ColorDrawable(Color.GRAY))
+                toast(baseContext, "Chat unavailable", background = ColorDrawable(Color.GRAY))
             }
             finish()
         }

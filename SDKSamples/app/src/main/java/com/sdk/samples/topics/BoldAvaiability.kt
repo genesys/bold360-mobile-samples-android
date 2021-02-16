@@ -57,6 +57,7 @@ class CheckAvailabilityViewModel : ViewModel() {
 class BoldAvailability : Fragment() {
 
     companion object {
+        const val TAG = "AvailabilityFragment"
         fun newInstance() = BoldAvailability()
     }
 
@@ -136,7 +137,7 @@ class BoldAvailability : Fragment() {
 
                 if (account == null) {
 
-                    Log.e("availability_fragment", ">>> account is null!!")
+                    Log.e(TAG, ">>> account is null!!")
 
                     callback.onComplete(
                         ChatAvailability.AvailabilityResult(
@@ -210,7 +211,7 @@ class BoldAvailability : Fragment() {
     }
 
     private fun resetChip() {
-        Log.e("availability_fragment", "Reset availability state")
+        Log.e(TAG, "Reset availability state")
 
         availability_status.performCloseIconClick()
        /* availability_status.apply {
@@ -224,7 +225,8 @@ class BoldAvailability : Fragment() {
         super.onStop()
         try {
             departmentAdapter.unregisterAdapterDataObserver(adapterDataObserver)
-        } catch (ignored: IllegalStateException) {
+        } catch (ignored: IllegalStateException) { 
+            Log.e(TAG, "Failed to unregister observer")
         }
     }
 

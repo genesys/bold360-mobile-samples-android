@@ -73,7 +73,7 @@ open class BoldChatAvailability : BoldChat() {
                 val unavailableEvent = stateEvent as? UnavailableEvent
                 takeIf { unavailableEvent?.isFollowedByForm != true }?.removeChatFragment()
 
-                Log.d("boldChat", stateEvent.state +", reason: ${unavailableEvent?.unavailableReason?:UnavailableReason.Unknown}")
+                Log.d(AvailabilityTag, stateEvent.state +", reason: ${unavailableEvent?.unavailableReason?:UnavailableReason.Unknown}")
                 //-> trigger the observer that was assigned to this viewModel to trigger
                 //  refresh of chat availability status.
                 availabilityViewModel.refresh(Event(Empty))
@@ -93,7 +93,7 @@ open class BoldChatAvailability : BoldChat() {
     }
 
     companion object {
-        const val AvailabilityTag = "AvailabilityTag"
+        const val AvailabilityTag = "BoldAvailability"
     }
 }
 
