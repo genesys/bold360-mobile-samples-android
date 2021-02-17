@@ -101,7 +101,7 @@ abstract class RestorationContinuity : History() {
                 when {
                     account == null && hasOpenChats() && isActive -> restoreChat()
 
-                    sampleFormViewModel.isRestorable() -> restoreChat( account = prepareAccount() )
+                    sampleFormViewModel.checkRestorable() -> restoreChat( account = prepareAccount() )
 
                     else -> {
                         context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT) }

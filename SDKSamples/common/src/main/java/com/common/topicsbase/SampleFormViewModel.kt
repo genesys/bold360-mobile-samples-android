@@ -1,10 +1,10 @@
 package com.common.topicsbase
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.common.utils.chatForm.*
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
@@ -12,9 +12,15 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.nanoengine.Account
 
-class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
+@Suppress("UNCHECKED_CAST")
+class SampleViewModelFactory (
+    private val sampleRepository: SampleRepository
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (SampleFormViewModel( sampleRepository) as T )
+}
 
-    private var sampleRepository: SampleRepository? = null
+class SampleFormViewModel( private val sampleRepository: SampleRepository ) : ViewModel(), SampleRepository by sampleRepository{
 
     private val accountData: JsonObject?
     get() = _sampleData.value?.account
@@ -28,16 +34,11 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
     private var _formData: MutableLiveData<JsonArray> = MutableLiveData()
     val formData: LiveData<JsonArray> = _formData
 
-    private fun getSavedAccount(): Any? {
-        return sampleRepository?.getSavedAccount( chatType.value ?: ChatType.ChatSelection)
-    }
-
-    private fun saveAccount(accountData: Any) {
-        sampleRepository?.saveAccount( accountData, chatType.value ?: ChatType.ChatSelection)
-    }
-
-    fun isRestorable() : Boolean {
-        return sampleRepository?.isRestorable( chatType.value ?: ChatType.ChatSelection) ?: false
+    /**
+     * @returns true if the account found by the repository
+     */
+    fun checkRestorable() : Boolean {
+        return sampleRepository.isRestorable(getChatType())
     }
 
     val account: Account?
@@ -53,8 +54,8 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
      */
     var restoreRequest: Boolean = false
 
-    fun setRepository(sampleRepository: SampleRepository) {
-        this.sampleRepository = sampleRepository
+    fun getAccountDataByKey(key: String): String? {
+        return accountData?.getString(key)
     }
 
     fun getFormField(index: Int): JsonObject? {
@@ -65,13 +66,10 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
         _chatType.value = chatType
     }
 
-    fun createFormFields(extraFields: List<FormFieldFactory.FormField>? = null) {
-        _formData.value = FormDataFactory.createFormFields(_chatType.value ?: ChatType.ChatSelection, extraFields)
-            .applyValues(getSavedAccount() as? JsonObject)
-    }
+    private fun getChatType() = chatType.value ?: ChatType.ChatSelection
 
-    fun getAccountDataByKey(key: String): String? {
-        return accountData?.getString(key)
+    fun createFormFields(extraFields: List<FormFieldFactory.FormField>? = null) {
+            _formData.value = FormDataFactory.createFormFields(getChatType(), extraFields).applyValues(getSavedAccount(getChatType()) as? JsonObject)
     }
 
     fun onAccountData(accountData: JsonObject) {
@@ -87,8 +85,7 @@ class SampleFormViewModel(app: Application) : AndroidViewModel(app) {
 
         accountData.takeIf { it.size() > 0 }?.let {
             _sampleData.value =  SampleData ( accountData, restoreRequest )
-            saveAccount(accountData)
+            saveAccount(accountData, getChatType())
         }
-
     }
 }

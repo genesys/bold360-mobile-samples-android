@@ -24,6 +24,7 @@ interface SampleRepository {
     /**
      * Checks if the account is restorable
      * @param chatType Is being used as the saved account's key
+     * @return true if the account found
      */
     fun isRestorable( @ChatType chatType: String): Boolean
 

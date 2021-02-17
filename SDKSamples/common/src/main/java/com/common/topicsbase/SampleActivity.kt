@@ -20,7 +20,9 @@ abstract class SampleActivity : AppCompatActivity() {
 
 //  <editor-fold desc=">>>>> Chat forms and account data handling <<<<<" >
 
-    val sampleFormViewModel: SampleFormViewModel by viewModels()
+    protected val sampleFormViewModel by viewModels<SampleFormViewModel> {
+        SampleViewModelFactory( JsonSampleRepository(applicationContext) )
+    }
 
     val account: Account?
     get() = sampleFormViewModel.account
@@ -60,8 +62,6 @@ abstract class SampleActivity : AppCompatActivity() {
 
         topicTitle = intent.getStringExtra("title").orEmpty()
 
-        val sampleFormViewModel: SampleFormViewModel by viewModels()
-
         sampleFormViewModel.updateChatType(chatType)
 
         sampleFormViewModel.sampleData.observe(this, Observer<SampleData> {
@@ -75,8 +75,6 @@ abstract class SampleActivity : AppCompatActivity() {
             startSample(savedInstanceState)
 
         })
-
-        sampleFormViewModel.setRepository( JsonSampleRepository(applicationContext) )
 
         presentSampleForm()
     }
