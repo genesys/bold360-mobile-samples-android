@@ -52,7 +52,7 @@ open class FullDemo : RestorationContinuity() {
 
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)?
     get() = {
-        super.extraDataFields?.invoke()!!.toMutableList().apply {
+        (super.extraDataFields?.invoke()?.toMutableList() ?: mutableListOf()).apply {
             add(FormFieldFactory.TextInputField( ChatType.Bot, DataKeys.Welcome, "", "Welcome message id", false ))
             add(FormFieldFactory.ContextBlock())
         }

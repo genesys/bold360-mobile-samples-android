@@ -74,7 +74,7 @@ class ChatForm : Fragment() {
 
                     is EditText -> getString(FieldProps.Key) to view.text.toString()
 
-                    is RadioGroup -> getString(FieldProps.Key) to formFieldsContainer.getCheckedRadioText(view)
+                    is RadioGroup -> getString(FieldProps.Key) to view.getSelectedText()
 
                     is SwitchCompat -> getString(FieldProps.Key) to view.isChecked.toString()
 
@@ -166,10 +166,6 @@ class FormFieldsContainer @JvmOverloads constructor(context: Context?, attrs: At
     }
 
     fun getFormFields(): List<View> = formFields.children()
-
-    fun getCheckedRadioText(radioGroup: RadioGroup): String? {
-        return formFields.findViewById<RadioButton>(radioGroup.checkedRadioButtonId).text?.toString()
-    }
 
     fun addFormField(fieldData: JsonObject) {
 

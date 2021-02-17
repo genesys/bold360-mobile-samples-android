@@ -1,6 +1,8 @@
 package com.common.utils.chatForm
 
 import android.util.Log
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys.*
 import com.common.utils.chatForm.defs.FieldProps
@@ -13,6 +15,7 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
+import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import kotlinx.android.synthetic.main.chat_form.*
 
 fun JsonObject.toBotAccount(): BotAccount {
@@ -43,11 +46,11 @@ fun JsonObject.toAsyncAccount(): AsyncAccount {
         info.userInfo =
             (infoJson?.getString(UserId)?.takeIf { it.isNotEmpty() }?.let { UserInfo(it) } ?: UserInfo()).apply {
                 infoJson?.let { infoJson ->
-                    infoJson.getString(Email)?.let { email = it }
-                    infoJson.getString(PhoneNumber)?.let { phoneNumber = it }
-                    infoJson.getString(FirstName)?.let { firstName = it }
-                    infoJson.getString(LastName)?.let { lastName = it }
-                    infoJson.getString(CountryAbbrev)?.let { countryAbbrev = it }
+                    infoJson.getString(SessionInfoKeys.Email)?.let { email = it }
+                    infoJson.getString(SessionInfoKeys.Phone)?.let { phoneNumber = it }
+                    infoJson.getString(SessionInfoKeys.FirstName)?.let { firstName = it }
+                    infoJson.getString(SessionInfoKeys.LastName)?.let { lastName = it }
+                    infoJson.getString(SessionInfoKeys.countryAbbrev)?.let { countryAbbrev = it }
                 }
             }
     }
@@ -83,12 +86,11 @@ internal fun JsonObject.toNeededAsyncInfo(): JsonObject {
                 info.getAsJsonObject("configurations").copySimpleProp(AppId, this)
 
                 info.getAsJsonObject("extraData")?.let { extraData ->
-                    extraData.copySimpleProp(Email, this)
-                    extraData.copySimpleProp(PhoneNumber, this)
-                    extraData.copySimpleProp(FirstName, this)
-                    extraData.copySimpleProp(LastName, this)
-                    extraData.copySimpleProp(LastName, this)
-                    extraData.copySimpleProp(CountryAbbrev, this)
+                    extraData.copySimpleProp(SessionInfoKeys.Email, this)
+                    extraData.copySimpleProp(SessionInfoKeys.Phone, this)
+                    extraData.copySimpleProp(SessionInfoKeys.FirstName, this)
+                    extraData.copySimpleProp(SessionInfoKeys.LastName, this)
+                    extraData.copySimpleProp(SessionInfoKeys.countryAbbrev, this)
                 }
             }
         }
@@ -156,3 +158,5 @@ fun JsonElement.toObject(catchEmpty: Boolean = false): JsonObject? {
         if (catchEmpty) JsonObject() else null
     }
 }
+
+fun RadioGroup.getSelectedText() : String? = findViewById<RadioButton>(this.checkedRadioButtonId).text?.toString()

@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({ FieldType.Title, FieldType.TextInput, FieldType.Switch, FieldType.ContextBlock })
+@StringDef({ FieldType.Title, FieldType.TextInput, FieldType.Switch, FieldType.ContextBlock, FieldType.Options, FieldType.Option })
 
 public @interface FieldType {
     String Title  = "title";

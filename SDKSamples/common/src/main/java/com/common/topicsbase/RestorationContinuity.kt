@@ -34,7 +34,7 @@ abstract class RestorationContinuity : History() {
 
 
     /**
-     * Reloads the login forms according to the ChatType
+     * Reloads the account details forms according to the ChatType
      */
     private fun reloadForms() {
 

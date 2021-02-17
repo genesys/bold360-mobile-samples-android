@@ -225,9 +225,7 @@ class BoldAvailability : Fragment() {
         super.onStop()
         try {
             departmentAdapter.unregisterAdapterDataObserver(adapterDataObserver)
-        } catch (ignored: IllegalStateException) { 
-            Log.e(TAG, "Failed to unregister observer")
-        }
+        } catch (ignored: IllegalStateException) { }
     }
 
     override fun onStart() {
