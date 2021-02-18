@@ -96,9 +96,9 @@ abstract class SampleActivity : AppCompatActivity() {
         }
     }
 
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out)
+    override fun onPause() {
+        super.onPause()
+        if (isFinishing) overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
     companion object {

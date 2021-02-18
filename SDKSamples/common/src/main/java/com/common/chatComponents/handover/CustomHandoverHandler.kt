@@ -24,7 +24,13 @@ import java.util.*
 class CustomHandoverHandler(context: Context) : HandoverHandler(context) {
 
     private var handlerConfiguration: String? = null
-    private val handler = Handler(Looper.myLooper()!!)
+
+    private val handler = Handler(
+        Looper.myLooper()?: let {
+            Looper.prepare()
+            Looper.myLooper()!!
+        }
+    )
 
     override fun handleEvent(name: String, event: Event) {
         when (name) {

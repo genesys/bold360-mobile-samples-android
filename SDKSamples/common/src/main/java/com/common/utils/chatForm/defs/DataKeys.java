@@ -9,9 +9,9 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
 @StringDef({DataKeys.AccountName, DataKeys.KB, DataKeys.Server, DataKeys.Accesskey,
-        SessionInfoKeys.Email, SessionInfoKeys.countryAbbrev,
-        DataKeys.AppId, SessionInfoKeys.Phone, DataKeys.UserId, SessionInfoKeys.LastName,
-        SessionInfoKeys.FirstName, SessionInfoKeys.Department, DataKeys.Restore})
+        DataKeys.Email, DataKeys.CountryAbbrev,DataKeys.ChatTypeKey,
+        DataKeys.AppId, DataKeys.Phone, DataKeys.UserId, DataKeys.LastName,
+        DataKeys.FirstName, DataKeys.Department, DataKeys.Restore})
 
 public @interface DataKeys {
     String AccountName = "account";
@@ -21,9 +21,15 @@ public @interface DataKeys {
     String Info = "info";
     String Context = "context";
     String Welcome = "welcome";
-    String UserId = "id";
     String AppId = "applicationId";
-    String ChatTypeKey = "chatType";
+    String UserId = "id";
     String Restore = "Restore if available";
+    String ChatTypeKey = "chatType";
+    String FirstName = SessionInfoKeys.FirstName;
+    String LastName = SessionInfoKeys.LastName;
+    String Email = SessionInfoKeys.Email;
+    String CountryAbbrev = SessionInfoKeys.countryAbbrev;
+    String Phone = SessionInfoKeys.Phone;
+    String Department = SessionInfoKeys.Department;
 
 }

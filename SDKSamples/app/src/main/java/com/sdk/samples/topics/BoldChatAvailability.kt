@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.common.utils.chatForm.defs.DataKeys
 import com.integration.core.Empty
 import com.integration.core.StateEvent
 import com.integration.core.UnavailableEvent
@@ -12,7 +13,6 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.sdk.samples.R
 
@@ -29,7 +29,7 @@ open class BoldChatAvailability : BoldChat() {
                     results?.run {
                         if (isAvailable) {
                             departmentId.takeIf { it > 0 }?.let {
-                                account.addExtraData(SessionInfoKeys.Department to results.departmentId)
+                                account.addExtraData(DataKeys.Department to results.departmentId)
                             }
 
                             createChat()

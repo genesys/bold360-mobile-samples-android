@@ -16,11 +16,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.common.utils.chatForm.defs.DataKeys
 import com.integration.core.Department
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.SingleLiveData
 import com.nanorep.convesationui.structure.controller.ChatAvailability
-import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
@@ -206,7 +206,7 @@ class BoldAvailability : Fragment() {
             text = getString(R.string.show_departments)
             isActivated = false
         }
-        viewModel?.account?.removeExtraData(SessionInfoKeys.Department)
+        viewModel?.account?.removeExtraData(DataKeys.Department)
         resetChip()
     }
 

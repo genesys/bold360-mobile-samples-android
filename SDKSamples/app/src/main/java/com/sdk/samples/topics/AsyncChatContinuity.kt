@@ -12,7 +12,6 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.model.conversation.SessionInfoKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /*
@@ -44,9 +43,9 @@ class AsyncChatContinuity : RestorationContinuity() {
     get() = {
         listOf(
             FormFieldFactory.TextInputField(ChatType.Async, DataKeys.UserId, "", "UserId", false),
-            FormFieldFactory.EmailInputField(ChatType.Async, SessionInfoKeys.Email, "", "Email", false),
-            FormFieldFactory.TextInputField(ChatType.Async, SessionInfoKeys.FirstName, "", "First Name", false),
-            FormFieldFactory.TextInputField(ChatType.Async, SessionInfoKeys.LastName, "", "Last Name", false)
+            FormFieldFactory.EmailInputField(ChatType.Async, DataKeys.Email, "", "Email", false),
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.FirstName, "", "First Name", false),
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.LastName, "", "Last Name", false)
         )
     }
 

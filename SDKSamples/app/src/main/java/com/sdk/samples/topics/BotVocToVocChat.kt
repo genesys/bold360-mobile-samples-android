@@ -8,12 +8,15 @@ import com.nanorep.nanoengine.model.configuration.VoiceSupport
 
 open class BotVocToVocChat : BotChat() {
 
+    private val alterProvider = CustomTTSAlterProvider()
+
     override fun createChatSettings(): ConversationSettings {
         return super.createChatSettings().voiceSettings(VoiceSettings(VoiceSupport.HandsFree))
     }
 
-    // Uncomment this to enable the read alter provider
     override fun getChatBuilder(): ChatController.Builder? {
-        return super.getChatBuilder()?.ttsReadAlterProvider( CustomTTSAlterProvider() )
+        return super.getChatBuilder()
+            ?.ttsReadAlterProvider( alterProvider ) // -> Comment this line to disable the read alter provider
+
     }
 }
