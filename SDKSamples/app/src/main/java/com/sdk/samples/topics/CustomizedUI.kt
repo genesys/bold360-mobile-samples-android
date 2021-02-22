@@ -132,7 +132,6 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
         if (layoutParams == null) {
             layoutParams = ViewsLayoutParams.getBubbleDefaultLayoutParams()
         }
-
     }
 
     override fun setTime(time: Long) {
@@ -144,6 +143,7 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setText(text: Spanned, onLinkPress: ((url: String) -> Unit)?) {
+        demo_local_bubble_message_textview.setBackgroundColor(Color.RED)
         demo_local_bubble_message_textview.text = text
     }
 
