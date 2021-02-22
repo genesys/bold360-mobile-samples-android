@@ -125,14 +125,8 @@ class MainActivity : AppCompatActivity() {
             topics_recycler.layoutManager = LinearLayoutManager(this)
 
             topics_recycler.adapter = TopicsAdapter(topics) { topic ->
-
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    startActivity(Intent(topic.intentAction).putExtra("title", topic.title), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-//                } else {
-                    startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
-                    overridePendingTransition(R.anim.right_in, R.anim.left_out)
-//                }
-
+                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
             }
             
             topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
