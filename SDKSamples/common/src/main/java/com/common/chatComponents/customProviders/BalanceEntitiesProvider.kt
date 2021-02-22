@@ -6,7 +6,7 @@ import com.nanorep.nanoengine.PersonalInfoRequest
 import com.nanorep.nanoengine.Property
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.utils.Completion
-import java.util.*
+import java.util.Random
 
 class BalanceEntitiesProvider : EntitiesProvider {
 

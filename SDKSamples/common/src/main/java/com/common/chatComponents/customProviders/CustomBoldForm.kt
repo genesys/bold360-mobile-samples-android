@@ -16,12 +16,17 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.bold.ui.*
+import com.nanorep.convesationui.bold.ui.ChatFormViewModel
+import com.nanorep.convesationui.bold.ui.FormComponent
+import com.nanorep.convesationui.bold.ui.FormConfiguration
+import com.nanorep.convesationui.bold.ui.SelectionListener
+import com.nanorep.convesationui.bold.ui.SelectionSpec
 import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
@@ -29,7 +34,9 @@ import com.nanorep.sdkcore.utils.TextTagHandler
 import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.custom_live_forms_layout.*
+import kotlinx.android.synthetic.main.custom_live_forms_layout.custom_form_submit_button
+import kotlinx.android.synthetic.main.custom_live_forms_layout.form_fields_container
+import kotlinx.android.synthetic.main.custom_live_forms_layout.form_type_title
 
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
@@ -209,13 +216,14 @@ class BoldCustomForm : Fragment() {
 
         //-> Adds the departments options as description below the edit field.
         fieldData.options?.run {
+
             val deptOptionsSB = StringBuilder().append(
                     context?.resources?.getString(R.string.custom_form_departments_title) ?: "")
 
             forEach {
 
-                deptOptionsSB.appendln(context?.getString(R.string.custom_form_departments_details, it.name,
-                        it.availableLabel, it.value)).appendln()
+                deptOptionsSB.appendLine(context?.getString(R.string.custom_form_departments_details, it.name,
+                    it.availableLabel, it.value)).appendLine()
 
                 if (depValue.isBlank() && it.isAvailable) {
                     depValue = it.value

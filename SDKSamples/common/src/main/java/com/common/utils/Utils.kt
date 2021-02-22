@@ -1,12 +1,10 @@
 package com.common.utils
 
 import android.annotation.SuppressLint
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import com.nanorep.nanoengine.model.configuration.DatestampFormatFactory
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class SampleDatestampFactory : DatestampFormatFactory {
 

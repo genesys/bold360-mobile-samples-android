@@ -4,7 +4,14 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.integration.core.*
+import com.integration.core.Error
+import com.integration.core.ErrorEvent
+import com.integration.core.Message
+import com.integration.core.MessageEvent
+import com.integration.core.State
+import com.integration.core.StateEvent
+import com.integration.core.UserAction
+import com.integration.core.UserEvent
 import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.ComponentType
 import com.nanorep.convesationui.views.autocomplete.ChatInputData
@@ -19,7 +26,7 @@ import com.nanorep.sdkcore.model.StatusPending
 import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.getAs
-import java.util.*
+import java.util.Locale
 
 class CustomHandoverHandler(context: Context) : HandoverHandler(context) {
 

@@ -15,8 +15,10 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.nanorep.sdkcore.utils.inflate
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.context_item.view.*
-import kotlinx.android.synthetic.main.context_view.view.*
+import kotlinx.android.synthetic.main.context_item.view.context_key
+import kotlinx.android.synthetic.main.context_item.view.context_value
+import kotlinx.android.synthetic.main.context_item.view.delete_context
+import kotlinx.android.synthetic.main.context_view.view.add_context
 import kotlin.math.max
 
 interface ContextAdapter {

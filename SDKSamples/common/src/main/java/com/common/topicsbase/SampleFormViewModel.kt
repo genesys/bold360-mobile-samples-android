@@ -85,7 +85,7 @@ class SampleFormViewModel( private val sampleRepository: SampleRepository ) : Vi
     fun onAccountData(accountData: JsonObject) {
 
         try {
-            accountData.remove(DataKeys.ChatTypeKey).asString?.let { _chatType.value = it }
+            accountData.remove(DataKeys.ChatTypeKey)?.asString?.let { _chatType.value = it }
             accountData.remove(DataKeys.Restore)?.asBoolean?.let { restoreRequest = it }
         } catch ( exception : IllegalStateException) {
            // being thrown by the 'JsonElement' casting

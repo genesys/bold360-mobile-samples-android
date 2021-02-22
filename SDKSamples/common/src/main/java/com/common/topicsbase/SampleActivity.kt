@@ -64,7 +64,7 @@ abstract class SampleActivity : AppCompatActivity() {
 
         sampleFormViewModel.updateChatType(chatType)
 
-        sampleFormViewModel.sampleData.observe(this, Observer<SampleData> {
+        sampleFormViewModel.sampleData.observe(this, Observer {
 
             supportFragmentManager
                 .popBackStack(

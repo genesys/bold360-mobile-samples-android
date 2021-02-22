@@ -40,7 +40,8 @@ class JsonSampleRepository( context: Context ): SampleRepository {
     }
 
     override fun getSavedAccount( @ChatType chatType: String): JsonObject {
-        return getSaved( chatType).orDefault(chatType)
+        return chatType.takeIf { it != ChatType.ChatSelection }
+            ?.let { getSaved( it ).orDefault(chatType) } ?: JsonObject()
     }
 
     override fun saveAccount( accountData: Any?, @ChatType chatType: String) {

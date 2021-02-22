@@ -7,10 +7,17 @@ import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.convesationui.utils.ElementMigration
 import com.nanorep.sdkcore.utils.SystemUtil
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import java.util.Date
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.min
 

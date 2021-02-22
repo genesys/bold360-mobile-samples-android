@@ -33,7 +33,7 @@ import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.dp
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.chat_form.*
+import kotlinx.android.synthetic.main.chat_form.formFieldsContainer
 import java.util.regex.Pattern
 
 class ChatForm : Fragment() {
@@ -93,7 +93,7 @@ class ChatForm : Fragment() {
                         get(FieldProps.Required)?.asBoolean ?: false
                     } catch ( exception : IllegalStateException) {
                         // being thrown by the 'JsonElement' casting
-                        Log.w(ChatForm.TAG, exception.message ?: "Unable to parse field")
+                        Log.w(TAG, exception.message ?: "Unable to parse field")
                         false
                     }
 

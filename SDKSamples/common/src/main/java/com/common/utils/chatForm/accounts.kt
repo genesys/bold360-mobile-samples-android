@@ -5,7 +5,7 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
-import java.util.*
+import java.util.UUID
 
 object Accounts {
 

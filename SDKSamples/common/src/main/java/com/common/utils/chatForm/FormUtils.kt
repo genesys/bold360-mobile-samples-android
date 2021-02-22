@@ -3,8 +3,22 @@ package com.common.utils.chatForm
 import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import com.common.utils.chatForm.defs.*
-import com.common.utils.chatForm.defs.DataKeys.*
+import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.chatForm.defs.DataKeys.Accesskey
+import com.common.utils.chatForm.defs.DataKeys.AccountName
+import com.common.utils.chatForm.defs.DataKeys.AppId
+import com.common.utils.chatForm.defs.DataKeys.Context
+import com.common.utils.chatForm.defs.DataKeys.CountryAbbrev
+import com.common.utils.chatForm.defs.DataKeys.Email
+import com.common.utils.chatForm.defs.DataKeys.FirstName
+import com.common.utils.chatForm.defs.DataKeys.Info
+import com.common.utils.chatForm.defs.DataKeys.KB
+import com.common.utils.chatForm.defs.DataKeys.LastName
+import com.common.utils.chatForm.defs.DataKeys.Phone
+import com.common.utils.chatForm.defs.DataKeys.Server
+import com.common.utils.chatForm.defs.DataKeys.UserId
+import com.common.utils.chatForm.defs.DataKeys.Welcome
+import com.common.utils.chatForm.defs.FieldProps
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -14,7 +28,6 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.bot.BotAccount
-import kotlinx.android.synthetic.main.chat_form.*
 
 fun JsonObject.toBotAccount(): BotAccount {
     return BotAccount(
@@ -59,7 +72,8 @@ internal fun JsonObject?.orDefault(@ChatType chatType: String): JsonObject {
         when (chatType) {
             ChatType.Live -> Gson().toJson(Accounts.defaultBoldAccount)
             ChatType.Async -> Gson().toJson(Accounts.defaultAsyncAccount)
-            else -> Gson().toJson(Accounts.defaultBotAccount)
+            ChatType.Bot -> Gson().toJson(Accounts.defaultBotAccount)
+            else -> ""
         }, JsonObject::class.java
     ).toNeededInfo(chatType)
 }
@@ -68,7 +82,8 @@ internal fun JsonObject.toNeededInfo(@ChatType chatType: String): JsonObject {
     return when (chatType) {
         ChatType.Live -> toNeededLiveInfo()
         ChatType.Async -> toNeededAsyncInfo()
-        else -> toNeededBotInfo()
+        ChatType.Bot -> toNeededBotInfo()
+        else -> JsonObject()
     }
 }
 

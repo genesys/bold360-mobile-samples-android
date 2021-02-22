@@ -34,7 +34,7 @@ class CustomTTSAlterProvider: TTSReadAlterProvider {
             // body = "Altered message Body"
 
             // For General prefix for carousel options:
-            (this as? CarouselReadoutMessage)?.setPrefixToItemsOptions("Carousel Option");
+            (this as? CarouselReadoutMessage)?.setPrefixToItemsOptions("Carousel Option")
         }
 
         // OR:

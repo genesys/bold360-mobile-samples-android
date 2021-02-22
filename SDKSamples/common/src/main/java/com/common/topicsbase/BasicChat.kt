@@ -16,9 +16,15 @@ import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
-import com.nanorep.sdkcore.utils.*
+import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.SystemUtil
+import com.nanorep.sdkcore.utils.hideKeyboard
+import com.nanorep.sdkcore.utils.runMain
+import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.activity_basic.*
+import kotlinx.android.synthetic.main.activity_basic.basic_chat_view
+import kotlinx.android.synthetic.main.activity_basic.basic_loading
+import kotlinx.android.synthetic.main.activity_basic.topic_title
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
