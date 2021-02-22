@@ -23,10 +23,12 @@ import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.model.StatusOk
-import com.nanorep.sdkcore.utils.dp
+import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customStatus
+import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customTimestamp
+import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.demo_local_bubble_message_textview
+import java.util.Date
 
 const val override = "override"
 const val configure = "configure"
@@ -37,10 +39,9 @@ annotation class CustomUIOption
 
 open class CustomizedUI : BotChat() {
 
-    override fun getBuilder(): ChatController.Builder {
+    override fun getChatBuilder(): ChatController.Builder? {
 
-        return super.getBuilder()
-            .chatUIProvider(
+        return super.getChatBuilder()?.chatUIProvider(
                 UIProviderFactory.create(
                     this,
                     intent?.getStringExtra("type") ?: override
@@ -77,7 +78,7 @@ private class UIProviderFactory {
                             setBackground(ColorDrawable(Color.GRAY))
 
                             setAvatar(ContextCompat.getDrawable(context, R.drawable.mic_icon))
-                            val margins = 2.dp
+                            val margins = 2.px
                             setAvatarMargins(margins, margins,margins,margins)
                         }
                     }
@@ -127,12 +128,10 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
         View.inflate(getContext(), R.layout.bubble_outgoing_demo, this)
 
         this.orientation = VERTICAL
-        background = ColorDrawable(Color.RED)
 
         if (layoutParams == null) {
             layoutParams = ViewsLayoutParams.getBubbleDefaultLayoutParams()
         }
-
     }
 
     override fun setTime(time: Long) {
@@ -144,6 +143,7 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setText(text: Spanned, onLinkPress: ((url: String) -> Unit)?) {
+        demo_local_bubble_message_textview.setBackgroundColor(Color.RED)
         demo_local_bubble_message_textview.text = text
     }
 

@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Base applications theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="CustomTextAppearance" parent="Base.TextAppearance.AppCompat.Large.Inverse">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/form_field_hint</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="hintTextAppearance">@style/CustomTextAppearance</item>
+        <item name="android:textColor">@color/form_field_text</item>
+        <item name="colorControlNormal">#1e000000</item>
+        <item name="colorControlActivated">#7e000000</item>
+        <item name="android:paddingLeft">4dp</item>
+    </style>
+
+    <style name="TextInputTextAppearance">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorHint">@android:color/transparent</item>
+    </style>
+
+</resources>

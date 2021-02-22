@@ -3,20 +3,25 @@ package com.sdk.samples.topics
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_bot_chat.*
-import kotlinx.android.synthetic.main.custom_ui_options_layout.*
-
+import kotlinx.android.synthetic.main.custom_ui_options_layout.configure_option
+import kotlinx.android.synthetic.main.custom_ui_options_layout.override_option
 
 open class CustomUIChat : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bot_chat)
+        setContentView(R.layout.activity_basic)
 
-        topic_title.text = intent.getStringExtra("title")
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
+
+        findViewById<TextView>(R.id.topic_title).text = intent.getStringExtra("title")
 
         initOptionsView()
 
@@ -24,13 +29,13 @@ open class CustomUIChat : AppCompatActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
 
     private fun initOptionsView(){
-
-        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, chat_view, true)
+        findViewById<ProgressBar>(R.id.basic_loading).visibility = View.GONE
+        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, findViewById<FrameLayout>(R.id.basic_chat_view), true)
         buttonSetup(configure_option, configure)
         buttonSetup(override_option, override)
     }
@@ -47,9 +52,9 @@ open class CustomUIChat : AppCompatActivity() {
 
                     putExtra("title", text.toString())
                     putExtra("type", customUIOption)
-                })
+                }.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
 
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
             }
         }
     }

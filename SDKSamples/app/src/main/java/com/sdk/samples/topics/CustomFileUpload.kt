@@ -10,12 +10,15 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.common.utils.live.createPickerIntent
+import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo
 import com.integration.core.StateEvent
 import com.integration.core.UploadResult
@@ -28,22 +31,24 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.px
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import com.sdk.samples.topics.ui.live.toFileUploadInfo
-import kotlinx.android.synthetic.main.activity_bot_chat.*
-import java.util.*
 
 /**
- * Demonstrate how to provide a costumed upload trigger, and do a full
+ * Demonstrates how to provide a costumed upload trigger, and do a full
  * upload flow to a live agent.
  */
 class CustomFileUpload : BoldChatAvailability() {
 
     private lateinit var imageButton: ImageButton
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun startSample(savedInstanceState: Bundle?) {
         initUploadButton()
+
+        super.startSample(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        destructMenu?.isVisible = true
+        return super.onCreateOptionsMenu(menu)
     }
 
     //<editor-fold desc="Custom upload: step 1: Create your custom upload trigger">
@@ -57,21 +62,21 @@ class CustomFileUpload : BoldChatAvailability() {
 
         }
 
-        chat_root.addView(imageButton, 0,
+        findViewById<ViewGroup>(R.id.chat_root).addView(imageButton, 0,
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
                 val margin = 3.px
                 setMargins(margin, margin, margin, margin)
-                gravity = Gravity.RIGHT
+                gravity = Gravity.END
             })
     }
     //</editor-fold>
 
     //<editor-fold desc="Custom upload: step 2: Disable the SDKs upload button">
-    override fun getBuilder(): ChatController.Builder {
-        return super.getBuilder().apply {
+    override fun getChatBuilder(): ChatController.Builder? {
+        return super.getChatBuilder()?.apply {
             chatUIProvider(ChatUIProvider(this@CustomFileUpload).apply {
                 chatInputUIProvider.uiConfig.showUpload = false
             })
@@ -87,12 +92,12 @@ class CustomFileUpload : BoldChatAvailability() {
 
             StateEvent.Started -> {
                 enableMenu(destructMenu, true)
-                
+
                 // !- first, make sure the Upload feature is enabled
                 if(chatController.isEnabled(ChatFeatures.FileUpload)) {
                     imageButton.visibility = View.VISIBLE
                 } else {
-                    toast(this, getString(R.string.file_transfer_not_enabled))
+                    toast(baseContext, getString(R.string.file_transfer_not_enabled))
                 }
             }
 
@@ -126,7 +131,7 @@ class CustomFileUpload : BoldChatAvailability() {
         }
 
         if (nonGranted.isEmpty()) {
-            FilePicker(this).openFilePicker()
+            startPickerActivity()
         } else {
             ActivityCompat.requestPermissions(this,
                 nonGranted.toTypedArray(),
@@ -148,9 +153,9 @@ class CustomFileUpload : BoldChatAvailability() {
                 }
 
                 if (notGranted.isEmpty()) {
-                    FilePicker(this).openFilePicker()
+                    startPickerActivity()
                 } else {
-                    toast(this, "Not granted permissions: $notGranted", Toast.LENGTH_LONG)
+                    toast(baseContext, "Not granted permissions: $notGranted", Toast.LENGTH_LONG)
                 }
             }
         }
@@ -172,7 +177,7 @@ class CustomFileUpload : BoldChatAvailability() {
     private fun addChosen(uri: Uri, chosenUploadsTarget: ArrayList<FileUploadInfo>) {
         val fileSizeLimit = 1024 * 1024 * 37
         try {
-            uri.toFileUploadInfo(this, fileSizeLimit)?.let { chosenUploadsTarget.add(it) }
+            uri.toFileUploadInfo(this, fileSizeLimit).let { chosenUploadsTarget.add(it) }
 
         } catch (ex: ErrorException) {
             if (NRError.IllegalStateError == ex.error.reason) {
@@ -208,6 +213,21 @@ class CustomFileUpload : BoldChatAvailability() {
     }
     //</editor-fold>
 
+    private fun startPickerActivity() {
+
+        createPickerIntent{
+            try {
+                ActivityCompat.startActivityForResult(
+                    this,
+                    it,
+                    FILE_UPLOAD_REQUEST_CODE, null
+                )
+            } catch (e: ActivityNotFoundException) {
+                toast(baseContext, getString(R.string.FileChooserError), Toast.LENGTH_LONG)
+            }
+        }
+    }
+
     //<editor-fold desc="Custom upload: step 6: listen to upload results">
     // when upload is done by the SDK the results are passed to the upload callback
     private fun onUploadResults(results: UploadResult) {
@@ -217,37 +237,6 @@ class CustomFileUpload : BoldChatAvailability() {
             if (NRError.Canceled != error.reason) {
                 val msg = error.description
                 chatController.post(SystemStatement(msg ?: error.reason!!))
-            }
-        }
-    }
-
-    class FilePicker(private val activity: Activity) {
-        fun openFilePicker() {
-            if (activity.isFinishing) {
-                Log.w(TAG, "request for file picker display is discarded")
-                return
-            }
-
-            val intent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                Intent(Intent.ACTION_GET_CONTENT)
-
-            } else {
-                Intent(Intent.ACTION_OPEN_DOCUMENT)
-
-            } .apply {
-                type = "*/*"
-                addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            }
-
-            try {
-                ActivityCompat.startActivityForResult(
-                    activity,
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_UPLOAD_REQUEST_CODE, null
-                )
-            } catch (e: ActivityNotFoundException) {
-                toast(activity, activity.getString(R.string.FileChooserError), Toast.LENGTH_LONG)
             }
         }
     }

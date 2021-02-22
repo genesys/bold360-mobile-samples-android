@@ -21,9 +21,10 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.common.topicsbase.SampleActivity
+import com.common.utils.chatForm.defs.ChatType
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -34,22 +35,25 @@ import com.integration.core.BoldLiveUploader
 import com.integration.core.FileUploadInfo
 import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
+import com.nanorep.nanoengine.model.conversation.SessionInfo
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import com.sdk.samples.topics.Accounts.defaultBoldAccount
-import kotlinx.android.synthetic.main.activity_bot_chat.topic_title
-import kotlinx.android.synthetic.main.activity_upload_no_ui.*
+import kotlinx.android.synthetic.main.activity_upload_no_ui.progress_bar
+import kotlinx.android.synthetic.main.activity_upload_no_ui.take_a_picture
+import kotlinx.android.synthetic.main.activity_upload_no_ui.topic_title
+import kotlinx.android.synthetic.main.activity_upload_no_ui.upload_container
+import kotlinx.android.synthetic.main.activity_upload_no_ui.upload_default_image
 import java.io.ByteArrayOutputStream
 
 
-class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
+class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
-    private val account =
-        defaultBoldAccount.apply {
-            skipPrechat()
-        }
+    override var chatType: String = ChatType.Live
+
+    override val containerId: Int
+        get() = R.id.upload_view
 
     private val uploader by lazy {
         BoldLiveUploader()
@@ -62,8 +66,11 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_no_ui)
 
+        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
         topic_title.text = intent.getStringExtra("title")
+    }
 
+    override fun startSample(savedInstanceState: Bundle?) {
         createChat()
 
     }
@@ -72,12 +79,12 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
 
         boldChat = BoldChat().apply {
 
-            visitorInfo = account.info
+            visitorInfo = account?.info ?: SessionInfo()
             wListener = this@BoldUploadNoUI.weakRef()
 
             try {
                 prepare(
-                    this@BoldUploadNoUI, account.apiKey,
+                    this@BoldUploadNoUI, account?.apiKey ?: "",
                     sessionParams = mapOf(
                         SessionParam.IncludeBranding to "true",
                         SessionParam.IncludeLayeredBranding to "true",
@@ -86,7 +93,7 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
                 )
 
             } catch (ex: IllegalStateException) {
-                Log.e("BoldUploadNoUI", "failed to create bold session")
+                Log.e(TAG, "failed to create bold session")
                 finish()
             }
 
@@ -106,7 +113,7 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
 
         if (!isFinishing) {
             runMain {
-                toast(this, "Chat unavailable", background = ColorDrawable(Color.GRAY))
+                toast(baseContext, "Chat unavailable", background = ColorDrawable(Color.GRAY))
             }
             finish()
         }
@@ -129,18 +136,28 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray) {
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        requestCode.takeIf { it == CAMERA_PERMISSION_REQUEST_CODE &&  grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED }?.run {
-            take_a_picture.setOnClickListener {
-                startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE)
-            }
-        } ?: kotlin.run {
+        requestCode.takeIf { it == CAMERA_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED }
+            ?.run {
+                take_a_picture.setOnClickListener {
+                    startActivityForResult(
+                        Intent(MediaStore.ACTION_IMAGE_CAPTURE),
+                        CAMERA_REQUEST_CODE
+                    )
+                }
+            } ?: kotlin.run {
             take_a_picture.isEnabled = false
         }
 
         upload_default_image.setOnClickListener {
-            (ContextCompat.getDrawable(this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
+            (ContextCompat.getDrawable(
+                this,
+                R.drawable.sample_image
+            ) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
+
         }
 
     }
@@ -197,12 +214,6 @@ class BoldUploadNoUI : AppCompatActivity(), BoldChatListener {
                 Log.e(TAG, "null response")
             }
         }
-    }
-
-    override fun finish() {
-        super.finish()
-
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
     }
 
     internal class ProgressController(private val container: ViewGroup){

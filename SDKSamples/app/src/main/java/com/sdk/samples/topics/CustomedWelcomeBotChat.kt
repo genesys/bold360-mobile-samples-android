@@ -1,14 +1,17 @@
 package com.sdk.samples.topics
 
-import com.nanorep.nanoengine.Account
+import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.chatForm.defs.DataKeys
 import com.nanorep.nanoengine.bot.BotAccount
 
 class CustomedWelcomeBotChat : BotChat() {
 
-    override fun getAccount(): Account {
-        return (super.getAccount() as BotAccount).apply {
-            welcomeMessage = Customed_WM
-        }
+    override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
+    get() = {
+        listOf(
+            FormFieldFactory.TextInputField( ChatType.Bot, DataKeys.Welcome, "", "Welcome message id", false )
+        )
     }
 
     companion object{

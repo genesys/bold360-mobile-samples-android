@@ -1,23 +1,15 @@
 package com.sdk.samples.topics
 
-import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.bot.BotAccount
+import com.common.topicsbase.BasicChat
+import com.common.utils.chatForm.defs.ChatType
 import com.nanorep.sdkcore.utils.toast
-import com.sdk.samples.topics.extra.withId
 
 open class BotChat : BasicChat() {
 
-    protected val account: BotAccount by lazy {
-        Accounts.defaultBotAccount
-    }
-        @JvmName("account") get
-
-    override fun getAccount(): Account {
-        return account.withId(this)
-    }
+    override var chatType: String = ChatType.Bot
 
     override fun onUploadFileRequest() {
-        toast(this@BotChat, "The file upload action is not available for this sample.")
+        toast(baseContext, "The file upload action is not available for this sample.")
     }
 
 }

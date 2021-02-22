@@ -1,18 +1,15 @@
 package com.sdk.samples.topics
 
+import com.common.topicsbase.BasicChat
+import com.common.utils.chatForm.defs.ChatType
+import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
-import com.nanorep.sdkcore.utils.toast
 
-open class BoldChat : BasicChat() {
+abstract class BoldChat : BasicChat() {
 
-    protected val account: BoldAccount by lazy {
-        Accounts.defaultBoldAccount
-    }
-    @JvmName("account") get
+    override var chatType: String = ChatType.Live
 
-    override fun getAccount(): Account {
-        return account
-    }
+    override fun prepareAccount(): Account = (account as BoldAccount).apply { info.securedInfo = getSecuredInfo() }
 
 }

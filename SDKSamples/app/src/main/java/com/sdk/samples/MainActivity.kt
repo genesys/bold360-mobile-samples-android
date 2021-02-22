@@ -17,99 +17,122 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.sample_topic.view.*
+import kotlinx.android.synthetic.main.activity_main.topics_recycler
+import kotlinx.android.synthetic.main.sample_topic.view.title
 
 open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var topics: ArrayList<SampleTopic>
     private var retryProviderInstall = true
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
 
+        arrayListOf(
 
-        topics = arrayListOf(
             SampleTopic(
                 "com.sdk.sample.action.BOT_CHAT",
                 getString(R.string.chat_with_bot),
                 ContextCompat.getDrawable(this, R.drawable.outline_android_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.HISTORY",
                 getString(R.string.chat_with_bot_history),
                 ContextCompat.getDrawable(this, R.drawable.baseline_history_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.WELCOME_BOT_CHAT",
                 getString(R.string.bot_chat_with_welcome),
                 ContextCompat.getDrawable(this, R.drawable.outline_message_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.VOICE_TO_VOICE",
                 getString(R.string.bot_chat_with_voc_to_voc),
                 ContextCompat.getDrawable(this, R.drawable.outline_hearing_black_24)
+
+            ), SampleTopic(
+                "com.sdk.sample.action.CONTEXT_SUPPORT",
+                getString(R.string.bot_context_support),
+                ContextCompat.getDrawable(this, R.drawable.context_support_24dp)
+
             ), SampleTopic(
                 "com.sdk.sample.action.ENTITIES",
                 getString(R.string.bot_chat_with_entities),
                 ContextCompat.getDrawable(this, R.drawable.entities_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.HANDOVER",
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_ASYNC_CHAT",
                 getString(R.string.async_chat_with_an_agent),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.ASYNC_CONTINUITY",
                 getString(R.string.async_chat_continuity),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
                 ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.CUSTOM_FORM",
                 getString(R.string.custom_form),
                 ContextCompat.getDrawable(this, R.drawable.baseline_description_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.PRE_CHAT_EXTRA_DATA",
                 getString(R.string.bot_to_bold_with_prechat),
                 ContextCompat.getDrawable(this, R.drawable.baseline_list_alt_black_24)
+
             ),  SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD",
                 "Custom upload on live chat",
                 ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI",
                 getString(R.string.bold_upload_without_ui),
                 ContextCompat.getDrawable(this, R.drawable.outline_publish_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.RESTORE",
                 getString(R.string.chat_restore),
                 ContextCompat.getDrawable(this, R.drawable.baseline_restore_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.CUSTOM_UI",
                 getString(R.string.custom_UI),
                 ContextCompat.getDrawable(this, R.drawable.outline_rate_review_black_24)
+
             ), SampleTopic(
                 "com.sdk.sample.action.AUTOCOMPLETE",
                 getString(R.string.standalone_autocomplete),
                 ContextCompat.getDrawable(this, R.drawable.outline_text_format_black_24)
             )
-        )
 
-        topics_recycler.layoutManager = LinearLayoutManager(this)
-        topics_recycler.adapter = TopicsAdapter(topics) { topic ->
-            startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
-            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        ).let { topics ->
+
+            topics_recycler.layoutManager = LinearLayoutManager(this)
+
+            topics_recycler.adapter = TopicsAdapter(topics) { topic ->
+                startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
+                overridePendingTransition(R.anim.right_in, R.anim.left_out)
+            }
+            
+            topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+            (topics_recycler.adapter as TopicsAdapter).updateTopics()
 
         }
-        topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        (topics_recycler.adapter as TopicsAdapter).updateTopics()
     }
 
     override fun onPostResume() {
@@ -130,13 +153,15 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val ERROR_DIALOG_REQUEST_CODE = 665
+        const val SECURITY_TAG = "Security-Installer"
+
 
         fun updateSecurityProvider(context: Activity) {
 
             if (Build.VERSION.SDK_INT < 21) {
                 ProviderInstaller.installIfNeededAsync(context, object : ProviderInstaller.ProviderInstallListener {
                     override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
-                        Log.e("Security-Installer", "!!! failed to install security provider updates, Checking for recoverable error...")
+                        Log.e(SECURITY_TAG, "!!! failed to install security provider updates, Checking for recoverable error...")
 
                         GoogleApiAvailability.getInstance().apply {
                             if (isUserResolvableError(errorCode) &&
@@ -159,11 +184,11 @@ class MainActivity : AppCompatActivity() {
                     private fun onProviderInstallerNotAvailable() {
                         val msg = "Google play services can't be installed or updated thous Messaging may not be available"
                         toast(context, msg)
-                        Log.e("Security-Installer", ">> $msg")
+                        Log.e(SECURITY_TAG, ">> $msg")
                     }
 
                     override fun onProviderInstalled() {
-                        Log.i("Security-Installer", ">> security provider updates installed successfully")
+                        Log.i(SECURITY_TAG, ">> security provider updates installed successfully")
 
                     }
                 })
@@ -174,7 +199,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-class TopicsAdapter(var topics: ArrayList<SampleTopic>, val gotoTopic: (topic: SampleTopic) -> Unit) :
+class TopicsAdapter(var topics: ArrayList<SampleTopic>, private val gotoTopic: (topic: SampleTopic) -> Unit) :
     RecyclerView.Adapter<TopicViewHolder>() {
 
     init {
