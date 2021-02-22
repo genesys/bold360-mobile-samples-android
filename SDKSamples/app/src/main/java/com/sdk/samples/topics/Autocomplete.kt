@@ -23,8 +23,8 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_upload_no_ui.*
-import kotlinx.android.synthetic.main.autocomplete_activity.*
+import kotlinx.android.synthetic.main.autocomplete_activity.article_root
+import kotlinx.android.synthetic.main.autocomplete_activity.article_view
 
 class Autocomplete : SampleActivity() {
 

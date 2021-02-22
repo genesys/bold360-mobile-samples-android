@@ -10,7 +10,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.custom_ui_options_layout.*
+import kotlinx.android.synthetic.main.custom_ui_options_layout.configure_option
+import kotlinx.android.synthetic.main.custom_ui_options_layout.override_option
 
 open class CustomUIChat : AppCompatActivity() {
 

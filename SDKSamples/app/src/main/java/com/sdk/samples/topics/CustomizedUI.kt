@@ -25,8 +25,10 @@ import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.model.StatusOk
 import com.nanorep.sdkcore.utils.dp
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customStatus
+import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customTimestamp
+import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.demo_local_bubble_message_textview
+import java.util.Date
 
 const val override = "override"
 const val configure = "configure"

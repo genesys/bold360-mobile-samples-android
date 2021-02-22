@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.sample_topic.view.*
+import kotlinx.android.synthetic.main.activity_main.topics_recycler
+import kotlinx.android.synthetic.main.sample_topic.view.title
 
 open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
 

@@ -9,7 +9,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.ScrollView
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.appcompat.widget.AppCompatTextView
@@ -28,7 +34,6 @@ import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.dp
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.chat_form.*
-import kotlinx.android.synthetic.main.context_view.view.*
 import java.util.regex.Pattern
 
 class ChatForm : Fragment() {

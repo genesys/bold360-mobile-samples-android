@@ -24,8 +24,12 @@ import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.bold_availability.*
-import kotlinx.android.synthetic.main.bold_availability.view.*
+import kotlinx.android.synthetic.main.bold_availability.availability_status
+import kotlinx.android.synthetic.main.bold_availability.departments_layout
+import kotlinx.android.synthetic.main.bold_availability.instruction
+import kotlinx.android.synthetic.main.bold_availability.show_departments
+import kotlinx.android.synthetic.main.bold_availability.view.availability_status
+import kotlinx.android.synthetic.main.bold_availability.view.departments_recycler
 
 class CheckAvailabilityViewModel : ViewModel() {
 
