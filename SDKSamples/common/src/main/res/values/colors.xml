@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#186EB1</color>
     <color name="colorAccent">#79B0FF</color>
     <color name="demo_text_color">#F44336</color>
+    <color name="demo_background_color">#4CAF50</color>
 
     <color name="form_field_hint">@color/colorAccent</color>
 

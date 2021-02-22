@@ -1,7 +1,6 @@
 package com.common.utils.chatForm
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
@@ -20,6 +19,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -31,7 +31,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
-import com.nanorep.sdkcore.utils.dp
+import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
 import kotlinx.android.synthetic.main.chat_form.formFieldsContainer
 import java.util.regex.Pattern
@@ -155,7 +155,7 @@ class FormFieldsContainer @JvmOverloads constructor(context: Context?, attrs: At
     private var formFields: LinearLayout
 
     init {
-        setPadding(8.dp, 8.dp, 8.dp, 8.dp)
+        setPadding(8.px, 8.px, 8.px, 8.px)
 
         formFields = LinearLayout(context)
         addView(
@@ -215,8 +215,8 @@ class FormFieldsContainer @JvmOverloads constructor(context: Context?, attrs: At
             AppCompatTextView(context).apply {
                 text = value ?: ""
                 textSize = 22f
-                setTextColor(Color.BLUE)
-                setPadding(8, 14, 8, 14)
+                setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                setPadding(8.px, 8.px, 8.px, 8.px)
                 layoutParams =
                     ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,

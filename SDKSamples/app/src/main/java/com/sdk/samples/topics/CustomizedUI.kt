@@ -23,7 +23,7 @@ import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.model.StatusOk
-import com.nanorep.sdkcore.utils.dp
+import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customStatus
 import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customTimestamp
@@ -78,7 +78,7 @@ private class UIProviderFactory {
                             setBackground(ColorDrawable(Color.GRAY))
 
                             setAvatar(ContextCompat.getDrawable(context, R.drawable.mic_icon))
-                            val margins = 2.dp
+                            val margins = 2.px
                             setAvatarMargins(margins, margins,margins,margins)
                         }
                     }
@@ -128,7 +128,6 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
         View.inflate(getContext(), R.layout.bubble_outgoing_demo, this)
 
         this.orientation = VERTICAL
-        background = ColorDrawable(Color.RED)
 
         if (layoutParams == null) {
             layoutParams = ViewsLayoutParams.getBubbleDefaultLayoutParams()

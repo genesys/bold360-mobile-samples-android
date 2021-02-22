@@ -1,7 +1,6 @@
 package com.common.utils.chatForm
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import com.nanorep.sdkcore.utils.inflate
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
@@ -76,12 +76,13 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
             text = context.getString(R.string.bot_context_title)
             textSize = 20f
             visibility = View.GONE
-            setTextColor(Color.BLUE)
+            setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
             gravity = Gravity.CENTER
             layoutParams = LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
+                (this as MarginLayoutParams).setMargins(0,16.px,0,0)
                 gravity = Gravity.CENTER
             }
         }

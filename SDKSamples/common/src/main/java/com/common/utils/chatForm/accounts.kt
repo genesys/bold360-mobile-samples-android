@@ -36,7 +36,7 @@ object Accounts {
 
     val defaultAsyncAccount = AsyncAccount(
         "2300000001700000000:2279533687831071375:MlVOftOF/UFUUqPPSbMSDAnQjITxOrQW:gamma",
-        "MobileAsyncStaging123452"
+        "MobileAsyncStagingNew12345"
     ).apply {
         info.userInfo = UserInfo(UUID.randomUUID().toString()).apply {
             firstName = "Android"
