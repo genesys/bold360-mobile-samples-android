@@ -120,30 +120,36 @@ abstract class RestorationContinuity : History() {
 
     override fun onBackPressed() {
 
-        when {
+        if( supportFragmentManager.backStackEntryCount > 1 ) {
 
-            supportFragmentManager.backStackEntryCount > 1 && supportFragmentManager.getCurrent()?.tag == CHAT_FORM -> {
-                supportFragmentManager
-                    .popBackStack(
-                        CHAT_FORM,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE
-                    )
-                supportFragmentManager.executePendingTransactions()
+            when (supportFragmentManager.getCurrent()?.tag) {
 
-                if (supportFragmentManager.backStackEntryCount == 0) {
-                    reloadForms()
+                CHAT_FORM -> { // -> Chat form is presented (2 in stack)
+                    supportFragmentManager
+                        .popBackStack(
+                            CHAT_FORM,
+                            FragmentManager.POP_BACK_STACK_INCLUSIVE
+                        )
+
+                    supportFragmentManager.executePendingTransactions()
+
+                    if ( supportFragmentManager.backStackEntryCount == 0 ) { // -> No more form fragments in stack => represent the chat selection
+                        reloadForms()
+                    }
+                }
+
+                else -> { // -> Another fragment in the stuck ( Article fragment, Live form etc. )
+                    supportFragmentManager.popBackStackImmediate()
+                    finishIfLast()
                 }
             }
 
-            supportFragmentManager.getCurrent()?.tag == topicTitle -> {
-                removeChatFragment()
-                supportFragmentManager.executePendingTransactions()
-            }
+        } else if ( supportFragmentManager.backStackEntryCount > 0 && supportFragmentManager.getCurrent()?.tag == topicTitle ) {  // -> Chat fragment is presented
+            removeChatFragment()
+            supportFragmentManager.executePendingTransactions()
 
-            else -> {
-                supportFragmentManager.popBackStack()
-                finish()
-            }
+        }  else { // -> No fragments in stack
+            super.onBackPressed()
         }
     }
 

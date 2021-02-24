@@ -10,7 +10,7 @@
 
     <Button
             android:id="@+id/add_context"
-            style="@style/main_button"
+            style="@style/submit_view_small"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
