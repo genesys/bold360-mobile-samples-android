@@ -18,9 +18,14 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://dl.bintray.com/nanorep/devcore/'}
+        maven { url 'https://dl.bintray.com/nanorep/devconversation/'}
+
+//        maven { url 'https://dl.bintray.com/bold360ai-sdk/core/'}
+//        maven { url 'https://dl.bintray.com/bold360ai-sdk/conversation/'}
+
         google()
         jcenter()
-        maven { url 'https://dl.bintray.com/bold360ai-sdk/conversation/'}
     }
 }
 
