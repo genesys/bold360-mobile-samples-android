@@ -1,4 +1,4 @@
-package com.sdk.fulldemo
+package com.boldchat.demo
 
 import android.Manifest
 import android.content.ActivityNotFoundException
@@ -402,7 +402,7 @@ open class FullDemo : RestorationContinuity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        findViewById<TextView>(com.sdk.fulldemo.R.id.topic_title).visibility = View.GONE
+        findViewById<TextView>(R.id.topic_title).visibility = View.GONE
     }
 
     override fun onStop() {
