@@ -33,12 +33,13 @@ import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.chat_form.formFieldsContainer
 import java.util.regex.Pattern
 
 class ChatForm : Fragment() {
 
     private val sampleFormViewModel: SampleFormViewModel by activityViewModels()
+
+    lateinit var formFieldsContainer: FormFieldsContainer
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +50,8 @@ class ChatForm : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        formFieldsContainer = view.findViewById(R.id.formFieldsContainer)
 
         createForm()
 
