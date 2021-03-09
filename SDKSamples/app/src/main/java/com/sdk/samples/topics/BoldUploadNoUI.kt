@@ -23,6 +23,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
 import com.integration.bold.BoldChat
@@ -40,11 +41,7 @@ import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.activity_upload_no_ui.progress_bar
-import kotlinx.android.synthetic.main.activity_upload_no_ui.take_a_picture
-import kotlinx.android.synthetic.main.activity_upload_no_ui.topic_title
-import kotlinx.android.synthetic.main.activity_upload_no_ui.upload_container
-import kotlinx.android.synthetic.main.activity_upload_no_ui.upload_default_image
+import com.sdk.samples.databinding.ActivityUploadNoUiBinding
 import java.io.ByteArrayOutputStream
 
 
@@ -59,15 +56,19 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
         BoldLiveUploader()
     }
 
+    lateinit var binding: ActivityUploadNoUiBinding
+
     private var boldChat: BoldChat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_upload_no_ui)
+
+        binding = DataBindingUtil.setContentView(
+            this, R.layout.activity_upload_no_ui)
 
         setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
-        topic_title.text = intent.getStringExtra("title")
+
+        binding.topicTitle.text = intent.getStringExtra("title")
     }
 
     override fun startSample(savedInstanceState: Bundle?) {
@@ -125,9 +126,9 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     override fun visitorInfoUpdated() {
         runMain {
-            progress_bar.visibility = View.INVISIBLE
-            take_a_picture.visibility = View.VISIBLE
-            upload_default_image.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.takeAPicture.visibility = View.VISIBLE
+            binding.uploadDefaultImage.visibility = View.VISIBLE
         }
 
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
@@ -142,17 +143,17 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
         requestCode.takeIf { it == CAMERA_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED }
             ?.run {
-                take_a_picture.setOnClickListener {
+                binding.takeAPicture.setOnClickListener {
                     startActivityForResult(
                         Intent(MediaStore.ACTION_IMAGE_CAPTURE),
                         CAMERA_REQUEST_CODE
                     )
                 }
             } ?: kotlin.run {
-            take_a_picture.isEnabled = false
+            binding.takeAPicture.isEnabled = false
         }
 
-        upload_default_image.setOnClickListener {
+        binding.uploadDefaultImage.setOnClickListener {
             (ContextCompat.getDrawable(
                 this,
                 R.drawable.sample_image
@@ -172,7 +173,7 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
 
     private fun uploadBitmap(bitmap: Bitmap) {
 
-        val progressController = ProgressController(upload_container)
+        val progressController = ProgressController(binding.uploadContainer)
 
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)

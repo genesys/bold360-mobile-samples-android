@@ -5,8 +5,8 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
@@ -23,19 +23,20 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.autocomplete_activity.article_root
-import kotlinx.android.synthetic.main.autocomplete_activity.article_view
+import com.sdk.samples.databinding.AutocompleteActivityBinding
 
 class Autocomplete : SampleActivity() {
 
     override var chatType: String = ChatType.Bot
+
+    private lateinit var binding: AutocompleteActivityBinding
 
     override val containerId: Int
         get() = R.id.autocomplete_container
 
     override fun startSample(savedInstanceState: Bundle?) {
         setSupportActionBar(findViewById(R.id.sample_toolbar))
-        article_view.setBackgroundColor(Color.parseColor("#88ffffff"))
+        binding.articleView.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel: BotCompletionViewModel by viewModels()
 
@@ -70,10 +71,13 @@ class Autocomplete : SampleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.autocomplete_activity)
+
+        binding = DataBindingUtil.setContentView(
+            this, R.layout.autocomplete_activity)
+
         setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
 
-        findViewById<TextView>(R.id.topic_title).text = topicTitle
+        binding.topicTitle.text = topicTitle
     }
 
     private fun onError(error: NRError) {
@@ -87,9 +91,9 @@ class Autocomplete : SampleActivity() {
         var html = "<html>${ArticleFragment.STYLE_TO_HANDLE_TABLES}<body>${articleResponse.body
             ?: "Not Available"}</body></html>"
         html = LinkedArticleHandler.updateLinkedArticles(html)
-        article_view.loadData(html, "text/html", "UTF-8")
-        article_root.visibility = View.VISIBLE
-        hideKeyboard(article_root)
+        binding.articleView.loadData(html, "text/html", "UTF-8")
+        binding.articleRoot.visibility = View.VISIBLE
+        hideKeyboard(binding.articleRoot)
     }
 
 }

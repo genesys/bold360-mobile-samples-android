@@ -6,31 +6,34 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.View.inflate
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import com.nanorep.sdkcore.utils.toast
-import kotlinx.android.synthetic.main.activity_main.topics_recycler
-import kotlinx.android.synthetic.main.sample_topic.view.title
+import com.sdk.samples.databinding.ActivityMainBinding
+import com.sdk.samples.databinding.SampleTopicBinding
+import java.util.ArrayList
 
 open class SampleTopic(val intentAction: String, val title: String, val icon: Drawable? = null)
 
 class MainActivity : AppCompatActivity() {
 
     private var retryProviderInstall = true
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(
+            this, R.layout.activity_main)
 
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
+        setSupportActionBar(findViewById(R.id.sample_toolbar))
 
         arrayListOf(
 
@@ -122,16 +125,16 @@ class MainActivity : AppCompatActivity() {
 
         ).let { topics ->
 
-            topics_recycler.layoutManager = LinearLayoutManager(this)
+            binding.topicsRecycler.layoutManager = LinearLayoutManager(this)
 
-            topics_recycler.adapter = TopicsAdapter(topics) { topic ->
+            binding.topicsRecycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+            binding.topicsRecycler.adapter = TopicsAdapter(topics) { topic ->
                 startActivity(Intent(topic.intentAction).putExtra("title", topic.title))
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)
+            }.also {
+                it.updateTopics() // to be moved to the
             }
-            
-            topics_recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-            (topics_recycler.adapter as TopicsAdapter).updateTopics()
-
         }
     }
 
@@ -197,8 +200,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
-
 class TopicsAdapter(var topics: ArrayList<SampleTopic>, private val gotoTopic: (topic: SampleTopic) -> Unit) :
     RecyclerView.Adapter<TopicViewHolder>() {
 
@@ -211,8 +212,7 @@ class TopicsAdapter(var topics: ArrayList<SampleTopic>, private val gotoTopic: (
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
-        val itemView = inflate(parent.context, R.layout.sample_topic, null)
-        return TopicViewHolder(itemView)
+        return TopicViewHolder(SampleTopicBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -224,10 +224,9 @@ class TopicsAdapter(var topics: ArrayList<SampleTopic>, private val gotoTopic: (
     }
 }
 
+class TopicViewHolder(binding: SampleTopicBinding) : RecyclerView.ViewHolder(binding.root) {
 
-class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private val titleView = itemView.title
+    private val titleView = binding.title
 
     fun bind(topic: SampleTopic, startTopic: (intentAction: SampleTopic) -> Unit) {
         titleView.apply {

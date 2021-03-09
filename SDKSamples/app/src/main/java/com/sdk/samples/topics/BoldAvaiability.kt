@@ -24,12 +24,7 @@ import com.nanorep.convesationui.structure.controller.ChatAvailability
 import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.snack
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.bold_availability.availability_status
-import kotlinx.android.synthetic.main.bold_availability.departments_layout
-import kotlinx.android.synthetic.main.bold_availability.instruction
-import kotlinx.android.synthetic.main.bold_availability.show_departments
-import kotlinx.android.synthetic.main.bold_availability.view.availability_status
-import kotlinx.android.synthetic.main.bold_availability.view.departments_recycler
+import com.sdk.samples.databinding.BoldAvailabilityBinding
 
 class CheckAvailabilityViewModel : ViewModel() {
 
@@ -69,13 +64,16 @@ class BoldAvailability : Fragment() {
         activity?.let { ViewModelProvider(it).get(CheckAvailabilityViewModel::class.java) }
     }
 
+    private lateinit var binding: BoldAvailabilityBinding
+
     private var chipUncheckedIcon: Drawable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.bold_availability, container, false)
+    ): View {
+        binding = BoldAvailabilityBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     private val departmentAdapter = DepartmentAdapter()
@@ -88,23 +86,25 @@ class BoldAvailability : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        view.departments_recycler.adapter = departmentAdapter
+        binding.departmentsRecycler.apply {
+            adapter = departmentAdapter
 
-        view.departments_recycler.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        }
 
-
-        show_departments.setOnClickListener {
-            if (show_departments.isActivated) {
-                deactivateDepartments()
-            } else {
-                activateDepartments()
+        binding.showDepartments.apply {
+            setOnClickListener {
+                if (isActivated) {
+                    deactivateDepartments()
+                } else {
+                    activateDepartments()
+                }
             }
         }
 
-        chipUncheckedIcon = view.availability_status.closeIcon
+        chipUncheckedIcon = binding.availabilityStatus.closeIcon
 
-        view.availability_status.apply {
+        binding.availabilityStatus.apply {
 
             closeIcon = ContextCompat.getDrawable(context, R.drawable.chat_channel)
 
@@ -114,7 +114,7 @@ class BoldAvailability : Fragment() {
                     override fun onComplete(result: ChatAvailability.AvailabilityResult) {
                         if (context == null || !isAdded) return // in case fragment was closed by receiving the response
 
-                        availability_status.apply {
+                        binding.availabilityStatus.apply {
                             isSelected = result.isAvailable
                             if (isSelected) {
                                 chipIcon = checkedIcon
@@ -128,7 +128,7 @@ class BoldAvailability : Fragment() {
                         }
 
                         result.reason?.run {
-                            availability_status.snack(
+                            binding.availabilityStatus.snack(
                                 "chat is not available due to $this",
                                 backgroundColor = Color.DKGRAY,
                                 disableSwipes = false
@@ -152,7 +152,7 @@ class BoldAvailability : Fragment() {
 
                 } else {
 
-                    val departmentId = (view.departments_recycler.adapter as DepartmentAdapter)
+                    val departmentId = (binding.departmentsRecycler.adapter as DepartmentAdapter)
                         .takeIf { it.selectedDepartment > -1 }
                         ?.let { it.getItemId(it.selectedDepartment) }
                         ?: 0L
@@ -162,7 +162,7 @@ class BoldAvailability : Fragment() {
             }
 
             setOnClickListener {
-                (availability_status.tag as? ChatAvailability.AvailabilityResult)?.run {
+                (binding.availabilityStatus.tag as? ChatAvailability.AvailabilityResult)?.run {
                     /* !! live chat can start only with departments that were configured to the ChatWindow
                         in prechat form configurations. unless skip prechat was applied. */
                     viewModel?.onResults(this)
@@ -187,9 +187,9 @@ class BoldAvailability : Fragment() {
                     override fun onComplete(result: ChatAvailability.DepartmentsResult) {
 
                         result.data?.takeIf { it.isNotEmpty() }?.apply {
-                            instruction.visibility = View.GONE
-                            departments_layout.visibility = View.VISIBLE
-                            show_departments.apply {
+                            binding.instruction.visibility = View.GONE
+                            binding.departmentsLayout.visibility = View.VISIBLE
+                            binding.showDepartments.apply {
                                 text = getString(R.string.hide_departments)
                                 isActivated = true
                             }
@@ -203,10 +203,10 @@ class BoldAvailability : Fragment() {
     }
 
     private fun deactivateDepartments() {
-        instruction.visibility = View.VISIBLE
-        departments_layout.visibility = View.GONE
+        binding.instruction.visibility = View.VISIBLE
+        binding.departmentsLayout.visibility = View.GONE
         departmentAdapter.clearSelected()
-        show_departments.apply {
+        binding.showDepartments.apply {
             text = getString(R.string.show_departments)
             isActivated = false
         }
@@ -217,7 +217,7 @@ class BoldAvailability : Fragment() {
     private fun resetChip() {
         Log.e(TAG, "Reset availability state")
 
-        availability_status.performCloseIconClick()
+        binding.availabilityStatus.performCloseIconClick()
        /* availability_status.apply {
             isSelected = false
             chipIcon = null
@@ -235,13 +235,15 @@ class BoldAvailability : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        view?.departments_recycler?.adapter?.registerAdapterDataObserver(adapterDataObserver)
+        if (this::binding.isInitialized) {
+            binding.departmentsRecycler.adapter?.registerAdapterDataObserver(adapterDataObserver)
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        availability_status.performCloseIconClick() // starts with the current availability state
+        binding.availabilityStatus.performCloseIconClick() // starts with the current availability state
     }
 
 }
