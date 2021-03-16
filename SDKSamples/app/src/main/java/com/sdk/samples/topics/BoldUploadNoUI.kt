@@ -45,7 +45,7 @@ import com.sdk.samples.databinding.ActivityUploadNoUiBinding
 import java.io.ByteArrayOutputStream
 
 
-class BoldUploadNoUI : SampleActivity(), BoldChatListener {
+class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatListener {
 
     override var chatType: String = ChatType.Live
 
@@ -56,15 +56,13 @@ class BoldUploadNoUI : SampleActivity(), BoldChatListener {
         BoldLiveUploader()
     }
 
-    lateinit var binding: ActivityUploadNoUiBinding
+    override fun getViewBinding(): ActivityUploadNoUiBinding =
+        DataBindingUtil.setContentView(this, R.layout.activity_upload_no_ui)
 
     private var boldChat: BoldChat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(
-            this, R.layout.activity_upload_no_ui)
 
         setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
 

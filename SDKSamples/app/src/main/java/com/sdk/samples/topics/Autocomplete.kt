@@ -25,11 +25,13 @@ import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import com.sdk.samples.databinding.AutocompleteActivityBinding
 
-class Autocomplete : SampleActivity() {
+class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
 
     override var chatType: String = ChatType.Bot
 
-    private lateinit var binding: AutocompleteActivityBinding
+    override fun getViewBinding(): AutocompleteActivityBinding =
+        DataBindingUtil.setContentView(this, R.layout.autocomplete_activity)
+
 
     override val containerId: Int
         get() = R.id.autocomplete_container
@@ -71,9 +73,6 @@ class Autocomplete : SampleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(
-            this, R.layout.autocomplete_activity)
 
         setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
 

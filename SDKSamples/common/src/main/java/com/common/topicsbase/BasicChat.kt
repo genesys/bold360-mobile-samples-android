@@ -28,12 +28,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-abstract class BasicChat : SampleActivity(), ChatEventListener {
+abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventListener {
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
 
-    lateinit var binding: ActivityBasicBinding
+    override fun getViewBinding(): ActivityBasicBinding = DataBindingUtil.setContentView(
+        this, R.layout.activity_basic)
 
     override val containerId: Int
         get() = R.id.basic_chat_view
@@ -114,9 +115,6 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(
-            this, R.layout.activity_basic)
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
 

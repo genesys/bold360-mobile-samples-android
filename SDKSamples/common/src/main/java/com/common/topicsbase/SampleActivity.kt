@@ -5,15 +5,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.viewbinding.ViewBinding
 import com.common.utils.chatForm.ChatForm
 import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.JsonSampleRepository
-import com.common.utils.chatForm.SampleData
 import com.common.utils.chatForm.defs.ChatType
 import com.nanorep.nanoengine.Account
 import com.sdk.common.R
 
-abstract class SampleActivity : AppCompatActivity() {
+abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
     protected lateinit var topicTitle: String
     abstract val containerId: Int
@@ -23,6 +23,10 @@ abstract class SampleActivity : AppCompatActivity() {
     protected val sampleFormViewModel by viewModels<SampleFormViewModel> {
         SampleViewModelFactory( JsonSampleRepository(applicationContext) )
     }
+
+    lateinit var binding: Binding
+
+    abstract fun getViewBinding(): Binding
 
     val account: Account?
     get() = sampleFormViewModel.account
@@ -61,6 +65,8 @@ abstract class SampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         topicTitle = intent.getStringExtra("title").orEmpty()
+
+        binding = getViewBinding()
 
         sampleFormViewModel.updateChatType(chatType)
 
