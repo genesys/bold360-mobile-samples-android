@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.common.topicsbase.BoundFragment
 import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
@@ -39,11 +40,12 @@ import com.sdk.common.databinding.CustomLiveFormsLayoutBinding
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
  */
-class BoldCustomForm : Fragment() {
+class BoldCustomForm : BoundFragment<CustomLiveFormsLayoutBinding>() {
 
     private var isSubmitted = false
 
-    private lateinit var binding: CustomLiveFormsLayoutBinding
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): CustomLiveFormsLayoutBinding =
+        CustomLiveFormsLayoutBinding.inflate(LayoutInflater.from(context), container, false)
 
     companion object {
         @JvmStatic
@@ -55,11 +57,6 @@ class BoldCustomForm : Fragment() {
     //-> fetch ViewModel instance to get the form arguments (as provided on [BoldCustomChatForm])
     private val formViewModel by lazy {
         ViewModelProvider(requireActivity()).get(ChatFormViewModel::class.java)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = CustomLiveFormsLayoutBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -143,20 +143,20 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setText(text: Spanned, onLinkPress: ((url: String) -> Unit)?) {
-        binding.demoLocalBubbleMessageTextview.setBackgroundColor(Color.RED)
-        binding.demoLocalBubbleMessageTextview.text = text
+        binding.localBubbleText.setBackgroundColor(Color.RED)
+        binding.localBubbleText.text = text
     }
 
     override fun setLinkTextColor(color: Int) {
-        binding.demoLocalBubbleMessageTextview.setLinkTextColor(color)
+        binding.localBubbleText.setLinkTextColor(color)
     }
 
     override fun setTextPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        binding.demoLocalBubbleMessageTextview.setPadding(left, top, right, bottom)
+        binding.localBubbleText.setPadding(left, top, right, bottom)
     }
 
     override fun setBackground(background: Drawable?) {
-        binding.demoLocalBubbleMessageTextview.background = background
+        binding.localBubbleText.background = background
     }
 
     override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
@@ -170,7 +170,7 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setTextStyle(styleConfig: StyleConfig) {
-        binding.demoLocalBubbleMessageTextview.setStyleConfig(styleConfig)
+        binding.localBubbleText.setStyleConfig(styleConfig)
     }
 
     override fun setStatus(status: Int, statusText: String?) {

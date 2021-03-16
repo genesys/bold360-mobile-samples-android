@@ -9,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.common.topicsbase.BoundFragment
 import com.common.utils.chatForm.defs.DataKeys
 import com.integration.core.Department
 import com.nanorep.convesationui.bold.model.BoldAccount
@@ -53,7 +53,7 @@ class CheckAvailabilityViewModel : ViewModel() {
 }
 
 
-class BoldAvailability : Fragment() {
+class BoldAvailability : BoundFragment<BoldAvailabilityBinding>() {
 
     companion object {
         const val TAG = "AvailabilityFragment"
@@ -64,17 +64,10 @@ class BoldAvailability : Fragment() {
         activity?.let { ViewModelProvider(it).get(CheckAvailabilityViewModel::class.java) }
     }
 
-    private lateinit var binding: BoldAvailabilityBinding
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): BoldAvailabilityBinding =
+        BoldAvailabilityBinding.inflate(inflater, container, false)
 
     private var chipUncheckedIcon: Drawable? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = BoldAvailabilityBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     private val departmentAdapter = DepartmentAdapter()
 
@@ -235,9 +228,8 @@ class BoldAvailability : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        if (this::binding.isInitialized) {
-            binding.departmentsRecycler.adapter?.registerAdapterDataObserver(adapterDataObserver)
-        }
+        binding.departmentsRecycler.adapter?.registerAdapterDataObserver(adapterDataObserver)
+
     }
 
     override fun onResume() {
