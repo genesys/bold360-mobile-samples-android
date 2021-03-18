@@ -2,7 +2,6 @@ package com.common.chatComponents.customProviders
 
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.common.topicsbase.SampleActivity
@@ -16,7 +15,7 @@ import com.nanorep.convesationui.bold.ui.FormListener
 import com.nanorep.convesationui.structure.controller.FormProvider
 import com.nanorep.sdkcore.utils.weakRef
 
-class CustomFormProvider(sampleActivity: AppCompatActivity) : FormProvider {
+class CustomFormProvider(sampleActivity: SampleActivity<*>) : FormProvider {
 
     private val wActivity = sampleActivity.weakRef()
 

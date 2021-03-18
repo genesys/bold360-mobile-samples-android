@@ -24,7 +24,9 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
         SampleViewModelFactory( JsonSampleRepository(applicationContext) )
     }
 
-    lateinit var binding: Binding
+    val binding: Binding by lazy {
+        getViewBinding()
+    }
 
     abstract fun getViewBinding(): Binding
 
@@ -65,8 +67,6 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         topicTitle = intent.getStringExtra("title").orEmpty()
-
-        binding = getViewBinding()
 
         sampleFormViewModel.updateChatType(chatType)
 
