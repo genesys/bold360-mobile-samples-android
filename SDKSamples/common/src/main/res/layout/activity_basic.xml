@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 
-<LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/AppTheme"
-        xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <include
-            layout="@layout/samples_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    <LinearLayout
-            android:padding="8dp"
-            android:id="@+id/chat_root"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/AppTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+            android:orientation="vertical">
 
-        <TextView
-                android:id="@+id/topic_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|start"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+        <include
+                layout="@layout/samples_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <FrameLayout
-                android:id="@+id/basic_chat_view"
+        <LinearLayout
+                android:id="@+id/chat_root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/rect_shape"
-                android:padding="3dp">
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
 
-            <ProgressBar
+            <TextView
+                    android:id="@+id/topic_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:id="@+id/basic_loading" />
+                    android:layout_gravity="top|start"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
-        </FrameLayout>
+            <FrameLayout
+                    android:id="@+id/basic_chat_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rect_shape"
+                    android:padding="3dp">
+
+                <ProgressBar
+                        android:id="@+id/basic_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>

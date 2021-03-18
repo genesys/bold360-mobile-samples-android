@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.AppCompatTextView
@@ -15,15 +16,14 @@ import androidx.core.content.ContextCompat
 import com.nanorep.sdkcore.utils.inflate
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.context_item.view.context_key
-import kotlinx.android.synthetic.main.context_item.view.context_value
-import kotlinx.android.synthetic.main.context_item.view.delete_context
-import kotlinx.android.synthetic.main.context_view.view.add_context
+import com.sdk.common.databinding.ContextItemBinding
 import kotlin.math.max
 
 interface ContextAdapter {
-    fun createContextView(botContext: Pair<String, String>? = null,
-                          onDelete: ((ContextViewHolder) -> Unit)? = null): View?
+    fun createContextView(
+        botContext: Pair<String, String>? = null,
+        onDelete: ((ContextViewHolder) -> Unit)? = null
+    ): View?
 }
 
 ///////////////////////////////////////////////////
@@ -38,8 +38,8 @@ interface ContextViewHolder {
 
 ///////////////////////////////////////////////////
 
-class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : LinearLayout(context, attrs, defStyle), ContextAdapter {
+class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    LinearLayout(context, attrs, defStyle), ContextAdapter {
 
     lateinit var contextHandler: ContextHandler
     private lateinit var title: AppCompatTextView
@@ -65,7 +65,9 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
 
         contextHandler = ContextHandler(contextView, this).apply {
             onDelete = { _ ->
-                if (childCount == 2) { title.visibility = View.GONE }
+                if (childCount == 2) {
+                    title.visibility = View.GONE
+                }
             }
         }
     }
@@ -82,7 +84,7 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                (this as MarginLayoutParams).setMargins(0,16.px,0,0)
+                (this as MarginLayoutParams).setMargins(0, 16.px, 0, 0)
                 gravity = Gravity.CENTER
             }
         }
@@ -93,7 +95,7 @@ class ContextBlock(context: Context, attrs: AttributeSet? = null, defStyle: Int 
 
         contextView = (container.inflate(R.layout.context_view, container, false) as LinearContext).apply {
             this.scroller = scroller
-            add_context.setOnClickListener {
+            findViewById<Button>(R.id.add_context).setOnClickListener {
                 try {
                     val lastContext = contextHandler.container.getLast()
                     if (lastContext == null || !lastContext.isEmpty()) {
@@ -129,6 +131,8 @@ class ContextViewLinear @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), ContextViewHolder {
 
+    val binding = ContextItemBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
 
         if (layoutParams == null) {
@@ -148,8 +152,7 @@ class ContextViewLinear @JvmOverloads constructor(
             }
         }
         orientation = HORIZONTAL
-        LayoutInflater.from(context).inflate(R.layout.context_item, this, true)
-        delete_context.setOnClickListener {
+        binding.deleteContext.setOnClickListener {
             onDelete?.invoke(this)
         }
     }
@@ -158,8 +161,8 @@ class ContextViewLinear @JvmOverloads constructor(
 
     @Throws(AssertionError::class)
     override fun getBotContext(): Pair<String, String> {
-        val key = context_key.text.toString()
-        val value = context_value.text.toString()
+        val key = binding.contextKey.text.toString()
+        val value = binding.contextValue.text.toString()
         val blankKey = key.isBlank()
         val blankValue = value.isBlank()
         if (blankKey && !blankValue || blankValue && !blankKey) {
@@ -169,8 +172,8 @@ class ContextViewLinear @JvmOverloads constructor(
     }
 
     override fun setBotContext(context: Pair<String, String>) {
-        context_key.setText(context.first)
-        context_value.setText(context.second)
+        binding.contextKey.setText(context.first)
+        binding.contextValue.setText(context.second)
     }
 
     override fun getView(): View {

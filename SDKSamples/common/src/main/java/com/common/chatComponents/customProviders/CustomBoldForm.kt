@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.common.topicsbase.BoundFragment
 import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
@@ -34,16 +35,17 @@ import com.nanorep.sdkcore.utils.TextTagHandler
 import com.nanorep.sdkcore.utils.forEachChild
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.custom_live_forms_layout.custom_form_submit_button
-import kotlinx.android.synthetic.main.custom_live_forms_layout.form_fields_container
-import kotlinx.android.synthetic.main.custom_live_forms_layout.form_type_title
+import com.sdk.common.databinding.CustomLiveFormsLayoutBinding
 
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
  */
-class BoldCustomForm : Fragment() {
+class BoldCustomForm : BoundFragment<CustomLiveFormsLayoutBinding>() {
 
     private var isSubmitted = false
+
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): CustomLiveFormsLayoutBinding =
+        CustomLiveFormsLayoutBinding.inflate(LayoutInflater.from(context), container, false)
 
     companion object {
         @JvmStatic
@@ -55,10 +57,6 @@ class BoldCustomForm : Fragment() {
     //-> fetch ViewModel instance to get the form arguments (as provided on [BoldCustomChatForm])
     private val formViewModel by lazy {
         ViewModelProvider(requireActivity()).get(ChatFormViewModel::class.java)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.custom_live_forms_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,14 +76,14 @@ class BoldCustomForm : Fragment() {
 
                 // We're taking the easy way, and just removing all fields views and recreating them
                 // according to the updated FormData. That will cover branding changes and fields changes.
-                form_fields_container.removeAllViews()
+                binding.formFieldsContainer.removeAllViews()
                 createBrandedFields()
             }
         })
     }
 
     private fun saveValues() {
-        form_fields_container.forEachChild { child ->
+        binding.formFieldsContainer.forEachChild { child ->
             (child.tag as? Int)?.let {
                 formViewModel.data?.fields?.get(it)?.value = (child as? FormComponent)?.getData() ?: let {
                     (child as? EditText)?.text.toString()
@@ -104,7 +102,7 @@ class BoldCustomForm : Fragment() {
 
     private fun initFormTypeTitle() {
         formViewModel.data?.formType?.let { formType ->
-            form_type_title.apply {
+            binding.formTypeTitle.apply {
                 setStyleConfig(StyleConfig(20, ContextCompat.getColor(context, R.color.colorPrimary),
                         Typeface.DEFAULT_BOLD))
                 text = formType
@@ -122,7 +120,7 @@ class BoldCustomForm : Fragment() {
                 (layoutParams as? ViewGroup.MarginLayoutParams)?.setMargins(0, 0, 0, 10.px)
                 text = TextTagHandler.getSpannedHtml(introMessage)
             }
-            form_fields_container.addView(introTxt)
+            binding.formFieldsContainer.addView(introTxt)
         }
     }
 
@@ -147,16 +145,16 @@ class BoldCustomForm : Fragment() {
                 when (fieldData.type) {
                     FormFieldType.Select -> {
                         when (fieldData.key) {
-                            FieldKey.DepartmentKey -> handleDeptView(form_fields_container, fieldData,
+                            FieldKey.DepartmentKey -> handleDeptView(binding.formFieldsContainer, fieldData,
                                     createEditViewView(fieldData).apply {
                                         tag = index
                                     })
-                            FieldKey.LanguageKey -> handleLanguageView(requireContext(), index, form_fields_container,
+                            FieldKey.LanguageKey -> handleLanguageView(requireContext(), index, binding.formFieldsContainer,
                                     fieldData, FormConfiguration(context))
                         }
                     }
                     else -> {
-                        form_fields_container.addView(createEditViewView(fieldData))
+                        binding.formFieldsContainer.addView(createEditViewView(fieldData))
                     }
                 }
 
@@ -239,9 +237,9 @@ class BoldCustomForm : Fragment() {
     }
 
     private fun initSubmitButton() {
-        custom_form_submit_button.setOnClickListener {
+        binding.customFormSubmitButton.setOnClickListener {
 
-            form_fields_container?.forEachChild {
+            binding.formFieldsContainer?.forEachChild {
                 (it as? EditText)?.run {
                     val index = tag as Int
                     formViewModel.data?.fields?.get(index)?.value = this.text.toString()

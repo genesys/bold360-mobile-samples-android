@@ -5,23 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.sdk.common.databinding.ActivityBasicBinding
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.custom_ui_options_layout.configure_option
-import kotlinx.android.synthetic.main.custom_ui_options_layout.override_option
+import com.sdk.samples.databinding.CustomUiOptionsLayoutBinding
 
 open class CustomUIChat : AppCompatActivity() {
 
+    private lateinit var binding: ActivityBasicBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_basic)
+
+        binding = DataBindingUtil.setContentView(
+            this, com.sdk.common.R.layout.activity_basic)
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
 
-        findViewById<TextView>(R.id.topic_title).text = intent.getStringExtra("title")
+        binding.topicTitle.text = intent.getStringExtra("title")
 
         initOptionsView()
 
@@ -34,10 +36,11 @@ open class CustomUIChat : AppCompatActivity() {
 
 
     private fun initOptionsView(){
-        findViewById<ProgressBar>(R.id.basic_loading).visibility = View.GONE
-        LayoutInflater.from(this).inflate(R.layout.custom_ui_options_layout, findViewById<FrameLayout>(R.id.basic_chat_view), true)
-        buttonSetup(configure_option, configure)
-        buttonSetup(override_option, override)
+        binding.basicLoading.visibility = View.GONE
+        CustomUiOptionsLayoutBinding.inflate(LayoutInflater.from(baseContext), binding.basicChatView , true).let {
+            buttonSetup(it.configureOption, configure)
+            buttonSetup(it.overrideOption, override)
+        }
     }
 
     private fun buttonSetup(button: Button, @CustomUIOption customUIOption: String) {

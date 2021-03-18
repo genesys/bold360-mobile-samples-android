@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.text.format.DateFormat
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.StringDef
@@ -25,9 +26,7 @@ import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.model.StatusOk
 import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
-import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customStatus
-import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.customTimestamp
-import kotlinx.android.synthetic.main.bubble_outgoing_demo.view.demo_local_bubble_message_textview
+import com.sdk.samples.databinding.BubbleOutgoingDemoBinding
 import java.util.Date
 
 const val override = "override"
@@ -124,8 +123,9 @@ private class UIProviderFactory {
  */
 private class OverrideContentAdapter(context: Context): LinearLayout(context), BubbleContentAdapter {
 
+    val binding = BubbleOutgoingDemoBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
-        View.inflate(getContext(), R.layout.bubble_outgoing_demo, this)
 
         this.orientation = VERTICAL
 
@@ -135,28 +135,28 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setTime(time: Long) {
-        customTimestamp.text = DateFormat.format("MM/dd/yyyy", Date(time)).toString()
+        binding.customTimestamp.text = DateFormat.format("MM/dd/yyyy", Date(time)).toString()
     }
 
     override fun enableTimestampView(enable: Boolean) {
-        customTimestamp.visibility = if (enable) View.VISIBLE else View.GONE
+        binding.customTimestamp.visibility = if (enable) View.VISIBLE else View.GONE
     }
 
     override fun setText(text: Spanned, onLinkPress: ((url: String) -> Unit)?) {
-        demo_local_bubble_message_textview.setBackgroundColor(Color.RED)
-        demo_local_bubble_message_textview.text = text
+        binding.localBubbleText.setBackgroundColor(Color.RED)
+        binding.localBubbleText.text = text
     }
 
     override fun setLinkTextColor(color: Int) {
-        demo_local_bubble_message_textview.setLinkTextColor(color)
+        binding.localBubbleText.setLinkTextColor(color)
     }
 
     override fun setTextPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        demo_local_bubble_message_textview.setPadding(left, top, right, bottom)
+        binding.localBubbleText.setPadding(left, top, right, bottom)
     }
 
     override fun setBackground(background: Drawable?) {
-        demo_local_bubble_message_textview.background = background
+        binding.localBubbleText.background = background
     }
 
     override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
@@ -170,11 +170,11 @@ private class OverrideContentAdapter(context: Context): LinearLayout(context), B
     }
 
     override fun setTextStyle(styleConfig: StyleConfig) {
-        demo_local_bubble_message_textview.setStyleConfig(styleConfig)
+        binding.localBubbleText.setStyleConfig(styleConfig)
     }
 
     override fun setStatus(status: Int, statusText: String?) {
-        customStatus.text = if (status == StatusOk) "received" else "waiting"
+        binding.customStatus.text = if (status == StatusOk) "received" else "waiting"
     }
 
     override fun setDefaultStyle(styleConfig: StyleConfig, timestampStyle: TimestampStyle) {}

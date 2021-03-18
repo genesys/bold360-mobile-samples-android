@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity"
-        android:padding="8dp"
-        android:orientation="vertical">
+<layout>
 
-    <include
-            layout="@layout/samples_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    <FrameLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/samplesContainer">
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:context=".MainActivity">
+
+        <include
+                layout="@layout/samples_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <FrameLayout
+                android:id="@+id/samplesContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Select a sample:"
                     android:textSize="@dimen/topic_titles_text"
-                    android:layout_marginBottom="10dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topics_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/rect_shape"/>
+                    android:background="@drawable/rect_shape" />
 
             <ProgressBar
                     android:id="@+id/sampleLoading"
@@ -37,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:visibility="gone" />
-    </FrameLayout>
+        </FrameLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</layout>
