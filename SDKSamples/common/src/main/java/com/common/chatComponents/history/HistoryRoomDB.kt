@@ -3,17 +3,7 @@ package com.common.chatComponents.history
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.room.Dao
-import androidx.room.Database
-import androidx.room.Entity
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.PrimaryKey
-import androidx.room.Query
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
+import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nanorep.convesationui.structure.elements.ChatElement
@@ -30,7 +20,7 @@ import java.util.Date
 
 private const val HISTORY = "history_database"
 
-@Database(entities = [HistoryElement::class], version = 4)
+@Database(entities = [HistoryElement::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class HistoryRoomDB: RoomDatabase() {
 
@@ -55,29 +45,14 @@ abstract class HistoryRoomDB: RoomDatabase() {
         }
 
         private fun buildDB(context: Context) : HistoryRoomDB {
-            val MIGRATION_3_4 = object : Migration(3, 4) {
+            val MIGRATION_4_5 = object : Migration(4, 5) {
                 override fun migrate(database: SupportSQLiteDatabase) {
-                    database.execSQL(
-                        """Create TABLE new_HistoryElement (
-                        id TEXT PRIMARY KEY NOT NULL DEFAULT '',
-                        groupId TEXT NOT NULL,
-                        scope INTEGER NOT NULL,
-                        inDate INTEGER NOT NULL,
-                        textContent TEXT NOT NULL,
-                        type INTEGER NOT NULL,
-                        isStorageReady INTEGER NOT NULL,
-                        key BLOB NOT NULL,
-                        timestamp INTEGER NOT NULL,
-                        status INTEGER NOT NULL DEFAULT -1);"""
-                    )
-                    database.execSQL(
-                        """INSERT INTO new_HistoryElement (id, groupId,
-                        scope,inDate,textContent,type,isStorageReady,key,timestamp, status) 
-                        SELECT timestamp, groupId,
-                        scope,inDate,textContent,type,isStorageReady, key,timestamp,status FROM HistoryElement;"""
-                    )
-                    database.execSQL("DROP TABLE HistoryElement;")
-                    database.execSQL("ALTER TABLE new_HistoryElement RENAME TO HistoryElement;")
+                    migrationAction(database)
+                }
+            }
+            val MIGRATION_2_5 = object : Migration(2, 5) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    migrationAction(database)
                 }
             }
 
@@ -85,7 +60,31 @@ abstract class HistoryRoomDB: RoomDatabase() {
                 context,
                 HistoryRoomDB::class.java,
                 HISTORY
-            ).addMigrations(MIGRATION_3_4).build()
+            ).addMigrations(MIGRATION_4_5, MIGRATION_2_5).build()
+        }
+
+        private fun migrationAction(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """Create TABLE new_HistoryElement (
+                                id TEXT PRIMARY KEY NOT NULL DEFAULT '',
+                                groupId TEXT NOT NULL,
+                                scope INTEGER NOT NULL,
+                                inDate INTEGER NOT NULL,
+                                textContent TEXT NOT NULL,
+                                type INTEGER NOT NULL,
+                                isStorageReady INTEGER NOT NULL,
+                                key BLOB NOT NULL,
+                                timestamp INTEGER NOT NULL,
+                                status INTEGER NOT NULL DEFAULT -1);"""
+            )
+            database.execSQL(
+                """INSERT INTO new_HistoryElement (id, groupId,
+                                scope,inDate,textContent,type,isStorageReady,key,timestamp, status) 
+                                SELECT timestamp, groupId,
+                                scope,inDate,textContent,type,isStorageReady, key,timestamp,status FROM HistoryElement;"""
+            )
+            database.execSQL("DROP TABLE HistoryElement;")
+            database.execSQL("ALTER TABLE new_HistoryElement RENAME TO HistoryElement;")
         }
     }
 }
@@ -137,6 +136,7 @@ class HistoryElement() : StorableChatElement {
 
     var groupId: String = ""
 
+    @ColumnInfo(defaultValue = "")
     @PrimaryKey
     @NonNull
     private var id: String = ""
@@ -146,6 +146,7 @@ class HistoryElement() : StorableChatElement {
     /**
      * for internal use, to get the records in insertion order
      */
+    @NonNull
     lateinit var inDate: Date
 
     private var timestamp: Long = 0
@@ -155,8 +156,9 @@ class HistoryElement() : StorableChatElement {
     @ChatElement.Companion.ChatElementType
     private var type: Int = 0
 
+    @ColumnInfo(name = "status", defaultValue = "-1")
     @StatementStatus
-    private var status = StatusPending
+    private var status : Int = StatusPending
 
     override var isStorageReady = true
 

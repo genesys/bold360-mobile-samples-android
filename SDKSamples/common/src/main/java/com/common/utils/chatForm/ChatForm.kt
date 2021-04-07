@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RadioButton
@@ -22,8 +21,8 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.common.topicsbase.BoundFragment
 import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
@@ -33,26 +32,25 @@ import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.chat_form.formFieldsContainer
+import com.sdk.common.databinding.ChatFormBinding
 import java.util.regex.Pattern
 
-class ChatForm : Fragment() {
+class ChatForm : BoundFragment<ChatFormBinding>() {
 
     private val sampleFormViewModel: SampleFormViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.chat_form, container, false)
-    }
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): ChatFormBinding =
+        ChatFormBinding.inflate(inflater, container, false)
+
+    private lateinit var formFieldsContainer: FormFieldsContainer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        formFieldsContainer = binding.formFieldsContainer
+
         createForm()
 
-        view.findViewById<Button>(R.id.start_chat).apply {
+        binding.startChat.apply {
             setOnClickListener {
                 collaborateData()
             }

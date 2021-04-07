@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:paddingRight="75dp"
-        android:paddingLeft="75dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-           android:id="@+id/configure_option"
-           style="@style/main_button"
-           android:text="@string/cutomized_ui"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_gravity="center"
-           android:layout_marginBottom="20dp" />
+<layout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/override_option"
-            style="@style/main_button"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="75dp"
+            android:paddingRight="75dp">
 
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/configure_option"
+                style="@style/main_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:text="@string/cutomized_ui" />
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/override_option"
+                style="@style/main_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+    </LinearLayout>
+</layout>

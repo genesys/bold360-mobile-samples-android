@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
@@ -22,17 +23,18 @@ import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
-import kotlinx.android.synthetic.main.activity_basic.basic_chat_view
-import kotlinx.android.synthetic.main.activity_basic.basic_loading
-import kotlinx.android.synthetic.main.activity_basic.topic_title
+import com.sdk.common.databinding.ActivityBasicBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-abstract class BasicChat : SampleActivity(), ChatEventListener {
+abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventListener {
 
     protected var endMenu: MenuItem? = null
     protected var destructMenu: MenuItem? = null
+
+    override fun getViewBinding(): ActivityBasicBinding = DataBindingUtil.setContentView(
+        this, R.layout.activity_basic)
 
     override val containerId: Int
         get() = R.id.basic_chat_view
@@ -57,13 +59,13 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
                     result.fragment?.let { chatFragment ->
                         if (!isFinishing && !supportFragmentManager.isStateSaved) {
 
-                            basic_loading.visibility = View.GONE
+                            binding.basicLoading.visibility = View.GONE
 
                             hideKeyboard(window.decorView)
 
                             supportFragmentManager.beginTransaction()
                                 .add(
-                                    basic_chat_view.id,
+                                    R.id.basic_chat_view,
                                     chatFragment,
                                     topicTitle
                                 )
@@ -113,10 +115,10 @@ abstract class BasicChat : SampleActivity(), ChatEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_basic)
 
         setSupportActionBar(findViewById(R.id.sample_toolbar))
-        topic_title.text = topicTitle
+
+        binding.topicTitle.text = topicTitle
     }
 
     override fun startSample(savedInstanceState: Bundle?) {

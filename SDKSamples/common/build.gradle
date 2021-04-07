@@ -43,6 +43,10 @@ android {
         pickFirst 'META-INF/main_release.kotlin_module'
         pickFirst 'META-INF/atomicfu.kotlin_module'
     }
+
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {

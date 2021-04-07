@@ -1,43 +1,46 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingTop="16dp"
-    android:gravity="center_horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/form_type_title"
-            android:gravity="center"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="6dp"
-            android:padding="6dp"
-            android:layout_gravity="top"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/form_fields_container"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:layout_gravity="center_horizontal"
-            android:padding="12dp">
+            android:paddingTop="16dp">
 
-        </LinearLayout>
-    </ScrollView>
+        <TextView
+                android:id="@+id/form_type_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="6dp"
+                android:gravity="center"
+                android:padding="6dp" />
 
-    <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/custom_form_submit"
-            android:id="@+id/custom_form_submit_button"
-            android:layout_gravity="bottom"
-            style="@style/submit_view"/>
-</LinearLayout>
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            <LinearLayout
+                    android:id="@+id/form_fields_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+                android:id="@+id/custom_form_submit_button"
+                style="@style/submit_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/custom_form_submit" />
+    </LinearLayout>
+</layout>

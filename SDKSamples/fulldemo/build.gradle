@@ -41,6 +41,10 @@ android {
         pickFirst 'META-INF/main_release.kotlin_module'
         pickFirst 'META-INF/atomicfu.kotlin_module'
     }
+
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -48,8 +52,6 @@ dependencies {
 
     api project(':common')
 
-    implementation ("com.bold360ai-sdk.core:sdkcore:4.2.+"){changing = true}
-    implementation ("com.bold360ai-sdk.conversation:engine:4.2.+"){changing = true}
     implementation ("com.bold360ai-sdk.conversation:chatintegration:4.2.+"){changing = true}
     implementation ("com.bold360ai-sdk.conversation:ui:4.2.+"){changing = true}
     implementation ("com.bold360ai-sdk.core:accessibility:4.2.+"){changing = true}

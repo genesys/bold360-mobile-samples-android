@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:weightSum="1"
-              android:layout_marginStart="2dp"
-              android:layout_marginEnd="2dp"
-              android:padding="5dp">
 
-    <EditText android:id="@+id/context_key"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="0.5"
-              android:hint="@string/context_name"
-              style="@style/form_edit_field"
-    android:saveEnabled="false"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditText android:id="@+id/context_value"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="0.5"
-              android:hint="@string/context_value"
-              android:layout_marginLeft="10dp"
-              style="@style/form_edit_field"
-              android:saveEnabled="false"
-            android:layout_marginStart="10dp" />
+    <merge
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="1">
 
-    <ImageButton android:id="@+id/delete_context"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:src="@drawable/delete"
-                 android:background="@android:color/transparent"
-                 android:padding="2dp"
-                 android:layout_marginLeft="5dp"
-                 android:layout_marginBottom="5dp"
-                 android:layout_gravity="bottom"
-            android:layout_marginStart="5dp" />
+        <EditText
+                android:id="@+id/context_key"
+                style="@style/form_edit_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/context_name"
+                android:saveEnabled="false" />
 
-</merge>
+        <EditText
+                android:id="@+id/context_value"
+                style="@style/form_edit_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:hint="@string/context_value"
+                android:saveEnabled="false" />
+
+        <ImageButton
+                android:id="@+id/delete_context"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/transparent"
+                android:padding="2dp"
+                android:src="@drawable/delete" />
+
+    </merge>
+</layout>
