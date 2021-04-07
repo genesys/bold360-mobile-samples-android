@@ -41,6 +41,10 @@ android {
         pickFirst 'META-INF/main_release.kotlin_module'
         pickFirst 'META-INF/atomicfu.kotlin_module'
     }
+
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -48,8 +52,6 @@ dependencies {
 
     api project(':common')
 
-    implementation ("com.nanorep.devcore:sdkcore:4.2.+"){changing = true}
-    implementation ("com.nanorep.devconversation:engine:4.2.+"){changing = true}
     implementation ("com.nanorep.devconversation:chatintegration:4.2.+"){changing = true}
     implementation ("com.nanorep.devconversation:ui:4.2.+"){changing = true}
     implementation ("com.nanorep.devcore:accessibility:4.2.+"){changing = true}
