@@ -49,14 +49,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api project(':common')
+    implementation project(':common')
 
-    implementation ("com.nanorep.devconversation:chatintegration:4.2.+"){changing = true}
-    implementation ("com.nanorep.devconversation:ui:4.2.+"){changing = true}
-    implementation ("com.nanorep.devcore:accessibility:4.2.+"){changing = true}
-
-    implementation 'androidx.fragment:fragment-ktx:1.3.0'
-
+    implementation ("com.nanorep.devcore:accessibility:4.3.+"){changing = true}
     implementation 'com.google.android.gms:play-services-base:17.6.0'
 
     testImplementation 'junit:junit:4.13.1'

@@ -2,12 +2,15 @@
 
 buildscript {
     ext.kotlin_version = '1.4.30'
-    ext.room_version = '2.2.6'
+    ext.room_version = '2.3.0'
+
     repositories {
         google()
-        jcenter()
-        
+        maven { url "https://maven.google.com" }
+        mavenCentral()
+
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -18,14 +21,12 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://dl.bintray.com/nanorep/devcore/'}
-        maven { url 'https://dl.bintray.com/nanorep/devconversation/'}
-
-//        maven { url 'https://dl.bintray.com/bold360ai-sdk/core/'}
-//        maven { url 'https://dl.bintray.com/bold360ai-sdk/conversation/'}
-
+        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/dev/"}
+//         mavenLocal()
+        mavenCentral()
         google()
-        jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url 'https://jitpack.io' }
     }
 }
 

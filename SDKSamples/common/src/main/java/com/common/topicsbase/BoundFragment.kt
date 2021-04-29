@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
-abstract class BoundFragment<Binding: ViewBinding>: Fragment() {
+abstract class BoundDataFragment<Binding: ViewBinding>: Fragment() {
 
     lateinit var binding: Binding
 
