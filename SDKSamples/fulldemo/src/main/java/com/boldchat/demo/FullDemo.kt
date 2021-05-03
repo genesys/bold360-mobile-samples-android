@@ -42,6 +42,7 @@ import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
@@ -82,7 +83,7 @@ open class FullDemo : RestorationContinuity() {
 
     private fun initializeProviders() {
         // Configuring a custom account provider that supports continuity :
-        accountProvider = ContinuityAccountHandler()
+        accountProvider = ContinuityAccountHandler(this)
 
         // Configuring a custom TTS alter provider :
         ttsAlterProvider = CustomTTSAlterProvider()
@@ -144,6 +145,11 @@ open class FullDemo : RestorationContinuity() {
         )
     }
 
+    override fun prepareAccount(): Account? {
+        return super.prepareAccount()?.apply {
+            accountProvider?.prepareAccount(this)
+        }
+    }
 
     // Runs on the first creation of the ChatController
     // Afterwards the Chat is being restored/created via the "reloadForms" method

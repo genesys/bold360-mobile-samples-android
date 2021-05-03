@@ -45,7 +45,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
 
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = (account as BotAccount).withId(this)
+            botViewModel.botChat.account = (account as BotAccount).withId(this) // fixme: withId should be removed, functionality should be moved.
         }
 
         botViewModel.uiConfig = AutocompleteViewUIConfig(this).apply {

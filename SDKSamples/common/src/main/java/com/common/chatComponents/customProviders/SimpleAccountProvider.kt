@@ -9,6 +9,10 @@ import com.nanorep.sdkcore.utils.Completion
 import com.nanorep.sdkcore.utils.weakRef
 import java.lang.ref.WeakReference
 
+/**
+ * Samples basic AccountInfoProvider implementation by App, used in the "Live chat escalation from ai & Prechat
+ * values".
+ */
 open class SimpleAccountProvider : AccountInfoProvider {
 
     private var accounts: MutableMap<String, AccountInfo> = mutableMapOf()
@@ -41,7 +45,7 @@ open class SimpleAccountProvider : AccountInfoProvider {
 
 }
 
-class SimpleAccountWithIdProvider(context: Context) : SimpleAccountProvider() {
+open class SimpleAccountWithIdProvider(context: Context) : SimpleAccountProvider() {
 
     private var wContext: WeakReference<Context> = context.weakRef()
 
@@ -61,6 +65,12 @@ class SimpleAccountWithIdProvider(context: Context) : SimpleAccountProvider() {
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
+        }
+    }
+
+    fun prepareAccount(account: AccountInfo){
+        wContext.get()?.let {
+            (account as? BotAccount)?.withId(it) // fixme: withId should be removed, functionality should be moved.
         }
     }
 }
