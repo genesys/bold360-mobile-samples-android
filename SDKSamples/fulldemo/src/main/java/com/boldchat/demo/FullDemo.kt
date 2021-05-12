@@ -37,6 +37,7 @@ import com.common.utils.live.toFileUploadInfo
 import com.integration.core.FileUploadInfo
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
+import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
 import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
@@ -94,6 +95,7 @@ open class FullDemo : RestorationContinuity() {
         // Uncomment to init the Balance Entities provider handler :
         // entitiesProvider = BalanceEntitiesProvider()
 
+        initInterruptionsReceiver()
     }
 
     override fun createChatSettings(): ConversationSettings {
@@ -130,7 +132,7 @@ open class FullDemo : RestorationContinuity() {
      *   A Broadcast which triggers Interruption to the chat.
      *   This is used to stop the voice recognition/readout during phone actions
      */
-    fun initInterfaceReceiver() {
+    fun initInterruptionsReceiver() {
 
         LocalBroadcastManager.getInstance(baseContext).registerReceiver(
             object : BroadcastReceiver() {
