@@ -18,16 +18,12 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.common.topicsbase.BoundFragment
+import com.common.topicsbase.BoundDataFragment
 import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.bold.ui.ChatFormViewModel
-import com.nanorep.convesationui.bold.ui.FormComponent
-import com.nanorep.convesationui.bold.ui.FormConfiguration
-import com.nanorep.convesationui.bold.ui.SelectionListener
-import com.nanorep.convesationui.bold.ui.SelectionSpec
+import com.nanorep.convesationui.bold.ui.*
 import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
@@ -40,7 +36,7 @@ import com.sdk.common.databinding.CustomLiveFormsLayoutBinding
 /**
  * Custom form implementation to be displayed instead of the SDKs provided forms
  */
-class BoldCustomForm : BoundFragment<CustomLiveFormsLayoutBinding>() {
+class BoldCustomForm : BoundDataFragment<CustomLiveFormsLayoutBinding>() {
 
     private var isSubmitted = false
 

@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.common.topicsbase.BoundFragment
+import com.common.topicsbase.BoundDataFragment
 import com.common.utils.chatForm.defs.DataKeys
 import com.integration.core.Department
 import com.nanorep.convesationui.bold.model.BoldAccount
@@ -53,7 +53,7 @@ class CheckAvailabilityViewModel : ViewModel() {
 }
 
 
-class BoldAvailability : BoundFragment<BoldAvailabilityBinding>() {
+class BoldAvailability : BoundDataFragment<BoldAvailabilityBinding>() {
 
     companion object {
         const val TAG = "AvailabilityFragment"

@@ -12,6 +12,7 @@ import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
 import com.nanorep.convesationui.fragments.ArticleFragment
+import com.nanorep.convesationui.views.autocomplete.Article
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
@@ -44,7 +45,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
 
         //preserving existing chat session
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = (account as BotAccount).withId(this)
+            botViewModel.botChat.account = (account as BotAccount).withId(this) // fixme: withId should be removed, functionality should be moved.
         }
 
         botViewModel.uiConfig = AutocompleteViewUIConfig(this).apply {
@@ -86,8 +87,8 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
     /**
      * some visible action on article selection: we display the fetched article body in a "WebView"
      */
-    private fun onArticle(articleResponse: ArticleResponse) {
-        var html = "<html>${ArticleFragment.STYLE_TO_HANDLE_TABLES}<body>${articleResponse.body
+    private fun onArticle(article: Article) {
+        var html = "<html>${ArticleFragment.STYLE_TO_HANDLE_TABLES}<body>${article.content
             ?: "Not Available"}</body></html>"
         html = LinkedArticleHandler.updateLinkedArticles(html)
         binding.articleView.loadData(html, "text/html", "UTF-8")

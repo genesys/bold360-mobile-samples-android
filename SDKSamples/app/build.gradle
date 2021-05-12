@@ -49,13 +49,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api project(':common')
-
-    implementation ("com.bold360ai-sdk.conversation:chatintegration:4.2.+"){changing = true}
-    implementation ("com.bold360ai-sdk.conversation:ui:4.2.+"){changing = true}
-    implementation ("com.bold360ai-sdk.core:accessibility:4.2.+"){changing = true}
-
-    implementation 'androidx.fragment:fragment-ktx:1.3.0'
+    implementation project(':common')
+    implementation ("com.bold360ai-sdk.core:accessibility:4.3.+"){changing = true}
 
     implementation 'com.google.android.gms:play-services-base:17.6.0'
 

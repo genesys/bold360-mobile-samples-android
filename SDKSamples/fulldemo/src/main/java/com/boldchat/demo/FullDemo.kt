@@ -1,6 +1,7 @@
 package com.boldchat.demo
 
 import android.Manifest
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -18,6 +19,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -39,6 +42,7 @@ import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
+import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
@@ -79,7 +83,7 @@ open class FullDemo : RestorationContinuity() {
 
     private fun initializeProviders() {
         // Configuring a custom account provider that supports continuity :
-        accountProvider = ContinuityAccountHandler()
+        accountProvider = ContinuityAccountHandler(this)
 
         // Configuring a custom TTS alter provider :
         ttsAlterProvider = CustomTTSAlterProvider()
@@ -141,6 +145,11 @@ open class FullDemo : RestorationContinuity() {
         )
     }
 
+    override fun prepareAccount(): Account? {
+        return super.prepareAccount()?.apply {
+            accountProvider?.prepareAccount(this)
+        }
+    }
 
     // Runs on the first creation of the ChatController
     // Afterwards the Chat is being restored/created via the "reloadForms" method
@@ -271,38 +280,16 @@ open class FullDemo : RestorationContinuity() {
      * file picker.
      */
     private fun uploadFileRequest() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-            != PackageManager.PERMISSION_GRANTED) {
-            this.requestPermissions(
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                FILE_UPLOAD_REQUEST_CODE
-            )
-
-        } else {
-            startPickerActivity()
+        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P ) {
+            permissions.plus(Manifest.permission.ACCESS_MEDIA_LOCATION)
         }
+        getPermissions.launch(permissions)
     }
 
 //  </editor-fold>
 
 //  <editor-fold desc=">>>>> Custom FileUpload implementation <<<<<" >
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            FILE_UPLOAD_REQUEST_CODE -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startPickerActivity()
-                }
-            }
-        }
-    }
 
     private fun handleFileUploads(resultData: Intent) {
         val chosenUploadsTarget = ArrayList<FileUploadInfo>()
@@ -353,10 +340,12 @@ open class FullDemo : RestorationContinuity() {
     private fun startPickerActivity() {
         createPickerIntent{
             try {
-                startActivityForResult(
+                /*startActivityForResult(
                     Intent.createChooser(intent, "Select files to upload"),
                     FILE_UPLOAD_REQUEST_CODE
-                )
+                )*/
+
+                fileChooser.launch(it)
 
             } catch (e: ActivityNotFoundException) {
                 toast(baseContext, getString(R.string.FileChooserError), Toast.LENGTH_LONG)
@@ -400,6 +389,19 @@ open class FullDemo : RestorationContinuity() {
 
 //  <editor-fold desc=">>>>> Lifecycle handling <<<<<" >
 
+    val getPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results:Map<String, Boolean> ->
+        val anyFailure = results.any { entry -> !entry.value }
+        if(!anyFailure) { // if all permissions were granted
+            startPickerActivity()
+        }
+    }
+
+    val fileChooser = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result:ActivityResult ->
+        result.data?.takeIf{result.resultCode == Activity.RESULT_OK}?.run {
+            handleFileUploads(this)
+        } ?: kotlin.run { Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded") }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         findViewById<TextView>(R.id.topic_title).visibility = View.GONE
@@ -408,16 +410,6 @@ open class FullDemo : RestorationContinuity() {
     override fun onStop() {
         if (isFinishing && hasChatController()) { chatController.unsubscribeNotifications(notificationsReceiver) }
         super.onStop()
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-
-        if (requestCode == FILE_UPLOAD_REQUEST_CODE) {
-            resultData?.takeIf { resultCode == RESULT_OK }?.run {
-                handleFileUploads(this)
-            } ?: kotlin.run { Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded") }
-        }
     }
 
     // Avoids sample finish animation:

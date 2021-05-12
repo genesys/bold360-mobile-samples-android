@@ -1,5 +1,6 @@
 package com.common.chatComponents.customProviders
 
+import android.content.Context
 import android.util.Log
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
@@ -15,16 +16,12 @@ import com.nanorep.sdkcore.utils.Completion
  * AccountSessionListener implementation.
  * An account provider that supports chat continuity.
  */
-class ContinuityAccountHandler : AccountSessionListener {
+class ContinuityAccountHandler(context: Context) : SimpleAccountWithIdProvider(context), AccountSessionListener {
 
     var senderId: String = ""
     var lastReceivedMessageId: String = ""
 
     private val accounts: MutableMap<String, AccountInfo> = mutableMapOf()
-
-    private fun addAccount(account: AccountInfo) {
-        accounts[account.getApiKey()] = account
-    }
 
     private fun continueAsync(account: Account? = null): Account? {
 
@@ -42,6 +39,7 @@ class ContinuityAccountHandler : AccountSessionListener {
     }
 
     override fun update(account: AccountInfo) {
+        super.update(account)
 
         accounts[account.getApiKey()]?.run {
 
@@ -54,8 +52,6 @@ class ContinuityAccountHandler : AccountSessionListener {
         } ?: kotlin.run {
             addAccount(account)
         }
-
-
     }
 
     override fun onConfigUpdate(account: AccountInfo, updateKey: String, updatedValue: Any?) {

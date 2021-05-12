@@ -37,7 +37,7 @@ class AsyncChatContinuity : RestorationContinuity() {
 
     override var chatType: String = ChatType.Async
 
-    private val accountHandler = ContinuityAccountHandler()
+    private val accountHandler = ContinuityAccountHandler(this)
 
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
     get() = {

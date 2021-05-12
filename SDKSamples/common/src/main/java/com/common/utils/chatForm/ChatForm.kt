@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
-import com.common.topicsbase.BoundFragment
+import com.common.topicsbase.BoundDataFragment
 import com.common.topicsbase.SampleFormViewModel
 import com.common.utils.chatForm.defs.FieldProps
 import com.common.utils.chatForm.defs.FieldType
@@ -33,9 +33,10 @@ import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.px
 import com.sdk.common.R
 import com.sdk.common.databinding.ChatFormBinding
+import java.lang.AssertionError
 import java.util.regex.Pattern
 
-class ChatForm : BoundFragment<ChatFormBinding>() {
+class ChatForm : BoundDataFragment<ChatFormBinding>() {
 
     private val sampleFormViewModel: SampleFormViewModel by activityViewModels()
 
@@ -81,7 +82,11 @@ class ChatForm : BoundFragment<ChatFormBinding>() {
 
                     is SwitchCompat -> getString(FieldProps.Key) to view.isChecked.toString()
 
-                    is ContextBlock -> getString(FieldProps.Key) to Gson().toJson(view.contextHandler.getContext()).toString()
+                    is ContextBlock -> {
+                        val context = try {view.contextHandler.getContext()}
+                        catch (ex:AssertionError){null}
+                        context?.let { getString(FieldProps.Key) to Gson().toJson(it).toString()}
+                    }
 
                     else -> null
 
