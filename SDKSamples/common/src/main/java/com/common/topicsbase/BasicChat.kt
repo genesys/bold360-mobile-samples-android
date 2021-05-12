@@ -52,7 +52,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             override fun onComplete(result: ChatLoadResponse) {
                 result.error?.run {
 
-                    toast(baseContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                    toast(applicationContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                    binding.basicLoading.visibility = View.GONE
 
                 } ?: runMain {
 
