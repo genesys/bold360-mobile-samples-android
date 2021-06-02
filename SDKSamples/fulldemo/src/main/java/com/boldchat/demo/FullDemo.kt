@@ -23,7 +23,7 @@ import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.chatComponents.customProviders.CustomTTSAlterProvider
 import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
-import com.common.utils.SecurityHandler
+import com.common.utils.SecurityInstaller
 import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
@@ -56,7 +56,7 @@ import kotlinx.coroutines.launch
 
 open class FullDemo : RestorationContinuity() {
 
-    private var retryProviderInstall: Boolean = true
+    private val securityInstaller = SecurityInstaller()
 
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)?
     get() = {
@@ -411,9 +411,7 @@ open class FullDemo : RestorationContinuity() {
     override fun onPostResume() {
         super.onPostResume()
 
-        SecurityHandler.takeUnless { !retryProviderInstall }?.updateSecurityProvider(this){ upToDate ->
-            retryProviderInstall = !upToDate
-        }.also { retryProviderInstall = false }
+        securityInstaller.update(this)
     }
 
     override fun onStop() {

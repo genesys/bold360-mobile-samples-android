@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.common.utils.SecurityHandler
+import com.common.utils.SecurityInstaller
 import com.sdk.samples.databinding.ActivityMainBinding
 import com.sdk.samples.databinding.SampleTopicBinding
 import java.util.ArrayList
@@ -20,7 +20,8 @@ open class SampleTopic(val intentAction: String, val title: String, val icon: Dr
 
 class MainActivity : AppCompatActivity() {
 
-    private var retryProviderInstall = true
+    private val securityInstaller = SecurityInstaller()
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,10 +136,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPostResume() {
         super.onPostResume()
-
-        SecurityHandler.takeUnless { !retryProviderInstall }?.updateSecurityProvider(this){ upToDate ->
-            retryProviderInstall = !upToDate
-        }.also { retryProviderInstall = false }
+        securityInstaller.update(this)
     }
 
  }
