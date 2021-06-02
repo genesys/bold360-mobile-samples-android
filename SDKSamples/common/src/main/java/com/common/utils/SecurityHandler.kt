@@ -6,7 +6,7 @@ import android.os.Build
 import android.util.Log
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
-import com.nanorep.sdkcore.utils.toast
+import com.nanorep.sdkcore.utils.NRError
 import kotlinx.coroutines.*
 import kotlin.coroutines.resume
 
@@ -16,20 +16,26 @@ class SecurityInstaller {
     private var needUpdate : Boolean = true
     private var updateJob: Job? = null
 
-    fun update(context:Activity){
+    fun update(context:Activity, onError:((errorCode:String)->Unit)?){
         if(updateJob?.isActive == true) {
             return
         } // prevents relaunching if in progress
 
         // since this will occur most of the times only once we'll be using the GlobalScope
         updateJob = GlobalScope.takeIf { needUpdate }?.launch(Dispatchers.Main) {
-             needUpdate =  updateSecurityProvider(context)}
+            needUpdate = updateSecurityProvider(context)?.let { errorCode ->
+                onError?.invoke(errorCode)
+                true
+            } != null
+
+            Log.v(SECURITY_TAG, "Security needUpdate = $needUpdate")
+        }
     }
 
-    private suspend fun updateSecurityProvider(context: Activity) : Boolean {
+    private suspend fun updateSecurityProvider(context: Activity) : String? {
 
         return when (Build.VERSION.SDK_INT >= 21) {
-            true -> false
+            true -> null
 
             else -> {
                 suspendCancellableCoroutine { cont ->
@@ -60,17 +66,12 @@ class SecurityInstaller {
                             }
 
                             private fun onProviderInstallerNotAvailable(wasCanceled: Boolean) {
-                                val msg =
-                                    "Google play services can't be installed or updated thous Messaging chat may not be available"
-                                toast(context, msg)
-                                Log.e(SECURITY_TAG, ">> $msg")
-
-                                cont.resume(wasCanceled)
+                                cont.resume(if (wasCanceled) NRError.Canceled else NRError.NotAvailable)
                             }
 
                             override fun onProviderInstalled() {
                                 Log.i(SECURITY_TAG, ">> security provider updates installed successfully")
-                                cont.resume(false)
+                                cont.resume(null)
                             }
                         }
                     )

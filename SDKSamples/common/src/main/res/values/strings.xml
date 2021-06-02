@@ -71,4 +71,8 @@
     <string name="bold_parameters_title">Bold extra data</string>
     <string name="bot_context_title">Bot Contexts:</string>
 
+    <string name="user_canceled_security_update">Google play services can\'t be update installation as canceled. Live chat may not be available</string>
+    <string name="security_update_not_available">Google play services can\'t be installed or updated thus live chat may not be available</string>
+
+
 </resources>

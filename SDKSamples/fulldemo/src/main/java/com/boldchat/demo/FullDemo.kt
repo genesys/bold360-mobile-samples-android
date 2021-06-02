@@ -29,6 +29,7 @@ import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
+import com.common.utils.parseSecurityError
 import com.integration.core.FileUploadInfo
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
@@ -411,7 +412,11 @@ open class FullDemo : RestorationContinuity() {
     override fun onPostResume() {
         super.onPostResume()
 
-        securityInstaller.update(this)
+        securityInstaller.update(this){ errorCode ->
+            val msg = parseSecurityError(errorCode)
+            toast(this, msg)
+            Log.e(SecurityInstaller.SECURITY_TAG, ">> $msg")
+        }
     }
 
     override fun onStop() {

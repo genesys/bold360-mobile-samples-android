@@ -3,6 +3,7 @@ package com.sdk.samples
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.utils.SecurityInstaller
+import com.common.utils.parseSecurityError
+import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.databinding.ActivityMainBinding
 import com.sdk.samples.databinding.SampleTopicBinding
 import java.util.ArrayList
@@ -136,7 +139,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPostResume() {
         super.onPostResume()
-        securityInstaller.update(this)
+
+        securityInstaller.update(this){ errorCode ->
+            val msg = parseSecurityError(errorCode)
+            toast(this, msg)
+            Log.e(SecurityInstaller.SECURITY_TAG, ">> $msg")
+        }
     }
 
  }
