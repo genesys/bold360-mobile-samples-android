@@ -1,11 +1,8 @@
 package com.sdk.samples
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -14,9 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.security.ProviderInstaller
-import com.nanorep.sdkcore.utils.toast
+import com.common.utils.SecurityHandler
 import com.sdk.samples.databinding.ActivityMainBinding
 import com.sdk.samples.databinding.SampleTopicBinding
 import java.util.ArrayList
@@ -140,65 +135,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPostResume() {
         super.onPostResume()
-        if (retryProviderInstall) {
-            updateSecurityProvider(this)
-            retryProviderInstall = false
-        }
+
+        SecurityHandler.takeUnless { !retryProviderInstall }?.updateSecurityProvider(this){ upToDate ->
+            retryProviderInstall = !upToDate
+        }.also { retryProviderInstall = false }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == ERROR_DIALOG_REQUEST_CODE) {
-            retryProviderInstall = true
-        }
-    }
-
-    companion object{
-        const val ERROR_DIALOG_REQUEST_CODE = 665
-        const val SECURITY_TAG = "Security-Installer"
-
-
-        fun updateSecurityProvider(context: Activity) {
-
-            if (Build.VERSION.SDK_INT < 21) {
-                ProviderInstaller.installIfNeededAsync(context, object : ProviderInstaller.ProviderInstallListener {
-                    override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
-                        Log.e(SECURITY_TAG, "!!! failed to install security provider updates, Checking for recoverable error...")
-
-                        GoogleApiAvailability.getInstance().apply {
-                            if (isUserResolvableError(errorCode) &&
-                                // check if the intent can be activated to prevent ActivityNotFoundException and
-                                // to be able to display that "Messaging won't be available"
-                                recoveryIntent?.resolveActivity(context.packageManager) != null) {
-
-                                // Recoverable error. Show a dialog prompting the user to
-                                // install/update/enable Google Play services.
-                                showErrorDialogFragment(context, errorCode, ERROR_DIALOG_REQUEST_CODE) {
-                                    // onCancel: The user chose not to take the recovery action
-                                    onProviderInstallerNotAvailable()
-                                }
-                            } else {
-                                onProviderInstallerNotAvailable()
-                            }
-                        }
-                    }
-
-                    private fun onProviderInstallerNotAvailable() {
-                        val msg = "Google play services can't be installed or updated thous Messaging may not be available"
-                        toast(context, msg)
-                        Log.e(SECURITY_TAG, ">> $msg")
-                    }
-
-                    override fun onProviderInstalled() {
-                        Log.i(SECURITY_TAG, ">> security provider updates installed successfully")
-
-                    }
-                })
-            }
-        }
-    }
-}
+ }
 
 class TopicsAdapter(var topics: ArrayList<SampleTopic>, private val gotoTopic: (topic: SampleTopic) -> Unit) :
     RecyclerView.Adapter<TopicViewHolder>() {
