@@ -50,8 +50,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':common')
-    implementation ("com.bold360ai-sdk.core:accessibility:4.3.+"){changing = true}
 
+    implementation ("com.bold360ai-sdk.core:accessibility:4.4.+"){changing = true}
     implementation 'com.google.android.gms:play-services-base:17.6.0'
 
     testImplementation 'junit:junit:4.13.1'

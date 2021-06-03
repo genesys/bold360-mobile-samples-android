@@ -2,12 +2,7 @@ package com.boldchat.demo
 
 import android.Manifest
 import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
+import android.content.*
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -21,7 +16,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.chatComponents.NotificationsReceiver
@@ -29,11 +23,13 @@ import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.chatComponents.customProviders.CustomTTSAlterProvider
 import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
+import com.common.utils.SecurityInstaller
 import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.live.createPickerIntent
 import com.common.utils.live.toFileUploadInfo
+import com.common.utils.parseSecurityError
 import com.integration.core.FileUploadInfo
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
@@ -60,6 +56,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 open class FullDemo : RestorationContinuity() {
+
+    private val securityInstaller = SecurityInstaller()
 
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)?
     get() = {
@@ -94,6 +92,7 @@ open class FullDemo : RestorationContinuity() {
         // Uncomment to init the Balance Entities provider handler :
         // entitiesProvider = BalanceEntitiesProvider()
 
+        initInterruptionsReceiver()
     }
 
     override fun createChatSettings(): ConversationSettings {
@@ -130,7 +129,7 @@ open class FullDemo : RestorationContinuity() {
      *   A Broadcast which triggers Interruption to the chat.
      *   This is used to stop the voice recognition/readout during phone actions
      */
-    fun initInterfaceReceiver() {
+    fun initInterruptionsReceiver() {
 
         LocalBroadcastManager.getInstance(baseContext).registerReceiver(
             object : BroadcastReceiver() {
@@ -208,7 +207,7 @@ open class FullDemo : RestorationContinuity() {
             }
 
             StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(baseContext, stateEvent.state, Toast.LENGTH_SHORT)
+                toast(this@FullDemo, stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
@@ -389,14 +388,17 @@ open class FullDemo : RestorationContinuity() {
 
 //  <editor-fold desc=">>>>> Lifecycle handling <<<<<" >
 
-    val getPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results:Map<String, Boolean> ->
+    // -> New results API for handling permissions requests and activity results:
+    //    https://medium.com/swlh/android-new-results-api-and-how-to-use-it-to-make-your-code-cleaner-de20d5c1fffa
+
+    private val getPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results:Map<String, Boolean> ->
         val anyFailure = results.any { entry -> !entry.value }
         if(!anyFailure) { // if all permissions were granted
             startPickerActivity()
         }
     }
 
-    val fileChooser = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result:ActivityResult ->
+    private val fileChooser = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result:ActivityResult ->
         result.data?.takeIf{result.resultCode == Activity.RESULT_OK}?.run {
             handleFileUploads(this)
         } ?: kotlin.run { Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded") }
@@ -405,6 +407,16 @@ open class FullDemo : RestorationContinuity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         findViewById<TextView>(R.id.topic_title).visibility = View.GONE
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+
+        securityInstaller.update(this){ errorCode ->
+            val msg = parseSecurityError(errorCode)
+            toast(this, msg)
+            Log.e(SecurityInstaller.SECURITY_TAG, ">> $msg")
+        }
     }
 
     override fun onStop() {
