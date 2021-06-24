@@ -51,8 +51,8 @@ dependencies {
 
     implementation project(':common')
 
-    implementation ("com.nanorep.devconversation:chatintegration:4.4.+"){changing = true}
-    implementation ("com.nanorep.devcore:accessibility:4.4.+"){changing = true}
+    implementation ("com.nanorep.devconversation:chatintegration:4.5.0.+"){changing = true}
+    implementation ("com.nanorep.devcore:accessibility:4.5.0.+"){changing = true}
 
 //    implementation ("com.bold360ai-sdk.conversation:chatintegration:4.3.+"){changing = true}
 //    implementation ("com.bold360ai-sdk.core:accessibility:4.3.+"){changing = true}

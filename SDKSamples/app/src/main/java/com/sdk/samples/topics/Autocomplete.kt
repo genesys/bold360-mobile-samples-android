@@ -18,7 +18,6 @@ import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
 import com.nanorep.nanoengine.LinkedArticleHandler
 import com.nanorep.nanoengine.bot.BotAccount
-import com.nanorep.nanoengine.model.ArticleResponse
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard

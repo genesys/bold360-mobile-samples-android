@@ -62,10 +62,10 @@ dependencies {
     api ("com.bold360ai-sdk.conversation:chatintegration:4.3.+"){changing = true}
     api ("com.bold360ai-sdk.conversation:ui:4.3.+"){changing = true}*/
 
-    api ("com.nanorep.devcore:sdkcore:4.4.+"){changing = true}
-    api ("com.nanorep.devconversation:engine:4.4.+"){changing = true}
-    api ("com.nanorep.devconversation:chatintegration:4.4.+"){changing = true}
-    api ("com.nanorep.devconversation:ui:4.4.+"){changing = true}
+    api ("com.nanorep.devcore:sdkcore:4.5.0.+"){changing = true}
+    api ("com.nanorep.devconversation:engine:4.5.0.+"){changing = true}
+    api ("com.nanorep.devconversation:chatintegration:4.5.0.+"){changing = true}
+    api ("com.nanorep.devconversation:ui:4.5.0.+"){changing = true}
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
