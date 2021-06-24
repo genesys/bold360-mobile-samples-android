@@ -40,6 +40,7 @@ open class CustomUIChat : AppCompatActivity() {
         CustomUiOptionsLayoutBinding.inflate(LayoutInflater.from(baseContext), binding.basicChatView , true).let {
             buttonSetup(it.configureOption, configure)
             buttonSetup(it.overrideOption, override)
+            buttonSetup(it.articleOption, articleConfig)
         }
     }
 
@@ -47,7 +48,7 @@ open class CustomUIChat : AppCompatActivity() {
 
         button.run {
 
-            text = getString(R.string.cutomized_ui, customUIOption)
+            text = customUIOption
 
             setOnClickListener {
 

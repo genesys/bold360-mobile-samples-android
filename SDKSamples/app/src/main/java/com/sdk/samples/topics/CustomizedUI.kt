@@ -18,6 +18,7 @@ import com.nanorep.convesationui.structure.elements.IncomingElementModel
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.convesationui.structure.providers.OutgoingElementUIProvider
 import com.nanorep.convesationui.structure.setStyleConfig
+import com.nanorep.convesationui.views.DrawableConfig
 import com.nanorep.convesationui.views.adapters.BubbleContentUIAdapter
 import com.nanorep.convesationui.views.chatelement.BubbleContentAdapter
 import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
@@ -29,11 +30,12 @@ import com.sdk.samples.R
 import com.sdk.samples.databinding.BubbleOutgoingDemoBinding
 import java.util.Date
 
-const val override = "override"
-const val configure = "configure"
+const val override = "overriding"
+const val configure = "configuring"
+const val articleConfig = "Article Config"
 
 @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-@StringDef(override, configure)
+@StringDef(override, configure, articleConfig)
 annotation class CustomUIOption
 
 open class CustomizedUI : BotChat() {
@@ -41,11 +43,11 @@ open class CustomizedUI : BotChat() {
     override fun getChatBuilder(): ChatController.Builder? {
 
         return super.getChatBuilder()?.chatUIProvider(
-                UIProviderFactory.create(
-                    this,
-                    intent?.getStringExtra("type") ?: override
-                )
+            UIProviderFactory.create(
+                this,
+                intent?.getStringExtra("type") ?: override
             )
+        )
     }
 
 }
@@ -58,8 +60,40 @@ private class UIProviderFactory {
         fun create(context: Context, @CustomUIOption customUIOption: String?): ChatUIProvider {
 
             return when (customUIOption) {
+                articleConfig -> configureArticle(context)
                 configure -> configuring(context)
                 else -> overriding(context)
+            }
+        }
+
+        private fun configureArticle(context: Context)  = ChatUIProvider(context).apply {
+
+            articleUIProvider.apply {
+
+                articleUIConfig?.apply {
+
+                    background = ContextCompat.getDrawable(context, R.drawable.bg) ?: ColorDrawable(Color.LTGRAY)
+
+                    closeUIConfig?.apply {
+                        margin = intArrayOf(2.px,8.px,2.px,8.px)
+                        position = UiConfigurations.Alignment.AlignTopLTR
+                        drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_black_24)).apply {
+                            compoundDrawablesPadding = 10.px
+                        }
+                    }
+
+                    verticalMargin = Pair(40.px, 0)
+
+                    title.apply {
+                        background = ColorDrawable(Color.YELLOW)
+                        font = StyleConfig(20.px, Color.BLUE)
+                    }
+
+                    body.apply {
+                        background = Color.GRAY
+                        setFont(14.px,Color.WHITE, "monospace", Typeface.ITALIC)
+                    }
+                }
             }
         }
 
