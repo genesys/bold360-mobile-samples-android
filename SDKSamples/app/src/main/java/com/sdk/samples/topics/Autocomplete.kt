@@ -11,8 +11,8 @@ import androidx.lifecycle.Observer
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
+import com.nanorep.convesationui.structure.elements.Article
 import com.nanorep.convesationui.fragments.ArticleFragment
-import com.nanorep.convesationui.views.autocomplete.Article
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
