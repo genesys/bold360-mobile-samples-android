@@ -26,6 +26,7 @@
     <string name="custom_form_departments_details">Name: %1$s ,Status: %2$s, Code to Input: %3$s</string>
     <string name="custom_UI">Customizing the chat UI</string>
     <string name="chat_restore">Chat creation &amp; restoring</string>
+    <string name="bot_chat_with_interception">Chat with AI: Elements interception</string>
     <string name="bot_chat_with_handover">Chat with AI: Handover</string>
     <string name="bot_chat_with_entities">Chat with AI: Entities Provider</string>
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
@@ -74,5 +75,7 @@
     <string name="user_canceled_security_update">Google play services can\'t be update installation as canceled. Live chat may not be available</string>
     <string name="security_update_not_available">Google play services can\'t be installed or updated thus live chat may not be available</string>
 
-
+    <!-- Interception: -->
+    <string name="select_for_interception">Select elements to intercept</string>
+    <string name="select_for_accessibility">Select elements to announce</string>
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="outgoing_element">Outgoing message</string>
+    <string name="incoming_bot_element">Bot Message</string>
+    <string name="incoming_element">Incoming Message</string>
+    <string name="options_element">Quick options</string>
+    <string name="upload_element">"File Upload "</string>
+    <string name="live_only">Intercept on live only</string>
+    <string name="carousel_element">Carousel bot message</string>
+    <string name="feedback_element">Instant feedback</string>
+</resources>
