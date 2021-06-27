@@ -30,9 +30,9 @@ import com.sdk.samples.R
 import com.sdk.samples.databinding.BubbleOutgoingDemoBinding
 import java.util.Date
 
-const val override = "overriding"
-const val configure = "configuring"
-const val articleConfig = "Article Config"
+const val override = "UI overriding"
+const val configure = "UI configuring"
+const val articleConfig = "Article UI configuration"
 
 @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
 @StringDef(override, configure, articleConfig)
