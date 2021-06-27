@@ -75,7 +75,7 @@ private class UIProviderFactory {
                 closeUIConfig?.apply {
                     margin = intArrayOf(2.px,8.px,2.px,8.px)
                     position = UiConfigurations.Alignment.AlignTopLTR
-                    drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_black_24)).apply {
+                    drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_white_24)).apply {
                         compoundDrawablesPadding = 10.px
                     }
                 }
