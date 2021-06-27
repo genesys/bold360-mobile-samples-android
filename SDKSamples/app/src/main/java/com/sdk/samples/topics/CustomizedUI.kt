@@ -68,31 +68,28 @@ private class UIProviderFactory {
 
         private fun configureArticle(context: Context)  = ChatUIProvider(context).apply {
 
-            articleUIProvider.apply {
+            articleUIProvider.articleUIConfig?.apply {
 
-                articleUIConfig?.apply {
+                background = ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
 
-                    background = ContextCompat.getDrawable(context, R.drawable.bg) ?: ColorDrawable(Color.LTGRAY)
-
-                    closeUIConfig?.apply {
-                        margin = intArrayOf(2.px,8.px,2.px,8.px)
-                        position = UiConfigurations.Alignment.AlignTopLTR
-                        drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_black_24)).apply {
-                            compoundDrawablesPadding = 10.px
-                        }
+                closeUIConfig?.apply {
+                    margin = intArrayOf(2.px,8.px,2.px,8.px)
+                    position = UiConfigurations.Alignment.AlignTopLTR
+                    drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_black_24)).apply {
+                        compoundDrawablesPadding = 10.px
                     }
+                }
 
-                    verticalMargin = Pair(40.px, 0)
+                verticalMargin = Pair(40.px, 0)
 
-                    title.apply {
-                        background = ColorDrawable(Color.YELLOW)
-                        font = StyleConfig(20.px, Color.BLUE)
-                    }
+                title.apply {
+                    background = ColorDrawable(Color.YELLOW)
+                    font = StyleConfig(20.px, Color.BLUE)
+                }
 
-                    body.apply {
-                        background = Color.GRAY
-                        setFont(14.px,Color.WHITE, "monospace", Typeface.ITALIC)
-                    }
+                body.apply {
+                    background = Color.GRAY
+                    setFont(14.px,Color.WHITE, "monospace", Typeface.ITALIC)
                 }
             }
         }
