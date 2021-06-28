@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_override">Override UI</string>
+    <string name="ui_configuration">Configure UI</string>
+    <string name="ui_article_config">Configure Article UI</string>
+</resources>

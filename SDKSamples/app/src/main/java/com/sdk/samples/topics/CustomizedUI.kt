@@ -10,7 +10,6 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.annotation.StringDef
 import androidx.core.content.ContextCompat
 import com.nanorep.convesationui.structure.UiConfigurations
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -30,14 +29,6 @@ import com.sdk.samples.R
 import com.sdk.samples.databinding.BubbleOutgoingDemoBinding
 import java.util.Date
 
-const val override = "UI overriding"
-const val configure = "UI configuring"
-const val articleConfig = "Article UI configuration"
-
-@kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-@StringDef(override, configure, articleConfig)
-annotation class CustomUIOption
-
 open class CustomizedUI : BotChat() {
 
     override fun getChatBuilder(): ChatController.Builder? {
@@ -45,7 +36,7 @@ open class CustomizedUI : BotChat() {
         return super.getChatBuilder()?.chatUIProvider(
             UIProviderFactory.create(
                 this,
-                intent?.getStringExtra("type") ?: override
+                intent?.getStringExtra("type") ?: ConfigOption.OVERRIDE.toString()
             )
         )
     }
@@ -57,11 +48,11 @@ private class UIProviderFactory {
     companion object {
 
         @JvmStatic
-        fun create(context: Context, @CustomUIOption customUIOption: String?): ChatUIProvider {
+        fun create(context: Context, customUIOption: String?): ChatUIProvider {
 
             return when (customUIOption) {
-                articleConfig -> configureArticle(context)
-                configure -> configuring(context)
+                ConfigOption.ARTICLE_CONFIG.toString() -> configureArticle(context)
+                ConfigOption.CONFIGURE.toString() -> configuring(context)
                 else -> overriding(context)
             }
         }
@@ -73,7 +64,9 @@ private class UIProviderFactory {
                 background = ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
 
                 closeUIConfig?.apply {
-                    margin = intArrayOf(2.px,8.px,2.px,8.px)
+                    val sidesMargin = 2.px
+                    val verticalMargin = 8.px
+                    margin = intArrayOf(sidesMargin, verticalMargin, sidesMargin, verticalMargin)
                     position = UiConfigurations.Alignment.AlignTopLTR
                     drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_white_24)).apply {
                         compoundDrawablesPadding = 10.px
