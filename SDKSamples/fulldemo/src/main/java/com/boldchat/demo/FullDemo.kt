@@ -1,12 +1,9 @@
 package com.boldchat.demo
 
-import android.Manifest
-import android.app.Activity
 import android.content.*
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,8 +11,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.chatComponents.NotificationsReceiver
@@ -27,10 +22,9 @@ import com.common.utils.SecurityInstaller
 import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
-import com.common.utils.live.createPickerIntent
-import com.common.utils.live.toFileUploadInfo
+import com.common.utils.live.UploadFileChooser
+import com.common.utils.live.onUploads
 import com.common.utils.parseSecurityError
-import com.integration.core.FileUploadInfo
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
@@ -46,16 +40,13 @@ import com.nanorep.nanoengine.model.configuration.VoiceSettings
 import com.nanorep.nanoengine.model.configuration.VoiceSupport
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
-import com.nanorep.sdkcore.model.SystemStatement
-import com.nanorep.sdkcore.utils.ErrorException
-import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.Notifications
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
-open class FullDemo : RestorationContinuity() {
+class FullDemo : RestorationContinuity() {
 
     private val securityInstaller = SecurityInstaller()
 
@@ -78,6 +69,10 @@ open class FullDemo : RestorationContinuity() {
     private var ttsAlterProvider: TTSReadAlterProvider? = null
 
     private var entitiesProvider: EntitiesProvider? = null
+
+    //!- needs to be initiated before Activity's onResume method since it registers to permissions requests
+    private val uploadFileChooser = UploadFileChooser(this, 25 * 1024 * 1024)
+
 
     private fun initializeProviders() {
         // Configuring a custom account provider that supports continuity :
@@ -129,7 +124,7 @@ open class FullDemo : RestorationContinuity() {
      *   A Broadcast which triggers Interruption to the chat.
      *   This is used to stop the voice recognition/readout during phone actions
      */
-    fun initInterruptionsReceiver() {
+    private fun initInterruptionsReceiver() {
 
         LocalBroadcastManager.getInstance(baseContext).registerReceiver(
             object : BroadcastReceiver() {
@@ -259,10 +254,6 @@ open class FullDemo : RestorationContinuity() {
         return url.startsWith("/")
     }
 
-    override fun onUploadFileRequest() {
-        uploadFileRequest()
-    }
-
     //-> previous listener method signature @Override onPhoneNumberNavigation(@NonNull String phoneNumber) {
     override fun onPhoneNumberSelected(phoneNumber: String) {
         try {
@@ -278,83 +269,13 @@ open class FullDemo : RestorationContinuity() {
      * starts the file upload process. asks for user permissions to browse storage and display the
      * file picker.
      */
-    private fun uploadFileRequest() {
-        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P ) {
-            permissions.plus(Manifest.permission.ACCESS_MEDIA_LOCATION)
+    override fun onUploadFileRequest() {
+        // sets the selected file info handling method
+        // and activates the files selection process
+        uploadFileChooser.apply {
+            onUploadsReady = chatController::onUploads
+            open()
         }
-        getPermissions.launch(permissions)
-    }
-
-//  </editor-fold>
-
-//  <editor-fold desc=">>>>> Custom FileUpload implementation <<<<<" >
-
-    private fun handleFileUploads(resultData: Intent) {
-        val chosenUploadsTarget = ArrayList<FileUploadInfo>()
-
-        val fileSizeLimit = getUploadSizeLimit(chatController.getScope())
-
-        val fileUri = resultData.data
-
-        fun addChosen(uri: Uri) {
-            try {
-                uri.toFileUploadInfo(this, fileSizeLimit).let { chosenUploadsTarget.add(it) }
-
-            } catch (ex: ErrorException) {
-                chatController.post(
-                    SystemStatement(
-                        ex.error.description
-                            ?: getString(R.string.upload_failure_general)
-                    )
-                )
-            }
-        }
-
-        if (fileUri == null) {
-            val clipData = resultData.clipData
-            if (clipData != null) {
-                val itemCount = clipData.itemCount
-                for (i in 0 until itemCount) {
-                    addChosen(clipData.getItemAt(i).uri)
-                }
-            }
-        } else {
-            addChosen(fileUri)
-        }
-
-        for (uploadInfo in chosenUploadsTarget) {
-            chatController.uploadFile(uploadInfo) { uploadResult ->
-                Log.i(FULL_DEMO_TAG, "got Upload results: $uploadResult")
-
-                uploadResult.error?.run {
-                    if (NRError.Canceled != reason) {
-                        chatController.post(SystemStatement(description ?: reason ?: errorCode))
-                    }
-                }
-            }
-        }
-    }
-
-    private fun startPickerActivity() {
-        createPickerIntent{
-            try {
-                /*startActivityForResult(
-                    Intent.createChooser(intent, "Select files to upload"),
-                    FILE_UPLOAD_REQUEST_CODE
-                )*/
-
-                fileChooser.launch(it)
-
-            } catch (e: ActivityNotFoundException) {
-                toast(baseContext, getString(R.string.FileChooserError), Toast.LENGTH_LONG)
-            }
-        }
-    }
-
-    private fun getUploadSizeLimit(scope: StatementScope): Int = when (scope) {
-        StatementScope.BoldScope -> 25 * 1024 * 1024
-        else -> -1
     }
 
 //  </editor-fold>
@@ -376,7 +297,7 @@ open class FullDemo : RestorationContinuity() {
 
         when (item.itemId) {
             R.id.upload_file -> {
-                uploadFileRequest()
+                onUploadFileRequest()
                 return true
             }
         }
@@ -387,22 +308,6 @@ open class FullDemo : RestorationContinuity() {
 //  </editor-fold>
 
 //  <editor-fold desc=">>>>> Lifecycle handling <<<<<" >
-
-    // -> New results API for handling permissions requests and activity results:
-    //    https://medium.com/swlh/android-new-results-api-and-how-to-use-it-to-make-your-code-cleaner-de20d5c1fffa
-
-    private val getPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results:Map<String, Boolean> ->
-        val anyFailure = results.any { entry -> !entry.value }
-        if(!anyFailure) { // if all permissions were granted
-            startPickerActivity()
-        }
-    }
-
-    private val fileChooser = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result:ActivityResult ->
-        result.data?.takeIf{result.resultCode == Activity.RESULT_OK}?.run {
-            handleFileUploads(this)
-        } ?: kotlin.run { Log.w(FULL_DEMO_TAG, "no file was selected to be uploaded") }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -432,6 +337,5 @@ open class FullDemo : RestorationContinuity() {
 
     companion object {
         const val FULL_DEMO_TAG = "FullDemo"
-        private const val FILE_UPLOAD_REQUEST_CODE = 111
     }
 }

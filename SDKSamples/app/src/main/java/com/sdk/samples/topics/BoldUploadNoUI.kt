@@ -44,6 +44,7 @@ import com.sdk.samples.R
 import com.sdk.samples.databinding.ActivityUploadNoUiBinding
 import java.io.ByteArrayOutputStream
 
+//TODO: upgrade [BLD-49041]
 
 class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatListener {
 

@@ -78,4 +78,14 @@
     <!-- Interception: -->
     <string name="select_for_interception">Select elements to intercept</string>
     <string name="select_for_accessibility">Select elements to announce</string>
+
+    <!-- Accessibility announcements -->
+    <string name="article_page_open">%s page open</string>
+    <string name="incoming_element">Incoming message</string>
+    <string name="outgoing_element">Message sent</string>
+    <string name="system_element">System message</string>
+    <string name="options_element">Message has options</string>
+    <string name="upload_element">File uploaded approved</string>
+    <string name="feedback_element">Feedback options</string>
+
 </resources>
