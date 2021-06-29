@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.Checkable
+import android.widget.LinearLayout
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
@@ -28,6 +29,7 @@ import com.nanorep.convesationui.structure.elements.ChatElement.Companion.Outgoi
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.QuickOptionsElement
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.UploadElement
 import com.nanorep.sdkcore.utils.children
+import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import com.sdk.samples.databinding.InterceptionTopicBinding
 
@@ -51,10 +53,11 @@ class ElementsInterceptionChat : BotChatHistory() {
 
         interceptViewModel.observeSubmission(this, { ready ->
             if (ready == true) {
-                configure(interceptViewModel.interceptions, interceptViewModel.announcements)
+                interceptor.apply {
+                    interceptionRules = interceptViewModel.interceptions
+                    announceRules = interceptViewModel.announcements
+                }
                 createChat()
-            } else {
-                finishIfLast()
             }
         })
 
@@ -92,9 +95,9 @@ class ElementsInterceptionChat : BotChatHistory() {
         return super.getChatBuilder()
     }
 
-    private fun configure(interceptions: List<InterceptData>, announcements: List<InterceptData>) {
-        interceptor.interceptionRules = interceptions
-        interceptor.announceRules = announcements
+    override fun onUrlLinkSelected(url: String) {
+        // -> announcing link activation on chat
+        announcer.announce("u r l  clicked  $url")
     }
 
     override fun onStop() {
@@ -186,8 +189,9 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
 
             dataList.forEach { data ->
                 val child = CheckBox(it).apply {
-                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    (layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin = 20
+                    layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                        topMargin = 10.px
+                    }
 
                     id = data.type * idDelta
                     this.text = context.getString(data.resource)
@@ -199,8 +203,11 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
 
                 if (data.liveScope) {
                     val switch = SwitchCompat(it).apply {
-                        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                        (layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin = 8
+                        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                            setMargins(22.px, -6.px , 0 , 0 )
+                        }
+                        switchPadding = 6.px
+
                         id = data.type * (idDelta * 2)
                         this.text = context.getString(R.string.live_only)
 
