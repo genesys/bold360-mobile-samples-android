@@ -65,7 +65,7 @@ open class CustomUIChat : AppCompatActivity() {
             setOnClickListener {
 
                 startActivity(Intent("com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION").apply {
-                    putExtra("type", customUIOption.toString())
+                    putExtra("type", customUIOption.name)
                 }.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
 
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)

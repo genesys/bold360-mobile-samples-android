@@ -36,7 +36,7 @@ open class CustomizedUI : BotChat() {
         return super.getChatBuilder()?.chatUIProvider(
             UIProviderFactory.create(
                 this,
-                intent?.getStringExtra("type") ?: ConfigOption.OVERRIDE.toString()
+                intent?.getStringExtra("type") ?: ConfigOption.OVERRIDE.name
             )
         )
     }
@@ -51,8 +51,8 @@ private class UIProviderFactory {
         fun create(context: Context, customUIOption: String?): ChatUIProvider {
 
             return when (customUIOption) {
-                ConfigOption.ARTICLE_CONFIG.toString() -> configureArticle(context)
-                ConfigOption.CONFIGURE.toString() -> configuring(context)
+                ConfigOption.ARTICLE_CONFIG.name -> configureArticle(context)
+                ConfigOption.CONFIGURE.name -> configuring(context)
                 else -> overriding(context)
             }
         }
@@ -73,16 +73,16 @@ private class UIProviderFactory {
                     }
                 }
 
-                verticalMargin = Pair(40.px, 0)
+                verticalMargin = 40.px to 0
 
                 title.apply {
                     background = ColorDrawable(Color.YELLOW)
-                    font = StyleConfig(20.px, Color.BLUE)
+                    font = StyleConfig(14.px, Color.BLUE, Typeface.DEFAULT_BOLD)
                 }
 
                 body.apply {
                     background = Color.GRAY
-                    setFont(14.px,Color.WHITE, "monospace", Typeface.ITALIC)
+                    setFont(12.px, Color.WHITE, "monospace", Typeface.ITALIC)
                 }
             }
         }
