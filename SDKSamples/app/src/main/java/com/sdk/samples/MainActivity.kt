@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             ), SampleTopic(
                 "com.sdk.sample.action.INTERCEPTION",
                 getString(R.string.bot_chat_with_interception),
-                ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
+                ContextCompat.getDrawable(this, R.drawable.intercept_24)
 
             ),SampleTopic(
                 "com.sdk.sample.action.HANDOVER",

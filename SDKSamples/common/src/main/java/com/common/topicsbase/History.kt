@@ -1,11 +1,9 @@
 package com.common.topicsbase
 
-import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.common.chatComponents.history.HistoryMigrationProvider
-import com.common.chatComponents.history.HistoryProvider
 import com.common.chatComponents.history.HistoryRepository
 import com.common.chatComponents.history.RoomHistoryProvider
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -79,12 +77,12 @@ abstract class History : BasicChat() {
     }
 
     @ExperimentalCoroutinesApi
-    override fun startSample(savedInstanceState: Bundle?) {
+    override fun startSample(isStateSaved: Boolean) {
 
         HistoryMigration.start(HistoryMigrationProvider(this) {
             runOnUiThread {
                 Log.d("BotChatHistory", "Migration completed. starting chat...")
-                super.startSample(savedInstanceState)
+                super.startSample(isStateSaved)
             }
         })
 

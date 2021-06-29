@@ -1,6 +1,5 @@
 package com.sdk.samples.topics
 
-import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.View
@@ -29,10 +28,10 @@ class CustomFileUpload : BoldChatAvailability() {
     private val uploadFileChooser = UploadFileChooser(this, 1024 * 1024 * 37)
 
 
-    override fun startSample(savedInstanceState: Bundle?) {
+    override fun startSample(isStateSaved: Boolean) {
         initUploadButton()
 
-        super.startSample(savedInstanceState)
+        super.startSample(isStateSaved)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,7 +44,7 @@ class CustomFileUpload : BoldChatAvailability() {
         imageButton = ImageButton(this).apply {
             setImageResource(R.drawable.outline_publish_black_24)
             setOnClickListener {
-                onUploadFileRequest()
+                uploadFileRequest()
             }
             visibility = View.GONE
 
@@ -95,23 +94,33 @@ class CustomFileUpload : BoldChatAvailability() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Custom upload: step 4: Opens file browsing activity for files selection">
-    // the method that will be triggered when the SDK passes upload requests after
-    // user pressed the "default" upload button
-    // if you have your own upload trigger u don't need to implement this.
+    //<editor-fold desc="Activating file upload process">
+    /**
+     * Called by the SDK when upload request was activated from the SDK UI implementation
+     * (i.e. upload button on the input field)
+     *
+     * If the upload process is being activated by apps custom view, this method will not be called.
+     */
     override fun onUploadFileRequest() {
+        uploadFileRequest()
+    }
+
+    /**
+     * starts the files selection and upload process
+     */
+    private fun uploadFileRequest() {
 
         uploadFileChooser.apply {
             onUploadsReady = chatController::onUploads
             open()
 
-            /*
+            /**
             * next steps are done by open() methods:
             * step 4: Opens file browsing activity for files selection
-            * step 5: Converts selected file to FileUploadInfo objects
-            * step 6: Start Upload for each created FileUploadInfo
-            * step 7: listens to upload results passed to onUploadsReady with onUploads extension method
-            * */
+            * step 5: Converts selected files to FileUploadInfo objects [UploadFileChooser.handleFileUploads]
+            * step 6: Start Upload for each created FileUploadInfo [ChatController.onUploads]
+            * step 7: listens to upload results [ChatController.onUploads] line:182
+            */
         }
     }
     //</editor-fold>

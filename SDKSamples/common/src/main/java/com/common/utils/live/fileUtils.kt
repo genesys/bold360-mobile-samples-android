@@ -80,10 +80,11 @@ open class FileChooser(activity: AppCompatActivity) {
 
 /**
  * Extends the FileChooser for files upload chooser functionality.
- * When files selection is done, the class goes over the results and creates
- * a DataStructure object for each selected file with its `FileUploadInfo` data or error.
+ * When files selection is done, every selected file will have a matching `FileUploadInfo` object
+ * defines details that are needed for its download. The data is wrapped with `DataStructure`
+ * to have error indication in case a file conversion failed.
  *
- * when processing is done, activates `onUploadsReady` with the upload info.
+ * when processing is done, `onUploadsReady` is activated with the list of upload info.
  */
 class UploadFileChooser(activity: AppCompatActivity, private val fileSizeLimit: Int)
     : FileChooser(activity) {
@@ -179,7 +180,8 @@ fun ChatController.onUploads(uploadsData: ArrayList<DataStructure<FileUploadInfo
         } ?: data.data?.let {
             // Activates ChatController.uploadFile API:
             this.uploadFile(it) { results ->
-                Log.i("File Upload", "got Upload results:$results")
+                // results callback for each upload execution
+                Log.d("File Upload", "got Upload results:$results")
                 val error = results.error
                 if (error != null) {
                     if (NRError.Canceled != error.reason) {

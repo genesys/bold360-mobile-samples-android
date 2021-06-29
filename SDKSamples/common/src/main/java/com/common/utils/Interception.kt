@@ -1,34 +1,37 @@
 package com.common.utils
 
 import android.content.Context
+import android.util.Log
 import com.common.chatComponents.history.RoomHistoryProvider
 import com.nanorep.convesationui.structure.elements.ElementModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-//class InterceptRule(val type: Int, var scope: StatementScope? = StatementScope.UnknownScope)
 open class InterceptData(val type: Int, var liveScope: Boolean = false)
 
 
-@ExperimentalCoroutinesApi
-class ElementsInterceptor(context: Context, val announcer: AccessibilityAnnouncer)
+class ElementsInterceptor(context: Context, private val announcer: AccessibilityAnnouncer)
     : RoomHistoryProvider(context) {
-
 
     var interceptionRules: List<InterceptData> = listOf()
     var announceRules: List<InterceptData> = listOf()
 
-
     override fun intercept(element: ElementModel): Boolean {
+        Log.d("Interception", "Got interception call with ${element::class.simpleName}")
 
-        announceRules.filter { it.type == element.elemType }.find { rule ->
-            rule.liveScope == element.elemScope.isLive
-        }?.let {
+        fun List<InterceptData>.findRule(type: Int, liveScope:Boolean): InterceptData? {
+            return this.filter { it.type == type }.find { rule ->
+                // if rule set to liveScope, only on live chat the announcer should be activated for this element
+                !rule.liveScope || rule.liveScope == liveScope
+            }
+        }
+
+        announceRules.findRule(element.elemType, element.elemScope.isLive)?.let {
             announcer.announce(element)
         }
 
-        return interceptionRules.filter { it.type == element.elemType }.find { rule ->
-            rule.liveScope == element.elemScope.isLive
-        } != null
+        return (interceptionRules.findRule(element.elemType, element.elemScope.isLive) != null).also {
+            if (it) {
+                Log.i("Interception", "Intercepting ${element::class.simpleName}")
+            }
+        }
     }
-
 }

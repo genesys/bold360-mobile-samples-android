@@ -34,7 +34,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     protected var destructMenu: MenuItem? = null
 
     override fun getViewBinding(): ActivityBasicBinding = DataBindingUtil.setContentView(
-        this, R.layout.activity_basic)
+            this, R.layout.activity_basic)
 
     override val containerId: Int
         get() = R.id.basic_chat_view
@@ -66,9 +66,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
                             supportFragmentManager.beginTransaction()
                                 .add(
-                                    R.id.basic_chat_view,
-                                    chatFragment,
-                                    topicTitle
+                                        R.id.basic_chat_view,
+                                        chatFragment,
+                                        topicTitle
                                 )
                                 .addToBackStack(ChatTag)
                                 .commit()
@@ -122,7 +122,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         binding.topicTitle.text = topicTitle
     }
 
-    override fun startSample(savedInstanceState: Bundle?) {
+    override fun startSample(isStateSaved: Boolean) {
         createChat()
     }
 
@@ -184,8 +184,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val fragmentFound = supportFragmentManager.takeUnless { it.isDestroyed }?.popBackStackImmediate(
-                    ChatTag,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                        ChatTag,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
                 if (fragmentFound == false) onChatUIDetached()
             } catch (ex: IllegalStateException) {

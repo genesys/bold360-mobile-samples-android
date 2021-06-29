@@ -27,31 +27,34 @@ import com.nanorep.convesationui.structure.elements.ChatElement.Companion.Incomi
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.OutgoingElement
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.QuickOptionsElement
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.UploadElement
-import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.children
 import com.sdk.samples.R
 import com.sdk.samples.databinding.InterceptionTopicBinding
 
 class ElementsInterceptionChat : BotChatHistory() {
 
-    val announcer = AccessibilityAnnouncer(this)
+    private val announcer = AccessibilityAnnouncer(this)
 
-    lateinit var interceptor:ElementsInterceptor
+    private lateinit var interceptor:ElementsInterceptor
 
     //!- needs to be initiated before Activity's onResume method since it registers to permissions requests
     private val uploadFileChooser = UploadFileChooser(this, 1024 * 1024 * 25)
 
 
+    private val interceptViewModel: InterceptViewModel
+        get() {
+            return ViewModelProvider(this).get(InterceptViewModel::class.java)
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val interceptViewModel = ViewModelProvider(this).get(InterceptViewModel::class.java)
         interceptViewModel.observeSubmission(this, { ready ->
-            if(ready == true){
+            if (ready == true) {
                 configure(interceptViewModel.interceptions, interceptViewModel.announcements)
                 createChat()
-            } else{
-                finish()
+            } else {
+                finishIfLast()
             }
         })
 
@@ -65,15 +68,21 @@ class ElementsInterceptionChat : BotChatHistory() {
         }
     }
 
-    override fun startSample(savedInstanceState: Bundle?) {
-        supportFragmentManager.beginTransaction()
-                .add(
-                        R.id.basic_chat_view,
-                        InterceptionConfig(),
-                        topicTitle
-                )
-                .addToBackStack(topicTitle)
-                .commit()
+    override fun onAccountDataReady() {
+        // prevents removal of account form
+    }
+
+    override fun startSample(isStateSaved: Boolean) {
+        if(!isStateSaved) { //!- check if we're not on saved state recovery to prevent state change and exceptions
+            supportFragmentManager.beginTransaction()
+                    .add(
+                            R.id.basic_chat_view,
+                            InterceptionConfig(),
+                            topicTitle
+                    )
+                    .addToBackStack(topicTitle)
+                    .commit()
+        }
     }
 
     override fun getChatBuilder(): ChatController.Builder? {
@@ -87,14 +96,22 @@ class ElementsInterceptionChat : BotChatHistory() {
         interceptor.interceptionRules = interceptions
         interceptor.announceRules = announcements
     }
+
+    override fun onStop() {
+        if(isFinishing) {
+            interceptViewModel.observeSubmission(this, null)
+        }
+        super.onStop()
+    }
 }
 
+
+//<editor-fold desc=////////////// Data classes //////////////>
 
 class InterceptViewModel : ViewModel() {
     var interceptions: List<InterceptData> = listOf()
 
     var announcements: List<InterceptData> = listOf()
-
 
     private val submitForm = SingleLiveData<Boolean>()
     fun observeSubmission(owner: LifecycleOwner, observer: Observer<Boolean?>?) {
@@ -108,10 +125,13 @@ class InterceptViewModel : ViewModel() {
 }
 
 
-
 class ViewData(type: Int, val resource: Int, isLive: Boolean = false)
     : InterceptData(type, isLive)
 
+//</editor-fold>
+
+
+//<editor-fold desc=////////////// Interception configuration form //////////////>
 
 class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
 
@@ -130,7 +150,6 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
         binding.startChat.setOnClickListener {
             submitData()
         }
-
     }
 
     private fun submitData(){
@@ -160,16 +179,6 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
         // notifies data is ready
         interceptViewModel.onSubmitForm(true)
     }
-
-    override fun onStop() {
-        if(!isRemoving) {
-            // notifies of form cancellation
-            interceptViewModel.onSubmitForm(false)
-            super.onStop()
-        }
-    }
-
-    /// fixme: upload initiation stops the chat !!
 
     private fun createDataViews(dataList: ArrayList<ViewData>, container: ViewGroup, idDelta: Int) {
         context?.let {
@@ -220,3 +229,5 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
     }
 
 }
+
+//</editor-fold>
