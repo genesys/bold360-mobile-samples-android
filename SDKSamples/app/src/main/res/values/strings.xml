@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Topics -->
+    <string name="chat_with_agent">Chat with agent</string>
+    <string name="async_chat_with_an_agent">Messaging with an agent</string>
+    <string name="async_chat_continuity">Messaging with an agent: Continuity</string>
+    <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
+    <string name="chat_with_bot">Chat with AI</string>
+    <string name="chat_with_bot_history">Chat with AI: History</string>
+    <string name="chat_with_bold">Chat with live agent</string>
+    <string name="bot_chat_with_welcome">Chat with AI: Custom welcome message</string>
+    <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice support</string>
+    <string name="standalone_autocomplete">Standalone Autocomplete</string>
+    <string name="custom_form">Custom Bold chat form</string>
+    <string name="custom_upload">"Custom upload on live chat"</string>
+    <string name="custom_UI">Customizing the chat UI</string>
+    <string name="chat_restore">Chat creation &amp; restoring</string>
+    <string name="bot_chat_with_interception">Elements interception and accessibility announcements</string>
+    <string name="bot_chat_with_handover">Chat with AI: Handover</string>
+    <string name="bot_chat_with_entities">Chat with AI: Entities Provider</string>
+    <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
+    <string name="bot_context_support">Chat with AI: Context support</string>
+
+
+    <string name="outgoing_element">Outgoing message</string>
+    <string name="incoming_bot_element">Bot Message</string>
+    <string name="incoming_element">Incoming Message</string>
+    <string name="options_element">Quick options</string>
+    <string name="upload_element">"File Upload "</string>
+    <string name="live_only">Intercept on live only</string>
+    <string name="carousel_element">Carousel bot message</string>
+    <string name="feedback_element">Instant feedback</string>
+
+    <!-- Interception: -->
+    <string name="select_for_interception">Select elements to intercept</string>
+    <string name="select_for_accessibility">Select elements to announce with accessibility</string>
+
+</resources>

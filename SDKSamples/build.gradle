@@ -22,8 +22,10 @@ buildscript {
 allprojects {
     repositories {
 //        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/release/"}
-        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/dev/"}
-//         mavenLocal()
+//        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/dev/"}
+        maven {url "https://genesysandroid.jfrog.io/artifactory/gradle-quickstart-local/"}
+
+        mavenLocal()
         mavenCentral()
         google()
         maven { url "https://maven.google.com" }
