@@ -36,4 +36,9 @@
     <string name="select_for_interception">Select elements to intercept</string>
     <string name="select_for_accessibility">Select elements to announce with accessibility</string>
 
+    <!-- UI Configuration options:-->
+    <string name="ui_override">Override UI</string>
+    <string name="ui_configuration">Configure UI</string>
+    <string name="ui_article_config">Configure Article UI</string>
+
 </resources>

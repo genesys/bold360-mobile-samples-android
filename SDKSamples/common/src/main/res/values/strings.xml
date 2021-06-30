@@ -17,7 +17,6 @@
     <string name="upload_file">upload file</string>
     <string name="clear_history">Clear History</string>
     <string name="history_support">History Support</string>
-    <string name="cutomized_ui">Customize by %s</string>
     <string name="bold_upload_without_ui">Uploading with live uploader</string>
     <string name="take_a_picture_text">Take a picture</string>
     <string name="upload_in_progress">Upload in progress</string>

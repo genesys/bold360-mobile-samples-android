@@ -10,7 +10,6 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.annotation.StringDef
 import androidx.core.content.ContextCompat
 import com.nanorep.convesationui.structure.UiConfigurations
 import com.nanorep.convesationui.structure.controller.ChatController
@@ -18,6 +17,7 @@ import com.nanorep.convesationui.structure.elements.IncomingElementModel
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.convesationui.structure.providers.OutgoingElementUIProvider
 import com.nanorep.convesationui.structure.setStyleConfig
+import com.nanorep.convesationui.views.DrawableConfig
 import com.nanorep.convesationui.views.adapters.BubbleContentUIAdapter
 import com.nanorep.convesationui.views.chatelement.BubbleContentAdapter
 import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
@@ -29,23 +29,16 @@ import com.sdk.samples.R
 import com.sdk.samples.databinding.BubbleOutgoingDemoBinding
 import java.util.Date
 
-const val override = "override"
-const val configure = "configure"
-
-@kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-@StringDef(override, configure)
-annotation class CustomUIOption
-
 open class CustomizedUI : BotChat() {
 
     override fun getChatBuilder(): ChatController.Builder? {
 
         return super.getChatBuilder()?.chatUIProvider(
-                UIProviderFactory.create(
-                    this,
-                    intent?.getStringExtra("type") ?: override
-                )
+            UIProviderFactory.create(
+                this,
+                intent?.getStringExtra("type") ?: ConfigOption.OVERRIDE.name
             )
+        )
     }
 
 }
@@ -55,11 +48,42 @@ private class UIProviderFactory {
     companion object {
 
         @JvmStatic
-        fun create(context: Context, @CustomUIOption customUIOption: String?): ChatUIProvider {
+        fun create(context: Context, customUIOption: String?): ChatUIProvider {
 
             return when (customUIOption) {
-                configure -> configuring(context)
+                ConfigOption.ARTICLE_CONFIG.name -> configureArticle(context)
+                ConfigOption.CONFIGURE.name -> configuring(context)
                 else -> overriding(context)
+            }
+        }
+
+        private fun configureArticle(context: Context)  = ChatUIProvider(context).apply {
+
+            articleUIProvider.articleUIConfig?.apply {
+
+                background = ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
+
+                closeUIConfig?.apply {
+                    val sidesMargin = 2.px
+                    val verticalMargin = 8.px
+                    margin = intArrayOf(sidesMargin, verticalMargin, sidesMargin, verticalMargin)
+                    position = UiConfigurations.Alignment.AlignTopLTR
+                    drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_white_24)).apply {
+                        compoundDrawablesPadding = 10.px
+                    }
+                }
+
+                verticalMargin = 40.px to 0
+
+                title.apply {
+                    background = ColorDrawable(Color.YELLOW)
+                    font = StyleConfig(14.px, Color.BLUE, Typeface.DEFAULT_BOLD)
+                }
+
+                body.apply {
+                    background = Color.GRAY
+                    setFont(12.px, Color.WHITE, "monospace", Typeface.ITALIC)
+                }
             }
         }
 
