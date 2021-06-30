@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -117,7 +118,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(findViewById(R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = topicTitle
     }

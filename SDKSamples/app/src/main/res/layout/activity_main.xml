@@ -10,6 +10,7 @@
             tools:context=".MainActivity">
 
         <include
+                android:id="@+id/samples_toolbar"
                 layout="@layout/samples_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

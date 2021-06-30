@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.sdk.common.databinding.ActivityBasicBinding
 import com.sdk.samples.R
@@ -33,7 +34,9 @@ open class CustomUIChat : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(
             this, com.sdk.common.R.layout.activity_basic)
 
-        setSupportActionBar(findViewById(R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = intent.getStringExtra("title")
 

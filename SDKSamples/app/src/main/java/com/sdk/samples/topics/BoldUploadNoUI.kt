@@ -21,6 +21,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -65,7 +66,9 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = intent.getStringExtra("title")
     }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -32,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(
             this, R.layout.activity_main)
 
-        setSupportActionBar(findViewById(R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         arrayListOf(
 
