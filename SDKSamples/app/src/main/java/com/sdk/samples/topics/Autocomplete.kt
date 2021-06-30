@@ -36,7 +36,8 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
     override val containerId: Int
         get() = R.id.autocomplete_container
 
-    override fun startSample(savedInstanceState: Bundle?) {
+    override fun startSample(isStateSaved: Boolean) {
+
         setSupportActionBar(findViewById(R.id.sample_toolbar))
         binding.articleView.setBackgroundColor(Color.parseColor("#88ffffff"))
 
@@ -51,7 +52,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
             inputStyleConfig = StyleConfig(16, Color.BLACK, Typeface.SERIF)
         }
 
-        if (savedInstanceState == null) {
+        if (!isStateSaved) {
             supportFragmentManager.beginTransaction().apply {
                 supportFragmentManager.findFragmentByTag("autocompleteFrag")?.run { this@apply.attach(this) }?.commit()
                     ?: run {

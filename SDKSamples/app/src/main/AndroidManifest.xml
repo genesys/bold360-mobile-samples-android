@@ -69,6 +69,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.sdk.samples.topics.ElementsInterceptionChat"
+            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.sdk.sample.action.INTERCEPTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.sdk.samples.topics.BoldChat"
             android:configChanges="orientation|screenSize|locale|layoutDirection">
             <intent-filter>
