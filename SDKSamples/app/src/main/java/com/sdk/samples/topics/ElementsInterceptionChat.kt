@@ -8,6 +8,7 @@ import android.widget.CheckBox
 import android.widget.Checkable
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SwitchCompat
+import androidx.fragment.app.FragmentManager.OnBackStackChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -37,7 +38,7 @@ class ElementsInterceptionChat : BotChatHistory() {
 
     private val announcer = AccessibilityAnnouncer(this)
 
-    private lateinit var interceptor:ElementsInterceptor
+    private lateinit var interceptor: ElementsInterceptor
 
     //!- needs to be initiated before Activity's onResume method since it registers to permissions requests
     private val uploadFileChooser = UploadFileChooser(this, 1024 * 1024 * 25)
@@ -76,22 +77,18 @@ class ElementsInterceptionChat : BotChatHistory() {
     }
 
     override fun startSample(isStateSaved: Boolean) {
-        if(!isStateSaved) { //!- check if we're not on saved state recovery to prevent state change and exceptions
+        if (!isStateSaved) { //!- check if we're not on saved state recovery to prevent state change and exceptions
             supportFragmentManager.beginTransaction()
-                    .add(
-                            R.id.basic_chat_view,
-                            InterceptionConfig(),
-                            topicTitle
-                    )
+                    .add(R.id.basic_chat_view, InterceptionConfig(), topicTitle)
                     .addToBackStack(topicTitle)
                     .commit()
         }
     }
 
     override fun getChatBuilder(): ChatController.Builder? {
-        historyProvider = HistoryRepository(interceptor.also {
-            updateHistoryRepo(account?.getGroupId())
-        })
+        historyProvider = HistoryRepository(interceptor)
+        updateHistoryRepo(account?.getGroupId())
+
         return super.getChatBuilder()
     }
 
@@ -101,7 +98,7 @@ class ElementsInterceptionChat : BotChatHistory() {
     }
 
     override fun onStop() {
-        if(isFinishing) {
+        if (isFinishing) {
             interceptViewModel.observeSubmission(this, null)
         }
         super.onStop()
@@ -150,25 +147,35 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
         createDataViews(InterceptElements, binding.interceptGroup, 1)
         createDataViews(AnnouncedElements, binding.announceGroup, 2)
 
-        binding.startChat.setOnClickListener {
+        binding.startChat.setOnClickListener { btn ->
+            btn.isClickable = false // prevents multiple activation
+
             submitData()
+
+            // -> listen to changes on the back stack in order to regain clickable
+            //  on the "Start chat" button after disabling it on submission.
+            parentFragmentManager.addOnBackStackChangedListener(object : OnBackStackChangedListener {
+                override fun onBackStackChanged() {
+                    btn.isClickable = true
+                    parentFragmentManager.removeOnBackStackChangedListener(this)
+                }
+            })
         }
     }
 
-    private fun submitData(){
+    private fun submitData() {
         val onSwitches = arrayListOf<Int>()
         interceptViewModel.interceptions = binding.interceptGroup.children()
-                .filter{it is Checkable && it.isChecked}.mapNotNull {
-
-                when(it){
-                    is CheckBox -> InterceptData(it.tag as Int)
-                    is SwitchCompat -> {
-                        onSwitches.add(it.tag as Int)
-                        null
+                .filter { it is Checkable && it.isChecked }.mapNotNull {
+                    when (it) {
+                        is CheckBox -> InterceptData(it.tag as Int)
+                        is SwitchCompat -> {
+                            onSwitches.add(it.tag as Int)
+                            null
+                        }
+                        else -> null
                     }
-                    else -> null
                 }
-            }
 
         // go over switched on switches and set scoped if the matching CheckBoxes were checked:
         onSwitches.forEach { type ->
@@ -176,7 +183,7 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
         }
 
         interceptViewModel.announcements = binding.announceGroup.children().mapNotNull { view ->
-            (view as? CheckBox)?.takeIf { it.isChecked }?.let { InterceptData(it.tag as Int)}
+            (view as? CheckBox)?.takeIf { it.isChecked }?.let { InterceptData(it.tag as Int) }
         }
 
         // notifies data is ready
@@ -204,7 +211,7 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
                 if (data.liveScope) {
                     val switch = SwitchCompat(it).apply {
                         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                            setMargins(22.px, -6.px , 0 , 0 )
+                            setMargins(22.px, (-6).px, 0, 0)
                         }
                         switchPadding = 6.px
 
