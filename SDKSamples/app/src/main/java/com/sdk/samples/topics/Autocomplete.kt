@@ -6,13 +6,14 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
-import com.nanorep.convesationui.structure.elements.Article
 import com.nanorep.convesationui.fragments.ArticleFragment
+import com.nanorep.convesationui.structure.elements.Article
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
@@ -38,7 +39,10 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
 
     override fun startSample(isStateSaved: Boolean) {
 
-        setSupportActionBar(findViewById(R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
+
         binding.articleView.setBackgroundColor(Color.parseColor("#88ffffff"))
 
         val botViewModel: BotCompletionViewModel by viewModels()
@@ -75,7 +79,9 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = topicTitle
     }
