@@ -94,8 +94,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
      * some visible action on article selection: we display the fetched article body in a "WebView"
      */
     private fun onArticle(article: Article) {
-        var html = "<html><Style>${ArticleFragment.STYLE_TO_HANDLE_TABLES}</Style><body>${article.content
-            ?: "Not Available"}</body></html>"
+        var html = "<html><Style>${ArticleFragment.STYLE_TO_HANDLE_TABLES}</Style><body>${article.content}</body></html>"
         html = LinkedArticleHandler.updateLinkedArticles(html)
         binding.articleView.loadData(html, "text/html", "UTF-8")
         binding.articleRoot.visibility = View.VISIBLE
