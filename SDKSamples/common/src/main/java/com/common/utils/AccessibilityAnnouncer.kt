@@ -3,6 +3,7 @@ package com.common.utils
 import android.content.Context
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.nanorep.convesationui.structure.elements.ChatElement.Companion.CarouselElement
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.FeedbackElement
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.IncomingElement
 import com.nanorep.convesationui.structure.elements.ChatElement.Companion.OutgoingElement
@@ -44,6 +45,7 @@ class AccessibilityAnnouncer(context: Context) {
         val res = when (elementModel.elemType) {
             OutgoingElement -> R.string.outgoing_element
             IncomingElement -> R.string.incoming_element
+            CarouselElement -> R.string.carousel_element
             SystemMessageElement -> R.string.system_element
             QuickOptionsElement -> R.string.options_element
             UploadElement -> R.string.upload_element

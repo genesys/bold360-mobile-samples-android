@@ -1,5 +1,6 @@
 package com.common.topicsbase
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -16,8 +17,10 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
+import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
+import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.hideKeyboard
@@ -66,13 +69,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
                             hideKeyboard(window.decorView)
 
                             supportFragmentManager.beginTransaction()
-                                .add(
-                                        R.id.basic_chat_view,
-                                        chatFragment,
-                                        topicTitle
-                                )
-                                .addToBackStack(ChatTag)
-                                .commit()
+                                    .add(R.id.basic_chat_view, chatFragment, topicTitle)
+                                    .addToBackStack(ChatTag)
+                                    .commit()
                         } else {
                             finish()
                         }
@@ -85,9 +84,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         prepareAccount()?.let { account ->
 
             (chatBuilder ?: ChatController.Builder(baseContext))
-                .build(account, chatLoadedListener).also {
-                    chatController = it
-                }
+                    .build(account, chatLoadedListener).also {
+                        chatController = it
+                    }
         }
     }
 
@@ -95,7 +94,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
      * @return true if the chat chatController exists and had not been destructed
      */
     protected fun hasChatController(): Boolean =
-        ::chatController.isInitialized && chatController.hasOpenChats() //-> 'hasOpenChats()' Would be replaced with 'wasDestructed()' on the next SDK version
+            ::chatController.isInitialized && chatController.hasOpenChats() //-> 'hasOpenChats()' Would be replaced with 'wasDestructed()' on the next SDK version
 
     /**
      * Enables the sample to modify the account before creating the chat
@@ -135,8 +134,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
     protected open fun getChatBuilder(): ChatController.Builder? {
         return ChatController.Builder(baseContext)
-            .conversationSettings(createChatSettings())
-            .chatEventListener(this)
+                .conversationSettings(createChatSettings())
+                .chatEventListener(this)
     }
 
     protected open fun createChatSettings(): ConversationSettings {
@@ -238,7 +237,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onStop() {
-        if (isFinishing) { destructChat() }
+        if (isFinishing) {
+            destructChat()
+        }
         super.onStop()
     }
 

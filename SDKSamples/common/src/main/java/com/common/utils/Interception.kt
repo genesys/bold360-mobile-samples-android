@@ -30,7 +30,7 @@ class ElementsInterceptor(context: Context, private val announcer: Accessibility
 
         return (interceptionRules.findRule(element.elemType, element.elemScope.isLive) != null).also {
             if (it) {
-                Log.i("Interception", "Intercepting ${element::class.simpleName}")
+                Log.w("Interception", "Intercepting ${element::class.simpleName}")
             }
         }
     }

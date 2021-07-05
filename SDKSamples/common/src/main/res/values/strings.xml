@@ -12,7 +12,7 @@
     <string name="custom_form_departments_title">Available departments: \n\n</string>
     <string name="custom_form_departments_details">Name: %1$s ,Status: %2$s, Code to Input: %3$s</string>
 
-    <string name="end_chat">End current chat</string>
+    <string name="end_current_chat">End current chat</string>
     <string name="destruct_chat_controller">Destruct</string>
     <string name="upload_file">upload file</string>
     <string name="clear_history">Clear History</string>
@@ -57,6 +57,7 @@
     <!-- Accessibility announcements -->
     <string name="article_page_open">%s page open</string>
     <string name="incoming_element">Incoming message</string>
+    <string name="carousel_element">Carousel incoming message</string>
     <string name="outgoing_element">Message sent</string>
     <string name="system_element">System message</string>
     <string name="options_element">Message has options</string>

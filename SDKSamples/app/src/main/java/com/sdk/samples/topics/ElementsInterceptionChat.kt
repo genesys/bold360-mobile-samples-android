@@ -238,6 +238,7 @@ class InterceptionConfig : BoundDataFragment<InterceptionTopicBinding>() {
 
         val AnnouncedElements = arrayListOf(ViewData(OutgoingElement, R.string.outgoing_element),
                 ViewData(IncomingElement, R.string.incoming_element),
+                ViewData(CarouselElement, R.string.carousel_element),
                 ViewData(QuickOptionsElement, R.string.options_element),
                 ViewData(UploadElement, R.string.upload_element))
     }
