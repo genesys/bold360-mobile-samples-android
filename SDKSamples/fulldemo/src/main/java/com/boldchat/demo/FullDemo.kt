@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.chatComponents.NotificationsReceiver
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
@@ -41,10 +40,10 @@ import com.nanorep.nanoengine.model.configuration.VoiceSupport
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.Notifications
+import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 class FullDemo : RestorationContinuity() {
 
@@ -82,7 +81,7 @@ class FullDemo : RestorationContinuity() {
         ttsAlterProvider = CustomTTSAlterProvider()
 
         // Configuring a custom handover handler :
-        handoverHandler = CustomHandoverHandler(baseContext)
+        handoverHandler = CustomHandoverHandler(this)
 
         // Uncomment to init the Balance Entities provider handler :
         // entitiesProvider = BalanceEntitiesProvider()
@@ -126,7 +125,7 @@ class FullDemo : RestorationContinuity() {
      */
     private fun initInterruptionsReceiver() {
 
-        LocalBroadcastManager.getInstance(baseContext).registerReceiver(
+        LocalBroadcastManager.getInstance(this).registerReceiver(
             object : BroadcastReceiver() {
 
                 override fun onReceive(context: Context, intent: Intent) {
@@ -201,7 +200,7 @@ class FullDemo : RestorationContinuity() {
                 }
             }
 
-            StateEvent.Unavailable -> lifecycleScope.launch {
+            StateEvent.Unavailable -> runMain {
                 toast(this@FullDemo, stateEvent.state, Toast.LENGTH_SHORT)
             }
 
@@ -225,7 +224,7 @@ class FullDemo : RestorationContinuity() {
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 if (isFileUrl(url)) {
                    /* val uri = FileProvider.getUriForFile(
-                       // baseContext, BuildConfig.APPLICATION_ID + ".provider",
+                       // this, BuildConfig.APPLICATION_ID + ".provider",
                         File(url)
                     )*/
 
@@ -242,7 +241,7 @@ class FullDemo : RestorationContinuity() {
         } catch (e: Exception) {
             Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
             toast(
-                baseContext,
+                this,
                 ">> got url: [$url]",
                 Toast.LENGTH_SHORT,
                 background = ColorDrawable(Color.GRAY)

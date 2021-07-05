@@ -66,7 +66,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
         }
 
         botViewModel.onError.observe(this, Observer { error ->
-            toast(baseContext, error.toString(), background = ColorDrawable(Color.RED))
+            toast(this, error.toString(), background = ColorDrawable(Color.RED))
         })
 
         botViewModel.onSelection.observe(this, Observer { selection ->
@@ -87,7 +87,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
     }
 
     private fun onError(error: NRError) {
-        toast(baseContext, error.toString(), background = ColorDrawable(Color.RED))
+        toast(this, error.toString(), background = ColorDrawable(Color.RED))
     }
 
     /**

@@ -116,7 +116,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
 
         if (!isFinishing) {
             runMain {
-                toast(baseContext, "Chat unavailable", background = ColorDrawable(Color.GRAY))
+                toast(this, "Chat unavailable", background = ColorDrawable(Color.GRAY))
             }
             finish()
         }

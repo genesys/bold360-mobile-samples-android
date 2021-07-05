@@ -10,7 +10,6 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
@@ -84,7 +83,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
         prepareAccount()?.let { account ->
 
-            (chatBuilder ?: ChatController.Builder(baseContext))
+            (chatBuilder ?: ChatController.Builder(this))
                 .build(account, chatLoadedListener).also {
                     chatController = it
                 }
@@ -134,7 +133,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     protected open fun getChatBuilder(): ChatController.Builder? {
-        return ChatController.Builder(baseContext)
+        return ChatController.Builder(this)
             .conversationSettings(createChatSettings())
             .chatEventListener(this)
     }
@@ -156,8 +155,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
 
-            StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(baseContext, stateEvent.state, Toast.LENGTH_SHORT)
+            StateEvent.Unavailable -> runMain {
+                toast(this, stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.Ended -> {
@@ -172,7 +171,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
     override fun onError(error: NRError) {
         super.onError(error)
-        lifecycleScope.launch { toast(baseContext, error.toString(), Toast.LENGTH_SHORT) }
+        runMain { toast(this, error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -257,7 +256,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onUrlLinkSelected(url: String) {
-        toast(baseContext, "got link: $url")
+        toast(this, "got link: $url")
     }
 
     companion object {

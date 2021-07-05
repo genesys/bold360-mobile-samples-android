@@ -71,7 +71,7 @@ open class FileChooser(activity: AppCompatActivity) {
                     fileChooser.launch(it)
 
                 } catch (e: ActivityNotFoundException) {
-                    toast(baseContext, getString(R.string.FileChooserError), Toast.LENGTH_LONG)
+                    toast(this, getString(R.string.FileChooserError), Toast.LENGTH_LONG)
                 }
             }
         }

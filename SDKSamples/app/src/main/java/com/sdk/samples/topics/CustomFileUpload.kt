@@ -85,7 +85,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 if(chatController.isEnabled(ChatFeatures.FileUpload)) {
                     imageButton.visibility = View.VISIBLE
                 } else {
-                    toast(baseContext, getString(R.string.file_transfer_not_enabled))
+                    toast(this, getString(R.string.file_transfer_not_enabled))
                 }
             }
 
