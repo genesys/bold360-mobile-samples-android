@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.toast
 import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.structure.elements.Article
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
@@ -22,7 +23,6 @@ import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.hideKeyboard
-import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 import com.sdk.samples.databinding.AutocompleteActivityBinding
 
@@ -66,7 +66,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
         }
 
         botViewModel.onError.observe(this, Observer { error ->
-            toast(this, error.toString(), background = ColorDrawable(Color.RED))
+            toast(error.toString(), background = ColorDrawable(Color.RED))
         })
 
         botViewModel.onSelection.observe(this, Observer { selection ->
@@ -87,7 +87,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
     }
 
     private fun onError(error: NRError) {
-        toast(this, error.toString(), background = ColorDrawable(Color.RED))
+        toast(error.toString(), background = ColorDrawable(Color.RED))
     }
 
     /**

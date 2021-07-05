@@ -1,7 +1,10 @@
 package com.common.utils
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.common.topicsbase.SampleActivity
 import com.nanorep.nanoengine.model.configuration.DatestampFormatFactory
 import com.nanorep.sdkcore.utils.NRError
 import com.sdk.common.R
@@ -35,3 +38,11 @@ fun AppCompatActivity.parseSecurityError(errorCode:String) =
         NRError.NotAvailable -> getString(R.string.security_update_not_available)
         else -> errorCode
     }
+
+
+@JvmOverloads
+fun SampleActivity<*>.toast(text: String, timeout: Int = Toast.LENGTH_LONG, background: Drawable? = null) {
+    if(!isFinishing) {
+        com.nanorep.sdkcore.utils.toast(this, text, timeout, background)
+    }
+}

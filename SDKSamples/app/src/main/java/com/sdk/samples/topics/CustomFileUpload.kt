@@ -8,12 +8,12 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import com.common.utils.live.UploadFileChooser
 import com.common.utils.live.onUploads
+import com.common.utils.toast
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.sdkcore.utils.px
-import com.nanorep.sdkcore.utils.toast
 import com.sdk.samples.R
 
 /**
@@ -85,7 +85,7 @@ class CustomFileUpload : BoldChatAvailability() {
                 if(chatController.isEnabled(ChatFeatures.FileUpload)) {
                     imageButton.visibility = View.VISIBLE
                 } else {
-                    toast(this, getString(R.string.file_transfer_not_enabled))
+                    toast(getString(R.string.file_transfer_not_enabled))
                 }
             }
 
