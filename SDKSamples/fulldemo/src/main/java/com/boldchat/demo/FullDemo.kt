@@ -1,8 +1,11 @@
 package com.boldchat.demo
 
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +27,7 @@ import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.live.UploadFileChooser
 import com.common.utils.live.onUploads
 import com.common.utils.parseSecurityError
+import com.common.utils.toast
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
@@ -201,7 +205,7 @@ class FullDemo : RestorationContinuity() {
             }
 
             StateEvent.Unavailable -> runMain {
-                toast(this@FullDemo, stateEvent.state, Toast.LENGTH_SHORT)
+                toast(stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
@@ -240,12 +244,7 @@ class FullDemo : RestorationContinuity() {
 
         } catch (e: Exception) {
             Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
-            toast(
-                this,
-                ">> got url: [$url]",
-                Toast.LENGTH_SHORT,
-                background = ColorDrawable(Color.GRAY)
-            )
+            super.onUrlLinkSelected(url)
         }
     }
 

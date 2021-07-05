@@ -115,7 +115,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         super.chatUnavailable(formData)
 
         runMain {
-            toast("Chat unavailable", background = ColorDrawable(Color.GRAY))
+            toast(getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY))
         }
 
         if (!isFinishing) {
@@ -196,7 +196,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
                 currentProgress.takeIf { it == 100 }?.run {
                     progressController.updateProgress(this)
                 } ?: kotlin.run {
-                    progressController.updateText("Upload Completed")
+                    progressController.updateText(getString(R.string.upload_completed))
                 }
             }
 

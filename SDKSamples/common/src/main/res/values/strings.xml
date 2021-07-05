@@ -54,6 +54,8 @@
     <string name="user_canceled_security_update">Google play services can\'t be update installation as canceled. Live chat may not be available</string>
     <string name="security_update_not_available">Google play services can\'t be installed or updated thus live chat may not be available</string>
 
+    <string name="file_upload_unavailable">The file upload action is not available for this sample.</string>
+
     <!-- Accessibility announcements -->
     <string name="article_page_open">%s page open</string>
     <string name="incoming_element">Incoming message</string>
@@ -62,5 +64,11 @@
     <string name="options_element">Message has options</string>
     <string name="upload_element">File uploaded approved</string>
     <string name="feedback_element">Feedback options</string>
+
+
+    <string name="chat_creation_error">Failed to load chat\nerror:%s</string>
+    <string name="chat_fragment_error">failed to get chat fragment</string>
+    <string name="chat_restoration_error">The Account is not restorable, a new chat had been created</string>
+    <string name="got_url">got link: %s</string>
 
 </resources>

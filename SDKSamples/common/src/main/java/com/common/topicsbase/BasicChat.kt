@@ -10,6 +10,7 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import com.common.utils.toast
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
@@ -21,7 +22,6 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.runMain
-import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import com.sdk.common.databinding.ActivityBasicBinding
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +52,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             override fun onComplete(result: ChatLoadResponse) {
                 result.error?.run {
 
-                    toast(applicationContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                    toast(getString(R.string.chat_creation_error, result.error ?: getString(R.string.chat_fragment_error)), Toast.LENGTH_SHORT)
                     binding.basicLoading.visibility = View.GONE
 
                 } ?: runMain {
@@ -156,7 +156,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             StateEvent.ChatWindowDetached -> onChatUIDetached()
 
             StateEvent.Unavailable -> runMain {
-                toast(this, stateEvent.state, Toast.LENGTH_SHORT)
+                toast(stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.Ended -> {
@@ -171,7 +171,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
     override fun onError(error: NRError) {
         super.onError(error)
-        runMain { toast(this, error.toString(), Toast.LENGTH_SHORT) }
+        runMain { toast(error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -256,7 +256,11 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onUrlLinkSelected(url: String) {
-        toast(this, "got link: $url")
+        toast(getString(R.string.got_url, url))
+    }
+
+    override fun onUploadFileRequest() {
+        toast(getString(R.string.file_upload_unavailable))
     }
 
     companion object {

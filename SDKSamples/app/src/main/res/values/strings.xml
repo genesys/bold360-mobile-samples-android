@@ -41,4 +41,9 @@
     <string name="ui_configuration">Configure UI</string>
     <string name="ui_article_config">Configure Article UI</string>
 
+    <string name="chat_unavailable">Chat unavailable</string>
+    <string name="upload_completed">Upload Completed</string>
+    <string name="data_uploaded">%s uploaded</string>
+    <string name="chat_not_available">chat is not available due to %s</string>
+
 </resources>

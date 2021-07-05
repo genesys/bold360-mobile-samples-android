@@ -121,8 +121,7 @@ class BoldAvailability : BoundDataFragment<BoldAvailabilityBinding>() {
                         }
 
                         result.reason?.run {
-                            binding.availabilityStatus.snack(
-                                "chat is not available due to $this",
+                            binding.availabilityStatus.snack( getString(R.string.chat_not_available, this),
                                 backgroundColor = Color.DKGRAY,
                                 disableSwipes = false
                             )
