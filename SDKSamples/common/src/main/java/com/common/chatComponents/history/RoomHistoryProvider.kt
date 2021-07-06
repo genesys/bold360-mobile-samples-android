@@ -7,6 +7,7 @@ import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.convesationui.utils.ElementMigration
 import com.nanorep.sdkcore.utils.SystemUtil
+import com.nanorep.sdkcore.utils.log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -98,7 +99,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
-            Log.d("history", "onUpdate: [id:$id] [text:${item.text}] [status:${item.getStatus()}]")
+            Log.d("history", "onUpdate: [id:$id] [text:${item.text.log(200)}] [status:${item.getStatus()}]")
             targetId?.run {
                 historyDao.update(this, id, item.getTimestamp(), item.getStorageKey(), item.getStatus())
             } ?: Log.e("history", "onReceive: targetId is null action is canceled")

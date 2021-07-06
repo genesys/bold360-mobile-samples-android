@@ -1,5 +1,6 @@
 package com.common.topicsbase
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,18 +11,21 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import com.common.utils.toast
+import androidx.lifecycle.lifecycleScope
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
+import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
+import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.runMain
+import com.common.utils.toast
 import com.sdk.common.R
 import com.sdk.common.databinding.ActivityBasicBinding
 import kotlinx.coroutines.CoroutineScope
@@ -65,11 +69,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
                             hideKeyboard(window.decorView)
 
                             supportFragmentManager.beginTransaction()
-                                .add(
-                                        R.id.basic_chat_view,
-                                        chatFragment,
-                                        topicTitle
-                                )
+                                .add(R.id.basic_chat_view, chatFragment, topicTitle)
                                 .addToBackStack(ChatTag)
                                 .commit()
                         } else {
@@ -94,7 +94,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
      * @return true if the chat chatController exists and had not been destructed
      */
     protected fun hasChatController(): Boolean =
-        ::chatController.isInitialized && chatController.hasOpenChats() //-> 'hasOpenChats()' Would be replaced with 'wasDestructed()' on the next SDK version
+            ::chatController.isInitialized && chatController.hasOpenChats() //-> 'hasOpenChats()' Would be replaced with 'wasDestructed()' on the next SDK version
 
     /**
      * Enables the sample to modify the account before creating the chat

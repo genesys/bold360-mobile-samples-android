@@ -54,7 +54,7 @@
 
     <string name="user_canceled_security_update">Google play services can\'t be update installation as canceled. Live chat may not be available</string>
     <string name="security_update_not_available">Google play services can\'t be installed or updated thus live chat may not be available</string>
-    
+
     <!-- Accessibility announcements -->
     <string name="article_page_open">%s page open</string>
     <string name="incoming_element">Incoming message</string>
