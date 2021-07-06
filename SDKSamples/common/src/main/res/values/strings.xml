@@ -63,6 +63,7 @@
     <string name="options_element">Message has options</string>
     <string name="upload_element">File uploaded approved</string>
     <string name="feedback_element">Feedback options</string>
+    <string name="carousel_element">Carousel incoming message</string>
 
     <!-- Toasts -->
     <string name="chat_creation_error">Failed to load chat\nerror:%s</string>
