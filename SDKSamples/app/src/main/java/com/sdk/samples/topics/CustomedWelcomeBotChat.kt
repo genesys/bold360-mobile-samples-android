@@ -4,13 +4,14 @@ import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.nanorep.nanoengine.bot.BotAccount
+import com.sdk.samples.R
 
 class CustomedWelcomeBotChat : BotChat() {
 
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
     get() = {
         listOf(
-            FormFieldFactory.TextInputField( ChatType.Bot, DataKeys.Welcome, "", "Welcome message id", false )
+            FormFieldFactory.TextInputField( ChatType.Bot, DataKeys.Welcome, "", getString(R.string.form_hint_welcomeMessage), false )
         )
     }
 

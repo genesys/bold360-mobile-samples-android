@@ -146,6 +146,11 @@ abstract class RestorationContinuity : History() {
             }
 
         } else if ( supportFragmentManager.backStackEntryCount > 0 && supportFragmentManager.getCurrent()?.tag == topicTitle ) {  // -> Chat fragment is presented
+
+            if (chatController.hasOpenChats()) {
+                reloadForms()
+            }
+
             removeChatFragment()
             supportFragmentManager.executePendingTransactions()
 

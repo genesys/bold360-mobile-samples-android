@@ -114,9 +114,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     override fun chatUnavailable(formData: UnavailabilityData?) {
         super.chatUnavailable(formData)
 
-        runMain {
-            toast(getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY))
-        }
+        runMain { toast(getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY)) }
 
         if (!isFinishing) {
             finish()

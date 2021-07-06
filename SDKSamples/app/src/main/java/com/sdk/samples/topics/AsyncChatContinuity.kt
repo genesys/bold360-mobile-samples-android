@@ -12,6 +12,7 @@ import com.integration.core.userInfo
 import com.nanorep.convesationui.async.AsyncAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.Account
+import com.sdk.samples.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /*
@@ -42,10 +43,10 @@ class AsyncChatContinuity : RestorationContinuity() {
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
     get() = {
         listOf(
-            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.UserId, "", "UserId", false),
-            FormFieldFactory.EmailInputField(ChatType.Async, DataKeys.Email, "", "Email", false),
-            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.FirstName, "", "First Name", false),
-            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.LastName, "", "Last Name", false)
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.UserId, "", getString(R.string.form_hint_userId), false),
+            FormFieldFactory.EmailInputField(ChatType.Async, DataKeys.Email, "", getString(R.string.form_hint_email), false),
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.FirstName, "", getString(R.string.form_hint_firstName), false),
+            FormFieldFactory.TextInputField(ChatType.Async, DataKeys.LastName, "", getString(R.string.form_hint_laseName), false)
         )
     }
 
