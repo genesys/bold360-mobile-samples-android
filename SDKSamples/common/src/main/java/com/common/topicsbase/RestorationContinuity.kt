@@ -65,12 +65,11 @@ abstract class RestorationContinuity : History() {
         }
     }
 
-    @ExperimentalCoroutinesApi
-    override fun startSample(isStateSaved: Boolean) {
+    override fun startSample() {
 
         updateHistoryRepo(targetId = account?.getGroupId())
 
-        super.startSample(isStateSaved)
+        super.startSample()
 
     }
 

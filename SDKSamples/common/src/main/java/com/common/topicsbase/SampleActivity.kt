@@ -43,7 +43,7 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
     /**
      * Called after the LoginData had been updated from the ChatForm
      */
-    abstract fun startSample(isStateSaved: Boolean = false)
+    abstract fun startSample()
 
     open val extraDataFields: (() -> List<FormFieldFactory.FormField>)? = null
 
@@ -72,7 +72,7 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
         sampleFormViewModel.sampleData.observe(this, Observer {
             onAccountDataReady()
-            startSample(savedInstanceState != null)
+            startSample()
         })
 
         presentSampleForm()

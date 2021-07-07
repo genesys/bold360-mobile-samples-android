@@ -28,10 +28,10 @@ class CustomFileUpload : BoldChatAvailability() {
     private val uploadFileChooser = UploadFileChooser(this, 1024 * 1024 * 37)
 
 
-    override fun startSample(isStateSaved: Boolean) {
+    override fun startSample() {
         initUploadButton()
 
-        super.startSample(isStateSaved)
+        super.startSample()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -1,6 +1,5 @@
 package com.common.topicsbase
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,21 +10,18 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
+import com.common.utils.toast
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
-import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
-import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.runMain
-import com.common.utils.toast
 import com.sdk.common.R
 import com.sdk.common.databinding.ActivityBasicBinding
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +53,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
                 result.error?.run {
 
                     toast(getString(R.string.chat_creation_error, result.error ?: getString(R.string.chat_fragment_error)), Toast.LENGTH_SHORT)
+                    onError(this.apply {
+                        errorCode = NRError.ConversationCreationError
+                    })
                     binding.basicLoading.visibility = View.GONE
 
                 } ?: runMain {
@@ -69,9 +68,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
                             hideKeyboard(window.decorView)
 
                             supportFragmentManager.beginTransaction()
-                                .add(R.id.basic_chat_view, chatFragment, topicTitle)
-                                .addToBackStack(ChatTag)
-                                .commit()
+                                    .add(R.id.basic_chat_view, chatFragment, topicTitle)
+                                    .addToBackStack(ChatTag)
+                                    .commit()
                         } else {
                             finish()
                         }
@@ -124,7 +123,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         binding.topicTitle.text = topicTitle
     }
 
-    override fun startSample(isStateSaved: Boolean) {
+    override fun startSample() {
         createChat()
     }
 
@@ -171,7 +170,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
     override fun onError(error: NRError) {
         super.onError(error)
-        runMain { toast(error.toString(), Toast.LENGTH_SHORT) }
+        // message for this error was already toasted
+        error.takeUnless { it.errorCode == NRError.ConversationCreationError}?.
+            runMain{ toast(error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -237,7 +238,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onStop() {
-        if (isFinishing) { destructChat() }
+        if (isFinishing) {
+            destructChat()
+        }
         super.onStop()
     }
 

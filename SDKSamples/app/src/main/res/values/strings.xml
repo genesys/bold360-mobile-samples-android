@@ -31,21 +31,60 @@
     <!--  Custom upload Sample -->
     <string name="file_transfer_not_enabled">File transfer is not enabled for this chat</string>
 
-    <!-- Interception Sample -->
+    <!-- Interception Sample: -->
     <string name="select_for_interception">Select elements to intercept</string>
     <string name="select_for_accessibility">Select elements to announce with accessibility</string>
+    <string name="select_rule_type">Select element type</string>
+    <string name="create_interception_rules">Add rules to intercept elements and create accessibility announcements</string>
+    <string name="create_intercept_rule">+ Intercept Rule</string>
+    <string name="create_announce_rule">+ Announcement Rule</string>
+    <string name="live_only">Intercept on live only</string>
+    <string name="live_chat_rule">Apply on live only</string>
+    <string name="intercept_rule">Intercept element rule:</string>
+    <string name="announce_rule">Announcement rule:</string>
+    <string name="element_type_label">Element type:</string>
+    <string name="delete_rule">Delete rule</string>
+    <string name="sample_option_menu">Sample options</string>
+    <string name="switch_sample_menu">Switch sample</string>
+    <string name="reset_sample_menu">Reset</string>
 
-    <!-- Intercept Elements -->
-    <string name="outgoing_element">Outgoing message</string>
+      <!-- Intercept Elements -->
+    <string name="outgoing_element">Outgoing Message</string>
     <string name="incoming_bot_element">Bot Message</string>
     <string name="incoming_element">Incoming Message</string>
     <string name="options_element">Quick options</string>
-    <string name="upload_element">"File Upload "</string>
-    <string name="live_only">Intercept on live only</string>
-    <string name="carousel_element">Carousel bot message</string>
+    <string name="upload_element">File Upload</string>
+    <string name="carousel_element">Carousel Message</string>
+    <string name="system_element">System Message</string>
+    <string name="removable_system_element">Temporary System Message</string>
     <string name="feedback_element">Instant feedback</string>
 
-    <!-- UI Configuration options-->
+    <string-array name="element_types">
+        <item name="undefined_element">Select element type</item>
+        <item name="outgoing_element">@string/outgoing_element</item>
+        <item name="incoming_element">@string/incoming_element</item>
+        <item name="carousel_element">@string/carousel_element</item>
+        <item name="system_element">@string/system_element</item>
+        <item name="removable_system_element">@string/removable_system_element</item>
+        <item name="feedback_element">@string/feedback_element</item>
+        <item name="options_element">@string/options_element</item>
+        <item name="upload_element">File Upload</item>
+    </string-array>
+
+    <integer-array name="element_types_id">
+        <item name="undefined_element">-1</item>
+        <item name="outgoing_element">1</item>
+        <item name="incoming_element">2</item>
+        <item name="carousel_element">3</item>
+        <item name="system_element">4</item>
+        <item name="removable_system_element">8</item>
+        <item name="feedback_element">5</item>
+        <item name="options_element">6</item>
+        <item name="upload_element">9</item>
+    </integer-array>
+    <!-- //////////////////////////////////////// -->
+
+    <!-- UI Configuration options:-->
     <string name="ui_override">Override UI</string>
     <string name="ui_configuration">Configure UI</string>
     <string name="ui_article_config">Configure Article UI</string>
@@ -63,5 +102,12 @@
     <string name="form_hint_laseName">Last Name</string>
     <string name="form_hint_welcomeMessage">Welcome message id</string>
     <string name="form_hint_departmentCode">Department code</string>
+
+
+    <!--for tests
+        <string name="agent_typing"></string>
+        <string name="instant_feedback_no">app-no</string>
+        <string name="instant_feedback_yes">app-yes</string>
+        <string name="end_chat"></string>-->
 
 </resources>

@@ -53,6 +53,8 @@ class ChatForm : BoundDataFragment<ChatFormBinding>() {
 
         binding.startChat.apply {
             setOnClickListener {
+                Log.d("intercept", "chatform startChat clicked, form visible = ${this@ChatForm.isVisible}")
+
                 collaborateData()
             }
         }
