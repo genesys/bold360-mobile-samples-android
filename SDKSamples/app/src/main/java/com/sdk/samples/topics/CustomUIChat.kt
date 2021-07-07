@@ -1,15 +1,28 @@
 package com.sdk.samples.topics
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.sdk.common.databinding.ActivityBasicBinding
 import com.sdk.samples.R
 import com.sdk.samples.databinding.CustomUiOptionsLayoutBinding
+
+enum class ConfigOption(val id : Int) {
+
+    OVERRIDE(R.string.ui_override),
+    CONFIGURE(R.string.ui_configuration) ,
+    ARTICLE_CONFIG(R.string.ui_article_config);
+
+    fun title(context: Context): String {
+        return context.getString(id)
+    }
+}
 
 open class CustomUIChat : AppCompatActivity() {
 
@@ -21,7 +34,9 @@ open class CustomUIChat : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(
             this, com.sdk.common.R.layout.activity_basic)
 
-        setSupportActionBar(findViewById(R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = intent.getStringExtra("title")
 
@@ -37,24 +52,23 @@ open class CustomUIChat : AppCompatActivity() {
 
     private fun initOptionsView(){
         binding.basicLoading.visibility = View.GONE
-        CustomUiOptionsLayoutBinding.inflate(LayoutInflater.from(baseContext), binding.basicChatView , true).let {
-            buttonSetup(it.configureOption, configure)
-            buttonSetup(it.overrideOption, override)
+        CustomUiOptionsLayoutBinding.inflate(LayoutInflater.from(this), binding.basicChatView , true).let {
+            buttonSetup(it.configureOption, ConfigOption.CONFIGURE)
+            buttonSetup(it.overrideOption, ConfigOption.OVERRIDE)
+            buttonSetup(it.articleOption, ConfigOption.ARTICLE_CONFIG)
         }
     }
 
-    private fun buttonSetup(button: Button, @CustomUIOption customUIOption: String) {
+    private fun buttonSetup(button: Button, customUIOption: ConfigOption) {
 
         button.run {
 
-            text = getString(R.string.cutomized_ui, customUIOption)
+            text = customUIOption.title(context)
 
             setOnClickListener {
 
                 startActivity(Intent("com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION").apply {
-
-                    putExtra("title", text.toString())
-                    putExtra("type", customUIOption)
+                    putExtra("type", customUIOption.name)
                 }.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY))
 
                 overridePendingTransition(R.anim.right_in, R.anim.left_out)

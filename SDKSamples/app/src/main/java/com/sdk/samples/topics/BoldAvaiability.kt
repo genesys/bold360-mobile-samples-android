@@ -121,8 +121,7 @@ class BoldAvailability : BoundDataFragment<BoldAvailabilityBinding>() {
                         }
 
                         result.reason?.run {
-                            binding.availabilityStatus.snack(
-                                "chat is not available due to $this",
+                            binding.availabilityStatus.snack( getString(R.string.chat_not_available, this),
                                 backgroundColor = Color.DKGRAY,
                                 disableSwipes = false
                             )
@@ -244,6 +243,10 @@ class BoldAvailability : BoundDataFragment<BoldAvailabilityBinding>() {
 class DepartmentAdapter(private var departments: List<Department> = listOf()) :
     RecyclerView.Adapter<DepartmentViewHolder>() {
 
+    companion object {
+        const val NO_DEPARTMENT_ITEM = "No department"
+    }
+
     var selectedDepartment: Int = -1
     private val selectionListener: (position: Int) -> Unit = { position ->
         selectedDepartment = position
@@ -271,7 +274,7 @@ class DepartmentAdapter(private var departments: List<Department> = listOf()) :
     }
 
     fun setDepartments(departmentsList: List<Department>) {
-        this.departments = listOf(Department("No department", "0")).plus(departmentsList)
+        this.departments = listOf(Department(NO_DEPARTMENT_ITEM, "0")).plus(departmentsList)
         selectedDepartment = 0
         notifyDataSetChanged()
     }

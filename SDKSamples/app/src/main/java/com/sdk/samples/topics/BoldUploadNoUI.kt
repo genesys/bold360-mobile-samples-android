@@ -21,11 +21,13 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.toast
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -38,12 +40,12 @@ import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
 import com.nanorep.nanoengine.model.conversation.SessionInfo
 import com.nanorep.sdkcore.utils.runMain
-import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
 import com.sdk.samples.databinding.ActivityUploadNoUiBinding
 import java.io.ByteArrayOutputStream
 
+//TODO: upgrade [BLD-49041]
 
 class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatListener {
 
@@ -64,12 +66,14 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(findViewById(com.sdk.common.R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = intent.getStringExtra("title")
     }
 
-    override fun startSample(savedInstanceState: Bundle?) {
+    override fun startSample() {
         createChat()
 
     }
@@ -110,10 +114,9 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     override fun chatUnavailable(formData: UnavailabilityData?) {
         super.chatUnavailable(formData)
 
+        runMain { toast(getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY)) }
+
         if (!isFinishing) {
-            runMain {
-                toast(baseContext, "Chat unavailable", background = ColorDrawable(Color.GRAY))
-            }
             finish()
         }
     }
@@ -191,7 +194,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
                 currentProgress.takeIf { it == 100 }?.run {
                     progressController.updateProgress(this)
                 } ?: kotlin.run {
-                    progressController.updateText("Upload Completed")
+                    progressController.updateText(getString(R.string.upload_completed))
                 }
             }
 

@@ -7,9 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
+import com.common.utils.toast
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
@@ -21,7 +22,6 @@ import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.runMain
-import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import com.sdk.common.databinding.ActivityBasicBinding
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +34,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     protected var destructMenu: MenuItem? = null
 
     override fun getViewBinding(): ActivityBasicBinding = DataBindingUtil.setContentView(
-        this, R.layout.activity_basic)
+            this, R.layout.activity_basic)
 
     override val containerId: Int
         get() = R.id.basic_chat_view
@@ -52,7 +52,10 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             override fun onComplete(result: ChatLoadResponse) {
                 result.error?.run {
 
-                    toast(applicationContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                    toast(getString(R.string.chat_creation_error, result.error ?: getString(R.string.chat_fragment_error)), Toast.LENGTH_SHORT)
+                    onError(this.apply {
+                        errorCode = NRError.ConversationCreationError
+                    })
                     binding.basicLoading.visibility = View.GONE
 
                 } ?: runMain {
@@ -65,13 +68,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
                             hideKeyboard(window.decorView)
 
                             supportFragmentManager.beginTransaction()
-                                .add(
-                                    R.id.basic_chat_view,
-                                    chatFragment,
-                                    topicTitle
-                                )
-                                .addToBackStack(ChatTag)
-                                .commit()
+                                    .add(R.id.basic_chat_view, chatFragment, topicTitle)
+                                    .addToBackStack(ChatTag)
+                                    .commit()
                         } else {
                             finish()
                         }
@@ -83,7 +82,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
         prepareAccount()?.let { account ->
 
-            (chatBuilder ?: ChatController.Builder(baseContext))
+            (chatBuilder ?: ChatController.Builder(this))
                 .build(account, chatLoadedListener).also {
                     chatController = it
                 }
@@ -94,7 +93,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
      * @return true if the chat chatController exists and had not been destructed
      */
     protected fun hasChatController(): Boolean =
-        ::chatController.isInitialized && chatController.hasOpenChats() //-> 'hasOpenChats()' Would be replaced with 'wasDestructed()' on the next SDK version
+            ::chatController.isInitialized && chatController.hasOpenChats() //-> 'hasOpenChats()' Would be replaced with 'wasDestructed()' on the next SDK version
 
     /**
      * Enables the sample to modify the account before creating the chat
@@ -117,12 +116,14 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(findViewById(R.id.sample_toolbar))
+        (binding.samplesToolbar as? Toolbar)?.let {
+            setSupportActionBar(it)
+        }
 
         binding.topicTitle.text = topicTitle
     }
 
-    override fun startSample(savedInstanceState: Bundle?) {
+    override fun startSample() {
         createChat()
     }
 
@@ -131,7 +132,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     protected open fun getChatBuilder(): ChatController.Builder? {
-        return ChatController.Builder(baseContext)
+        return ChatController.Builder(this)
             .conversationSettings(createChatSettings())
             .chatEventListener(this)
     }
@@ -153,8 +154,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
 
-            StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(baseContext, stateEvent.state, Toast.LENGTH_SHORT)
+            StateEvent.Unavailable -> runMain {
+                toast(stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.Ended -> {
@@ -169,7 +170,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
     override fun onError(error: NRError) {
         super.onError(error)
-        lifecycleScope.launch { toast(baseContext, error.toString(), Toast.LENGTH_SHORT) }
+        // message for this error was already toasted
+        error.takeUnless { it.errorCode == NRError.ConversationCreationError}?.
+            runMain{ toast(error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -184,8 +187,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val fragmentFound = supportFragmentManager.takeUnless { it.isDestroyed }?.popBackStackImmediate(
-                    ChatTag,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                        ChatTag,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
                 if (fragmentFound == false) onChatUIDetached()
             } catch (ex: IllegalStateException) {
@@ -235,7 +238,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onStop() {
-        if (isFinishing) { destructChat() }
+        if (isFinishing) {
+            destructChat()
+        }
         super.onStop()
     }
 
@@ -254,7 +259,11 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onUrlLinkSelected(url: String) {
-        toast(baseContext, "got link: $url")
+        toast(getString(R.string.got_url, url))
+    }
+
+    override fun onUploadFileRequest() {
+        toast(getString(R.string.file_upload_unavailable))
     }
 
     companion object {

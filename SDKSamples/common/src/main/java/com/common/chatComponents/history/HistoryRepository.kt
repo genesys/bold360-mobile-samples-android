@@ -1,6 +1,7 @@
 package com.common.chatComponents.history
 
 import com.nanorep.convesationui.structure.history.ChatElementListener
+import com.nanorep.convesationui.structure.history.InterceptElement
 
 interface HistoryProvider: ChatElementListener {
     var targetId: String?

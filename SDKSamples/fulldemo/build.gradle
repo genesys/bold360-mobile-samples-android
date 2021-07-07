@@ -51,8 +51,8 @@ dependencies {
 
     implementation project(':common')
 
-    implementation ("com.bold360ai-sdk.conversation:chatintegration:4.4.+"){changing = true}
-    implementation ("com.bold360ai-sdk.core:accessibility:4.4.+"){changing = true}
+    implementation ("com.bold360ai-sdk.conversation:chatintegration:4.5.+"){changing = true}
+    implementation ("com.bold360ai-sdk.core:accessibility:4.5.+"){changing = true}
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1' // according to dependencies usage

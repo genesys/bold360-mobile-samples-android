@@ -1,57 +1,41 @@
 <resources>
     <string name="app_name">Bold SDK Samples</string>
 
+    <!-- Availability form -->
     <string name="hide_departments">Press to hide departments list</string>
-    <string name="start_chat">Start Chat</string>
     <string name="department_selection"><u><b>Select a department for availability check</b></u></string>
-    <string name="department_hint"><u><b>Department code</b></u></string>
     <string name="show_departments">Press to show departments list</string>
+
+    <!-- Bold forms -->
+    <string name="start_chat">Start Chat</string>
     <string name="required_error">This field is mandatory</string>
     <string name="validation_error">Invalid input</string>
+    <string name="department_code">Department Code</string>
+    <string name="application_id_hint">Application Id</string>
+    <string name="user_id_hint">User Id</string>
 
-    <string name="chat_with_agent">Chat with agent</string>
-    <string name="async_chat_with_an_agent">Messaging with an agent</string>
-    <string name="async_chat_continuity">Messaging with an agent: Continuity</string>
-    <string name="start_live_no_dep_instruction">Start live chat or check availability without preconfigured department</string>
-    <string name="chat_with_bot">Chat with AI</string>
-    <string name="chat_with_bot_history">Chat with AI: History</string>
-    <string name="chat_with_bold">Chat with live agent</string>
-    <string name="bot_chat_with_welcome">Chat with AI: Custom welcome message</string>
-    <string name="bot_chat_with_voc_to_voc">Chat with AI: Voice support</string>
-    <string name="standalone_autocomplete">Standalone Autocomplete</string>
-    <string name="full_demo">Full Demo</string>
-    <string name="custom_form">Custom Bold chat form</string>
-    <string name="custom_upload">"Custom upload on live chat"</string>
     <string name="custom_form_departments_title">Available departments: \n\n</string>
     <string name="custom_form_departments_details">Name: %1$s ,Status: %2$s, Code to Input: %3$s</string>
-    <string name="custom_UI">Customizing the chat UI</string>
-    <string name="chat_restore">Chat creation &amp; restoring</string>
-    <string name="bot_chat_with_handover">Chat with AI: Handover</string>
-    <string name="bot_chat_with_entities">Chat with AI: Entities Provider</string>
-    <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
-    <string name="bot_context_support">Chat with AI: Context support</string>
+    <string name="custom_form_submit">submit</string>
 
-    <string name="end_chat">End current chat</string>
+    <!-- Actions menu -->
+    <string name="end_current_chat">End current chat</string>
     <string name="destruct_chat_controller">Destruct</string>
     <string name="upload_file">upload file</string>
     <string name="clear_history">Clear History</string>
-    <string name="history_support">History Support</string>
-    <string name="cutomized_ui">Customize by %s</string>
-    <string name="bold_upload_without_ui">Uploading with live uploader</string>
-    <string name="take_a_picture_text">Take a picture</string>
-    <string name="upload_in_progress">Upload in progress</string>
-    <string name="upload_default_image">Upload default image</string>
-    <string name="file_transfer_not_enabled">File transfer is not enabled for this chat</string>
-    <string name="department_code">Department Code</string>
 
-
-    <string name="application_id_hint">Application Id</string>
-    <string name="user_id_hint">User Id</string>
+    <!-- Sample forms -->
     <string name="restore_if_available">Restore if available</string>
-    <string name="custom_form_submit">submit</string>
+    <string name="context_name">Context Name</string>
+    <string name="context_value">Context Value</string>
+    <string name="add_context">Add Context</string>
+    <string name="bot_context_list"><u>Bot Context list:</u></string>
+    <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
 
-    <string name="error_account_name">Account name is empty</string>
-    <string name="error_kb">Knowledge Base is empty</string>
+    <string name="bold_parameters_title">Bold extra data</string>
+    <string name="bot_context_title">Bot Contexts:</string>
+
+    <!-- Default hints -->
     <string name="account_hint">Account Name</string>
     <string name="kb_hint">Knowledge Base</string>
     <string name="server_hint">Server</string>
@@ -59,20 +43,33 @@
     <string name="firstName_hint">First Name</string>
     <string name="lastName_hint">Last Name</string>
     <string name="welcome_hint">Insert welcome message id</string>
-    <string name="context_name">Context Name</string>
-    <string name="context_value">Context Value</string>
-    <string name="add_context">Add Context</string>
-    <string name="bot_context_list"><u>Bot Context list:</u></string>
-    <string name="create_restore_chat_instruction">Select a chat and choose your action</string>
-    <string name="error_apiKey">Empty Api key</string>
-    <string name="error_email">Email is not valid</string>
     <string name="email_hint">Email</string>
     <string name="phone_hint">Phone number</string>
-    <string name="bold_parameters_title">Bold extra data</string>
-    <string name="bot_context_title">Bot Contexts:</string>
+
+    <!-- Errors -->
+    <string name="error_apiKey">Empty Api key</string>
+    <string name="error_email">Email is not valid</string>
+    <string name="error_account_name">Account name is empty</string>
+    <string name="error_kb">Knowledge Base is empty</string>
 
     <string name="user_canceled_security_update">Google play services can\'t be update installation as canceled. Live chat may not be available</string>
     <string name="security_update_not_available">Google play services can\'t be installed or updated thus live chat may not be available</string>
 
+    <!-- Toasts -->
+    <string name="chat_creation_error">Failed to load chat\nerror:%s</string>
+    <string name="chat_fragment_error">failed to get chat fragment</string>
+    <string name="chat_restoration_error">The Account is not restorable, a new chat had been created</string>
+    <string name="got_url">got link: %s</string>
+    <string name="file_upload_unavailable">The file upload action is not available for this sample.</string>
+
+    <!-- Accessibility announcements -->
+    <string name="article_page_open">%s page open</string>
+    <string name="incoming_element">Incoming message</string>
+    <string name="outgoing_element">Message sent</string>
+    <string name="system_element">System message</string>
+    <string name="options_element">Message has options</string>
+    <string name="upload_element">File uploaded approved</string>
+    <string name="feedback_element">Feedback options</string>
+    <string name="carousel_element">Carousel incoming message</string>
 
 </resources>

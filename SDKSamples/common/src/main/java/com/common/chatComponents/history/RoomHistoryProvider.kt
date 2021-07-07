@@ -7,11 +7,11 @@ import com.nanorep.convesationui.structure.history.HistoryCallback
 import com.nanorep.convesationui.structure.history.HistoryFetching
 import com.nanorep.convesationui.utils.ElementMigration
 import com.nanorep.sdkcore.utils.SystemUtil
+import com.nanorep.sdkcore.utils.log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
@@ -27,9 +27,9 @@ import kotlin.math.min
  * @param coroutineScope The application's lifecycle coroutine scope
  */
 
-@ExperimentalCoroutinesApi
-open class RoomHistoryProvider(var context: Context, override var targetId: String? = null, var pageSize: Int = 8) :
-    HistoryProvider {
+@Suppress("EXPERIMENTAL_API_USAGE")
+open class RoomHistoryProvider(var context: Context, override var targetId: String? = null, var pageSize: Int = 8)
+    : HistoryProvider {
 
     protected open val fetchDispatcher: CoroutineDispatcher = Dispatchers.Main
 
@@ -41,11 +41,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
      * Gets all the history from the database(on a I/O thread), and invokes a page of it (page size has been determined at the activity).
      * When finished, it sends the callback to the SDK (on the Main thread).
      */
-    override fun onFetch(
-        from: Int,
-        @HistoryFetching.FetchDirection direction: Int,
-        callback: HistoryCallback?
-    ) {
+    override fun onFetch(from: Int, @HistoryFetching.FetchDirection direction: Int, callback: HistoryCallback?) {
 
         Log.v("history", "got fetch request : from $from direction $direction")
 
@@ -63,7 +59,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     /**
      * Adds an element to the history (on a I/O thread)
      */
-    @ExperimentalCoroutinesApi
+    //@ExperimentalCoroutinesApi
     override fun onReceive(item: StorableChatElement) {
         // start immediately the insert action without being suspended.
         // this Room version verifies DB actions not on main thread.
@@ -84,18 +80,6 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     /**
      * Removes an element to the history (on a I/O thread)
      */
-    @ExperimentalCoroutinesApi
-    override fun onRemove(timestampId: Long) {
-
-        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
-            targetId?.run {
-                Log.d("history", "onRemove: [id:$timestampId]")
-                historyDao.delete(this, timestampId)
-            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
-        }
-    }
-
-    @ExperimentalCoroutinesApi
     override fun onRemove(id: String) {
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
@@ -107,37 +91,15 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     }
 
     /**
-     * Updates an element at the history by its timestamp (on a I/O thread)
+     * Updates an element at the history by its id (on a I/O thread)
      */
-    @ExperimentalCoroutinesApi
-    override fun onUpdate(timestampId: Long, item: StorableChatElement) {
-
-        coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
-
-            Log.d(
-                "history",
-                "onUpdate: [id:$timestampId] [text:${item.text}] [status:${item.getStatus()}]"
-            )
-            targetId?.run {
-                historyDao.update(this, timestampId, item.getStorageKey(), item.getStatus())
-            } ?: Log.e("history", "onReceive: targetId is null action is canceled")
-        }
-    }
-
-    @ExperimentalCoroutinesApi
     override fun onUpdate(id: String, item: StorableChatElement) {
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
 
-            Log.d("history", "onUpdate: [id:$id] [text:${item.text}] [status:${item.getStatus()}]")
+            Log.d("history", "onUpdate: [id:$id] [text:${item.text.log(200)}] [status:${item.getStatus()}]")
             targetId?.run {
-                historyDao.update(
-                    this,
-                    id,
-                    item.getTimestamp(),
-                    item.getStorageKey(),
-                    item.getStatus()
-                )
+                historyDao.update(this, id, item.getTimestamp(), item.getStorageKey(), item.getStatus())
             } ?: Log.e("history", "onReceive: targetId is null action is canceled")
         }
     }
@@ -215,8 +177,8 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     }
 }
 
-@ExperimentalCoroutinesApi
-class HistoryMigrationProvider(context: Context, private var onDone:(()->Unit)? = null) : RoomHistoryProvider(context), ElementMigration {
+class HistoryMigrationProvider(context: Context, private var onDone:(()->Unit)? = null)
+    : RoomHistoryProvider(context), ElementMigration {
 
     init {
         pageSize = 20

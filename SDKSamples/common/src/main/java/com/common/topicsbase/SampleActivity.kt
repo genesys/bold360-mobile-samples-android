@@ -43,7 +43,7 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
     /**
      * Called after the LoginData had been updated from the ChatForm
      */
-    abstract fun startSample(savedInstanceState: Bundle? = null)
+    abstract fun startSample()
 
     open val extraDataFields: (() -> List<FormFieldFactory.FormField>)? = null
 
@@ -71,19 +71,21 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
         sampleFormViewModel.updateChatType(chatType)
 
         sampleFormViewModel.sampleData.observe(this, Observer {
-
-            supportFragmentManager
-                .popBackStack(
-                    CHAT_FORM,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
-
-            startSample(savedInstanceState)
-
+            onAccountDataReady()
+            startSample()
         })
 
         presentSampleForm()
     }
+
+    open fun onAccountDataReady(){
+        supportFragmentManager
+                .popBackStack(
+                        CHAT_FORM,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
+    }
+
 
 //  <editor-fold desc=">>>>> Base Activity actions <<<<<" >
 
