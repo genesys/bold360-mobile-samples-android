@@ -1,6 +1,5 @@
 package com.common.topicsbase
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,21 +10,18 @@ import androidx.annotation.Nullable
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
+import com.common.utils.toast
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
-import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.Account
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
-import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.utils.NRError
 import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.hideKeyboard
 import com.nanorep.sdkcore.utils.runMain
-import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import com.sdk.common.databinding.ActivityBasicBinding
 import kotlinx.coroutines.CoroutineScope
@@ -56,7 +52,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             override fun onComplete(result: ChatLoadResponse) {
                 result.error?.run {
 
-                    toast(applicationContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                    toast(getString(R.string.chat_creation_error, result.error ?: getString(R.string.chat_fragment_error)), Toast.LENGTH_SHORT)
                     onError(this.apply {
                         errorCode = NRError.ConversationCreationError
                     })
@@ -86,10 +82,10 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
         prepareAccount()?.let { account ->
 
-            (chatBuilder ?: ChatController.Builder(baseContext))
-                    .build(account, chatLoadedListener).also {
-                        chatController = it
-                    }
+            (chatBuilder ?: ChatController.Builder(this))
+                .build(account, chatLoadedListener).also {
+                    chatController = it
+                }
         }
     }
 
@@ -136,9 +132,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     protected open fun getChatBuilder(): ChatController.Builder? {
-        return ChatController.Builder(baseContext)
-                .conversationSettings(createChatSettings())
-                .chatEventListener(this)
+        return ChatController.Builder(this)
+            .conversationSettings(createChatSettings())
+            .chatEventListener(this)
     }
 
     protected open fun createChatSettings(): ConversationSettings {
@@ -159,7 +155,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             StateEvent.ChatWindowDetached -> onChatUIDetached()
 
             StateEvent.Unavailable -> runMain {
-                toast(this, stateEvent.state, Toast.LENGTH_SHORT)
+                toast(stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.Ended -> {
@@ -176,7 +172,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         super.onError(error)
         // message for this error was already toasted
         error.takeUnless { it.errorCode == NRError.ConversationCreationError}?.
-            runMain{ toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT) }
+            runMain{ toast(error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {
@@ -263,7 +259,11 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
     }
 
     override fun onUrlLinkSelected(url: String) {
-        toast(baseContext, "got link: $url")
+        toast(getString(R.string.got_url, url))
+    }
+
+    override fun onUploadFileRequest() {
+        toast(getString(R.string.file_upload_unavailable))
     }
 
     companion object {

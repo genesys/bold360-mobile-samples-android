@@ -52,7 +52,7 @@ open class CustomUIChat : AppCompatActivity() {
 
     private fun initOptionsView(){
         binding.basicLoading.visibility = View.GONE
-        CustomUiOptionsLayoutBinding.inflate(LayoutInflater.from(baseContext), binding.basicChatView , true).let {
+        CustomUiOptionsLayoutBinding.inflate(LayoutInflater.from(this), binding.basicChatView , true).let {
             buttonSetup(it.configureOption, ConfigOption.CONFIGURE)
             buttonSetup(it.overrideOption, ConfigOption.OVERRIDE)
             buttonSetup(it.articleOption, ConfigOption.ARTICLE_CONFIG)

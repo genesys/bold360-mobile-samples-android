@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
+import com.common.utils.toast
 import com.integration.bold.BoldChat
 import com.integration.bold.BoldChatListener
 import com.integration.bold.boldchat.core.PostChatData
@@ -39,7 +40,6 @@ import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
 import com.nanorep.nanoengine.model.conversation.SessionInfo
 import com.nanorep.sdkcore.utils.runMain
-import com.nanorep.sdkcore.utils.toast
 import com.nanorep.sdkcore.utils.weakRef
 import com.sdk.samples.R
 import com.sdk.samples.databinding.ActivityUploadNoUiBinding
@@ -114,10 +114,9 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     override fun chatUnavailable(formData: UnavailabilityData?) {
         super.chatUnavailable(formData)
 
+        runMain { toast(getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY)) }
+
         if (!isFinishing) {
-            runMain {
-                toast(baseContext, "Chat unavailable", background = ColorDrawable(Color.GRAY))
-            }
             finish()
         }
     }
@@ -195,7 +194,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
                 currentProgress.takeIf { it == 100 }?.run {
                     progressController.updateProgress(this)
                 } ?: kotlin.run {
-                    progressController.updateText("Upload Completed")
+                    progressController.updateText(getString(R.string.upload_completed))
                 }
             }
 

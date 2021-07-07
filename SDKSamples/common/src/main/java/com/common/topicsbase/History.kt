@@ -45,10 +45,7 @@ abstract class History : BasicChat() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         historyMenu = menu?.findItem(R.id.clear_history)
-        historyMenu?.isVisible = true
-        if (hasChatController()) {
-            enableMenu(historyMenu, true)
-        }
+        enableMenu(historyMenu, true)
         return true
     }
 

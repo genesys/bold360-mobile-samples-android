@@ -1,8 +1,11 @@
 package com.boldchat.demo
 
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.common.chatComponents.NotificationsReceiver
 import com.common.chatComponents.customProviders.ContinuityAccountHandler
@@ -25,6 +27,7 @@ import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.live.UploadFileChooser
 import com.common.utils.live.onUploads
 import com.common.utils.parseSecurityError
+import com.common.utils.toast
 import com.integration.core.InQueueEvent
 import com.integration.core.StateEvent
 import com.nanorep.convesationui.structure.FriendlyDatestampFormatFactory
@@ -41,10 +44,10 @@ import com.nanorep.nanoengine.model.configuration.VoiceSupport
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.Notifications
+import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 class FullDemo : RestorationContinuity() {
 
@@ -82,7 +85,7 @@ class FullDemo : RestorationContinuity() {
         ttsAlterProvider = CustomTTSAlterProvider()
 
         // Configuring a custom handover handler :
-        handoverHandler = CustomHandoverHandler(baseContext)
+        handoverHandler = CustomHandoverHandler(this)
 
         // Uncomment to init the Balance Entities provider handler :
         // entitiesProvider = BalanceEntitiesProvider()
@@ -126,7 +129,7 @@ class FullDemo : RestorationContinuity() {
      */
     private fun initInterruptionsReceiver() {
 
-        LocalBroadcastManager.getInstance(baseContext).registerReceiver(
+        LocalBroadcastManager.getInstance(this).registerReceiver(
             object : BroadcastReceiver() {
 
                 override fun onReceive(context: Context, intent: Intent) {
@@ -201,8 +204,8 @@ class FullDemo : RestorationContinuity() {
                 }
             }
 
-            StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(this@FullDemo, stateEvent.state, Toast.LENGTH_SHORT)
+            StateEvent.Unavailable -> runMain {
+                toast(stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
@@ -225,7 +228,7 @@ class FullDemo : RestorationContinuity() {
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 if (isFileUrl(url)) {
                    /* val uri = FileProvider.getUriForFile(
-                       // baseContext, BuildConfig.APPLICATION_ID + ".provider",
+                       // this, BuildConfig.APPLICATION_ID + ".provider",
                         File(url)
                     )*/
 
@@ -241,12 +244,7 @@ class FullDemo : RestorationContinuity() {
 
         } catch (e: Exception) {
             Log.w(FULL_DEMO_TAG, ">> Failed to activate link on default app: " + e.message)
-            toast(
-                baseContext,
-                ">> got url: [$url]",
-                Toast.LENGTH_SHORT,
-                background = ColorDrawable(Color.GRAY)
-            )
+            super.onUrlLinkSelected(url)
         }
     }
 
