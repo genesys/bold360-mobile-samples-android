@@ -8,11 +8,12 @@ import androidx.lifecycle.Observer
 import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
+import com.common.utils.toast
 import com.integration.core.securedInfo
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
-import com.nanorep.sdkcore.utils.toast
+import com.sdk.common.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 abstract class RestorationContinuity : History() {
@@ -104,7 +105,7 @@ abstract class RestorationContinuity : History() {
                     sampleFormViewModel.checkRestorable() -> restoreChat( account = prepareAccount() )
 
                     else -> {
-                        context?.let { toast(it, "The Account is not restorable, a new chat had been created", Toast.LENGTH_SHORT) }
+                        toast(getString(R.string.chat_restoration_error), Toast.LENGTH_SHORT)
                         startChat(accountInfo = prepareAccount())
                     }
                 }
@@ -145,6 +146,11 @@ abstract class RestorationContinuity : History() {
             }
 
         } else if ( supportFragmentManager.backStackEntryCount > 0 && supportFragmentManager.getCurrent()?.tag == topicTitle ) {  // -> Chat fragment is presented
+
+            if (chatController.hasOpenChats()) {
+                reloadForms()
+            }
+
             removeChatFragment()
             supportFragmentManager.executePendingTransactions()
 

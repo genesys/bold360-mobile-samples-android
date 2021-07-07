@@ -7,6 +7,7 @@ import com.common.utils.chatForm.defs.DataKeys
 import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.nanoengine.AccountInfo
+import com.sdk.samples.R
 
 
 class PrechatExtraData : BotChat() {
@@ -14,9 +15,9 @@ class PrechatExtraData : BotChat() {
     override val extraDataFields: (() -> List<FormFieldFactory.FormField>)
     get() = {
         listOf(
-            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.FirstName, "", "First Name", false),
-            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.LastName, "", "Last Name", false),
-            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.Department, "", "Department code", false)
+            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.FirstName, "", getString(R.string.form_hint_firstName), false),
+            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.LastName, "", getString(R.string.form_hint_laseName), false),
+            FormFieldFactory.TextInputField(ChatType.Bot, DataKeys.Department, "", getString(R.string.form_hint_departmentCode), false)
         )
     }
 

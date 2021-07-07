@@ -14,6 +14,7 @@
     <string name="standalone_autocomplete">Standalone Autocomplete</string>
     <string name="custom_form">Custom Bold chat form</string>
     <string name="custom_upload">"Custom upload on live chat"</string>
+    <string name="bold_upload_without_ui">Uploading with live uploader</string>
     <string name="custom_UI">Customizing the chat UI</string>
     <string name="chat_restore">Chat creation &amp; restoring</string>
     <string name="bot_chat_with_interception">Elements interception and accessibility announcements</string>
@@ -22,7 +23,19 @@
     <string name="bot_to_bold_with_prechat">Live chat escalation from ai &amp; Prechat values</string>
     <string name="bot_context_support">Chat with AI: Context support</string>
 
+    <!-- Upload without UI Sample -->
+    <string name="take_a_picture_text">Take a picture</string>
+    <string name="upload_in_progress">Upload in progress</string>
+    <string name="upload_default_image">Upload default image</string>
 
+    <!--  Custom upload Sample -->
+    <string name="file_transfer_not_enabled">File transfer is not enabled for this chat</string>
+
+    <!-- Interception Sample -->
+    <string name="select_for_interception">Select elements to intercept</string>
+    <string name="select_for_accessibility">Select elements to announce with accessibility</string>
+
+    <!-- Intercept Elements -->
     <string name="outgoing_element">Outgoing message</string>
     <string name="incoming_bot_element">Bot Message</string>
     <string name="incoming_element">Incoming Message</string>
@@ -32,13 +45,23 @@
     <string name="carousel_element">Carousel bot message</string>
     <string name="feedback_element">Instant feedback</string>
 
-    <!-- Interception: -->
-    <string name="select_for_interception">Select elements to intercept</string>
-    <string name="select_for_accessibility">Select elements to announce with accessibility</string>
-
-    <!-- UI Configuration options:-->
+    <!-- UI Configuration options-->
     <string name="ui_override">Override UI</string>
     <string name="ui_configuration">Configure UI</string>
     <string name="ui_article_config">Configure Article UI</string>
+
+    <!-- Toasts -->
+    <string name="chat_unavailable">Chat unavailable</string>
+    <string name="upload_completed">Upload Completed</string>
+    <string name="data_uploaded">%s uploaded</string>
+    <string name="chat_not_available">chat is not available due to %s</string>
+
+    <!-- Sample form hints -->
+    <string name="form_hint_userId">UserId</string>
+    <string name="form_hint_email">Email</string>
+    <string name="form_hint_firstName">First Name</string>
+    <string name="form_hint_laseName">Last Name</string>
+    <string name="form_hint_welcomeMessage">Welcome message id</string>
+    <string name="form_hint_departmentCode">Department code</string>
 
 </resources>

@@ -33,6 +33,7 @@ import com.nanorep.sdkcore.utils.children
 import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import com.sdk.samples.databinding.InterceptionTopicBinding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class ElementsInterceptionChat : BotChatHistory() {
 
@@ -76,6 +77,7 @@ class ElementsInterceptionChat : BotChatHistory() {
         // prevents removal of account form
     }
 
+    @ExperimentalCoroutinesApi
     override fun startSample(isStateSaved: Boolean) {
         if (!isStateSaved) { //!- check if we're not on saved state recovery to prevent state change and exceptions
             supportFragmentManager.beginTransaction()
@@ -85,6 +87,7 @@ class ElementsInterceptionChat : BotChatHistory() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
         historyProvider = HistoryRepository(interceptor)
         updateHistoryRepo(account?.getGroupId())

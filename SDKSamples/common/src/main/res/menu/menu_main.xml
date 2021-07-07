@@ -1,7 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="app.com.nanoconversationdemo.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/end_current_chat"
@@ -24,6 +22,7 @@
         android:orderInCategory="1"
         android:title="@string/upload_file"
         android:visible="false"
+        android:enabled="false"
         app:showAsAction="collapseActionView" />
 
     <item
