@@ -55,7 +55,6 @@ abstract class History : BasicChat() {
     /**
      * Adding history save support to the ChatController
      */
-    @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
 
         enableMenu(historyMenu, true)
@@ -76,13 +75,12 @@ abstract class History : BasicChat() {
         return false
     }
 
-    @ExperimentalCoroutinesApi
-    override fun startSample(isStateSaved: Boolean) {
+    override fun startSample() {
 
         HistoryMigration.start(HistoryMigrationProvider(this) {
             runOnUiThread {
                 Log.d("BotChatHistory", "Migration completed. starting chat...")
-                super.startSample(isStateSaved)
+                super.startSample()
             }
         })
 

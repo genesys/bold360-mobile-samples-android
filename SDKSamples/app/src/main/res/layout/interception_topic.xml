@@ -56,7 +56,7 @@
                 android:orientation="vertical" />
 
             <Button
-                android:id="@+id/start_chat"
+                android:id="@+id/start_chat_config"
                 style="@style/submit_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

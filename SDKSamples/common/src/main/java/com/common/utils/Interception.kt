@@ -3,9 +3,10 @@ package com.common.utils
 import android.content.Context
 import android.util.Log
 import com.common.chatComponents.history.RoomHistoryProvider
+import com.nanorep.convesationui.structure.elements.ChatElement
 import com.nanorep.convesationui.structure.elements.ElementModel
 
-open class InterceptData(val type: Int, var liveScope: Boolean = false)
+open class InterceptData(var type: Int = ChatElement.UndefinedElement, var liveScope: Boolean = false)
 
 
 class ElementsInterceptor(context: Context, private val announcer: AccessibilityAnnouncer)

@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
@@ -28,6 +27,7 @@ import kotlin.math.min
  * @param coroutineScope The application's lifecycle coroutine scope
  */
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 open class RoomHistoryProvider(var context: Context, override var targetId: String? = null, var pageSize: Int = 8)
     : HistoryProvider {
 
@@ -59,7 +59,7 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     /**
      * Adds an element to the history (on a I/O thread)
      */
-    @ExperimentalCoroutinesApi
+    //@ExperimentalCoroutinesApi
     override fun onReceive(item: StorableChatElement) {
         // start immediately the insert action without being suspended.
         // this Room version verifies DB actions not on main thread.
@@ -80,7 +80,6 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     /**
      * Removes an element to the history (on a I/O thread)
      */
-    @ExperimentalCoroutinesApi
     override fun onRemove(id: String) {
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
@@ -94,7 +93,6 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     /**
      * Updates an element at the history by its id (on a I/O thread)
      */
-    @ExperimentalCoroutinesApi
     override fun onUpdate(id: String, item: StorableChatElement) {
 
         coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
@@ -179,7 +177,6 @@ open class RoomHistoryProvider(var context: Context, override var targetId: Stri
     }
 }
 
-@ExperimentalCoroutinesApi
 class HistoryMigrationProvider(context: Context, private var onDone:(()->Unit)? = null)
     : RoomHistoryProvider(context), ElementMigration {
 

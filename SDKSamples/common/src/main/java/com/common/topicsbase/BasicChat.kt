@@ -57,6 +57,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
                 result.error?.run {
 
                     toast(applicationContext, "Failed to load chat\nerror:${result.error ?: "failed to get chat fragment"}", Toast.LENGTH_SHORT)
+                    onError(this.apply {
+                        errorCode = NRError.ConversationCreationError
+                    })
                     binding.basicLoading.visibility = View.GONE
 
                 } ?: runMain {
@@ -124,7 +127,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         binding.topicTitle.text = topicTitle
     }
 
-    override fun startSample(isStateSaved: Boolean) {
+    override fun startSample() {
         createChat()
     }
 
@@ -155,8 +158,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
             StateEvent.ChatWindowDetached -> onChatUIDetached()
 
-            StateEvent.Unavailable -> lifecycleScope.launch {
-                toast(baseContext, stateEvent.state, Toast.LENGTH_SHORT)
+            StateEvent.Unavailable -> runMain {
+                toast(this, stateEvent.state, Toast.LENGTH_SHORT)
             }
 
             StateEvent.Ended -> {
@@ -171,7 +174,9 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
 
     override fun onError(error: NRError) {
         super.onError(error)
-        lifecycleScope.launch { toast(baseContext, error.toString(), Toast.LENGTH_SHORT) }
+        // message for this error was already toasted
+        error.takeUnless { it.errorCode == NRError.ConversationCreationError}?.
+            runMain{ toast(this@BasicChat, error.toString(), Toast.LENGTH_SHORT) }
     }
 
     override fun onBackPressed() {

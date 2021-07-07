@@ -73,7 +73,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         binding.topicTitle.text = intent.getStringExtra("title")
     }
 
-    override fun startSample(isStateSaved: Boolean) {
+    override fun startSample() {
         createChat()
 
     }
