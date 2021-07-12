@@ -1,5 +1,6 @@
 package com.sdk.samples.topics
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,7 +22,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -38,6 +40,7 @@ import com.integration.core.BoldLiveUploader
 import com.integration.core.FileUploadInfo
 import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
+import com.integration.core.skipPrechat
 import com.nanorep.nanoengine.model.conversation.SessionInfo
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.weakRef
@@ -50,6 +53,8 @@ import java.io.ByteArrayOutputStream
 class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatListener {
 
     override var chatType: String = ChatType.Live
+
+    lateinit var activityLauncher: ActivityResultLauncher<Intent>
 
     override val containerId: Int
         get() = R.id.upload_view
@@ -66,23 +71,26 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (binding.samplesToolbar as? Toolbar)?.let {
-            setSupportActionBar(it)
-        }
-
         binding.topicTitle.text = intent.getStringExtra("title")
+
+        activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                (result.data?.extras?.get("data") as? Bitmap)?.run {
+                    uploadBitmap(this)
+                }
+            }
+        }
     }
 
     override fun startSample() {
         createChat()
-
     }
 
     private fun createChat() {
 
         boldChat = BoldChat().apply {
 
-            visitorInfo = account?.info ?: SessionInfo()
+            visitorInfo = (account?.info ?: SessionInfo()).apply { skipPrechat = true }
             wListener = this@BoldUploadNoUI.weakRef()
 
             try {
@@ -105,16 +113,15 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     }
 
     override fun chatEnded(formData: PostChatData?) {
-
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            finish()
-        }
+        finishIfLast()
     }
 
     override fun chatUnavailable(formData: UnavailabilityData?) {
         super.chatUnavailable(formData)
 
-        runMain { toast(getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY)) }
+        runMain {
+            toast( getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY))
+        }
 
         if (!isFinishing) {
             finish()
@@ -122,14 +129,17 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     }
 
     override fun chatCreated(formData: PreChatData?) {
+        // Since we skip the prechat, the form data is null and we call the boldChat?.start() again.
         boldChat?.start()
     }
 
-    override fun visitorInfoUpdated() {
+    override fun chatStarted() {
         runMain {
+
             binding.progressBar.visibility = View.INVISIBLE
             binding.takeAPicture.visibility = View.VISIBLE
             binding.uploadDefaultImage.visibility = View.VISIBLE
+
         }
 
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
@@ -145,31 +155,15 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         requestCode.takeIf { it == CAMERA_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED }
             ?.run {
                 binding.takeAPicture.setOnClickListener {
-                    startActivityForResult(
-                        Intent(MediaStore.ACTION_IMAGE_CAPTURE),
-                        CAMERA_REQUEST_CODE
-                    )
+                    activityLauncher.launch( Intent(MediaStore.ACTION_IMAGE_CAPTURE) )
                 }
-            } ?: kotlin.run {
-            binding.takeAPicture.isEnabled = false
-        }
+            } ?: kotlin.run { binding.takeAPicture.isEnabled = false }
 
         binding.uploadDefaultImage.setOnClickListener {
-            (ContextCompat.getDrawable(
-                this,
-                R.drawable.sample_image
-            ) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
+            ( ContextCompat.getDrawable( this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
 
         }
 
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        (data?.extras?.get("data") as? Bitmap)?.takeIf { requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK }?.run {
-                uploadBitmap(this)
-        }
     }
 
     private fun uploadBitmap(bitmap: Bitmap) {
@@ -273,10 +267,14 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         }
     }
 
+    override fun onBackPressed() {
+        boldChat?.end()
+        super.onBackPressed()
+    }
+
     companion object {
         const val TAG = "NoUIUploadSample"
 
-        const val CAMERA_REQUEST_CODE = 99
         const val CAMERA_PERMISSION_REQUEST_CODE = 100
     }
 }

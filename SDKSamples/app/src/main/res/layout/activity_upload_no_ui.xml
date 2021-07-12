@@ -7,12 +7,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <include
-                android:id="@+id/samples_toolbar"
-                layout="@layout/samples_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         <LinearLayout
                 android:id="@+id/root_layout"
                 android:layout_width="match_parent"
