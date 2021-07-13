@@ -3,7 +3,6 @@ package com.sdk.samples.topics
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -24,7 +23,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.common.topicsbase.SampleActivity
@@ -63,6 +61,12 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         BoldLiveUploader()
     }
 
+    private val getPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results: Map<String, Boolean> ->
+        enableTakeAPic(
+            results.all { entry -> entry.value }  // if all permissions were granted
+        )
+    }
+
     override fun getViewBinding(): ActivityUploadNoUiBinding =
         DataBindingUtil.setContentView(this, R.layout.activity_upload_no_ui)
 
@@ -74,6 +78,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         binding.topicTitle.text = intent.getStringExtra("title")
 
         activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
             if (result.resultCode == Activity.RESULT_OK) {
                 (result.data?.extras?.get("data") as? Bitmap)?.run {
                     uploadBitmap(this)
@@ -129,7 +134,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
     }
 
     override fun chatCreated(formData: PreChatData?) {
-        // Since we skip the prechat, the form data is null and we call the boldChat?.start() again.
+        // Since we skip the prechat, the form data is null and we call the boldChat?.start() again, to actually start the chat after it was created..
         boldChat?.start()
     }
 
@@ -142,28 +147,21 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
 
         }
 
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        requestCode.takeIf { it == CAMERA_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED }
-            ?.run {
-                binding.takeAPicture.setOnClickListener {
-                    activityLauncher.launch( Intent(MediaStore.ACTION_IMAGE_CAPTURE) )
-                }
-            } ?: kotlin.run { binding.takeAPicture.isEnabled = false }
+        getPermissions.launch(arrayOf(android.Manifest.permission.CAMERA))
 
         binding.uploadDefaultImage.setOnClickListener {
             ( ContextCompat.getDrawable( this, R.drawable.sample_image) as? BitmapDrawable)?.bitmap?.run { uploadBitmap(this) }
-
         }
 
+    }
+
+    private fun enableTakeAPic(enable: Boolean) {
+        if (enable) {
+            binding.takeAPicture.isEnabled = true
+            binding.takeAPicture.setOnClickListener {
+                activityLauncher.launch( Intent(MediaStore.ACTION_IMAGE_CAPTURE) )
+            }
+        }
     }
 
     private fun uploadBitmap(bitmap: Bitmap) {

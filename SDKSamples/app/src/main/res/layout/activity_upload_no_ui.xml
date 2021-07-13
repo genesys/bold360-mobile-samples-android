@@ -54,6 +54,7 @@
                             android:layout_marginBottom="20dp"
                             android:clickable="true"
                             android:focusable="true"
+                            android:enabled="false"
                             android:text="@string/take_a_picture_text"
                             android:visibility="gone" />
 
