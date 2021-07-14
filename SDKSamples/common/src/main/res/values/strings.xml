@@ -72,4 +72,9 @@
     <string name="feedback_element">Feedback options</string>
     <string name="carousel_element">Carousel incoming message</string>
 
+    <!-- Form field hints -->
+    <string name="form_hint_email">Email</string>
+    <string name="form_hint_firstName">First Name</string>
+    <string name="form_hint_laseName">Last Name</string>
+
 </resources>

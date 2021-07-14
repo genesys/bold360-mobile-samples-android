@@ -97,9 +97,6 @@
 
     <!-- Sample form hints -->
     <string name="form_hint_userId">UserId</string>
-    <string name="form_hint_email">Email</string>
-    <string name="form_hint_firstName">First Name</string>
-    <string name="form_hint_laseName">Last Name</string>
     <string name="form_hint_welcomeMessage">Welcome message id</string>
     <string name="form_hint_departmentCode">Department code</string>
 

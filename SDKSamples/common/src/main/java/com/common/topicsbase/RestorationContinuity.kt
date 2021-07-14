@@ -14,7 +14,6 @@ import com.nanorep.convesationui.bold.model.BoldAccount
 import com.nanorep.nanoengine.Account
 import com.nanorep.sdkcore.utils.getCurrent
 import com.sdk.common.R
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 abstract class RestorationContinuity : History() {
 

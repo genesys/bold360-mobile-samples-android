@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GenesysHandover</string>
+
+
+
+    <string name="form_hint_token">Token</string>
+
 </resources>
