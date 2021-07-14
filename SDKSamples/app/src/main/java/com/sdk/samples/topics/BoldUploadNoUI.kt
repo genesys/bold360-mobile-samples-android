@@ -38,6 +38,7 @@ import com.integration.core.BoldLiveUploader
 import com.integration.core.FileUploadInfo
 import com.integration.core.UploadResult
 import com.integration.core.annotations.FileType
+import com.integration.core.skipPrechat
 import com.nanorep.nanoengine.model.conversation.SessionInfo
 import com.nanorep.sdkcore.utils.runMain
 import com.nanorep.sdkcore.utils.weakRef
@@ -82,7 +83,7 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
 
         boldChat = BoldChat().apply {
 
-            visitorInfo = account?.info ?: SessionInfo()
+            visitorInfo = (account?.info ?: SessionInfo()).apply { skipPrechat = true }
             wListener = this@BoldUploadNoUI.weakRef()
 
             try {
