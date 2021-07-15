@@ -16,7 +16,6 @@ import com.integration.core.StateEvent.Companion.Created
 import com.integration.core.StateEvent.Companion.Ended
 import com.integration.core.StateEvent.Companion.Preparing
 import com.integration.core.StateEvent.Companion.Started
-import com.integration.core.StatusEvent
 import com.nanorep.convesationui.structure.AccountListenerEvent
 import com.nanorep.convesationui.structure.HandoverHandler
 import com.nanorep.convesationui.views.autocomplete.ChatInputData
@@ -37,7 +36,11 @@ import com.nanorep.sdkcore.model.StatusSent
 import com.nanorep.sdkcore.utils.Event
 import com.nanorep.sdkcore.utils.EventListener
 import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.SystemUtil
 import com.nanorep.sdkcore.utils.lazyM
+import com.nanorep.sdkcore.utils.log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -98,6 +101,7 @@ class GenAccount(token: String = UUID.randomUUID().toString()) : Account(token) 
 class MessagesQueue : ConcurrentLinkedQueue<GenHandover.OutgoingMessage>() {
 
     var onMessageReady: ((GenHandover.OutgoingMessage) -> Unit)? = null
+    var onMessageExpired: ((GenHandover.OutgoingMessage) -> Unit)? = null
 
     fun update(id: String, status: Int) {
         find { it.id == id }?.let {
@@ -108,8 +112,16 @@ class MessagesQueue : ConcurrentLinkedQueue<GenHandover.OutgoingMessage>() {
 
     private fun nextIdle(): GenHandover.OutgoingMessage? {
 //        return reversed().find { it.status == StatusNone }
+        removeAll(filter { message ->
+            message.expired().let {
+                if (it) onMessageExpired?.invoke(message)
+                it
+            }
+        })
+
         return peek()?.takeIf { it.status == StatusNone }
     }
+
 
     fun remove(id: String) {
         find { it.id == id }?.let {
@@ -122,19 +134,28 @@ class MessagesQueue : ConcurrentLinkedQueue<GenHandover.OutgoingMessage>() {
     }
 
     fun addMessage(message: GenHandover.OutgoingMessage) {
+        Log.d("GenHandover", "queue add:")
+// consider set message self-timeout
         add(message)
         notifyNext()
     }
 
     private fun notifyNext() {
+        Log.d("GenHandover", "notifyNext:")
         nextIdle()?.let {
+            Log.d("GenHandover", "notifyNext: got ready message")
+
             onMessageReady?.invoke(it)
         }
     }
 
-    override fun poll(): GenHandover.OutgoingMessage? {
-        return super.poll()?.also {
-            notifyNext()
+    fun poll(status: Int): GenHandover.OutgoingMessage? {
+        Log.d("GenHandover", "queue poll on status: $status")
+
+        return super.peek()?.takeIf { it.status == status }?.let {
+            poll().also {
+                notifyNext()
+            }
         }
     }
     // only peek idles can be sent
@@ -144,6 +165,10 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
     HandoverHandler(context) {
 
     class OutgoingMessage(var message: ChatStatement) {
+        fun expired(): Boolean {
+            return status == StatusPending && SystemUtil.generateTimestamp() - message.timestamp > ExpirationTime
+        }
+
         val id: String
             get() = message.sId
 
@@ -151,29 +176,47 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
         var status: Int = StatusNone
 
 
-        /* companion object{
-             const val IdleStatus = 0
-             const val PendingStatus = 1
-             const val DoneStatus = 2
-         }*/
+        companion object {
+            const val ExpirationTime = 5000
+            /*const val IdleStatus = 0
+            const val PendingStatus = 1
+            const val DoneStatus = 2*/
+        }
     }
 
     private val messagesQueue = MessagesQueue().apply {
 
         onMessageReady = { outgoingMessage ->
+            Log.d(
+                "GenHandover",
+                "onMessageReady: got outgoing message: ${outgoingMessage.message.text.log(50)}"
+            )
+
             try {
                 activeSession?.let {
+                    Log.d("GenHandover", "onMessageReady: session active, sending outgoing message")
+
                     it.sendMessage(outgoingMessage.also {
                         it.status = StatusPending
-                        passEvent(StatusEvent(it.id, StatusSent, this))
+                        updateStatus(it.message, StatusSent)
                     }.message.text)
                 }
             } catch (e: Throwable) {
                 Log.e(TAG, "Post message failed: code: ${outgoingMessage.id}")
-                passEvent(StatusEvent(outgoingMessage.id, StatusError, this))
+                updateStatus(outgoingMessage.message, StatusError)
 
                 poll()//remove(outgoingMessage.id) TODO: check this
             }
+        }
+
+        onMessageExpired = { outgoingMessage ->
+            Log.d(
+                "GenHandover",
+                "onMessageExpired: outgoing message expired: ${outgoingMessage.message.text.log(50)}"
+            )
+
+            updateStatus(outgoingMessage.message, StatusError)
+
         }
     }
 
@@ -202,6 +245,16 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
 
 
     override fun endChat(forceClose: Boolean) {
+        if(isActive){
+            try {
+                client.disconnect()
+            } catch (t: Throwable) {
+                Log.e(TAG, "Failed to disconnect Genesys chat", t)
+            } finally {
+                injectSystemMessage("Chat ended")
+            }
+        }
+
         handleEvent(State, StateEvent(Ended, getScope()))
 
         enableChatInput(false, null);
@@ -217,7 +270,13 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
                 autocompleteEnabled = false
                 typingMonitoringEnabled = false
                 onSend = {
-                    post(OutgoingStatement(text = it.toString() , scope = getScope(), source = inputSource.name))
+                    post(
+                        OutgoingStatement(
+                            text = it.toString(),
+                            scope = getScope(),
+                            source = inputSource.name
+                        )
+                    )
                 }
                 inputEnabled = enable
             }
@@ -270,14 +329,33 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
     }
 
     private fun handleMessage(message: WebMessagingMessage<*>) {
+        Log.d(TAG, "handleMessage: type: ${message.type}")
+
         when (message.type) {
             MessageType.Message.value -> {
-                injectElement(
-                    IncomingStatement(
-                        message.body?.toString() ?: "",
-                        scope = getScope()
-                    )
-                )
+                Log.d(TAG, "handleMessage: injecting message to chat")
+                (message.body as? StructuredMessage)?.let { msgBody ->
+                    when (msgBody.direction) {
+                        "Inbound" -> { // sent by user
+                            messagesQueue.poll(StatusPending)?.let { outMessage ->
+                                val temp = outMessage.message.sId
+                                 msgBody.id?.let { outMessage.message.sId = it }
+
+                                // ?? how can we verify that the message we've got is the one we expect?
+                                //  messages can be sent from the server on malfunction, and we don't want to consider
+                                //  them unless it's our message
+                                Log.d(TAG, "handleMessage: polling user message from pending queue")
+                                updateElement(temp,  outMessage.message)
+                                updateStatus(outMessage.message, StatusOk)
+                            }
+                        }
+
+                        else -> {
+                            injectElement(IncomingStatement(msgBody.text?:"", scope = getScope()))
+                        }
+                    }
+                }
+
             }
 
             MessageType.Response.value -> {
@@ -287,6 +365,11 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
     }
 
     private fun handleResponse(message: WebMessagingMessage<*>) {
+        Log.d(
+            TAG,
+            "handleResponse: body: ${message.body?.javaClass?.simpleName ?: " message has no body"}"
+        )
+
         val body = message.body
 
         when (body) {
@@ -329,7 +412,7 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
                 })
             }
 
-            enableChatInput(true,  ChatInputData())
+            enableChatInput(true, ChatInputData())
             // -> the chat is active now.
             injectSystemMessage("Start Chat")
 
@@ -366,8 +449,7 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
             }
 
             MessagingClient.State.CLOSED -> {
-                injectSystemMessage("Chat ended")
-                destruct()
+                endChat()
             }
             else -> Log.d(TAG, "onStateChanged: unhandled state $state")
         }
