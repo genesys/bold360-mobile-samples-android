@@ -221,7 +221,7 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
     }
 
 
-    private val client = MessagingClient(
+    private var client = MessagingClient(
         genAccount.configuration
         /*configuration = Configuration(
             deploymentId = "f8aad9d7-f8e7-48e9-ab02-eef92bc4fd2f",
@@ -288,6 +288,10 @@ class GenHandover(context: Context, val genAccount: GenAccount = GenAccount()) :
 
     override fun startChat(accountInfo: AccountInfo?) {
         super.startChat(accountInfo)
+
+        (accountInfo as? GenAccount)?.configuration?.let {
+            client = MessagingClient(it)
+        }
 
         client.stateListener = {
             onStateChanged(it)

@@ -28,6 +28,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
+        freeCompilerArgs = ['-Xjvm-default=compatibility']
         jvmTarget = '1.8'
     }
 
@@ -44,9 +45,9 @@ dependencies {
     implementation ("com.nanorep.devconversation:chatintegration:4.5.+"){changing = true}
     implementation ("com.nanorep.devcore:accessibility:4.5.+"){changing = true}
 
-    implementation("io.ktor:ktor-client-android:1.5.2")
-    implementation("io.ktor:ktor-client-json:1.5.2")
-    implementation("io.ktor:ktor-client-serialization:1.5.2")
+    runtimeOnly("io.ktor:ktor-client-android:1.5.2")
+    runtimeOnly("io.ktor:ktor-client-json:1.5.2")
+    runtimeOnly("io.ktor:ktor-client-serialization:1.5.2")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
