@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.30'
+    id 'org.jmailen.kotlinter'
 }
 
 android {
@@ -48,6 +50,11 @@ dependencies {
     runtimeOnly("io.ktor:ktor-client-android:1.5.2")
     runtimeOnly("io.ktor:ktor-client-json:1.5.2")
     runtimeOnly("io.ktor:ktor-client-serialization:1.5.2")
+    runtimeOnly("io.ktor:ktor-client-logging:1.5.2")
+    runtimeOnly("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
+    runtimeOnly("co.touchlab:kermit:0.1.9")
+    runtimeOnly("androidx.security:security-crypto:1.1.0-alpha03")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'

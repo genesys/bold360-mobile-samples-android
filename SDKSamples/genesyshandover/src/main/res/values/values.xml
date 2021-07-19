@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="token_store_key" type="string">com.genesys.messaging.poc</item>/>
+    <!--<item name="user_first_name" type="string">com.genesys.messaging.poc</item>/>
+    <item name="user_last_name" type="string">com.genesys.messaging.poc</item>/>
+    <item name="token_store_key" type="string">com.genesys.messaging.poc</item>/>-->
+</resources>
