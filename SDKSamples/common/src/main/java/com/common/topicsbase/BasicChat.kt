@@ -258,6 +258,10 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         }
     }
 
+    override fun onPhoneNumberSelected(phoneNumber: String) {
+        toast(getString(R.string.got_phone, phoneNumber))
+    }
+
     override fun onUrlLinkSelected(url: String) {
         toast(getString(R.string.got_url, url))
     }
