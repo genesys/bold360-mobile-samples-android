@@ -64,20 +64,20 @@ private class UIProviderFactory {
                 background = ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
 
                 closeUIConfig?.apply {
-                    val sidesMargin = 2.px
-                    val verticalMargin = 8.px
-                    margin = intArrayOf(sidesMargin, verticalMargin, sidesMargin, verticalMargin)
-                    position = UiConfigurations.Alignment.AlignTopLTR
+                    setMargin(2.px, 8.px, 2.px, 10.px)
+                    setPadding(4.px, 4.px, 4.px, 4.px)
+                    position = UiConfigurations.Alignment.AlignCenterHorizontal
                     drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_white_24)).apply {
-                        compoundDrawablesPadding = 10.px
+                        compoundDrawablesPadding = 2.px
                     }
                 }
 
-                verticalMargin = 40.px to 0
+                setContentPadding(0, 40.px, 0, 0)
+                setPadding(2.px, 2.px, 2.px, 2.px)
 
                 title.apply {
                     background = ColorDrawable(Color.YELLOW)
-                    font = StyleConfig(14.px, Color.BLUE, Typeface.DEFAULT_BOLD)
+                    font = StyleConfig(16.px, Color.BLUE, Typeface.DEFAULT_BOLD)
                 }
 
                 body.apply {
