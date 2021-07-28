@@ -64,8 +64,13 @@ private class UIProviderFactory {
                 background = ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
 
                 closeUIConfig?.apply {
-                    setMargin(2.px, 8.px, 2.px, 10.px)
-                    setPadding(4.px, 4.px, 4.px, 4.px)
+
+                    val sidesMargin = 2.px
+                    setMargin(sidesMargin, 8.px, sidesMargin, 10.px)
+
+                    val closePadding = 4.px
+                    setPadding(closePadding, closePadding, closePadding, closePadding)
+
                     position = UiConfigurations.Alignment.AlignCenterHorizontal
                     drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_white_24)).apply {
                         compoundDrawablesPadding = 2.px
@@ -73,7 +78,9 @@ private class UIProviderFactory {
                 }
 
                 setContentPadding(0, 40.px, 0, 0)
-                setPadding(2.px, 2.px, 2.px, 2.px)
+
+                val pagePadding = 2.px
+                setPadding(pagePadding, pagePadding, pagePadding, pagePadding)
 
                 title.apply {
                     background = ColorDrawable(Color.YELLOW)
