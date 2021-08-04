@@ -52,8 +52,7 @@ internal fun Context.isOnline() : Boolean =
             toast(
                 this,
                 getString(R.string.no_connection),
-                Toast.LENGTH_SHORT,
-                ColorDrawable(Color.RED)
+                Toast.LENGTH_SHORT
             )
         }
     }

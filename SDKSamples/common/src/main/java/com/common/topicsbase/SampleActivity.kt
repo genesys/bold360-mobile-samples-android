@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -20,43 +19,14 @@ import com.common.utils.isOnline
 import com.nanorep.nanoengine.Account
 import com.sdk.common.R
 
-abstract class BaseActivity: AppCompatActivity(){
+private class ConnectivityReceiver: BroadcastReceiver() {
 
-    private class ConnectivityReceiver: BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            context?.isOnline()
-        }
+    override fun onReceive(context: Context?, intent: Intent?) {
+        context?.isOnline()
     }
-
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        if (!isOnline()) finish()
-        else registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-    }
-
-    override fun onBackPressed() {
-
-        super.onBackPressed()
-
-        supportFragmentManager.executePendingTransactions()
-
-        if (!isFinishing) { finishIfLast() }
-    }
-
-    protected fun finishIfLast() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            finish()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (isFinishing) overridePendingTransition(R.anim.left_in, R.anim.right_out)
-    }
-
 }
 
-abstract class SampleActivity<Binding: ViewBinding> : BaseActivity() {
+abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
     protected lateinit var topicTitle: String
     abstract val containerId: Int
@@ -114,8 +84,11 @@ abstract class SampleActivity<Binding: ViewBinding> : BaseActivity() {
         sampleFormViewModel.updateChatType(chatType)
 
         sampleFormViewModel.sampleData.observe(this, Observer {
-            onAccountDataReady()
-            startSample()
+            if (isOnline()) {
+                registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+                onAccountDataReady()
+                startSample()
+            }
         })
 
         presentSampleForm()
@@ -123,17 +96,39 @@ abstract class SampleActivity<Binding: ViewBinding> : BaseActivity() {
 
     open fun onAccountDataReady(){
         supportFragmentManager
-                .popBackStack(
-                        CHAT_FORM,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
+            .popBackStack(
+                CHAT_FORM,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
     }
 
 
+//  <editor-fold desc=">>>>> Base Activity actions <<<<<" >
+
+    override fun onBackPressed() {
+
+        super.onBackPressed()
+
+        supportFragmentManager.executePendingTransactions()
+
+        if (!isFinishing) { finishIfLast() }
+    }
+
+    protected fun finishIfLast() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            finish()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (isFinishing) overridePendingTransition(R.anim.left_in, R.anim.right_out)
+    }
 
     companion object {
         const val CHAT_FORM = "ChatForm"
     }
 
+//  </editor-fold>
 
 }
