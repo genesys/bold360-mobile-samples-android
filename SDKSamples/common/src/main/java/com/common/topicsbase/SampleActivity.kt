@@ -31,6 +31,8 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
     protected lateinit var topicTitle: String
     abstract val containerId: Int
 
+    private val connectivityReceiver = ConnectivityReceiver()
+
 //  <editor-fold desc=">>>>> Chat forms and account data handling <<<<<" >
 
     protected val sampleFormViewModel by viewModels<SampleFormViewModel> {
@@ -85,7 +87,7 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
         sampleFormViewModel.sampleData.observe(this, Observer {
             if (isOnline()) {
-                registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+                registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
                 onAccountDataReady()
                 startSample()
             }
@@ -122,7 +124,10 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (isFinishing) overridePendingTransition(R.anim.left_in, R.anim.right_out)
+        if (isFinishing) {
+            overridePendingTransition(R.anim.left_in, R.anim.right_out)
+            unregisterReceiver(connectivityReceiver)
+        }
     }
 
     companion object {
