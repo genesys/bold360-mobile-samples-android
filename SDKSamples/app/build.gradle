@@ -39,6 +39,7 @@ android {
         pickFirst 'META-INF/main_debug.kotlin_module'
         pickFirst 'META-INF/main_release.kotlin_module'
         pickFirst 'META-INF/atomicfu.kotlin_module'
+        pickFirst 'META-INF/common_debug.kotlin_module'
     }
 
     buildFeatures {
@@ -51,8 +52,7 @@ dependencies {
 
     implementation project(':common')
 
-    implementation ("com.nanorep.devcore:accessibility:4.5.+"){changing = true}
-//    implementation ("com.bold360ai-sdk.core:accessibility:4.5.+"){changing = true}
+    implementation ("com.bold360ai-sdk.core:accessibility:4.6.+"){changing = true}
     implementation 'com.google.android.gms:play-services-base:17.6.0'
 
     testImplementation 'junit:junit:4.13.1'
