@@ -60,6 +60,7 @@
     <string name="chat_fragment_error">failed to get chat fragment</string>
     <string name="chat_restoration_error">The Account is not restorable, a new chat had been created</string>
     <string name="got_url">got link: %s</string>
+    <string name="got_phone">got phone: %s</string>
     <string name="file_upload_unavailable">The file upload action is not available for this sample.</string>
 
     <!-- Accessibility announcements -->
