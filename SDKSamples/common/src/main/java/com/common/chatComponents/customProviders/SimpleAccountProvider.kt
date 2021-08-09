@@ -2,12 +2,12 @@ package com.common.chatComponents.customProviders
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.common.utils.chatForm.ContinuityRepository
+import com.common.utils.chatForm.SampleRepository
 import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.bot.BotAccount
 import com.nanorep.sdkcore.utils.Completion
-import com.nanorep.sdkcore.utils.weakRef
-import java.lang.ref.WeakReference
 
 /**
  * Samples basic AccountInfoProvider implementation by App, used in the "Live chat escalation from ai & Prechat
@@ -45,48 +45,23 @@ open class SimpleAccountProvider : AccountInfoProvider {
 
 }
 
-open class SimpleAccountWithIdProvider(context: Context) : SimpleAccountProvider() {
+open class SimpleAccountWithIdProvider( repository: ContinuityRepository ) : SimpleAccountProvider() {
 
-    private var wContext: WeakReference<Context> = context.weakRef()
+    val updateVisitorToken: (account: BotAccount) -> Unit = { account ->
+        repository.saveVisitorToken("botUserId_${account.account}", account.userId)
+    }
+
+    val getVisitorToken: (account: BotAccount) -> String? = { account ->
+        repository.getVisitorToken("botUserId_${account.account}")
+    }
 
     override fun update(account: AccountInfo) {
         super.update(account)
-        (account as? BotAccount)?.let { updateBotSession(it) }
-    }
-
-    private fun updateBotSession(account: BotAccount) {
-        wContext.get()?.run {
-            try {
-                val preferences: SharedPreferences = getSharedPreferences(
-                    "bot_chat_session",
-                    Context.MODE_PRIVATE
-                )
-                preferences.edit().putString("botUserId_" + account.account, account.userId).apply()
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
+        (account as? BotAccount)?.let { updateVisitorToken(it) }
     }
 
     fun prepareAccount(account: AccountInfo){
-        wContext.get()?.let {
-            (account as? BotAccount)?.withId(it) // fixme: withId should be removed, functionality should be moved.
-        }
+        (account as? BotAccount)?.let{ it.userId = getVisitorToken(it) }
     }
 }
-
-fun BotAccount.withId(context: Context) = apply {
-
-    try {
-        val preferences: SharedPreferences = context.getSharedPreferences(
-            "bot_chat_session",
-            Context.MODE_PRIVATE
-        )
-        val userId = preferences.getString("botUserId_$account", null)
-        this.userId = userId
-    } catch (ex: Exception) {
-        ex.printStackTrace()
-    }
-}
-
 
