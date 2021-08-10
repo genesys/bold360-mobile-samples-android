@@ -39,25 +39,6 @@ class SampleDatestampFactory : DatestampFormatFactory {
     }
 }
 
-internal fun Context.isOnline() : Boolean =
-
-    (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).let { manager ->
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            manager.activeNetwork
-        } else {
-            manager.activeNetworkInfo
-        } != null
-    }.also {
-        if (!it) {
-            toast(
-                this,
-                getString(R.string.no_connection),
-                Toast.LENGTH_SHORT
-            )
-        }
-    }
-
-
 fun AppCompatActivity.parseSecurityError(errorCode:String) =
     when(errorCode){
         NRError.Canceled -> getString(R.string.user_canceled_security_update)

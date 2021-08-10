@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -66,7 +67,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
         }
 
         botViewModel.onError.observe(this, Observer { error ->
-            toast(error.toString(), background = ColorDrawable(Color.RED))
+            error?.run { onError(this) }
         })
 
         botViewModel.onSelection.observe(this, Observer { selection ->
@@ -87,7 +88,8 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
     }
 
     private fun onError(error: NRError) {
-        toast(error.toString(), background = ColorDrawable(Color.RED))
+        toast(error.toString(), Toast.LENGTH_SHORT)
+        if (error.errorCode == NRError.ConversationCreationError) finish()
     }
 
     /**

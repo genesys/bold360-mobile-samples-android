@@ -1,10 +1,5 @@
 package com.common.topicsbase
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,23 +10,13 @@ import com.common.utils.chatForm.ChatForm
 import com.common.utils.chatForm.FormFieldFactory
 import com.common.utils.chatForm.JsonSampleRepository
 import com.common.utils.chatForm.defs.ChatType
-import com.common.utils.isOnline
 import com.nanorep.nanoengine.Account
 import com.sdk.common.R
-
-private class ConnectivityReceiver: BroadcastReceiver() {
-
-    override fun onReceive(context: Context?, intent: Intent?) {
-        context?.isOnline()
-    }
-}
 
 abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
     protected lateinit var topicTitle: String
     abstract val containerId: Int
-
-    private val connectivityReceiver = ConnectivityReceiver()
 
 //  <editor-fold desc=">>>>> Chat forms and account data handling <<<<<" >
 
@@ -86,11 +71,8 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
         sampleFormViewModel.updateChatType(chatType)
 
         sampleFormViewModel.sampleData.observe(this, Observer {
-            if (isOnline()) {
-                registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-                onAccountDataReady()
-                startSample()
-            }
+            onAccountDataReady()
+            startSample()
         })
 
         presentSampleForm()
@@ -124,10 +106,7 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (isFinishing) {
-            overridePendingTransition(R.anim.left_in, R.anim.right_out)
-            unregisterReceiver(connectivityReceiver)
-        }
+        if (isFinishing) overridePendingTransition(R.anim.left_in, R.anim.right_out)
     }
 
     companion object {

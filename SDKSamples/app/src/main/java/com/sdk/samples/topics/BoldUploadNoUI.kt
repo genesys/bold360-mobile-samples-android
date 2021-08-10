@@ -21,6 +21,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -125,11 +126,18 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         super.chatUnavailable(formData)
 
         runMain {
-            toast( getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY))
+            toast( getString(R.string.chat_unavailable), Toast.LENGTH_SHORT)
         }
 
         if (!isFinishing) {
             finish()
+        }
+    }
+
+    override fun error(code: Int, message: String?, data: Any?) {
+        runMain {
+            message?.let { toast(it) }
+            if (code == -100 && !isFinishing) finish()
         }
     }
 
