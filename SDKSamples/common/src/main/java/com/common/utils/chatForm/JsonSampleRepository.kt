@@ -14,7 +14,7 @@ interface ContinuityRepository {
     /**
      * Saves the VisitorToken to the shared properties
      */
-    fun saveVisitorToken( key: String, visitorToken: String? )
+    fun saveVisitorToken(key: String, sessionToken: String? )
 
     /**
      * Gets a saved VisitorToken from the shared properties
@@ -56,11 +56,11 @@ class JsonSampleRepository( context: Context ): SampleRepository {
 
         get() = object : ContinuityRepository{
 
-            override fun saveVisitorToken( key: String, visitorToken: String?) {
+            override fun saveVisitorToken(key: String, sessionToken: String?) {
                 wContext.get()?.getSharedPreferences("bot_chat_session", 0)?.let { shared ->
                     val editor = shared.edit()
                     editor.putString(
-                        key, visitorToken.toString()
+                        key, sessionToken.toString()
                     )
                     editor.apply()
                 }
