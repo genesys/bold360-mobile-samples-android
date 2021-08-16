@@ -172,7 +172,7 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         super.onError(error)
         // message for this error was already toasted
         error.takeUnless { it.errorCode == NRError.ConversationCreationError}?.
-            runMain{ toast(error.toString(), Toast.LENGTH_SHORT) }
+            runMain{ toast(error.toString(), Toast.LENGTH_SHORT) } ?: onBackPressed()
     }
 
     override fun onBackPressed() {

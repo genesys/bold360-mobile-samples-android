@@ -80,10 +80,10 @@ abstract class SampleActivity<Binding: ViewBinding> : AppCompatActivity() {
 
     open fun onAccountDataReady(){
         supportFragmentManager
-                .popBackStack(
-                        CHAT_FORM,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
+            .popBackStack(
+                CHAT_FORM,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
     }
 
 
