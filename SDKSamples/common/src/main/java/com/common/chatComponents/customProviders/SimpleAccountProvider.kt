@@ -1,9 +1,6 @@
 package com.common.chatComponents.customProviders
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.common.utils.chatForm.ContinuityRepository
-import com.common.utils.chatForm.SampleRepository
 import com.nanorep.convesationui.structure.handlers.AccountInfoProvider
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.bot.BotAccount
@@ -45,23 +42,15 @@ open class SimpleAccountProvider : AccountInfoProvider {
 
 }
 
-open class SimpleAccountWithIdProvider( repository: ContinuityRepository ) : SimpleAccountProvider() {
-
-    val updateVisitorToken: (account: BotAccount) -> Unit = { account ->
-        repository.saveVisitorToken("botUserId_${account.account}", account.userId)
-    }
-
-    val getVisitorToken: (account: BotAccount) -> String? = { account ->
-        repository.getVisitorToken("botUserId_${account.account}")
-    }
-
+open class SimpleAccountWithIdProvider(private val repository: ContinuityRepository ) : SimpleAccountProvider() {
+    
     override fun update(account: AccountInfo) {
         super.update(account)
-        (account as? BotAccount)?.let { updateVisitorToken(it) }
+        (account as? BotAccount)?.let { repository.saveVisitorToken("botUserId_${account.account}", account.userId) }
     }
 
     fun prepareAccount(account: AccountInfo){
-        (account as? BotAccount)?.let{ it.userId = getVisitorToken(it) }
+        (account as? BotAccount)?.let{ it.userId = repository.getVisitorToken("botUserId_${account.account}") }
     }
 }
 
