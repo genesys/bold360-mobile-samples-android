@@ -46,11 +46,11 @@ open class SimpleAccountWithIdProvider(private val repository: ContinuityReposit
     
     override fun update(account: AccountInfo) {
         super.update(account)
-        (account as? BotAccount)?.let { repository.saveVisitorToken("botUserId_${account.account}", account.userId) }
+        (account as? BotAccount)?.let { repository.saveSessionToken("botUserId_${account.account}", account.userId) }
     }
 
     fun prepareAccount(account: AccountInfo){
-        (account as? BotAccount)?.let{ it.userId = repository.getVisitorToken("botUserId_${account.account}") }
+        (account as? BotAccount)?.let{ it.userId = repository.getSessionToken("botUserId_${account.account}") }
     }
 }
 

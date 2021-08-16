@@ -12,14 +12,14 @@ import java.lang.ref.WeakReference
  */
 interface ContinuityRepository {
     /**
-     * Saves the VisitorToken to the shared properties
+     * Saves the SessionToken to the shared properties
      */
-    fun saveVisitorToken(key: String, sessionToken: String? )
+    fun saveSessionToken(key: String, sessionToken: String? )
 
     /**
-     * Gets a saved VisitorToken from the shared properties
+     * Gets a saved SessionToken from the shared properties
      */
-    fun getVisitorToken( key: String ) : String?
+    fun getSessionToken(key: String ) : String?
 }
 
 interface SampleRepository {
@@ -56,7 +56,7 @@ class JsonSampleRepository( context: Context ): SampleRepository {
 
         get() = object : ContinuityRepository{
 
-            override fun saveVisitorToken(key: String, sessionToken: String?) {
+            override fun saveSessionToken(key: String, sessionToken: String?) {
                 wContext.get()?.getSharedPreferences("bot_chat_session", 0)?.let { shared ->
                     val editor = shared.edit()
                     editor.putString(
@@ -66,7 +66,7 @@ class JsonSampleRepository( context: Context ): SampleRepository {
                 }
             }
 
-            override fun getVisitorToken( key: String): String? {
+            override fun getSessionToken(key: String): String? {
                 return wContext.get()?.getSharedPreferences("bot_chat_session", 0)?.getString(key, null)
             }
         }

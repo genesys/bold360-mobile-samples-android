@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.common.chatComponents.customProviders.ContinuityAccountHandler
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.toast
@@ -50,7 +49,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
         //preserving existing chat session
         // Configuring a custom account provider that supports continuity :
         if (!botViewModel.botChat.hasSession) {
-            ( sampleFormViewModel.continuityRepository.getVisitorToken("botUserId_${this.account}") )?.let {
+            ( sampleFormViewModel.continuityRepository.getSessionToken("botUserId_${this.account}") )?.let {
                 botViewModel.botChat.account = (account as BotAccount).apply { userId = it}
             }
         }
