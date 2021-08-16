@@ -10,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.common.chatComponents.customProviders.withId
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.toast
@@ -49,8 +48,11 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
         val botViewModel: BotCompletionViewModel by viewModels()
 
         //preserving existing chat session
+        // Configuring a custom account provider that supports continuity :
         if (!botViewModel.botChat.hasSession) {
-            botViewModel.botChat.account = (account as BotAccount).withId(this) // fixme: withId should be removed, functionality should be moved.
+            ( sampleFormViewModel.continuityRepository.getSessionToken("botUserId_${this.account}") )?.let {
+                botViewModel.botChat.account = (account as BotAccount).apply { userId = it}
+            }
         }
 
         botViewModel.uiConfig = AutocompleteViewUIConfig(this).apply {

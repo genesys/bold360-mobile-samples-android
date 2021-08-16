@@ -2,6 +2,8 @@ package com.common.chatComponents.customProviders
 
 import android.content.Context
 import android.util.Log
+import com.common.utils.chatForm.ContinuityRepository
+import com.common.utils.chatForm.SampleRepository
 import com.integration.core.LastReceivedMessageId
 import com.integration.core.SenderId
 import com.nanorep.convesationui.async.AsyncAccount
@@ -16,7 +18,7 @@ import com.nanorep.sdkcore.utils.Completion
  * AccountSessionListener implementation.
  * An account provider that supports chat continuity.
  */
-class ContinuityAccountHandler(context: Context) : SimpleAccountWithIdProvider(context), AccountSessionListener {
+class ContinuityAccountHandler(repository: ContinuityRepository) : SimpleAccountWithIdProvider(repository), AccountSessionListener {
 
     var senderId: String = ""
     var lastReceivedMessageId: String = ""

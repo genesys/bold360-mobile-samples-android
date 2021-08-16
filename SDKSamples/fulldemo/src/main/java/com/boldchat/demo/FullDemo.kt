@@ -22,6 +22,7 @@ import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
 import com.common.utils.SecurityInstaller
 import com.common.utils.chatForm.FormFieldFactory
+import com.common.utils.chatForm.SampleRepository
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.live.UploadFileChooser
@@ -78,8 +79,9 @@ class FullDemo : RestorationContinuity() {
 
 
     private fun initializeProviders() {
+
         // Configuring a custom account provider that supports continuity :
-        accountProvider = ContinuityAccountHandler(this)
+        accountProvider = ContinuityAccountHandler( sampleFormViewModel.continuityRepository )
 
         // Configuring a custom TTS alter provider :
         ttsAlterProvider = CustomTTSAlterProvider()
