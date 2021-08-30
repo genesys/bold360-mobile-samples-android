@@ -13,6 +13,7 @@ import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.toast
 import com.nanorep.convesationui.structure.elements.Article
+import com.nanorep.convesationui.views.ArticleUIConfig
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
 import com.nanorep.convesationui.views.autocomplete.BotCompletionViewModel
@@ -96,9 +97,7 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
      * some visible action on article selection: we display the fetched article body in a "WebView"
      */
     private fun onArticle(article: Article) {
-        val tablesCss = "table{table-layout: fixed;max-width: none;width: " +
-                "auto;min-width: 100%;border: solid thin;}td {border: solid thin}tbody {border: solid thin;}"
-        var html = "<html><Style>$tablesCss</Style><body>${article.content}</body></html>"
+        var html = "<html><Style>${ArticleUIConfig.TableCssStyle}</Style><body>${article.content}</body></html>"
         html = LinkedArticleHandler.updateLinkedArticles(html)
         binding.articleView.loadData(html, "text/html", "UTF-8")
         binding.articleRoot.visibility = View.VISIBLE
