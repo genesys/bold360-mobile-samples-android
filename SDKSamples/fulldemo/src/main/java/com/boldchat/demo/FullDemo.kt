@@ -1,10 +1,6 @@
 package com.boldchat.demo
 
-import android.content.ActivityNotFoundException
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -22,7 +18,6 @@ import com.common.chatComponents.handover.CustomHandoverHandler
 import com.common.topicsbase.RestorationContinuity
 import com.common.utils.SecurityInstaller
 import com.common.utils.chatForm.FormFieldFactory
-import com.common.utils.chatForm.SampleRepository
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.chatForm.defs.DataKeys
 import com.common.utils.live.UploadFileChooser
@@ -37,11 +32,7 @@ import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.model.configuration.ChatFeatures
-import com.nanorep.nanoengine.model.configuration.ConversationSettings
-import com.nanorep.nanoengine.model.configuration.TimestampStyle
-import com.nanorep.nanoengine.model.configuration.VoiceSettings
-import com.nanorep.nanoengine.model.configuration.VoiceSupport
+import com.nanorep.nanoengine.model.configuration.*
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.Notifications
@@ -150,31 +141,35 @@ class FullDemo : RestorationContinuity() {
         }
     }
 
-    // Runs on the first creation of the ChatController
-    // Afterwards the Chat is being restored/created via the "reloadForms" method
-    override fun createChat() {
+    override var onChatControllerReady: () -> Unit = {
 
-        // Uncomment to register a Phone call broadcast to trigger onChatInterruption.
-        // initInterfaceReceiver()
+        // Uncomment to register a Phone call broadcast to trigger onChatInterruption:
+        /* LocalBroadcastManager.getInstance(this).registerReceiver(
+                    object : BroadcastReceiver() {
 
-        // Creates the chat controller
-        super.createChat()
+                        override fun onReceive(context: Context, intent: Intent) {
+                            Log.d("callAction", "Got broadcast on call action")
+                            if (chatController.isActive) {
+                                chatController.onChatInterruption()
+                            }
+                        }
+                    }, IntentFilter("android.CHAT_CALL_ACTION")
+                )*/
 
         // Registers the app to the wanted chat Notifications
-        if ( hasChatController() ) {
-            chatController.apply {
-                subscribeNotifications(
-                    notificationsReceiver,
-                    ChatNotifications.PostChatFormSubmissionResults,
-                    ChatNotifications.UnavailabilityFormSubmissionResults,
-                    Notifications.UploadEnd,
-                    Notifications.UploadStart,
-                    Notifications.UploadProgress,
-                    Notifications.UploadFailed,
-                    Notifications.VoiceStopRequest,
-                    Notifications.ChatInterruption
-                )
-            }
+        chatController.apply {
+            subscribeNotifications(
+                notificationsReceiver,
+                ChatNotifications.PostChatFormSubmissionResults,
+                ChatNotifications.UnavailabilityFormSubmissionResults,
+                Notifications.UploadEnd,
+                Notifications.UploadStart,
+                Notifications.UploadProgress,
+                Notifications.UploadFailed,
+                Notifications.VoiceStopRequest,
+                Notifications.ChatInterruption,
+                Notifications.QueuePosition
+            )
         }
     }
 

@@ -2,7 +2,6 @@ package com.sdk.samples.topics
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.lifecycle.Observer
 import com.common.topicsbase.SampleActivity
 import com.common.utils.chatForm.defs.ChatType
 import com.common.utils.toast
-import com.nanorep.convesationui.fragments.ArticleFragment
 import com.nanorep.convesationui.structure.elements.Article
 import com.nanorep.convesationui.views.autocomplete.AutocompleteViewUIConfig
 import com.nanorep.convesationui.views.autocomplete.BotAutocompleteFragment
@@ -98,7 +96,9 @@ class Autocomplete : SampleActivity<AutocompleteActivityBinding>() {
      * some visible action on article selection: we display the fetched article body in a "WebView"
      */
     private fun onArticle(article: Article) {
-        var html = "<html><Style>${ArticleFragment.STYLE_TO_HANDLE_TABLES}</Style><body>${article.content}</body></html>"
+        val tablesCss = "table{table-layout: fixed;max-width: none;width: " +
+                "auto;min-width: 100%;border: solid thin;}td {border: solid thin}tbody {border: solid thin;}"
+        var html = "<html><Style>$tablesCss</Style><body>${article.content}</body></html>"
         html = LinkedArticleHandler.updateLinkedArticles(html)
         binding.articleView.loadData(html, "text/html", "UTF-8")
         binding.articleRoot.visibility = View.VISIBLE
