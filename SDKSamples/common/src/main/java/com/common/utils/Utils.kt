@@ -1,12 +1,19 @@
 package com.common.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.IntentFilter
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import android.os.Build
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.common.topicsbase.SampleActivity
 import com.nanorep.nanoengine.model.configuration.DatestampFormatFactory
 import com.nanorep.sdkcore.utils.NRError
+import com.nanorep.sdkcore.utils.toast
 import com.sdk.common.R
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
@@ -43,6 +50,6 @@ fun AppCompatActivity.parseSecurityError(errorCode:String) =
 @JvmOverloads
 fun SampleActivity<*>.toast(text: String, timeout: Int = Toast.LENGTH_LONG, background: Drawable? = null) {
     if(!isFinishing) {
-        com.nanorep.sdkcore.utils.toast(this, text, timeout, background)
+        toast(this, text, timeout, background)
     }
 }

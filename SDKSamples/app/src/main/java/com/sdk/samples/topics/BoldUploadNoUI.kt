@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,6 +20,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -37,6 +37,7 @@ import com.integration.bold.boldchat.visitor.api.SessionParam
 import com.integration.core.BoldLiveUploader
 import com.integration.core.FileUploadInfo
 import com.integration.core.UploadResult
+import com.integration.core.annotations.ErrorCodes.INPUT_OUTPUT_ERROR
 import com.integration.core.annotations.FileType
 import com.integration.core.skipPrechat
 import com.nanorep.nanoengine.model.conversation.SessionInfo
@@ -125,11 +126,18 @@ class BoldUploadNoUI : SampleActivity<ActivityUploadNoUiBinding>(), BoldChatList
         super.chatUnavailable(formData)
 
         runMain {
-            toast( getString(R.string.chat_unavailable), background = ColorDrawable(Color.GRAY))
+            toast( getString(R.string.chat_unavailable), Toast.LENGTH_SHORT)
         }
 
         if (!isFinishing) {
             finish()
+        }
+    }
+
+    override fun error(code: Int, message: String?, data: Any?) {
+        runMain {
+            message?.let { toast(it) }
+            if (code == INPUT_OUTPUT_ERROR && !isFinishing) finish()
         }
     }
 

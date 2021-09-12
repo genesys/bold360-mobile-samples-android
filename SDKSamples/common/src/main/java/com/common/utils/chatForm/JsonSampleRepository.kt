@@ -7,6 +7,21 @@ import com.google.gson.JsonObject
 import com.nanorep.sdkcore.utils.weakRef
 import java.lang.ref.WeakReference
 
+/**
+ * A repository that in charge of the chat continuity data
+ */
+interface ContinuityRepository {
+    /**
+     * Saves the SessionToken to the shared properties
+     */
+    fun saveSessionToken(key: String, sessionToken: String? )
+
+    /**
+     * Gets a saved SessionToken from the shared properties
+     */
+    fun getSessionToken(key: String ) : String?
+}
+
 interface SampleRepository {
 
     /**
@@ -28,11 +43,33 @@ interface SampleRepository {
      */
     fun isRestorable( @ChatType chatType: String): Boolean
 
+
+    val continuityRepository: ContinuityRepository
+
 }
 
 class JsonSampleRepository( context: Context ): SampleRepository {
 
     private val wContext: WeakReference<Context> = context.weakRef()
+
+    override val continuityRepository: ContinuityRepository
+
+        get() = object : ContinuityRepository{
+
+            override fun saveSessionToken(key: String, sessionToken: String?) {
+                wContext.get()?.getSharedPreferences("bot_chat_session", 0)?.let { shared ->
+                    val editor = shared.edit()
+                    editor.putString(
+                        key, sessionToken.toString()
+                    )
+                    editor.apply()
+                }
+            }
+
+            override fun getSessionToken(key: String): String? {
+                return wContext.get()?.getSharedPreferences("bot_chat_session", 0)?.getString(key, null)
+            }
+        }
 
     private fun getSaved( @ChatType chatType: String) : JsonObject? {
         return wContext.get()?.getSharedPreferences("accounts", 0)?.getString(chatType, null)
