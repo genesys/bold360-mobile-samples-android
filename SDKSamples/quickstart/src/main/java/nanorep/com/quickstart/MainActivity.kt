@@ -56,9 +56,6 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
             conversationSettings(ConversationSettings())
             chatEventListener(this@MainActivity)
 
-            // Here we apply the UI provider
-            chatUIProvider(coxUIConfig())
-
         }.build(account, object : ChatLoadedListener {
 
             override fun onComplete(result: ChatLoadResponse) {
@@ -110,13 +107,4 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
         const val CONVERSATION_FRAGMENT_TAG = "conversation_fragment"
     }
 
-
-    private fun coxUIConfig() : ChatUIProvider = ChatUIProvider(this).apply {
-        chatElementsUIProvider.incomingUIProvider.carouselUIProvider.configure = { adapter ->
-            adapter.apply {
-                setInfoSubTitleMinLines(4)
-                setInfoTitleMinLines(3)
-            }
-        }
-    }
 }
