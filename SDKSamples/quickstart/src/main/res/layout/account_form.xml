@@ -51,7 +51,8 @@
                             android:background="@android:color/transparent"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:paddingTop="8dp"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +70,8 @@
                             android:background="@android:color/transparent"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,7 +89,8 @@
                             android:background="@android:color/transparent"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +99,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="@string/account_form_context_title"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:paddingBottom="6dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/account_context_layout"
@@ -113,8 +117,7 @@
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLines="1"
-
-                            android:padding="20dp" />
+                            android:paddingTop="8dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +135,8 @@
                             android:background="@android:color/transparent"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
