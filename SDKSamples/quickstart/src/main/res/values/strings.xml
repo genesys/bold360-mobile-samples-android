@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">QuickStart</string>
+    <string name="quick_start_account_form_title">Bold360 AI Chat Demo</string>
+    <string name="quick_start_account_form_account_name">Account</string>
+    <string name="quick_start_account_form_knowledge_base">Knowledge Base</string>
+    <string name="quick_start_account_form_api_key">Api Key</string>
+    <string name="quick_start_account_form_server">Server</string>
+    <string name="account_form_context_title">Fill the contexts according to the pattern:\nKEY1:VALUE1;KEY2:VALUE2 ....</string>
+    <string name="account_form_contexts">Contexts</string>
+    <string name="empty_account_name_error">Fill the account name</string>
+    <string name="empty_knowlegebase_error">Fill the knowledge base</string>
+</resources>
