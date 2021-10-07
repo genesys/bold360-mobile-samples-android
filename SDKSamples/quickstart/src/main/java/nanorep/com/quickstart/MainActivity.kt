@@ -9,6 +9,7 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
+import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
@@ -55,6 +56,9 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
 
             conversationSettings(ConversationSettings())
             chatEventListener(this@MainActivity)
+
+            // Here we apply the UI provider
+            chatUIProvider(coxUIConfig())
 
         }.build(account, object : ChatLoadedListener {
 
@@ -114,4 +118,13 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
         const val CONVERSATION_FRAGMENT_TAG = "conversation_fragment"
     }
 
+
+    private fun coxUIConfig() : ChatUIProvider = ChatUIProvider(this).apply {
+        chatElementsUIProvider.incomingUIProvider.carouselUIProvider.configure = { adapter ->
+            adapter.apply {
+                setInfoSubTitleMinLines(4)
+                setInfoTitleMinLines(3)
+            }
+        }
+    }
 }

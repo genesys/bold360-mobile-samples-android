@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/c_item_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:padding ="0dp">
+
+        <!--https://github.com/vinc3m1/RoundedImageView-->
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/c_item_thumb"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/c_item_text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/c_item_thumb"
+            app:layout_constraintEnd_toEndOf="@id/c_item_thumb"
+            app:layout_constraintStart_toStartOf="@id/c_item_thumb"
+            app:layout_constraintTop_toTopOf="@id/c_item_thumb">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/c_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:lines="1"
+                android:ellipsize="end"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/c_item_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:lines="2"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/c_item_options_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:measureWithLargestChild="true"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/c_item_text_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_goneMarginTop="12dp"
+            android:padding="0dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>
