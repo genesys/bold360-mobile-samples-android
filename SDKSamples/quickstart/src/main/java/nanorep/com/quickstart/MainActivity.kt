@@ -9,7 +9,6 @@ import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatEventListener
 import com.nanorep.convesationui.structure.controller.ChatLoadResponse
 import com.nanorep.convesationui.structure.controller.ChatLoadedListener
-import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.nanoengine.AccountInfo
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.sdkcore.utils.NRError
@@ -31,6 +30,7 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -60,19 +60,19 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
 
             override fun onComplete(result: ChatLoadResponse) {
 
-//                val error = result.error ?: let {
-//
-//                    if (result.fragment) {
-//                        NRError(NRError.EmptyError, "Chat UI failed to init")
-//                    } else {
-//                        null
-//                    }
-//                }
+                val error = result.error ?: let {
 
-               /* error?.let {
+                    if (result.fragment == null) {
+                        NRError(NRError.EmptyError, "Chat UI failed to init")
+                    } else {
+                        null
+                    }
+                }
+
+                error?.let {
                     onError(it)
                     chatStartError?.invoke()
-                } ?: */openConversationFragment(result.fragment!!)
+                } ?: openConversationFragment(result.fragment!!)
 
                 waitingVisibility(false)
             }
@@ -101,6 +101,13 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
                     addToBackStack(tag)
                 }
             }.commit()
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            boldController?.destruct()
+        }
+        super.onBackPressed()
     }
 
     companion object {
