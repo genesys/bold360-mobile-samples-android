@@ -113,5 +113,4 @@ class MainActivity : AppCompatActivity(), ChatFlowHandler {
     companion object {
         const val CONVERSATION_FRAGMENT_TAG = "conversation_fragment"
     }
-
 }
