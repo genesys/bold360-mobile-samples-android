@@ -17,6 +17,7 @@ import com.nanorep.convesationui.structure.elements.IncomingElementModel
 import com.nanorep.convesationui.structure.providers.ChatUIProvider
 import com.nanorep.convesationui.structure.providers.OutgoingElementUIProvider
 import com.nanorep.convesationui.structure.setStyleConfig
+import com.nanorep.convesationui.utils.assetsFileUri
 import com.nanorep.convesationui.views.DrawableConfig
 import com.nanorep.convesationui.views.adapters.BubbleContentUIAdapter
 import com.nanorep.convesationui.views.chatelement.BubbleContentAdapter
@@ -24,6 +25,7 @@ import com.nanorep.convesationui.views.chatelement.ViewsLayoutParams
 import com.nanorep.nanoengine.model.configuration.StyleConfig
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.sdkcore.model.StatusOk
+import com.nanorep.sdkcore.utils.getTypeface
 import com.nanorep.sdkcore.utils.px
 import com.sdk.samples.R
 import com.sdk.samples.databinding.BubbleOutgoingDemoBinding
@@ -35,8 +37,7 @@ open class CustomizedUI : BotChat() {
 
         return super.getChatBuilder()?.chatUIProvider(
             UIProviderFactory.create(
-                this,
-                intent?.getStringExtra("type") ?: ConfigOption.OVERRIDE.name
+                this, intent?.getStringExtra("type") ?: ConfigOption.OVERRIDE.name
             )
         )
     }
@@ -57,11 +58,12 @@ private class UIProviderFactory {
             }
         }
 
-        private fun configureArticle(context: Context)  = ChatUIProvider(context).apply {
+        private fun configureArticle(context: Context) = ChatUIProvider(context).apply {
 
             articleUIProvider.articleUIConfig?.apply {
 
-                background = ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
+                background =
+                    ContextCompat.getDrawable(context, R.drawable.genesys_back) ?: ColorDrawable(Color.LTGRAY)
 
                 closeUIConfig?.apply {
 
@@ -72,7 +74,12 @@ private class UIProviderFactory {
                     setPadding(closePadding, closePadding, closePadding, closePadding)
 
                     position = UiConfigurations.Alignment.AlignCenterHorizontal
-                    drawable = DrawableConfig(ContextCompat.getDrawable(context, R.drawable.outline_cancel_white_24)).apply {
+                    drawable = DrawableConfig(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.outline_cancel_white_24
+                        )
+                    ).apply {
                         compoundDrawablesPadding = 2.px
                     }
                 }
@@ -84,12 +91,13 @@ private class UIProviderFactory {
 
                 title.apply {
                     background = ColorDrawable(Color.YELLOW)
-                    font = StyleConfig(16.px, Color.BLUE, Typeface.DEFAULT_BOLD)
+                    font = StyleConfig(14.px, Color.BLUE, context.getTypeface("fonts/great_vibes.otf"))
                 }
 
                 body.apply {
                     background = Color.GRAY
-                    setFont(12.px, Color.WHITE, "monospace", Typeface.ITALIC)
+                    setFont( "great_vibes", assetsFileUri("fonts/great_vibes.otf"),
+                        StyleConfig(8.px, Color.WHITE))
                 }
             }
         }
@@ -101,34 +109,34 @@ private class UIProviderFactory {
                 // Customize the general default SDK UI
                 configure = { adapter: BubbleContentUIAdapter ->
 
-                        adapter.apply {
-                            setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
-                            setStatusbarAlignment(UiConfigurations.Alignment.AlignStart)
-                            setStatusbarComponentsAlignment(UiConfigurations.StatusbarAlignment.AlignLTR)
-                            setBackground(ColorDrawable(Color.GRAY))
+                    adapter.apply {
+                        setTextStyle(StyleConfig(14, Color.RED, Typeface.SANS_SERIF))
+                        setStatusbarAlignment(UiConfigurations.Alignment.AlignStart)
+                        setStatusbarComponentsAlignment(UiConfigurations.StatusbarAlignment.AlignLTR)
+                        setBackground(ColorDrawable(Color.GRAY))
 
-                            setAvatar(ContextCompat.getDrawable(context, R.drawable.mic_icon))
-                            val margins = 2.px
-                            setAvatarMargins(margins, margins,margins,margins)
-                        }
+                        setAvatar(ContextCompat.getDrawable(context, R.drawable.mic_icon))
+                        val margins = 2.px
+                        setAvatarMargins(margins, margins, margins, margins)
                     }
+                }
 
                 // Dynamic Customization of the default SDK's UI (customization in real time according to the data of the element)
                 customize = { adapter: BubbleContentUIAdapter, element: IncomingElementModel? ->
 
-                        element?.run {
+                    element?.run {
 
-                            if (elemScope.isLive) {
-                                adapter.apply {
-                                    setAvatar(ContextCompat.getDrawable(context, R.drawable.speaker_on))
-                                    setTextStyle(StyleConfig(10, Color.WHITE))
-                                    setBackground(ColorDrawable(Color.RED))
-                                }
+                        if (elemScope.isLive) {
+                            adapter.apply {
+                                setAvatar(ContextCompat.getDrawable(context, R.drawable.speaker_on))
+                                setTextStyle(StyleConfig(10, Color.WHITE))
+                                setBackground(ColorDrawable(Color.RED))
                             }
                         }
-
-                        adapter
                     }
+
+                    adapter
+                }
             }
         }
 
@@ -152,7 +160,7 @@ private class UIProviderFactory {
 /**
  * A demo for custom BubbleContentAdapter implementation
  */
-private class OverrideContentAdapter(context: Context): LinearLayout(context), BubbleContentAdapter {
+private class OverrideContentAdapter(context: Context) : LinearLayout(context), BubbleContentAdapter {
 
     val binding = BubbleOutgoingDemoBinding.inflate(LayoutInflater.from(context), this, true)
 
