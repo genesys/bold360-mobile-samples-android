@@ -40,6 +40,7 @@ import com.nanorep.nanoengine.model.configuration.ChatFeatures
 import com.nanorep.nanoengine.model.configuration.ConversationSettings
 import com.nanorep.nanoengine.model.configuration.TimestampStyle
 import com.nanorep.nanoengine.model.configuration.VoiceSettings
+import com.nanorep.nanoengine.model.configuration.VoiceSupport
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.Notifications
