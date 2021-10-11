@@ -21,12 +21,12 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/dev/"}
-//        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/release/"}
         mavenCentral()
         google()
         maven { url "https://maven.google.com" }
         maven { url 'https://jitpack.io' }
+        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/dev/"}
+//        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/release/"}
     }
 }
 

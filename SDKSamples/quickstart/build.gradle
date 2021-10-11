@@ -46,11 +46,11 @@ android {
 
 dependencies {
 
-    implementation ("com.nanorep.devcore:accessibility:4.7.+"){changing = true}
-    implementation ("com.nanorep.devcore:sdkcore:4.7.+"){changing = true}
-    implementation ("com.nanorep.devconversation:engine:4.7.+"){changing = true}
-    implementation ("com.nanorep.devconversation:chatintegration:4.7.+"){changing = true}
-    implementation ("com.nanorep.devconversation:ui:4.7.+"){changing = true}
+    implementation ("com.nanorep.devcore:accessibility:4.8.+"){changing = true}
+    implementation ("com.nanorep.devcore:sdkcore:4.8.+"){changing = true}
+    implementation ("com.nanorep.devconversation:engine:4.8.+"){changing = true}
+    implementation ("com.nanorep.devconversation:chatintegration:4.8.+"){changing = true}
+    implementation ("com.nanorep.devconversation:ui:4.8.+"){changing = true}
 
     api 'androidx.fragment:fragment-ktx:1.3.6'
     api 'androidx.appcompat:appcompat:1.3.1'
