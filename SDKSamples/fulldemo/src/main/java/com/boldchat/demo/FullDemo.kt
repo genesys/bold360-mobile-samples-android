@@ -1,6 +1,10 @@
 package com.boldchat.demo
 
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -32,7 +36,10 @@ import com.nanorep.convesationui.structure.components.TTSReadAlterProvider
 import com.nanorep.convesationui.structure.controller.ChatController
 import com.nanorep.convesationui.structure.controller.ChatNotifications
 import com.nanorep.nanoengine.Account
-import com.nanorep.nanoengine.model.configuration.*
+import com.nanorep.nanoengine.model.configuration.ChatFeatures
+import com.nanorep.nanoengine.model.configuration.ConversationSettings
+import com.nanorep.nanoengine.model.configuration.TimestampStyle
+import com.nanorep.nanoengine.model.configuration.VoiceSettings
 import com.nanorep.nanoengine.nonbot.EntitiesProvider
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.utils.Notifications

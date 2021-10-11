@@ -3,7 +3,6 @@ package com.common.chatComponents.history
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nanorep.convesationui.structure.elements.ChatElement
