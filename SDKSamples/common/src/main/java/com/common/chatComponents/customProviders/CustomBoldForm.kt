@@ -23,7 +23,6 @@ import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.bold.ui.*
 import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
