@@ -63,7 +63,7 @@ class AccountForm : Fragment() {
         super.onStop()
 
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.takeIf { view != null }?.run { imm.hideSoftInputFromWindow(view!!.windowToken, 0) }
+        imm?.takeIf { view != null }?.run { imm.hideSoftInputFromWindow(requireView().windowToken, 0) }
     }
 
     private fun createAccount(): AccountInfo? {
