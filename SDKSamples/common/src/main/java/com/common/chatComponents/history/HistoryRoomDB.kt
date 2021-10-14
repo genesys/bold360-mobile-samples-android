@@ -22,7 +22,7 @@ import com.nanorep.convesationui.structure.elements.StorableChatElement
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
-import java.util.Date
+import java.util.*
 
 
 /**
