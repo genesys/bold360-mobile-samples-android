@@ -59,15 +59,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api ("com.nanorep.devcore:sdkcore:4.8.+"){changing = true}
-    api ("com.nanorep.devconversation:engine:4.8.+"){changing = true}
-    api ("com.nanorep.devconversation:chatintegration:4.8.+"){changing = true}
-    api ("com.nanorep.devconversation:ui:4.8.+"){changing = true}
-
-    /*api ("com.bold360ai-sdk.core:sdkcore:4.8.+"){changing = true}
+    api ("com.bold360ai-sdk.core:sdkcore:4.8.+"){changing = true}
     api ("com.bold360ai-sdk.conversation:engine:4.8.+"){changing = true}
     api ("com.bold360ai-sdk.conversation:chatintegration:4.8.+"){changing = true}
-    api ("com.bold360ai-sdk.conversation:ui:4.8.+"){changing = true}*/
+    api ("com.bold360ai-sdk.conversation:ui:4.8.+"){changing = true}
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
