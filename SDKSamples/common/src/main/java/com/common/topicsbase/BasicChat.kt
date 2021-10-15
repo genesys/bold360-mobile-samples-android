@@ -85,9 +85,12 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
             (chatBuilder ?: ChatController.Builder(this))
                 .build(account, chatLoadedListener).also {
                     chatController = it
+                    onChatControllerReady()
                 }
         }
     }
+
+    protected open var onChatControllerReady = {}
 
     /**
      * @return true if the chat chatController exists and had not been destructed
@@ -127,6 +130,8 @@ abstract class BasicChat : SampleActivity<ActivityBasicBinding>(), ChatEventList
         createChat()
     }
 
+    // Runs on the first creation of the ChatController
+    // Afterwards the Chat is being restored/created via the "reloadForms" method
     protected open fun createChat() {
         create(getChatBuilder())
     }

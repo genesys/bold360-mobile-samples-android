@@ -45,6 +45,10 @@ android {
     buildFeatures {
         dataBinding true
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -52,7 +56,7 @@ dependencies {
 
     implementation project(':common')
 
-    implementation ("com.bold360ai-sdk.core:accessibility:4.7.+"){changing = true}
+    implementation ("com.bold360ai-sdk.core:accessibility:4.8.+"){changing = true}
     implementation 'com.google.android.gms:play-services-base:17.6.0'
 
     testImplementation 'junit:junit:4.13.1'

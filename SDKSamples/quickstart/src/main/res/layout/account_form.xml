@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/form_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/bg"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal"
+            android:text="@string/quick_start_account_form_title"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:paddingStart="24dp"
+                android:paddingLeft="24dp"
+                android:paddingEnd="24dp"
+                android:paddingRight="24dp">
+
+            <LinearLayout
+                    android:id="@+id/bot_fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_name_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/quick_start_account_form_account_name"
+                        android:paddingBottom="36dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/account_name_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingTop="8dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_kb_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/quick_start_account_form_knowledge_base"
+                        android:paddingBottom="36dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/knowledgebaseEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_apikey_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/quick_start_account_form_api_key"
+                        android:paddingBottom="36dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/apiKeyEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/account_form_context_title"
+                        android:textStyle="bold"
+                        android:paddingBottom="6dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_context_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/account_form_contexts"
+                        android:paddingBottom="36dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/account_context_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/account_server_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/quick_start_account_form_server"
+                        android:paddingBottom="36dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/serverEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingTop="8dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/start_chat"
+            style="@style/submit_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:contentDescription="Start Chat"
+            android:text="Start Chat" />
+</LinearLayout>

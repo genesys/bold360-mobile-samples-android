@@ -23,7 +23,11 @@ import com.integration.bold.boldchat.visitor.api.FieldKey
 import com.integration.bold.boldchat.visitor.api.FormField
 import com.integration.bold.boldchat.visitor.api.FormFieldType
 import com.integration.core.StateEvent
-import com.nanorep.convesationui.bold.ui.*
+import com.nanorep.convesationui.bold.ui.ChatFormViewModel
+import com.nanorep.convesationui.bold.ui.FormComponent
+import com.nanorep.convesationui.bold.ui.FormConfiguration
+import com.nanorep.convesationui.bold.ui.SelectionListener
+import com.nanorep.convesationui.bold.ui.SelectionSpec
 import com.nanorep.convesationui.bold.ui.boldFormComponents.SelectionView
 import com.nanorep.convesationui.structure.setStyleConfig
 import com.nanorep.nanoengine.model.configuration.StyleConfig
@@ -146,7 +150,8 @@ class BoldCustomForm : BoundDataFragment<CustomLiveFormsLayoutBinding>() {
                                         tag = index
                                     })
                             FieldKey.LanguageKey -> handleLanguageView(requireContext(), index, binding.formFieldsContainer,
-                                    fieldData, FormConfiguration(context))
+                                    fieldData, FormConfiguration(context)
+                            )
                         }
                     }
                     else -> {

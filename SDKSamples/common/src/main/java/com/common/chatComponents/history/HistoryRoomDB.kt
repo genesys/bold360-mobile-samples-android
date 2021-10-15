@@ -3,7 +3,18 @@ package com.common.chatComponents.history
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nanorep.convesationui.structure.elements.ChatElement
@@ -11,7 +22,7 @@ import com.nanorep.convesationui.structure.elements.StorableChatElement
 import com.nanorep.sdkcore.model.StatementScope
 import com.nanorep.sdkcore.model.StatementStatus
 import com.nanorep.sdkcore.model.StatusPending
-import java.util.Date
+import java.util.*
 
 
 /**

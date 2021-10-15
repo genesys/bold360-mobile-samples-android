@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="nanorep.com.quickstart">
+
+    <application
+            android:allowBackup="true"
+            android:icon="@drawable/sample_image"
+            android:roundIcon="@drawable/sample_image"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+        <activity
+                android:name=".MainActivityLeanJava"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+        <!-- uncomment to launch as application default:
+         <category android:name="android.intent.category.LAUNCHER" />-->
+
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".MainActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
