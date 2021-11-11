@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Bold SDK Samples</string>
-
     <!-- Availability form -->
     <string name="hide_departments">Press to hide departments list</string>
     <string name="department_selection"><u><b>Select a department for availability check</b></u></string>

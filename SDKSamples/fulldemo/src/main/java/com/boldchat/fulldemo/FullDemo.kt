@@ -1,4 +1,4 @@
-package com.boldchat.demo
+package com.boldchat.fulldemo
 
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver

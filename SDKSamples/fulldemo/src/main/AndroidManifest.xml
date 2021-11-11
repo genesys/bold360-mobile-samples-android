@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.boldchat.demo">
+    package="com.boldchat.fulldemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -19,6 +19,8 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:icon="@drawable/favicon512"
+        android:roundIcon="@drawable/favicon512"
         android:usesCleartextTraffic="true">
 
         <activity
