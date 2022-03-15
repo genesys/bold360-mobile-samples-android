@@ -1,4 +1,15 @@
-include ':fulldemo'
-include ':common'
-include ':app'
+//include ':fulldemo'
+//include ':common'
+//include ':app'
 include ':quickstart'
+include  ':ui', ':sdkcore',
+        ':engine',
+        ':accessibility', ':chatintegration'
+
+
+project(':ui').projectDir = new File('../../ui')
+project(':engine').projectDir = new File('../../engine')
+project(':accessibility').projectDir = new File('../../accessibility')
+project(':sdkcore').projectDir = new File('../../sdkcore')
+project(':chatintegration').projectDir = new File('../../chatintegration')
+
