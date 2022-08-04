@@ -27,6 +27,7 @@ allprojects {
         maven { url 'https://jitpack.io' }
         //maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/dev/"}
         maven {url "https://genesysdx.jfrog.io/artifactory/bold-android.dev/"}
+        maven {url "https://genesysdx.jfrog.io/artifactory/bold-android.prod/"}
 //        maven {url "https://bold360ai-mobile-artifacts.s3.amazonaws.com/android/release/"}
     }
 }
