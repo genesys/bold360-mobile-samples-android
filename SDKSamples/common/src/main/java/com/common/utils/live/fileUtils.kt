@@ -57,10 +57,21 @@ open class FileChooser(activity: AppCompatActivity) {
     }
 
     fun open() {
-        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            permissions.plus(Manifest.permission.ACCESS_MEDIA_LOCATION)
+
+        val permissions: Array<String> = when {
+            Build.VERSION.SDK_INT >= 33 -> {
+                arrayOf(Manifest.permission.ACCESS_MEDIA_LOCATION, Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO)
+            }
+            else -> {
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE).let {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                        it.plus(Manifest.permission.ACCESS_MEDIA_LOCATION)
+                    } else it
+                }
+            }
         }
+
         getPermissions.launch(permissions)
     }
 

@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -36,14 +39,16 @@
 
         <activity
             android:name="com.sdk.samples.MainActivity"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.sdk.samples.topics.Autocomplete">
+        <activity android:name="com.sdk.samples.topics.Autocomplete"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.AUTOCOMPLETE" />
 
@@ -52,7 +57,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BotChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOT_CHAT" />
 
@@ -61,7 +67,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BotVocToVocChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.VOICE_TO_VOICE" />
 
@@ -70,7 +77,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.ElementsInterceptionChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.INTERCEPTION" />
 
@@ -79,7 +87,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BoldChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.8" />
 
@@ -88,7 +97,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BoldChatAsync"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_ASYNC_CHAT" />
 
@@ -97,7 +107,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.CustomFileUpload"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD" />
 
@@ -106,7 +117,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BoldUploadNoUI"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT_UPLOAD_NO_UI" />
 
@@ -115,7 +127,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.CustomedWelcomeBotChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.WELCOME_BOT_CHAT" />
 
@@ -124,7 +137,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BoldChatAvailability"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.BOLD_CHAT_AVAILABILITY" />
 
@@ -133,7 +147,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.PrechatExtraData"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.PRE_CHAT_EXTRA_DATA" />
 
@@ -142,7 +157,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.ChatRestore"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.RESTORE" />
 
@@ -151,7 +167,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.EntitiesProviderChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.ENTITIES" />
 
@@ -160,7 +177,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.Handover"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.HANDOVER" />
 
@@ -169,7 +187,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.CustomUIChat"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.CUSTOM_UI" />
 
@@ -178,7 +197,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.CustomizedUI"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.CUSTOMIZED_UI_IMPLEMENTATION" />
 
@@ -187,7 +207,8 @@
         </activity>
         <activity
             android:name="com.sdk.samples.topics.BotChatHistory"
-            android:configChanges="orientation|screenSize|locale|layoutDirection">
+            android:configChanges="orientation|screenSize|locale|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.HISTORY" />
 
@@ -197,7 +218,8 @@
         <activity
             android:name="com.sdk.samples.topics.AsyncChatContinuity"
             android:configChanges="orientation|screenSize|locale|layoutDirection"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.ASYNC_CONTINUITY" />
 
@@ -207,7 +229,8 @@
         <activity
             android:name="com.sdk.samples.topics.BoldCustomChatForm"
             android:configChanges="orientation|screenSize|locale|layoutDirection"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.CUSTOM_FORM" />
 
@@ -217,7 +240,8 @@
         <activity
             android:name="com.sdk.samples.topics.ContextSupportChat"
             android:configChanges="orientation|screenSize|locale|layoutDirection"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sdk.sample.action.CONTEXT_SUPPORT" />
 
