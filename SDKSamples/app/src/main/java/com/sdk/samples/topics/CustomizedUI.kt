@@ -164,6 +164,8 @@ private class OverrideContentAdapter(context: Context) : LinearLayout(context), 
 
     val binding = BubbleOutgoingDemoBinding.inflate(LayoutInflater.from(context), this, true)
 
+    override var adaptSelectableText: Boolean = true
+
     init {
 
         this.orientation = VERTICAL
@@ -183,6 +185,7 @@ private class OverrideContentAdapter(context: Context) : LinearLayout(context), 
 
     override fun setText(text: Spanned, onLinkPress: ((url: String) -> Unit)?) {
         binding.localBubbleText.setBackgroundColor(Color.RED)
+        binding.localBubbleText.setTextIsSelectable(adaptSelectableText)
         binding.localBubbleText.text = text
     }
 
