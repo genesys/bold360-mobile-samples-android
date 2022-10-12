@@ -11,7 +11,7 @@ android {
         applicationId "com.genesys.bold.messenger"
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 50
+        versionCode 51
         versionName "5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
