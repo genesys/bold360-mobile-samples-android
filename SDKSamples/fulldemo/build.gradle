@@ -8,7 +8,7 @@ android {
     //buildToolsVersion '30.1.0'
 
     defaultConfig {
-        applicationId "com.boldchat.demo"
+        applicationId "com.genesys.bold.messenger"
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 50
