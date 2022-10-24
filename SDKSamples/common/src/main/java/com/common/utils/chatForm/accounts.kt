@@ -16,7 +16,7 @@ object Accounts {
         get() = BoldAccount("") // Fame
 
     val defaultBoldAccount: BoldAccount
-        get() = fameBoldAccount
+        get() = formalBoldAccount
 
     private val formalBotAccount: BotAccount
         get() = BotAccount(
@@ -26,13 +26,8 @@ object Accounts {
             "" //https://eu1-1.nanorep.com/console/login.html
         )
 
-    private val testBotAccount: BotAccount
-        get() = BotAccount(
-            "", "",
-            "", "")
-
     val defaultBotAccount: BotAccount
-        get() = testBotAccount
+        get() = formalBotAccount
 
     val defaultAsyncAccount = AsyncAccount(
         "",
