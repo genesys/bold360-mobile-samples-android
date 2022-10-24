@@ -38,6 +38,7 @@ android {
         pickFirst 'META-INF/main_debug.kotlin_module'
         pickFirst 'META-INF/main_release.kotlin_module'
         pickFirst 'META-INF/atomicfu.kotlin_module'
+        pickFirst 'META-INF/common_debug.kotlin_module'
     }
 
     buildFeatures {
