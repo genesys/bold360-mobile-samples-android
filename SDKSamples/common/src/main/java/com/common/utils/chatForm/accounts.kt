@@ -12,9 +12,6 @@ object Accounts {
     private val formalBoldAccount: BoldAccount
         get() = BoldAccount("") // Mobile
 
-    private val fameBoldAccount: BoldAccount
-        get() = BoldAccount("") // Fame
-
     val defaultBoldAccount: BoldAccount
         get() = formalBoldAccount
 
