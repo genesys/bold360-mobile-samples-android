@@ -50,11 +50,11 @@ android {
 
 dependencies {
 
-    implementation ("com.bold360ai-sdk.core:accessibility:4.8.3"){changing = true}
-    implementation ("com.bold360ai-sdk.core:sdkcore:4.8.3"){changing = true}
-    implementation ("com.bold360ai-sdk.conversation:engine:4.8.3"){changing = true}
-    implementation ("com.bold360ai-sdk.conversation:chatintegration:4.8.3"){changing = true}
-    implementation ("com.bold360ai-sdk.conversation:ui:4.8.3"){changing = true}
+    implementation ("com.bold360ai-sdk.core:accessibility:4.8.3")
+    implementation ("com.bold360ai-sdk.core:sdkcore:4.8.3")
+    implementation ("com.bold360ai-sdk.conversation:engine:4.8.3")
+    implementation ("com.bold360ai-sdk.conversation:chatintegration:4.8.3")
+    implementation ("com.bold360ai-sdk.conversation:ui:4.8.3")
 
 //    implementation("com.nanorep.devcore:accessibility:4.8.+") { changing = true }
 //    implementation("com.nanorep.devcore:sdkcore:4.8.+") { changing = true }
