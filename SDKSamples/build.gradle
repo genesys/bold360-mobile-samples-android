@@ -25,7 +25,6 @@ allprojects {
         google()
         maven { url "https://maven.google.com" }
         maven { url 'https://jitpack.io' }
-        maven {url "https://genesysdx.jfrog.io/artifactory/bold-android.dev/"}
         maven {url "https://genesysdx.jfrog.io/artifactory/bold-android.prod/"}
     }
 }
