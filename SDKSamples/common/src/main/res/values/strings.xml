@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bold SDK Samples</string>
+    <string name="app_name">Genesys Bold360 Chat</string>
 
     <!-- Availability form -->
     <string name="hide_departments">Press to hide departments list</string>
