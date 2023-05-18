@@ -67,7 +67,6 @@ class AsyncChatContinuity : RestorationContinuity() {
     /**
      * Configure the accountProvider in order to receive account related updates, and be able to restore chats.
      */
-    @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.accountProvider(accountHandler)
     }
