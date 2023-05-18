@@ -108,7 +108,6 @@ class FullDemo : RestorationContinuity() {
             )
     }
 
-    @ExperimentalCoroutinesApi
     override fun getChatBuilder(): ChatController.Builder? {
         return super.getChatBuilder()?.apply {
             accountProvider?.let { accountProvider(it) }

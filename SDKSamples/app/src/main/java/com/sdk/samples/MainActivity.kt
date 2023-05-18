@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.bot_chat_with_handover),
                 ContextCompat.getDrawable(this, R.drawable.baseline_pan_tool_black_24)
 
-            ), SampleTopic(
+            )/*, SampleTopic(
                 "com.sdk.sample.action.BOLD_ASYNC_CHAT",
                 getString(R.string.async_chat_with_an_agent),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.async_chat_continuity),
                 ContextCompat.getDrawable(this, R.drawable.outline_transform_black_24)
 
-            ), SampleTopic(
+            )*/, SampleTopic(
                 "com.sdk.sample.action.BOLD_CHAT_AVAILABILITY",
                 getString(R.string.chat_with_bold),
                 ContextCompat.getDrawable(this, R.drawable.outline_perm_identity_black_24)
